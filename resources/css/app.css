@@ -1,0 +1,20 @@
+@layer base {
+    @font-face {
+        font-family: "hacen";
+        font-weight: 100;
+        src: url("./fonts/hacen.ttf") format('truetype');
+    }
+    @font-face {
+        font-family: "nitaqat";
+        font-weight: 100;
+        src: url("./fonts/nitaqat.ttf") format('truetype');
+    }
+    @font-face {
+        font-family: "judur";
+        font-weight: 100;
+        src: url("./fonts/judur.otf") format('truetype');
+    }
+}
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
