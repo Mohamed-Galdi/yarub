@@ -33,10 +33,10 @@
             </div>
         @endif
     </div> --}}
-    <div class="flex justify-center items-center gap-8 m-12 text-right flex-col bg-pr-900">
+    <div class="flex justify-center items-center gap-8 m-12 text-right flex-col bg-pr-100">
         <img src="./assets/logos/logo_dark.png" alt="" class="w-32" width="100px">
         <h1 class=" text-5xl m-8 p-4 font-hacen font-bold text-primary">
-            خط نطاقات تحميل </h1>
+         gggggg     خط نطاقات تحميل </h1>
         <h1 class=" text-xl m-8 p-4 font-nitaqat font-bold">
             خط نطاقات تحميل </h1>
         {{-- <h1 class=" text-5xl m-8 p-4 ">

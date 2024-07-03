@@ -15,7 +15,7 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::get('/', function () {
-    toast('Your Post as been submited!', 'success');
+    // toast('Your Post as been submited!', 'success');
     return view('welcome');
 });
 
