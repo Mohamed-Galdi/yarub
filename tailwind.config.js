@@ -16,6 +16,7 @@ export default {
                 hacen: ["hacen"],
                 nitaqat: ["nitaqat"],
                 judur: ["judur"],
+                arabic_handwrite: ["arabic_handwrite"],
             },
             colors: {
                 primary: "#292a65",

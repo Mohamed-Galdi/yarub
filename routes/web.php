@@ -14,14 +14,19 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', function () {
-    // toast('Your Post as been submited!', 'success');
-    return view('welcome');
-});
+Route::get('/', function () { return view('home.home');})->name('home');
 
-Route::get('/dashboard', function () {
-    return view('dashboard');
-})->middleware(['auth', 'verified'])->name('dashboard');
+Route::get('/about', function () { return view('home.about');})->name('about');
+
+Route::get('/courses', function () { return view('home.courses');})->name('courses');
+
+Route::get('/lessons', function () { return view('home.lessons');})->name('lessons');
+
+Route::get('/contact', function () { return view('home.contact');})->name('contact'); 
+
+
+
+Route::get('/dashboard', function () { return view('dashboard');})->middleware(['auth', 'verified'])->name('dashboard');
 
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
