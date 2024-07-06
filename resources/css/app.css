@@ -30,3 +30,83 @@
         background-image: linear-gradient(#ffffff 1.1rem, #ccc 1.2rem);
         background-size: 100% 1.2rem;
 }
+
+.no-scrollbar::-webkit-scrollbar {
+    display: none;
+}
+
+.no-scrollbar {
+    -ms-overflow-style: none;  /* IE and Edge */
+    scrollbar-width: none;  /* Firefox */
+}
+
+
+
+/* my custom animation */
+@keyframes flight-left {
+
+    0%,
+    100% {
+        transform: translateY(-10%) translateX(-5%);
+
+    }
+
+    50% {
+        transform: none;
+    }
+}
+
+.animate-flight-left {
+    animation: flight-left 2s infinite ease-in-out;
+    
+}
+
+@keyframes flight-right {
+
+    0%,
+    100% {
+        transform: translateY(-10%) translateX(5%);
+
+    }
+
+    50% {
+        transform: none;
+    }
+}
+
+.animate-flight-right {
+    animation: flight-right 2s infinite ease-in-out;
+}
+
+@keyframes flight {
+
+    0%,
+    100% {
+        transform: translateY(-10%);
+
+    }
+
+    50% {
+        transform: none;
+    }
+}
+
+.animate-flight {
+    animation: flight 2s infinite ease-in-out;
+}
+
+.delay-0-200{
+    animation-delay: 200ms;
+}
+.delay-0-400{
+    animation-delay: 400ms;
+}
+.delay-0-600{
+    animation-delay: 600ms;
+}
+.delay-0-800{
+    animation-delay: 800ms;
+}
+.delay-0-1000{
+    animation-delay: 1000ms;
+}

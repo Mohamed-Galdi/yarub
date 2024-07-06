@@ -1,7 +1,6 @@
 @extends('layouts.guest')
 @section('content')
-    <div class="text-5xl font-bold text-center">
-        تواصل معنا
-
-    </div>
+     <div style="background-image: url('./assets/images/contact-bg.jpg')"
+        class=" h-[100vh] grid place-items-left bg-no-repeat bg-cover bg-buttom ">
+     </div>
 @endsection()

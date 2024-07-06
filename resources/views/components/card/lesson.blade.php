@@ -10,10 +10,13 @@
         <p class="font-nitaqat font-bold text-sm truncate ">{{ $description }}</p>
         <div class="mt-2 mb-2 flex justify-between items-center ">
             <div class="bg-orange-400 px-2 pb-2 rounded-2xl w-fit">
-                <p class="font-nitaqat font-bold text-xl">{{ $price }} ر.س</p>
+                <p class="font-nitaqat font-bold text-xl">{{ $monthlyPrice }} ر.س شهريا</p>
             </div>
-            <x-card.rating />
+            <div class="bg-orange-300 px-2 pb-2 rounded-2xl w-fit">
+                <p class="font-nitaqat font-bold text-xl">{{ $yearlyPrice }} ر.س سنويا</p>
+            </div>
         </div>
+        <x-card.rating />
         <a href="/" class="w-full">
             <button class="bg-primary w-full text-white text-xl py-2 px-4 rounded-2xl flex gap-4 justify-center items-center 
             hover:border-gray-800 hover:bg-gray-100 hover:text-pr-500 hover:border group transition-all duration-300 ease-in-out ">
