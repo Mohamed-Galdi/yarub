@@ -9,9 +9,9 @@
                 <h1 class="md:text-6xl lg:text-7xl text-5xl font-hacen">منصتك <span class="">الرقمية</span> الاولى<br />
                     لتعلم <span class="text-pr-100">اللغة العربية</span></h1>
                 <p class="text-3xl font-nitaqat">مهمتنا تسهيل تعلم اللغة العربية لمختلف المستويات بشكل رقمي، سهل، وفعال.</p>
-                <div class="mt-4">
-                    <x-btn.slide-dark :text="'انضم الينا '" :link="'/home'" />
-                    <x-btn.slide-light :text="'استكشف الدورات '" :link="'/home'" />
+                <div class="mt-4 md:space-y-0 space-y-4">
+                    <x-btn.slide-dark class="w-64">انضم الينا </x-btn.slide-dark>
+                    <x-btn.slide-light class="w-64">استكشف الدورات </x-btn.slide-light>
 
                 </div>
             </div>
@@ -74,7 +74,7 @@
                     </div>
                     <div class="text-lg">
                         <a href="{{ route('courses') }}">
-                            <x-btn.scale-dark :text="'إكتشف المزيد ...'" />
+                            <x-btn.scale-dark class="md:h-12 h-8 text-sm md:text-lg  md:w-40 w-32 ">إكتشف المزيد ...</x-btn.scale-dark>
                         </a>
                     </div>
 
@@ -101,7 +101,7 @@
                     </div>
                     <div class="">
                         <a href="{{ route('courses') }}">
-                            <x-btn.scale-dark :text="'إكتشف المزيد ...'" />
+                            <x-btn.scale-dark class="md:h-12 h-8 text-sm md:text-lg  md:w-40 w-32 ">إكتشف المزيد ...</x-btn.scale-dark>
                         </a>
                     </div>
 
@@ -186,7 +186,7 @@
 
                     </p>
                     <div class="mt-4">
-                        <x-btn.anime :text="'إنضم الينا الان '" :link="'/home'" />
+                        <x-btn.anime class="w-64">إنضم الينا الان </x-btn.anime>
                     </div>
                 </div>
                 <div class="md:w-1/2 w-full flex justify-end items-end relative mt-8 md:mt-0">

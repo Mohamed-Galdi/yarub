@@ -10,6 +10,7 @@
     <link rel="icon" type="image/x-icon" href="/assets/favicon.ico">
     <!-- Scripts -->
     @vite(['resources/css/app.css', 'resources/js/app.js'])
+
 </head>
 
 <body class="font-hacen text-xl text-gray-900 antialiased">
@@ -23,7 +24,7 @@
                 </a>
                 <div class="flex md:order-2 space-x-3 md:space-x-2 items-center gap-3  ">
                     <a href="/register">
-                        <x-btn.slide-dark :text="'انشئ حسابك'" />
+                        <x-btn.slide-dark class="">انشئ حسابك</x-btn.slide-dark>
                     </a>
                     <button data-collapse-toggle="navbar-sticky" type="button"
                         class="inline-flex items-center p-2 w-10 h-10 justify-center text-sm text-gray-100 bg-primary rounded-lg md:hidden hover:bg-gray-200 hover:text-pr-500 focus:outline-none focus:ring-2 focus:ring-gray-200 "
