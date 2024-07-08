@@ -81,9 +81,9 @@
                 </div>
                 <div class="mt-8 flex md:flex-row flex-col justify-between items-center gap-4">
                     {{-- card --}}
-                    <x-card.course :title="' مقدمة يَعرُب في التأسيس للقدرات - اللفظي'" :description="'دورة تفصيلية وتعريفية باختبارات القدرات حسب اشتراطات قياس'" :price="30" />
-                    <x-card.course :title="' التعريف بأقسام اختبار  القدرات -اللفظي   '" :description="'التعريف بأقسام الاختبار اللفظي وشرح تفصيلي للتناظر اللفظي مع إيراد أمثلة توضيحية'" :price="30" />
-                    <x-card.course :title="' المفردة الشاذة ( الارتباط والاختلاف )'" :description="'شرح تفصيلي لقسم المفردة الشاذة ( الارتباط والاختلاف ) مع تدريبات شاملة'" :price="30" />
+                    <x-card.course class="md:w-1/4 w-[22rem]" :title="' مقدمة يَعرُب في التأسيس للقدرات - اللفظي'" :description="'دورة تفصيلية وتعريفية باختبارات القدرات حسب اشتراطات قياس'" :price="30" />
+                    <x-card.course class="md:w-1/4 w-[22rem]" :title="' التعريف بأقسام اختبار  القدرات -اللفظي   '" :description="'التعريف بأقسام الاختبار اللفظي وشرح تفصيلي للتناظر اللفظي مع إيراد أمثلة توضيحية'" :price="30" />
+                    <x-card.course class="md:w-1/4 w-[22rem]" :title="' المفردة الشاذة ( الارتباط والاختلاف )'" :description="'شرح تفصيلي لقسم المفردة الشاذة ( الارتباط والاختلاف ) مع تدريبات شاملة'" :price="30" />
 
 
                 </div>
@@ -91,7 +91,7 @@
             </div>
 
         </div>
-        {{-- /////////////////////////////// Our Best Courses section /////////////////////////////// --}}
+        {{-- /////////////////////////////// Our Best Lessons section /////////////////////////////// --}}
         <div class="py-16 px-8 md:px-4 lg:px-0">
             <div class="mx-auto max-w-screen-xl">
                 <div class="flex justify-between items-end ">
@@ -106,19 +106,21 @@
                     </div>
 
                 </div>
-                <div class="mt-8 flex md:flex-row flex-col justify-between items-center gap-4">
+                <div class="mt-8 flex md:flex-row flex-col justify-between items-center gap-4 ">
                     {{-- card --}}
                     <x-card.lesson
+                    class="md:w-1/4 w-[22rem] "
                     :title="' الخيل والليل لامروء القيس '"
                     :description="'شرح قصيدة امروء القيس من منهج الدراسات الأدبية'" 
                     :monthly-price="30"
                     :yearly-price="300" />
                     <x-card.lesson
+                    class="md:w-1/4 w-[22rem]"
                     :title="' التوابع'"
                     :description="'شرح درس التوابع من منهج الكفاية النحوية من الصف الثاني الثانوي'" 
                     :monthly-price="30"
                     :yearly-price="300" />
-                    <x-card.lesson :title="' همزة  الوصل '" 
+                    <x-card.lesson class="md:w-1/4 w-[22rem]" :title="' همزة  الوصل '" 
                     :description="'شرح درس همزة الوصل وكيفية كتابتها من منهج كفايات لغوية ٢ للصف الأول الثانوي'"
                     :monthly-price="30" 
                     :yearly-price="300" />

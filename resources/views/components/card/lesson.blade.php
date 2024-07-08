@@ -1,7 +1,9 @@
 <div
-    class="bg-gray-200 md:w-1/4 w-96   flex flex-col items-start justify-start border-2 border-pr-500 overflow-hidden
-        rounded-xl shadow-lg shadow-pr-400 hover:shadow-sm cursor-pointer transition-all duration-300 ease-in-out hover:scale-[0.99]
-        relative  h-96 ">
+    {{ $attributes->merge([
+        'class' => 'bg-gray-200 flex flex-col items-start justify-start border-2 border-pr-500 overflow-hidden
+            rounded-xl shadow-lg shadow-pr-400 hover:shadow-sm cursor-pointer transition-all duration-300 ease-in-out hover:scale-[0.99]
+            relative  h-96',
+    ]) }}>
     <div class="w-full h-1/2">
         <x-card.course-img :title="$title" />
     </div>
@@ -18,7 +20,8 @@
         </div>
         <x-card.rating />
         <a href="/" class="w-full">
-            <button class="bg-primary w-full text-white text-xl py-2 px-4 rounded-2xl flex gap-4 justify-center items-center 
+            <button
+                class="bg-primary w-full text-white text-xl py-2 px-4 rounded-2xl flex gap-4 justify-center items-center 
             hover:border-gray-800 hover:bg-gray-100 hover:text-pr-500 hover:border group transition-all duration-300 ease-in-out ">
                 <p> أضف الى السلة</p>
                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512" class="w-6 ">

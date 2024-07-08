@@ -5,13 +5,13 @@
             class=" h-[40rem] place-items-left bg-no-repeat bg-cover bg-buttom flex justify-center brightness-50 ">
         </div>
         <h1
-            class="text-[10rem] text-white mt-16 mix-blend-diffeerence z-50 absolute top-12 left-[50%] -translate-x-1/2 font-arabic_handwrite">
+            class="w-full text-center text-nowrap lg:text-[10rem] md:text-9xl text-7xl text-white md:mt-16 mix-blend-diffeerence z-50 absolute top-12 left-[50%] -translate-x-1/2 font-arabic_handwrite">
             إكتشف من نحن
         </h1>
 
         {{-- Who we are --}}
-        <div class="my-16 mx-auto max-w-screen-xl flex gap-12 justify-between items-start">
-            <div class="text-start w-1/2 space-y-6">
+        <div class="my-16 mx-auto max-w-screen-xl flex md:flex-row flex-col  gap-12 justify-between items-start px-6 md:px-0">
+            <div class="text-start md:w-1/2 w-full space-y-6">
                 <h2 class="text-4xl">فريقنا</h2>
                 <p class="text-justify font-judur">
                     تُدار منصة يعرب من طرف خبراء في اللغة العربية، حاصلين على شواهد و جوائز في دروس اللغة العربية. بالإضافة
@@ -19,7 +19,7 @@
                     للأفضل. إلى جانب دعم تقني و فني يسهر على تلبية كل متطلباتكم على مدار الساعة.
                 </p>
             </div>
-            <div class="text-start w-1/2 space-y-6">
+            <div class="text-start md:w-1/2 w-full space-y-6">
                 <h2 class="text-4xl">هدفنا</h2>
                 <p class="text-justify font-judur">
                     رفع المستوى التحصيلي للطلاب والطاالبات في اختبارات القدرات المحلية الجزء اللفظي حصول معلمي و معلمات
@@ -33,7 +33,7 @@
         <div class="bg-pr-800">
             <div class="py-16 mx-auto max-w-screen-xl text-center">
                 <h2 class="text-gray-200 text-4xl ">شركاء النجاح</h2>
-                <div class="flex  mt-8 w-full justify-center items-center gap-12 text-2xl text-nowrap">
+                <div class="flex md:flex-row flex-col  mt-8 w-full justify-center items-center gap-12 text-2xl text-nowrap">
                     <a href="https://google.com/" target="_blank"
                         class="p-8 w-72 h-24 bg-gray-200 rounded-xl cursor-pointer shadow-blue-500 shadow-lg hover:scale-[0.99] hover:shadow-none transition-all duration-300 ease-in-out  ">
                         <p> مؤسسة سراة بروداكشن</p>
@@ -47,13 +47,13 @@
         </div>
 
         {{-- //////////// FAQs /////////////////// --}}
-        <div class="mx-auto max-w-screen-xl pt-16">
-            <div class="flex justify-between">
-                <div class="w-1/4 space-y-4">
+        <div class="mx-auto max-w-screen-xl pt-16 px-6 md:px-0">
+            <div class="flex md:flex-row flex-col justify-between">
+                <div class="md:w-1/4 w-full space-y-4 text-center md:text-right">
                     <h2 class="text-6xl">أجوبة</h2>
                     <p class="text-2xl font-nitaqat font-bold">لأسئلة قد تخطر ببالك</p>
                 </div>
-                <div class="w-3/4">
+                <div class="md:w-3/4 w-full mt-6 md:mt-0">
                     <ul class="flex flex-col">
                         {{-- ///////////////////////////// Question 1 ///////////////////////////////////////////////// --}}
                         <li class="bg-pr-500 my-2 shadow-lg rounded-xl overflow-hidden" x-data="accordion(1)">

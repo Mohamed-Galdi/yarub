@@ -18,9 +18,9 @@ Route::get('/', function () { return view('home.home');})->name('home');
 
 Route::get('/about', function () { return view('home.about');})->name('about');
 
-Route::get('/courses', function () { return view('home.courses');})->name('courses');
+Route::get('/courses', function () { return view('courses.courses_list');})->name('courses');
 
-Route::get('/lessons', function () { return view('home.lessons');})->name('lessons');
+Route::get('/lessons', function () { return view('lessons.lessons_list');})->name('lessons');
 
 Route::get('/contact', function () { return view('home.contact');})->name('contact'); 
 

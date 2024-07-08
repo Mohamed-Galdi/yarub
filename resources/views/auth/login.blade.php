@@ -1,47 +1,23 @@
-<x-guest-layout>
-    <!-- Session Status -->
-    <x-auth-session-status class="mb-4" :status="session('status')" />
-
-    <form method="POST" action="{{ route('login') }}">
-        @csrf
-
-        <!-- Email Address -->
-        <div>
-            <x-input-label for="email" :value="__('Email')" />
-            <x-text-input id="email" class="block mt-1 w-full" type="email" name="email" :value="old('email')" required autofocus autocomplete="username" />
-            <x-input-error :messages="$errors->get('email')" class="mt-2" />
+    @extends('layouts.guest')
+    @section('content')
+        <div class="w-full md:h-[90vh] h-fit bg-gradient-to-tr from-pr-400 to-pr-700 pb-8 md:pb-0 ">
+            <div class="max-w-screen-xl mx-auto flex md:flex-row flex-col  justify-between items-center h-full md:px-12 px-3">
+                <div class="md:w-1/2 w-full flex flex-col items-center md:justify-center gap-2 md:h-[32rem] my-8 md:my-0  ">
+                    <h1 class=" text-gray-200 text-5xl text-center order-2 md:order-1">تسجيل الدخول</h1>
+                    <img src="./assets/illustrations/login.png" alt="" class="md:w-3/5 w-1/3 h-fit order-1 md:order-2   object-cover ">
+                </div>
+                <div
+                    class="md:w-1/2 w-full bg-white/20 md:h-[22rem] rounded-lg border-2 border-pr-100 overflow-hidden backdrop-blur-xl p-8">
+                    <form action=" " class="py-8 space-y-8">
+                        <x-form.input type="text" name="eamil" placeholder=" البريد الإلكتروني " class="w-full" />
+                        <x-form.input type="password" name="password" placeholder=" كلمة المرور " class="w-full" />
+                        <x-btn.scale-light> انشاء حساب </x-btn.scale-light>
+                        <p class="text-center text-gray-200"> ليس لديك حساب بعد، قم<span
+                                class="text-blue-400 underline hover:text-blue-500">
+                                <a href="/register"> بإنشاءه من هنا </a>
+                            </span></p>
+                    </form>
+                </div>
+            </div>
         </div>
-
-        <!-- Password -->
-        <div class="mt-4">
-            <x-input-label for="password" :value="__('Password')" />
-
-            <x-text-input id="password" class="block mt-1 w-full"
-                            type="password"
-                            name="password"
-                            required autocomplete="current-password" />
-
-            <x-input-error :messages="$errors->get('password')" class="mt-2" />
-        </div>
-
-        <!-- Remember Me -->
-        <div class="block mt-4">
-            <label for="remember_me" class="inline-flex items-center">
-                <input id="remember_me" type="checkbox" class="rounded border-gray-300 text-indigo-600 shadow-sm focus:ring-indigo-500" name="remember">
-                <span class="ms-2 text-sm text-gray-600">{{ __('Remember me') }}</span>
-            </label>
-        </div>
-
-        <div class="flex items-center justify-end mt-4">
-            @if (Route::has('password.request'))
-                <a class="underline text-sm text-gray-600 hover:text-gray-900 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500" href="{{ route('password.request') }}">
-                    {{ __('Forgot your password?') }}
-                </a>
-            @endif
-
-            <x-primary-button class="ms-3">
-                {{ __('Log in') }}
-            </x-primary-button>
-        </div>
-    </form>
-</x-guest-layout>
+    @endsection()
