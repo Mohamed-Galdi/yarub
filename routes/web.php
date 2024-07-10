@@ -25,8 +25,13 @@ Route::get('/lessons', function () { return view('lessons.lessons_list');})->nam
 Route::get('/contact', function () { return view('home.contact');})->name('contact'); 
 
 
+// ///////////// Student Routes //////////////
+Route::get('/student-dashboard', function () { return view('student.dashboard');})->middleware(['auth', 'verified'])->name('student.dashboard');
+Route::get('/student-courses', function () { return view('student.courses');})->middleware(['auth', 'verified'])->name('student.courses');
 
-Route::get('/dashboard', function () { return view('dashboard');})->middleware(['auth', 'verified'])->name('dashboard');
+
+
+Route::get('/admin-dashboard', function () { return view('admin.dashboard');})->middleware(['auth', 'verified'])->name('admin.dashboard');
 
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
