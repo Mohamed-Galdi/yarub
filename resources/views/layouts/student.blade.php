@@ -18,7 +18,7 @@
         class="fixed top-0 z-50 w-full bg-pr-500 text-white border-b border-gray-200 py-2 md:px-24 px-4 flex justify-between">
         {{-- Mobile Toggle button --}}
         <button id="toggleButton"
-            class="sm:hidden p-2 rounded bg-gray-700 hover:bg-gray-600 focus:outline-none order-1">
+            class="sm:hidden p-2 rounded bg-gray-200 text-pr-500 hover:bg-gray-400 focus:outline-none order-1">
             <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"
                 xmlns="http://www.w3.org/2000/svg">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7"></path>
@@ -36,9 +36,8 @@
             </button>
 
             <!-- Dropdown menu -->
-            <div id="dropdownHover"
-                class="z-10 hidden bg-white divide-y divide-gray-100 rounded-lg shadow w-44 dark:bg-gray-700 mr-32">
-                <ul class="py-2 text-sm text-gray-700 dark:text-gray-200" aria-labelledby="dropdownHoverButton">
+            <div id="dropdownHover" class="z-10 hidden bg-white divide-y divide-gray-100 rounded-lg shadow w-44  mr-32">
+                <ul class="py-2 text-sm text-gray-700 " aria-labelledby="dropdownHoverButton">
                     <li class="font-hacen ">
                         <a href="/profile" class="flex justify-between items-center px-4 py-2 hover:bg-gray-100 ">
                             <p>حسابي الشخصي</p>
@@ -73,8 +72,8 @@
 
     <aside id="sidebar"
         class="fixed z-[9999] top-0 right-0 mt-16 h-full w-60 bg-gray-300 transition-transform translate-x-full sm:translate-x-0 sm:block shadow-lg shadow-pr-500 ">
-        <div class="h-full p-4 overflow-y-auto">
-            <ul class="space-y-3 font-medium">
+        <div class="h-full p-4 overflow-y-auto ">
+            <ul class="space-y-4 font-medium">
                 <x-btn.dashboard-item route='student.dashboard'>
                     <p class="ml-3">لوحة التحكم</p>
                     <x-icons.student-dashboard class="w-6 h-6 text-gray-100" />
@@ -113,9 +112,25 @@
 
 
             </ul>
+            <div
+                class="w-full h-12 bottom-16 right-0 border-t text-gray-100 bg-pr-500 border-gray-100 absolute flex justify-between items-center text-sm font-bold">
+                <a href="{{ route('home') }}"
+                    class="flex justify-center items-center gap-2 border-l border-gray-100 pl-2 w-1/2 cursor-pointer hover:text-indigo-400">
+                    <x-icons.home class="w-4 h-4  " />
+                    <p> الرئيسية</p>
+                </a>
+                <form action="{{ route('logout') }}" method="POST" class="w-1/2 cursor-pointer hover:text-indigo-400">
+                    @csrf
+                    <button type="submit" class="w-full flex justify-center items-center gap-2 " >
+                            <x-icons.logout class="w-4 h-4  scale-x-[-1] " />
+                            <p> الخروج</p>
+                    </button>
+                </form>
+            </div>
         </div>
     </aside>
-    <main class="bg-gray-200 md:w-[calc(100%-15rem)] w-full min-h-screen md:ms-[15rem] ms-0 flex justify-center items-center">
+    <main
+        class="bg-gray-200 md:w-[calc(100%-15rem)] w-full min-h-screen md:ms-[15rem] ms-0 flex justify-center items-center">
         <div class="w-full h-full p-8">
             @yield('content')
         </div>
@@ -148,5 +163,6 @@
         });
     </script>
 </body>
+@include('sweetalert::alert')
 
 </html>

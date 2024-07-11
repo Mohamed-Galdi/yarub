@@ -14,82 +14,131 @@
 </head>
 
 <body dir="rtl" class="bg-gray-100">
-    <nav
-        class="fixed top-0 z-50 w-full bg-pr-500 text-white border-b border-gray-200 py-2 md:px-24 px-4 flex justify-between">
-        {{-- Mobile Toggle button --}}
-        <button id="toggleButton"
-            class="sm:hidden p-2 rounded bg-gray-700 hover:bg-gray-600 focus:outline-none order-1">
+    {{-- <div>
+        <button>
+            <x-icons.logout class="w-6 h-6 text-pr-500 scale-x-[-1] left-32 absolute" />
+        </button>
+    </div> --}}
+    <button id="openButton"
+        class="sm:hidden p-2 rounded-bl-lg  bg-pr-500 text-gray-200 hover:bg-pr-800 focus:outline-none order-1">
+        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"
+            xmlns="http://www.w3.org/2000/svg">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7"></path>
+        </svg>
+    </button>
+
+
+    <aside id="sidebar"
+        class="fixed top-0 right-0 h-full w-60 bg-indigo-800 transition-transform translate-x-full sm:translate-x-0 sm:block shadow-lg shadow-pr-500 ">
+        <button id="closeButton"
+            class="sm:hidden p-2 rounded-bl-lg bg-gray-100 text-pr-500 hover:bg-gray-400 focus:outline-none order-1">
             <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"
                 xmlns="http://www.w3.org/2000/svg">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7"></path>
             </svg>
         </button>
-
-        {{-- Profile button --}}
-        <div id="dropdownHoverButton" data-dropdown-toggle="dropdownHover" data-dropdown-trigger="hover"
-            class="flex items-center gap-4 order-3 md:order-3">
-            <button id="dropdownHoverButton" data-dropdown-toggle="dropdownHover" data-dropdown-trigger="hover"
-                type="button">
-                <div class="w-12 h-12 bg-gray-100 rounded-full flex items-center justify-center text-pr-300 ">
-                    <x-icons.user class="w-6 h-6" />
+        <div class="p-4 font-judur  ">
+            <div
+                class="flex justify-start items-center gap-4 bg-gray-100 p-2 rounded-lg shadow-lg shadow-blue-500 cursor-pointer hover:shadow-none hover:scale-[0.99] transition-all duration-300 ease-in-out">
+                <div class="rounded-full flex items-center justify-center text-pr-300 bg-indigo-400 w-12 h-12 ">
+                    <x-icons.admin class="w-6 h-6 text-gray-100" />
                 </div>
-            </button>
-
-            <!-- Dropdown menu -->
-            <div id="dropdownHover"
-                class="z-10 hidden bg-white divide-y divide-gray-100 rounded-lg shadow w-44 dark:bg-gray-700 mr-32">
-                <ul class="py-2 text-sm text-gray-700 dark:text-gray-200" aria-labelledby="dropdownHoverButton">
-                    <li class="font-hacen ">
-                        <a href="/profile" class="flex justify-between items-center px-4 py-2 hover:bg-gray-100 ">
-                            <p>حسابي الشخصي</p>
-                            <x-icons.user class="w-4 h-4 text-pr-500" />
-                        </a>
-                    </li>
-                    <li class="font-hacen ">
-                        <form action="{{route('logout')}}" method="POST" class="w-full">
-                            @csrf
-                            <button type="submit" class="flex justify-between items-center w-full px-4 py-2 hover:bg-gray-100">
-                                <p>تسجيل الخروج </p>
-                                <x-icons.logout class="w-4 h-4 text-pr-500 scale-x-[-1]" />
-                            </button>
-                        </form>
-                    </li>
-
-                </ul>
+                <div>
+                    <p class=" font-bold">المشرف</p>
+                    <p class="text-sm font-hacen">{{ Auth::user()->email }}</p>
+                </div>
             </div>
-
-
-
         </div>
-
-        {{-- Yarub Logo --}}
-        <div class="order-2 md:order-1">
-            <a href="/" class="flex items-center space-x-3 ">
-                <img src="./assets/logos/logo_light.png" class="w-16" alt="منصة يعرب">
-            </a>
-        </div>
-    </nav>
-
-    <aside id="sidebar"
-        class="fixed top-0 right-0 mt-16 h-full w-60 bg-gray-300 transition-transform translate-x-full sm:translate-x-0 sm:block shadow-lg shadow-pr-500 ">
+        <div class="w-full h-[2px] bg-gray-100"></div>
         <div class="h-full p-4 overflow-y-auto">
-            <ul class="space-y-2 font-medium">
-                <li class="bg-pr-400 rounded-lg text-gray-100 text-start p-2 hover:bg-pr-500">
-                    <a href="#" class="flex items-center ">
-                        <p class="ml-3">Dashboard</p>
-                    </a>
-                </li>
-                <!-- Add more sidebar items here -->
+            <ul class="space-y-4 font-medium">
+                {{-- ///////////////////////////////////// --}}
+                <x-btn.admin-dashboard-item route='admin.dashboard'>
+                    <p class="ml-3">لوحة التحكم</p>
+                    <x-icons.circle-chart
+                        class="w-6 h-6 {{ request()->routeIs('admin.dashboard') ? 'text-gray-200' : ' text-gray-800' }}" />
+                </x-btn.admin-dashboard-item>
+                {{-- ///////////////////////////////////// --}}
+                <x-btn.admin-dashboard-item route='admin.students'>
+                    <p class="ml-3">الطلاب </p>
+                    <x-icons.students
+                        class="w-6 h-6 {{ request()->routeIs('admin.students') ? 'text-gray-200' : ' text-gray-800' }}" />
+                </x-btn.admin-dashboard-item>
+                {{-- ///////////////////////////////////// --}}
+                <x-btn.admin-dashboard-item route='admin.courses'>
+                    <p class="ml-3">الدورات </p>
+                    <x-icons.course
+                        class="w-6 h-6 {{ request()->routeIs('admin.courses') ? 'text-gray-200' : ' text-gray-800' }}" />
+                </x-btn.admin-dashboard-item>
+                {{-- ///////////////////////////////////// --}}
+                <x-btn.admin-dashboard-item route='admin.lessons'>
+                    <p class="ml-3">الشروحات </p>
+                    <x-icons.lesson
+                        class="w-6 h-6 {{ request()->routeIs('admin.lessons') ? 'text-gray-200' : ' text-gray-800' }}" />
+                </x-btn.admin-dashboard-item>
+                {{-- ///////////////////////////////////// --}}
+                <x-btn.admin-dashboard-item route='admin.tests'>
+                    <p class="ml-3">الإختبارات </p>
+                    <x-icons.test
+                        class="w-6 h-6 {{ request()->routeIs('admin.tests') ? 'text-gray-200' : ' text-gray-800' }}" />
+                </x-btn.admin-dashboard-item>
+                {{-- ///////////////////////////////////// --}}
+                <x-btn.admin-dashboard-item route='admin.certificates'>
+                    <p class="ml-3"> الشواهد </p>
+                    <x-icons.certificate
+                        class="w-6 h-6 {{ request()->routeIs('admin.certificates') ? 'text-gray-200' : ' text-gray-800' }}" />
+                </x-btn.admin-dashboard-item>
+                {{-- ///////////////////////////////////// --}}
+                <x-btn.admin-dashboard-item route='admin.payments'>
+                    <p class="ml-3"> المدفوعات </p>
+                    <x-icons.payments
+                        class="w-6 h-6 {{ request()->routeIs('admin.payments') ? 'text-gray-200' : ' text-gray-800' }}" />
+                </x-btn.admin-dashboard-item>
+                {{-- ///////////////////////////////////// --}}
+                <x-btn.admin-dashboard-item route='admin.support'>
+                    <p class="ml-3"> الدعم </p>
+                    <x-icons.support
+                        class="w-6 h-6 {{ request()->routeIs('admin.support') ? 'text-gray-200' : ' text-gray-800' }}" />
+                </x-btn.admin-dashboard-item>
+                {{-- ///////////////////////////////////// --}}
+
             </ul>
+            <div
+                class="w-full h-12 right-0 border-t text-gray-100 bg-indigo-800 border-gray-100 bottom-0 absolute flex justify-between items-center text-sm font-bold">
+                <a href="{{ route('home') }}"
+                    class="flex justify-center items-center gap-2 border-l border-gray-100 pl-2 w-1/2 cursor-pointer hover:text-indigo-400">
+                    <x-icons.home class="w-4 h-4  " />
+                    <p> الرئيسية</p>
+                </a>
+                <form action="{{ route('logout') }}" method="POST" class="w-1/2 cursor-pointer hover:text-indigo-400">
+                    @csrf
+                    <button type="submit" class="w-full flex justify-center items-center gap-2 " >
+                            <x-icons.logout class="w-4 h-4  scale-x-[-1] " />
+                            <p> الخروج</p>
+                    </button>
+                </form>
+            </div>
         </div>
+
     </aside>
+
+    <main
+        class="bg-gray-100 md:w-[calc(100%-15rem)] w-full min-h-screen md:ms-[15rem] ms-0 flex justify-center items-center">
+        <div class="w-full h-full p-8">
+            @yield('content')
+        </div>
+    </main>
 
     <script>
         document.addEventListener('DOMContentLoaded', function() {
-            const toggleButton = document.getElementById('toggleButton');
+            const openButton = document.getElementById('openButton');
+            const closeButton = document.getElementById('closeButton');
             const sidebar = document.getElementById('sidebar');
 
-            toggleButton.addEventListener('click', function() {
+            closeButton.addEventListener('click', function() {
+                sidebar.classList.toggle('translate-x-full');
+            });
+            openButton.addEventListener('click', function() {
                 sidebar.classList.toggle('translate-x-full');
             });
 
@@ -110,5 +159,6 @@
         });
     </script>
 </body>
+@include('sweetalert::alert')
 
 </html>

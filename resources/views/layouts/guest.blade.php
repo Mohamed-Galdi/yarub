@@ -22,16 +22,29 @@
                 <a href="/" class="flex items-center space-x-3 ">
                     <img src="./assets/logos/logo_dark.png" class="w-24" alt="منصة يعرب">
                 </a>
-                <div class="flex md:order-2 space-x-3 md:space-x-2 items-center gap-3  ">
+                <div class="flex md:order-2 space-x-0 md:space-x-2 items-center gap-3  ">
 
                     @auth
-                        <a href="{{route('student.dashboard')}}">
-                            <x-btn.slide-dark class="text-base px-4 text-nowrap truncate w-full flex gap-2 items-end justify-center ">
-                                <p class="align-text-bottom">حسابي</p>
-                                <x-icons.user class="w-5 h-5"></x-icons.user>
+                        @if (Auth::user()->role === 'student')
+                            <a href="{{ route('student.dashboard') }}">
+                                <x-btn.slide-dark
+                                    class="text-base px-4 text-nowrap truncate w-full flex gap-2 items-end justify-center">
+                                    <p class="align-text-bottom">حسابي </p>
+                                    <x-icons.user class="w-5 h-5"></x-icons.user>
                                 </x-btn.slide-dark>
-                        </a>
+                            </a>
+                        @elseif(Auth::user()->role === 'admin')
+                            <a href="{{ route('admin.dashboard') }}">
+                                <x-btn.slide-dark
+                                    class="text-base px-4 text-nowrap truncate w-full flex gap-2 items-end justify-center">
+                                    <p class="align-text-bottom">المشرف </p>
+                                    <x-icons.admin class="w-5 h-5"></x-icons.admin>
+                                </x-btn.slide-dark>
+                            </a>
+                        @endif
                     @endauth
+
+
                     @guest
                         <a href="/register">
                             <x-btn.slide-dark class="text-sm md:px-4 px-2 text-nowrap truncate ">انشئ
@@ -42,12 +55,18 @@
                         </a>
                     @endguest
 
-                    <div class="w-8 h-8 relative">
-                        <x-icons.cart class="text-sm text-pr-500 w-full h-full "></x-icons.cart>
-                        <div
-                            class="text-white bg-pr-500 rounded-full absolute top-0 right-0 w-4 h-4 flex justify-center items-center">
-                            2</div>
-                    </div>
+
+                    @if (Auth::check() && Auth::user()->role === 'admin')
+                        <span></span>
+                    @else()
+                        <div class="w-8 h-8 relative">
+                            <x-icons.cart class="text-sm text-pr-500 w-full h-full "></x-icons.cart>
+                            <div
+                                class="text-white bg-pr-500 rounded-full absolute top-0 right-0 w-4 h-4 flex justify-center items-center">
+                                2</div>
+                        </div>
+                    @endif
+
                     <button data-collapse-toggle="navbar-sticky" type="button"
                         class="inline-flex items-center p-2 w-10 h-10 justify-center text-sm text-gray-100 bg-primary rounded-lg md:hidden hover:bg-gray-200 hover:text-pr-500 focus:outline-none focus:ring-2 focus:ring-gray-200 "
                         aria-controls="navbar-sticky" aria-expanded="false">

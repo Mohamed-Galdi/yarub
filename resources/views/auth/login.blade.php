@@ -10,7 +10,7 @@
                 </div>
                 <div
                     class="md:w-1/2 w-full bg-white/20 md:h-[22rem] rounded-lg border-2 border-pr-100 overflow-hidden backdrop-blur-xl px-8 md:pb-0 pb-">
-                    <form action="{{ route('login') }}" method="POST" class=" space-y-8">
+                    <form action="{{ route('student.login') }}" method="POST" class=" space-y-8">
                         @csrf
                         <x-form.input type="text" name="email" placeholder=" البريد الإلكتروني " class="w-full" />
 

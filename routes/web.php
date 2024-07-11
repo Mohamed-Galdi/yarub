@@ -14,29 +14,35 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', function () { return view('home.home');})->name('home');
-
-Route::get('/about', function () { return view('home.about');})->name('about');
-
-Route::get('/courses', function () { return view('courses.courses_list');})->name('courses');
-
-Route::get('/lessons', function () { return view('lessons.lessons_list');})->name('lessons');
-
-Route::get('/contact', function () { return view('home.contact');})->name('contact'); 
+// ///////////// Admin Routes //////////////
+Route::middleware(['auth', 'verified', 'admin'])->prefix('admin-dashboard')->group(function () {
+    Route::get('/', function () { return view('admin.dashboard'); })->name('admin.dashboard');
+    Route::get('/students', function () { return view('admin.students'); })->name('admin.students');
+    Route::get('/courses', function () { return view('admin.courses'); })->name('admin.courses');
+    Route::get('/lessons', function () { return view('admin.lessons'); })->name('admin.lessons');
+    Route::get('/tests', function () { return view('admin.tests'); })->name('admin.tests');
+    Route::get('/certificates', function () { return view('admin.certificates'); })->name('admin.certificates');
+    Route::get('/payments', function () { return view('admin.payments'); })->name('admin.payments');
+    Route::get('/support', function () { return view('admin.support'); })->name('admin.support');
+});
 
 
 // ///////////// Student Routes //////////////
-Route::get('/student-dashboard', function () { return view('student.dashboard');})->middleware(['auth', 'verified'])->name('student.dashboard');
-Route::get('/student-courses', function () { return view('student.courses');})->middleware(['auth', 'verified'])->name('student.courses');
-
-
-
-Route::get('/admin-dashboard', function () { return view('admin.dashboard');})->middleware(['auth', 'verified'])->name('admin.dashboard');
-
-Route::middleware('auth')->group(function () {
-    Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
-    Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
-    Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
+Route::middleware(['auth', 'verified', 'student'])->group(function () {
+    Route::get('/student-dashboard', function () { return view('student.dashboard'); })->name('student.dashboard');
+    Route::get('/student-courses', function () { return view('student.courses'); })->name('student.courses');
+    Route::get('/student-lessons', function () { return view('student.lessons'); })->name('student.lessons');
 });
 
-require __DIR__.'/auth.php';
+
+
+// ///////////// Home Routes //////////////
+Route::get('/', function () { return view('home.home'); })->name('home');
+Route::get('/about', function () { return view('home.about'); })->name('about');
+Route::get('/courses', function () { return view('courses.courses_list'); })->name('courses');
+Route::get('/lessons', function () { return view('lessons.lessons_list'); })->name('lessons');
+Route::get('/contact', function () { return view('home.contact'); })->name('contact');
+
+
+// ///////////// Auth Routes //////////////
+require __DIR__ . '/auth.php';

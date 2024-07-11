@@ -33,12 +33,12 @@ class RegisteredUserController extends Controller
         $request->validate([
             'first_name' => ['required', 'string', 'max:255'],
             'last_name' => ['required', 'string', 'max:255'],
-            'email' => ['required', 'string', 'email', 'max:255', 'unique:'.User::class],
+            'email' => ['required', 'string', 'email', 'max:255', 'unique:' . User::class],
             'password' => ['required', 'confirmed', Rules\Password::defaults()],
         ]);
 
         $user = User::create([
-            'name' => $request->first_name.' '.$request->last_name,
+            'name' => $request->first_name . ' ' . $request->last_name,
             'email' => $request->email,
             'role' => 'student',
             'password' => Hash::make($request->password),
@@ -51,6 +51,6 @@ class RegisteredUserController extends Controller
         toast('تم إنشاء الحساب بنجاح !', 'success');
 
 
-        return redirect(RouteServiceProvider::HOME);
+        return redirect()->route('student.dashboard');
     }
 }

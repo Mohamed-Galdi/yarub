@@ -23,13 +23,42 @@ class AuthenticatedSessionController extends Controller
     /**
      * Handle an incoming authentication request.
      */
-    public function store(LoginRequest $request): RedirectResponse
+    public function loginStudent(LoginRequest $request): RedirectResponse
     {
         $request->authenticate();
 
+        // Get the authenticated user
+        $user = Auth::user();
+
+        // Check if the user is a student
+        if ($user->role !== 'student') {
+            Auth::logout();
+            return redirect()->route('login')->withErrors(['email' => 'البريد الإلكتروني أو كلمة المرور غير صحيح !']);
+        }
+
         $request->session()->regenerate();
 
+        toast('تم تسجيل الدخول بنجاح !', 'success');
+
         return redirect()->route('student.dashboard');
+    }
+
+    public function loginAdmin(LoginRequest $request): RedirectResponse
+    {
+        $request->authenticate();
+
+        // Get the authenticated user
+        $user = Auth::user();
+
+        // Check if the user is an admin
+        if ($user->role !== 'admin') {
+            Auth::logout();
+            return redirect()->route('admin.login')->withErrors(['email' => 'البريد الإلكتروني أو كلمة المرور غير صحيح !']);
+        }
+
+        $request->session()->regenerate();
+        toast('تم تسجيل الدخول بنجاح !', 'success');
+        return redirect()->route('admin.dashboard');
     }
 
     /**

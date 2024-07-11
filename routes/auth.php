@@ -19,14 +19,16 @@ Route::middleware('guest')->group(function () {
     ->name('register');
 
     Route::get('login', function () {return view('auth.login');})
-    ->name('login_page');
-
-    Route::post('login', [AuthenticatedSessionController::class, 'store'])
     ->name('login');
+
+    Route::post('login', [AuthenticatedSessionController::class, 'loginStudent'])
+    ->name('student.login');
 
     Route::get('admin-login', function () {return view('auth.admin-login');})
     ->name('admin_login_page');
 
+    Route::post('admin-login', [AuthenticatedSessionController::class, 'loginAdmin'])
+    ->name('admin.login');
 
     Route::get('forgot-password', [PasswordResetLinkController::class, 'create'])
         ->name('password.request');
