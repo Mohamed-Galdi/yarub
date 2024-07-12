@@ -6,19 +6,17 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
-    <title>منصة يعرب التعليمية</title>
+    <title>يعرب - شاشة المشرف </title>
     <link rel="icon" type="image/x-icon" href="/assets/favicon.ico">
     <!-- Scripts -->
     @vite(['resources/css/app.css', 'resources/js/app.js'])
+    <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
 
 </head>
 
-<body dir="rtl" class="bg-gray-100">
-    {{-- <div>
-        <button>
-            <x-icons.logout class="w-6 h-6 text-pr-500 scale-x-[-1] left-32 absolute" />
-        </button>
-    </div> --}}
+<body dir="rtl" class="bg-gray-100 font-hacen">
+    
+    {{-- ////////////////// sidebar mobile toggle button ////////////////// --}}
     <button id="openButton"
         class="sm:hidden p-2 rounded-bl-lg  bg-pr-500 text-gray-200 hover:bg-pr-800 focus:outline-none order-1">
         <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"
@@ -129,6 +127,7 @@
         </div>
     </main>
 
+    {{-- ////////////////// sidebar mobile toggle button ////////////////// --}}
     <script>
         document.addEventListener('DOMContentLoaded', function() {
             const openButton = document.getElementById('openButton');

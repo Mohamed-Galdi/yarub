@@ -13,7 +13,7 @@
 
 </head>
 
-<body dir="rtl" class="bg-gray-100">
+<body dir="rtl" class="bg-gray-100 font-hacen">
     <nav
         class="fixed top-0 z-50 w-full bg-pr-500 text-white border-b border-gray-200 py-2 md:px-24 px-4 flex justify-between">
         {{-- Mobile Toggle button --}}
