@@ -27,7 +27,7 @@
 
 
     <aside id="sidebar"
-        class="fixed top-0 right-0 h-full w-60 bg-indigo-800 transition-transform translate-x-full sm:translate-x-0 sm:block shadow-lg shadow-pr-500 ">
+        class="fixed z-[999999] top-0 right-0 h-full w-60 bg-indigo-800 transition-transform translate-x-full sm:translate-x-0 sm:block shadow-lg shadow-pr-500 ">
         <button id="closeButton"
             class="sm:hidden p-2 rounded-bl-lg bg-gray-100 text-pr-500 hover:bg-gray-400 focus:outline-none order-1">
             <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"

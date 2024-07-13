@@ -31,7 +31,7 @@
             <button id="dropdownHoverButton" data-dropdown-toggle="dropdownHover" data-dropdown-trigger="hover"
                 type="button">
                 <div class="w-12 h-12 bg-gray-100 rounded-full flex items-center justify-center text-pr-300 ">
-                    <x-icons.user class="w-6 h-6" />
+                    <img src="{{asset(Auth::user()->avatar)  }}" class="" />
                 </div>
             </button>
 
