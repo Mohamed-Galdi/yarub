@@ -1,6 +1,6 @@
 @extends('layouts.admin')
 @section('content')
     <div>
-        <h1 class="text-7xl font-bold mx-12 text-indigo-500">Courses</h1>
+        <p>Edit the course {{$id}}</p>
     </div>
 @endsection()

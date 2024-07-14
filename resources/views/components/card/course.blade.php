@@ -1,6 +1,6 @@
-<div {{ $attributes->merge(['class' => 'bg-gray-200 flex flex-col items-start justify-start border-2 border-pr-500 overflow-hidden
+<div class = "bg-gradient-to-tr from-teal-600 to-teal-400 flex flex-col items-start justify-start border-2 border-pr-500 overflow-hidden
         rounded-xl shadow-lg shadow-pr-400 hover:shadow-sm cursor-pointer transition-all duration-300 ease-in-out hover:scale-[0.99]
-        relative  h-96']) }}
+        relative  h-96"
     >
     <div class="w-full h-1/2">
         <x-card.course-img :title="$title" />

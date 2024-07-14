@@ -24,12 +24,18 @@
 
         {{-- ////////////////////////////// Courses list ////////////////////////////// --}}
         <div class="grid grid-cols-1  md:grid-cols-2 lg:grid-cols-3  gap-12  px-8">
-            <x-card.lesson :title="' الخيل والليل لامروء القيس '" :description="'شرح قصيدة امروء القيس من منهج الدراسات الأدبية'" :monthly-price="30" :yearly-price="300" />
-            <x-card.lesson :title="' التوابع'" :description="'شرح درس التوابع من منهج الكفاية النحوية من الصف الثاني الثانوي'" :monthly-price="30" :yearly-price="300" />
-            <x-card.lesson :title="' همزة  الوصل '" :description="'شرح درس همزة الوصل وكيفية كتابتها من منهج كفايات لغوية ٢ للصف الأول الثانوي'" :monthly-price="30" :yearly-price="300" />
-            <x-card.lesson :title="' الخيل والليل لامروء القيس '" :description="'شرح قصيدة امروء القيس من منهج الدراسات الأدبية'" :monthly-price="30" :yearly-price="300" />
-            <x-card.lesson :title="' التوابع'" :description="'شرح درس التوابع من منهج الكفاية النحوية من الصف الثاني الثانوي'" :monthly-price="30" :yearly-price="300" />
-            <x-card.lesson :title="' همزة  الوصل '" :description="'شرح درس همزة الوصل وكيفية كتابتها من منهج كفايات لغوية ٢ للصف الأول الثانوي'" :monthly-price="30" :yearly-price="300" />
+            <x-card.guest-lesson class="w-[22rem] " :title="'مقدمة يَعرُب في التأسيس للقدرات - اللفظي'" :description="'شرح تفصيلي لقسم المفردة الشاذة ( الارتباط والاختلاف ) مع تدريبات شاملة'" :monthly-price="30"
+                :yearly-price="300" />
+            <x-card.guest-lesson class=" w-[22rem]" :title="' التوابع'" :description="'شرح درس التوابع من منهج الكفاية النحوية من الصف الثاني الثانوي'" :monthly-price="30"
+                :yearly-price="300" />
+            <x-card.guest-lesson class=" w-[22rem]" :title="' همزة  الوصل '" :description="'شرح درس همزة الوصل وكيفية كتابتها من منهج كفايات لغوية ٢ للصف الأول الثانوي'" :monthly-price="30"
+                :yearly-price="300" />
+            <x-card.guest-lesson class="w-[22rem] " :title="'مقدمة يَعرُب في التأسيس للقدرات - اللفظي'" :description="'شرح تفصيلي لقسم المفردة الشاذة ( الارتباط والاختلاف ) مع تدريبات شاملة'" :monthly-price="30"
+                :yearly-price="300" />
+            <x-card.guest-lesson class=" w-[22rem]" :title="' التوابع'" :description="'شرح درس التوابع من منهج الكفاية النحوية من الصف الثاني الثانوي'" :monthly-price="30"
+                :yearly-price="300" />
+            <x-card.guest-lesson class=" w-[22rem]" :title="' همزة  الوصل '" :description="'شرح درس همزة الوصل وكيفية كتابتها من منهج كفايات لغوية ٢ للصف الأول الثانوي'" :monthly-price="30"
+                :yearly-price="300" />
         </div>
 
 

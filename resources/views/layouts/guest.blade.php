@@ -10,6 +10,8 @@
     <link rel="icon" type="image/x-icon" href="/assets/favicon.ico">
     <!-- Scripts -->
     @vite(['resources/css/app.css', 'resources/js/app.js'])
+   <script src="//unpkg.com/alpinejs" defer></script>
+
 
 </head>
 

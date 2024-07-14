@@ -1,7 +1,9 @@
 <?php
 
-use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\Admin\CourseController;
+use App\Http\Controllers\Admin\LessonController;
+use App\Http\Controllers\Admin\StudentController;
 
 /*
 |--------------------------------------------------------------------------
@@ -14,12 +16,25 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
+
 // ///////////// Admin Routes //////////////
 Route::middleware(['auth', 'verified', 'admin'])->prefix('admin-dashboard')->group(function () {
     Route::get('/', function () { return view('admin.dashboard'); })->name('admin.dashboard');
-    Route::get('/students', function () { return view('admin.students'); })->name('admin.students');
-    Route::get('/courses', function () { return view('admin.courses'); })->name('admin.courses');
-    Route::get('/lessons', function () { return view('admin.lessons'); })->name('admin.lessons');
+
+    // students
+    Route::get('/students', [StudentController::class, 'index'])->name('admin.students');
+    Route::get('/students/view/{id}', [StudentController::class, 'show'])->name('admin.view_student');
+
+    // Courses
+    Route::get('/courses', [CourseController::class, 'index'])->name('admin.courses');
+    Route::get('/courses/create', [CourseController::class, 'create'])->name('admin.courses.create');
+    Route::get('/courses/edit/{id}', [CourseController::class, 'edit'])->name('admin.courses.edit');
+
+    // Lessons
+    Route::get('/lessons', [LessonController::class, 'index'])->name('admin.lessons');
+    Route::get('/lessons/create', [LessonController::class, 'create'])->name('admin.lessons.create');
+    Route::get('/lessons/edit/{id}', [LessonController::class, 'edit'])->name('admin.lessons.edit');
+
     Route::get('/tests', function () { return view('admin.tests'); })->name('admin.tests');
     Route::get('/certificates', function () { return view('admin.certificates'); })->name('admin.certificates');
     Route::get('/payments', function () { return view('admin.payments'); })->name('admin.payments');

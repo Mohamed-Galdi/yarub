@@ -97,19 +97,18 @@ final class StudentsTable extends PowerGridComponent
         return [
             Button::add('view')
                 ->slot('<x-icons.user class="w-4 h-4" />')
-                ->id()
                 ->class('py-2 px-3 me-1 rounded-lg bg-white text-blue-500 border border-blue-500 hover:bg-blue-500 hover:text-white transition-all duration-300 ease-in-out')
-                ->dispatch('edit', ['rowId' => $row->id]),
+                ->route('admin.view_student', ['id' => $row->id]),
+
             Button::add('edit')
                 ->slot('<x-icons.edit class="w-4 h-4" />')
                 ->id()
-                ->class('py-2 px-3 me-1 rounded-lg bg-white text-yellow-500 border border-yellow-500 hover:bg-yellow-500 hover:text-white transition-all duration-300 ease-in-out ')
-                ->dispatch('edit', ['rowId' => $row->id]),
+                ->class('py-2 px-3 me-1 rounded-lg bg-white text-yellow-500 border border-yellow-500 hover:bg-yellow-500 hover:text-white transition-all duration-300 ease-in-out '),
             Button::add('delete')
                 ->slot('<x-icons.trash class="w-4 h-4" />')
                 ->id()
+                ->confirm('هل أنت متأكد من حذف هذا المستخدم؟')
                 ->class('py-2 px-3 me-1 rounded-lg bg-white text-red-500 border border-red-500 hover:bg-red-500 hover:text-white transition-all duration-300 ease-in-out ')
-                ->dispatch('edit', ['rowId' => $row->id])
         ];
     }
 
