@@ -31,6 +31,6 @@
 
      </div>
      <div class="">
-         <x-btn.edit class="" route="admin.courses.edit" id="{{$courseId}}">تعديل</x-btn.edit>
+         <x-btn.edit class="" route="admin.lessons.edit" id="{{$courseId}}">تعديل</x-btn.edit>
      </div>
  </div>
