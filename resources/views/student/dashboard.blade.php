@@ -10,7 +10,7 @@
 </head>
 
 <body class="bg-gray-700  ">
-    <div class="w-screen h-screen flex flex-col justify-end items-center gap-4  ">
+    <div class="w-screen h-screen flex flex-col md:justify-end md:items-center justify-center items-center gap-4  ">
         <form action="{{ route('logout') }}" method="POST">
             @csrf
             <button>
@@ -21,8 +21,8 @@
             </button>
         </form>
 
-        <h1 class="font-hacen text-6xl text-white"> ! ...لوحة تحكم الطلاب قيد التطوير ⌛</h1>
-        <img src="{{ asset('assets/images/dev.svg') }}" alt="logo" class="w-1/2">
+        <h1 class="font-hacen md:text-6xl text-xl text-white"> ! ...لوحة تحكم الطلاب قيد التطوير ⌛</h1>
+        <img src="{{ asset('assets/images/dev.svg') }}" alt="logo" class="md:w-1/2 w-full">
     </div>
 </body>
 

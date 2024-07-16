@@ -6,7 +6,7 @@
 
             <x-btn.add route="admin.lessons.create">إضافة شرح</x-btn.add>
         </div>
-        <div class="bg-white rounded-lg border border-gray-300 p-4 w-full grid grid-cols-3 gap-6">
+        <div class="bg-white rounded-lg border border-gray-300 p-4 w-full grid lg:grid-cols-3 grid-cols-1 place-items-center gap-6">
             <x-card.admin-lesson :title="'الخيل والليل لامروء القيس'" :numberOfLessons="6" :numberOfStudents="23" :price="30"
                 :courseId="1" />
             <x-card.admin-lesson :title="'التوابع'" :numberOfLessons="10" :numberOfStudents="54" :price="30"

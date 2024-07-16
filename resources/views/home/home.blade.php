@@ -26,7 +26,7 @@
                 <h2 class="text-gray-200 text-center text-5xl mb-6">ميزاتنا الاساسية</h2>
                 <div class="flex md:flex-row flex-col jusfify-between items-center gap-8 ">
                     <div
-                        class="text-white flex flex-col md:items-start items-center md:text-start text-center gap-4 py-4 pe-12 ps-4 md:w-1/3 w-full">
+                        class="text-white flex flex-col md:items-start items-center md:text-start text-center gap-4 py-4 md:pe-12 pe-4 ps-4 md:w-1/3 w-full">
                         <div
                             class="w-16 h-16 bg-gradient-to-bl from-indigo-300 to-indigo-700 rounded-lg flex items-center justify-center transition-all duration-300 ease-in-out hover:scale-105 cursor-pointer shadow-blue-400 shadow-2xl ">
                             <div class="w-12">
@@ -37,7 +37,7 @@
                         <p class="text-lg font-nitaqat">منصة رقمية تتيح لك تعلم اللغة العربية في بيئة حديثة ومتطورة</p>
                     </div>
                     <div
-                        class="text-white flex flex-col md:items-start items-center md:text-start text-center  gap-4 py-4 pe-12 ps-4 md:w-1/3 w-full">
+                        class="text-white flex flex-col md:items-start items-center md:text-start text-center  gap-4 py-4 md:pe-12 pe-4  ps-4 md:w-1/3 w-full">
                         <div
                             class="w-16 h-16 bg-gradient-to-bl from-indigo-300 to-indigo-700 rounded-lg flex items-center justify-center transition-all duration-300 ease-in-out hover:scale-105 cursor-pointer shadow-blue-400 shadow-2xl ">
                             <div class="w-8">
@@ -49,7 +49,7 @@
                             العربية</p>
                     </div>
                     <div
-                        class="text-white flex flex-col md:items-start items-center md:text-start text-center  gap-4 py-4 pe-12 ps-4 md:w-1/3 w-full">
+                        class="text-white flex flex-col md:items-start items-center md:text-start text-center  gap-4 py-4 md:pe-12 pe-4  ps-4 md:w-1/3 w-full">
                         <div
                             class="w-16 h-16 bg-gradient-to-bl  from-indigo-300 to-indigo-700  rounded-lg flex items-center justify-center transition-all duration-300 ease-in-out hover:scale-105 cursor-pointer shadow-blue-400 shadow-2xl ">
                             <div class="w-[2.5rem]">

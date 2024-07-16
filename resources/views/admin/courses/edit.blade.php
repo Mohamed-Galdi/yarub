@@ -1,6 +1,6 @@
 @extends('layouts.admin')
 @section('content')
     <div>
-        <p>Edit the course {{$id}}</p>
+        <p>تعديل الدورة {{$id}}</p>
     </div>
 @endsection()

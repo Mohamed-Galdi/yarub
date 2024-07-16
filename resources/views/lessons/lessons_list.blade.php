@@ -23,7 +23,7 @@
         </form>
 
         {{-- ////////////////////////////// Courses list ////////////////////////////// --}}
-        <div class="grid grid-cols-1  md:grid-cols-2 lg:grid-cols-3  gap-12  px-8">
+        <div class="grid grid-cols-1  md:grid-cols-2 lg:grid-cols-3  gap-12  px-8 place-items-center">
             <x-card.guest-lesson class="w-[22rem] " :title="'مقدمة يَعرُب في التأسيس للقدرات - اللفظي'" :description="'شرح تفصيلي لقسم المفردة الشاذة ( الارتباط والاختلاف ) مع تدريبات شاملة'" :monthly-price="30"
                 :yearly-price="300" />
             <x-card.guest-lesson class=" w-[22rem]" :title="' التوابع'" :description="'شرح درس التوابع من منهج الكفاية النحوية من الصف الثاني الثانوي'" :monthly-price="30"

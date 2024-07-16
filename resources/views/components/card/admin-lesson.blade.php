@@ -1,6 +1,6 @@
- <div  {{$attributes->merge(['class' => 'w-full h-96 bg-gradient-to-tr from-teal-800 to-teal-400 rounded-xl shadow-lg p-4 space-y-4'])}}>
-     <div class="w-full h-1/2 rounded-xl overflow-hidden">
-         <x-card.course-img title="'{{$title}}'" />
+ <div  {{$attributes->merge(['class' => 'w-full h-fit bg-gradient-to-tr from-teal-800 to-teal-400 rounded-xl shadow-lg p-4 space-y-4'])}}>
+     <div class="w-full h-44 rounded-xl overflow-hidden">
+         <x-card.course-img title="'{{$title}}'" class />
      </div>
      <div class="">
          <p class="text-white">{{$title}}</p>
@@ -13,7 +13,7 @@
                  <p>{{$numberOfLessons}}</p>
              </div>
          </div>
-          <div class=" flex flex-col justify-center items-center w-1/3 border-x-2 border-white ">
+          <div class=" flex flex-col justify-center items-center w-1/3 border-x-2 border-white  ">
              <p class="text-yellow-300">الإشتراك</p>
              <div class=" text-sm font-judur">
                  <p>{{$price}}  رس/ شهريا</p>

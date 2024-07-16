@@ -23,7 +23,7 @@
         </form>
 
         {{-- ////////////////////////////// Courses list ////////////////////////////// --}}
-        <div class="grid grid-cols-1  md:grid-cols-2 lg:grid-cols-3  gap-12  px-8">
+        <div class="grid grid-cols-1  md:grid-cols-2 lg:grid-cols-3  gap-12  px-8 place-items-center">
             <x-card.guest-course class="w-[22rem] " :title="'مقدمة يَعرُب في التأسيس للقدرات - اللفظي'" :description="'شرح تفصيلي لقسم المفردة الشاذة ( الارتباط والاختلاف ) مع تدريبات شاملة'" :price="30" />
             <x-card.guest-course class="w-[22rem] " :title="'مقدمة يَعرُب في التأسيس للقدرات - اللفظي'" :description="'شرح تفصيلي لقسم المفردة الشاذة ( الارتباط والاختلاف ) مع تدريبات شاملة'" :price="30" />
             <x-card.guest-course class="w-[22rem] " :title="'مقدمة يَعرُب في التأسيس للقدرات - اللفظي'" :description="'شرح تفصيلي لقسم المفردة الشاذة ( الارتباط والاختلاف ) مع تدريبات شاملة'" :price="30" />

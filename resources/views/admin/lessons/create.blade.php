@@ -1,6 +1,7 @@
 @extends('layouts.admin')
 @section('content')
     <div>
-        <h1>Add New Lesson</h1>
+        <h1>إضافة دورة جديدة
+        </h1>
     </div>
 @endsection()

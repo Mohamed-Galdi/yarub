@@ -4,7 +4,7 @@
         <div>
             <x-btn.add route="admin.courses.create">إضافة دورة</x-btn.add>
         </div>
-        <div class="bg-white rounded-lg border border-gray-300 p-4 w-full grid grid-cols-3 gap-6">
+        <div class="bg-white rounded-lg border border-gray-300 p-4 w-full grid lg:grid-cols-3 grid-cols-1 place-items-center gap-6">
 
             <x-card.admin-course :title="'مقدمة يَعرُب في التأسيس للقدرات - اللفظي'" :number_of_lessons="6" :number_of_students="23" :price="30"
                 :course_id="1" />
