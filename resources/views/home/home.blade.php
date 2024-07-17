@@ -82,9 +82,10 @@
                 </div>
                 <div class="mt-8 flex md:flex-row flex-col justify-between items-center gap-4  w-full">
                     {{-- card --}}
-                    <x-card.guest-course class="w-[22rem] " :title="'مقدمة يَعرُب في التأسيس للقدرات - اللفظي'" :description="'شرح تفصيلي لقسم المفردة الشاذة ( الارتباط والاختلاف ) مع تدريبات شاملة'" :price="30" />
-                    <x-card.guest-course class="w-[22rem] " :title="'مقدمة يَعرُب في التأسيس للقدرات - اللفظي'" :description="'شرح تفصيلي لقسم المفردة الشاذة ( الارتباط والاختلاف ) مع تدريبات شاملة'" :price="30" />
-                    <x-card.guest-course class="w-[22rem] " :title="'مقدمة يَعرُب في التأسيس للقدرات - اللفظي'" :description="'شرح تفصيلي لقسم المفردة الشاذة ( الارتباط والاختلاف ) مع تدريبات شاملة'" :price="30" />
+                    <x-card.guest-course class="w-[22rem] " :title="'مقدمة يَعرُب في التأسيس للقدرات - اللفظي'" :description="'دورة تفصيلية وتعريفية باختبارات القدرات حسب اشتراطات قياس '" :price="30" />
+                    <x-card.guest-course class="w-[22rem] " :title="'التعريف بأقسام اختبار  القدرات -اللفظي  ( التناظر اللفظي )'" :description="'التعريف بأقسام الاختبار اللفظي وشرح تفصيلي للتناظر اللفظي مع إيراد أمثلة توضيحية '" :price="30" />
+                    <x-card.guest-course class="w-[22rem] " :title="'الارتباط والاختلاف'" :description="' شرح تفصيلي لقسم المفردة الشاذة ( الارتباط والاختلاف ) مع تدريبات شاملة
+                                                            '" :price="30" />
 
 
                 </div>
@@ -110,7 +111,8 @@
                 </div>
                 <div class="mt-8 flex md:flex-row flex-col justify-between items-center gap-4 ">
                     {{-- card --}}
-                     <x-card.guest-lesson class="w-[22rem] " :title="'مقدمة يَعرُب في التأسيس للقدرات - اللفظي'" :description="'شرح تفصيلي لقسم المفردة الشاذة ( الارتباط والاختلاف ) مع تدريبات شاملة'" :monthly-price="30"
+                    <x-card.guest-lesson class="w-[22rem] " :title="' الخيل والليل لامروء القيس
+                                        '" :description="'شرح قصيدة امروء القيس من منهج الدراسات الأدبية'" :monthly-price="30"
                         :yearly-price="300" />
                     <x-card.guest-lesson class=" w-[22rem]" :title="' التوابع'" :description="'شرح درس التوابع من منهج الكفاية النحوية من الصف الثاني الثانوي'" :monthly-price="30"
                         :yearly-price="300" />
