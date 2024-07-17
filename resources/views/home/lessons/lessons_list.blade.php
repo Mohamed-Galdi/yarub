@@ -30,12 +30,10 @@
                 :yearly-price="300" />
             <x-card.guest-lesson class=" w-[22rem]" :title="' همزة  الوصل '" :description="'شرح درس همزة الوصل وكيفية كتابتها من منهج كفايات لغوية ٢ للصف الأول الثانوي'" :monthly-price="30"
                 :yearly-price="300" />
-            <x-card.guest-lesson class="w-[22rem] " :title="'مقدمة يَعرُب في التأسيس للقدرات - اللفظي'" :description="'شرح تفصيلي لقسم المفردة الشاذة ( الارتباط والاختلاف ) مع تدريبات شاملة'" :monthly-price="30"
+           
+            <x-card.guest-lesson class=" w-[22rem]" :title="' المتممات'" :description="'شرح درس المتممات  من منهج كفايات لغوية ٢ للصف الأول الثانوي'" :monthly-price="30"
                 :yearly-price="300" />
-            <x-card.guest-lesson class=" w-[22rem]" :title="' التوابع'" :description="'شرح درس التوابع من منهج الكفاية النحوية من الصف الثاني الثانوي'" :monthly-price="30"
-                :yearly-price="300" />
-            <x-card.guest-lesson class=" w-[22rem]" :title="' همزة  الوصل '" :description="'شرح درس همزة الوصل وكيفية كتابتها من منهج كفايات لغوية ٢ للصف الأول الثانوي'" :monthly-price="30"
-                :yearly-price="300" />
+           
         </div>
 
 

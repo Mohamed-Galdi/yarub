@@ -26,7 +26,7 @@
                                     :class="selectedTab === 'courses' ?
                                         'border-indigo-500' :
                                         'border-gray-500'"
-                                    class="border-2  p-1 rounded-full min-w-6  text-xs">5</span>
+                                    class="border-2  p-1 rounded-full min-w-6  text-xs">8</span>
                             </div>
                         </button>
                         <button @click="selectedTab = 'lessons'" :aria-selected="selectedTab === 'lessons'"
@@ -45,9 +45,9 @@
                                     :class="selectedTab === 'lessons' ?
                                         'border-indigo-500' :
                                         'border-gray-500'"
-                                    class="border-2  p-1 rounded-full min-w-6  text-xs">5</span>
+                                    class="border-2  p-1 rounded-full min-w-6  text-xs">2</span>
                             </div>
-                        </button>                        
+                        </button>
                         <button @click="selectedTab = 'tests'" :aria-selected="selectedTab === 'tests'"
                             :tabindex="selectedTab === 'tests' ? '0' : '-1'"
                             :class="selectedTab === 'tests' ?
@@ -64,7 +64,7 @@
                                     :class="selectedTab === 'tests' ?
                                         'border-indigo-500' :
                                         'border-gray-500'"
-                                    class="border-2  p-1 rounded-full min-w-6  text-xs">5</span>
+                                    class="border-2  p-1 rounded-full min-w-6  text-xs">10</span>
                             </div>
                         </button>
                         <button @click="selectedTab = 'certificates'" :aria-selected="selectedTab === 'certificates'"
@@ -83,7 +83,7 @@
                                     :class="selectedTab === 'certificates' ?
                                         'border-indigo-500' :
                                         'border-gray-500'"
-                                    class="border-2  p-1 rounded-full min-w-6  text-xs">5</span>
+                                    class="border-2  p-1 rounded-full min-w-6  text-xs">2</span>
                             </div>
                         </button>
 
@@ -93,20 +93,28 @@
                         <div x-show="selectedTab === 'courses'" id="tabpanelGroups" role="tabpanel" aria-label="courses">
                             <div class="mt-4 space-y-6">
                                 {{-- course component --}}
-                               <x-card.student-profile-course title="مقدمة يَعرُب في التأسيس للقدرات - اللفظي" startDate="منذ 10 ايام" lastVisitDate="منذ 5 ساعات" courseCount="2/5" testCount="1/4" :progress="66" />
-                               <x-card.student-profile-course title="مقدمة يَعرُب في التأسيس للقدرات - اللفظي" startDate="منذ 10 ايام" lastVisitDate="منذ 5 ساعات" courseCount="2/5" testCount="1/4" :progress="5" />
-                               <x-card.student-profile-course title="مقدمة يَعرُب في التأسيس للقدرات - اللفظي" startDate="منذ 10 ايام" lastVisitDate="منذ 5 ساعات" courseCount="2/5" testCount="1/4" :progress="75" />
-                               <x-card.student-profile-course title="مقدمة يَعرُب في التأسيس للقدرات - اللفظي" startDate="منذ 10 ايام" lastVisitDate="منذ 5 ساعات" courseCount="2/5" testCount="1/4" :progress="33" />
-                               <x-card.student-profile-course title="مقدمة يَعرُب في التأسيس للقدرات - اللفظي" startDate="منذ 10 ايام" lastVisitDate="منذ 5 ساعات" courseCount="2/5" testCount="1/4" :progress="66" />
+                                <x-card.student-profile-course title="مقدمة يَعرُب في التأسيس للقدرات - اللفظي"
+                                    startDate="منذ 10 ايام" lastVisitDate="منذ 5 ساعات" courseCount="2/5" testCount="1/4"
+                                    :progress="66" />
+                                <x-card.student-profile-course
+                                    title="التعريف بأقسام اختبار  القدرات -اللفظي  ( التناظر اللفظي )"
+                                    startDate="منذ 10 ايام" lastVisitDate="منذ 15 ساعات" courseCount="0/5" testCount="2/4"
+                                    :progress="5" />
+                                <x-card.student-profile-course
+                                    title="شرح تفصيلي لقسم ( إكمال الجمل الناقصة ) مع تدريبات شاملة" startDate="منذ 10 ايام"
+                                    lastVisitDate="منذ 5 ايام" courseCount="3/5" testCount="2/4" :progress="33" />
+                                <x-card.student-profile-course title="شرح تفصيلي لقسم ( الخطأ السياقي ) مع تدريبات شاملة "
+                                    startDate="منذ 10 ايام" lastVisitDate="منذ 10 ايام" courseCount="5/5" testCount="4/4"
+                                    :progress="80" />
 
                             </div>
                         </div>
                         <div x-show="selectedTab === 'lessons'" id="tabpanelGroups" role="tabpanel" aria-label="lessons">
                             <div class="mt-4 space-y-6">
-                                <x-card.student-profile-lesson title="مقدمة يَعرُب في التأسيس للقدرات - اللفظي" startDate="منذ 10 ايام" endDate="01/04/2024" duration="10 ساعات" testCount="1/4" :progress="66" />
-                                <x-card.student-profile-lesson title="مقدمة يَعرُب في التأسيس للقدرات - اللفظي" startDate="منذ 10 ايام" endDate="01/04/2024" duration="10 ساعات" testCount="1/4" :progress="90" />
-                                <x-card.student-profile-lesson title="مقدمة يَعرُب في التأسيس للقدرات - اللفظي" startDate="منذ 10 ايام" endDate="01/04/2024" duration="10 ساعات" testCount="1/4" :progress="33" />
-                                <x-card.student-profile-lesson title="مقدمة يَعرُب في التأسيس للقدرات - اللفظي" startDate="منذ 10 ايام" endDate="01/04/2024" duration="10 ساعات" testCount="1/4" :progress="6" />
+                                <x-card.student-profile-lesson title=" الخيل والليل لامروء القيس" startDate="01/07/2024" endDate="01/10/2024" duration=" 3 أشهر" testCount="1/4" :progress="10" />
+                                <x-card.student-profile-lesson title="التوابع" startDate="01/07/2024" endDate="01/10/2024" duration=" 3 أشهر" testCount="1/4" :progress="50" />
+                                <x-card.student-profile-lesson title=" همزة الوصل" startDate="01/07/2024" endDate="01/10/2024" duration=" 3 أشهر" testCount="1/4" :progress="75" />
+                                <x-card.student-profile-lesson title="المتممات" startDate="01/07/2024" endDate="01/10/2024" duration=" 3 أشهر" testCount="1/4" :progress="90" />
                             </div>
                         </div>
                         <div x-show="selectedTab === 'tests'" id="tabpanelGroups" role="tabpanel" aria-label="tests">
@@ -114,7 +122,8 @@
                                 <p>...</p>
                             </div>
                         </div>
-                        <div x-show="selectedTab === 'certificates'" id="tabpanelGroups" role="tabpanel" aria-label="certificates">
+                        <div x-show="selectedTab === 'certificates'" id="tabpanelGroups" role="tabpanel"
+                            aria-label="certificates">
                             <div class="mt-4 space-y-6">
                                 <p>...</p>
                             </div>
