@@ -170,7 +170,8 @@
             }
         });
     </script>
+    @include('sweetalert::alert')
+    @stack('scripts')
 </body>
-@include('sweetalert::alert')
 
 </html>

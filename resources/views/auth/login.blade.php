@@ -12,9 +12,9 @@
                     class="md:w-1/2 w-full bg-white/20 md:h-[22rem] rounded-lg border-2 border-pr-100 overflow-hidden backdrop-blur-xl px-8 md:pb-0 pb-">
                     <form action="{{ route('student.login') }}" method="POST" class=" space-y-8">
                         @csrf
-                        <x-form.input type="text" name="email" placeholder=" البريد الإلكتروني " class="w-full" />
+                        <x-form.input-dark type="text" name="email" placeholder=" البريد الإلكتروني " class="w-full" />
 
-                        <x-form.input type="password" name="password" placeholder=" كلمة المرور " class="w-full" />
+                        <x-form.input-dark type="password" name="password" placeholder=" كلمة المرور " class="w-full" />
 
                         <x-btn.scale-light type="submit" class="w-full"> تسجيل الدخول </x-btn.scale-light>
                         <p class="text-center text-gray-200"> ليس لديك حساب بعد، قم<span

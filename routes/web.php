@@ -28,6 +28,7 @@ Route::middleware(['auth', 'verified', 'admin'])->prefix('admin-dashboard')->gro
     // Courses
     Route::get('/courses', [CourseController::class, 'index'])->name('admin.courses');
     Route::get('/courses/create', [CourseController::class, 'create'])->name('admin.courses.create');
+    Route::post('/courses', [CourseController::class, 'store'])->name('admin.courses.store');
     Route::get('/courses/edit/{id}', [CourseController::class, 'edit'])->name('admin.courses.edit');
 
     // Lessons

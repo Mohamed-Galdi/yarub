@@ -13,17 +13,17 @@
                     <form action="{{ route('register') }}" method="POST" class=" space-y-8">
                         @csrf
                         <div class=" flex gap-3 w-full">
-                            <x-form.input type="text" name="first_name" placeholder="الإسم الشخصي" class="w-1/2" />
-                            <x-form.input type="text" name="last_name" placeholder="الإسم العائلي" class="w-1/2" />
+                            <x-form.input-dark type="text" name="first_name" placeholder="الإسم الشخصي" class="w-1/2" />
+                            <x-form.input-dark type="text" name="last_name" placeholder="الإسم العائلي" class="w-1/2" />
 
                         </div>
-                        <x-form.input type="text" name="email" placeholder=" البريد الإلكتروني " class="w-full" />
+                        <x-form.input-dark type="text" name="email" placeholder=" البريد الإلكتروني " class="w-full" />
 
 
-                        <x-form.input type="password" name="password" placeholder=" كلمة المرور " class="w-full" />
+                        <x-form.input-dark type="password" name="password" placeholder=" كلمة المرور " class="w-full" />
 
 
-                        <x-form.input type="password" name="password_confirmation" placeholder=" تأكيد كلمة المرور "
+                        <x-form.input-dark type="password" name="password_confirmation" placeholder=" تأكيد كلمة المرور "
                             class="w-full" />
 
 
