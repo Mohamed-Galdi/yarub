@@ -62,3 +62,5 @@ Route::get('/contact', function () { return view('home.contact'); })->name('cont
 
 // ///////////// Auth Routes //////////////
 require __DIR__ . '/auth.php';
+
+Route::post('/upload-video', [CourseController::class, 'uploadVideo'])->name('upload.video');

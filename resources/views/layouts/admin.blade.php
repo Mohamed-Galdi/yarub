@@ -171,7 +171,7 @@
         });
     </script>
     @include('sweetalert::alert')
-    @stack('scripts')
 </body>
+@stack('scripts')
 
 </html>

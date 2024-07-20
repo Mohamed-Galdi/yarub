@@ -11,14 +11,12 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('content', function (Blueprint $table) {
+        Schema::create('contents', function (Blueprint $table) {
             $table->id();
-            $table->enum('type', ['video','pdf', 'text']);
-            $table->text('content');
+            $table->string('title');
             $table->string('url')->nullable();
             $table->unsignedBigInteger('course_id')->nullable();
             $table->unsignedBigInteger('lesson_id')->nullable();
-            $table->integer('order')->default(0);
             $table->timestamps();
 
             $table->foreign('course_id')->references('id')->on('courses')->onDelete('cascade');

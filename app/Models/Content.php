@@ -10,7 +10,10 @@ class Content extends Model
     use HasFactory;
 
     protected $fillable = [
-        'type', 'content', 'course_id', 'lesson_id', 'order',
+        'title',
+        'url',
+        'course_id',
+        'lesson_id',   
     ];
 
     public function course()
