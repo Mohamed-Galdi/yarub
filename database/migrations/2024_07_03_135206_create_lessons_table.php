@@ -15,7 +15,9 @@ return new class extends Migration
             $table->id();
             $table->string('title');
             $table->text('description');
-            $table->timestamp('published_at')->nullable();
+            $table->decimal('monthly_price', 8, 2);
+            $table->decimal('annual_price', 8, 2);
+            $table->boolean('published')->default(true);
             $table->timestamps();
         });
     }

@@ -5,21 +5,10 @@
             <x-btn.add route="admin.courses.create">إضافة دورة</x-btn.add>
         </div>
         <div class="bg-white rounded-lg border border-gray-300 p-4 w-full grid lg:grid-cols-3 grid-cols-1 place-items-center gap-6">
-
-            <x-card.admin-course :title="'مقدمة يَعرُب في التأسيس للقدرات - اللفظي'" :number_of_lessons="6" :number_of_students="23" :price="30"
-                :course_id="1" />
-            <x-card.admin-course :title="'التعريف بأقسام اختبار القدرات -اللفظي'" :number_of_lessons="8" :number_of_students="41" :price="30"
-                :course_id="2" />
-            <x-card.admin-course :title="'المفردة الشاذة ( الارتباط والاختلاف )'" :number_of_lessons="1" :number_of_students="16" :price="30"
-                :course_id="3" />
-            <x-card.admin-course :title="'مقدمة يَعرُب في التأسيس للقدرات - اللفظي'" :number_of_lessons="4" :number_of_students="22" :price="30"
-                :course_id="4" />
-            <x-card.admin-course :title="'التعريف بأقسام اختبار القدرات -اللفظي'" :number_of_lessons="5" :number_of_students="32" :price="30"
-                :course_id="5" />
-            <x-card.admin-course :title="'المفردة الشاذة ( الارتباط والاختلاف )'" :number_of_lessons="6" :number_of_students="15" :price="30"
-                :course_id="6" />
-
-
+            @foreach ($courses as $course)
+                <x-card.admin-course :title="$course->title" :number_of_lessons="$course->content()->count()" :number_of_students="$course->students()->count()" :price="$course->price"
+                    :course_id="$course->id" />
+            @endforeach
         </div>
     </div>
 @endsection()

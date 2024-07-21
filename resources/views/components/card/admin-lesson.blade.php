@@ -16,8 +16,8 @@
           <div class=" flex flex-col justify-center items-center w-1/3 border-x-2 border-white  ">
              <p class="text-yellow-300">الإشتراك</p>
              <div class=" text-sm font-judur">
-                 <p>{{$price}}  رس/ شهريا</p>
-                 <p>{{$price}}  رس/ سنويا</p>
+                 <p>{{$monthlyPrice}}  رس/ شهريا</p>
+                 <p>{{$annualPrice}}  رس/ سنويا</p>
              </div>
          </div>
          <div class=" flex flex-col justify-center items-center w-1/3 ">
@@ -31,6 +31,6 @@
 
      </div>
      <div class="">
-         <x-btn.edit class="" route="admin.lessons.edit" id="{{$courseId}}">تعديل</x-btn.edit>
+         <x-btn.edit class="" route="admin.lessons.edit" id="{{$lessonId}}">تعديل</x-btn.edit>
      </div>
  </div>

@@ -5,6 +5,6 @@
     {{$placeholder}}
     </textarea>
     @error($name)
-    <div class="text-red-500 text-sm -bottom-5 right-4 absolute">{{ $message }}</div>
+    <div class="text-red-500 text-sm -bottom-5 absolute">{{ $message }}</div>
 @enderror
 </div>
