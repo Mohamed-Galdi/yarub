@@ -19,7 +19,8 @@ class CourseController extends Controller
      */
     public function index()
     {
-        $courses = Course::all();
+        // order by published, then created_at
+        $courses = Course::orderBy('published', 'desc')->orderBy('created_at', 'desc')->get();
         return view('admin.courses.courses', compact('courses'));
     }
 
@@ -75,7 +76,7 @@ class CourseController extends Controller
             DB::rollBack();
             $this->cleanupTempFolder();
             throw $e;
-            
+
             return back()->with('error', 'An error occurred while creating the course. Please try again.');
         }
     }
@@ -120,23 +121,96 @@ class CourseController extends Controller
      */
     public function show(string $id)
     {
-        //
+        $course = Course::with('content')->findOrFail($id);
+        return view('admin.courses.show', compact('course'));
     }
 
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(string $id)
+    public function edit($id)
     {
-        return view('admin.courses.edit', compact('id'));
+        $course = Course::with('content')->findOrFail($id);
+        return view('admin.courses.edit', compact('course'));
     }
+
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(Request $request, $id)
     {
-        //
+        // $request->validate([
+        //     'title' => 'required|string|max:255',
+        //     'description' => 'required|string',
+        //     'price' => 'required|numeric|min:0',
+        //     'published' => 'required|boolean',
+        //     'content_titles' => 'required|array|min:1',
+        //     'content_titles.*' => 'required|string|max:255',
+        //     'content_videos' => 'required|array|min:1',
+        //     'content_videos.*' => 'nullable|string',
+        //     'content_ids' => 'required|array|min:1',
+        //     'content_ids.*' => 'nullable|integer|exists:contents,id',
+        // ]);
+        // dd($request->all());
+
+        try {
+            $course = Course::findOrFail($id);
+            $course->update([
+                'title' => $request->title,
+                'description' => $request->description,
+                'price' => $request->price,
+                'published' => $request->has('published'),
+
+            ]);
+
+            foreach ($request->content_titles as $index => $title) {
+                $contentId = $request->content_ids[$index];
+                $videoPath = $request->content_videos[$index];
+
+                if ($contentId) {
+                    // Update existing content
+                    $content = Content::findOrFail($contentId);
+                    $content->title = $title;
+                    if ($videoPath && $videoPath !== $content->url) {
+                        // New video uploaded, move it to final location
+                        $finalPath = $this->moveVideoToFinalLocation($videoPath, $course->id);
+                        // Delete old video
+                        Storage::disk('public')->delete($content->url);
+                        $content->url = $finalPath;
+                    }
+                    $content->save();
+                } else {
+                    // Create new content
+                    $finalPath = $this->moveVideoToFinalLocation($videoPath, $course->id);
+                    Content::create([
+                        'course_id' => $course->id,
+                        'title' => $title,
+                        'url' => $finalPath,
+                    ]);
+                }
+            }
+
+            $this->cleanupTempFolder();
+
+            DB::commit();
+            return redirect()->route('admin.courses')->with('success', 'Course updated successfully!');
+        } catch (\Exception $e) {
+            DB::rollBack();
+            $this->cleanupTempFolder();
+            return back()->with('error', 'An error occurred while updating the course. Please try again.');
+        }
+    }
+
+    public function deleteContent(Request $request, $id)
+    {
+        $content = Content::findOrFail($id);
+        $courseId = $content->course_id;
+
+        Storage::disk('public')->delete($content->url);
+        $content->delete();
+
+        return response()->json(['success' => true]);
     }
 
     /**

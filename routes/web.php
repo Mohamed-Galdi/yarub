@@ -4,6 +4,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Admin\CourseController;
 use App\Http\Controllers\Admin\LessonController;
 use App\Http\Controllers\Admin\StudentController;
+use App\Models\Course;
 
 /*
 |--------------------------------------------------------------------------
@@ -29,7 +30,11 @@ Route::middleware(['auth', 'verified', 'admin'])->prefix('admin-dashboard')->gro
     Route::get('/courses', [CourseController::class, 'index'])->name('admin.courses');
     Route::get('/courses/create', [CourseController::class, 'create'])->name('admin.courses.create');
     Route::post('/courses', [CourseController::class, 'store'])->name('admin.courses.store');
+    Route::get('/courses/{id}' , [CourseController::class, 'show'])->name('admin.courses.view');
     Route::get('/courses/edit/{id}', [CourseController::class, 'edit'])->name('admin.courses.edit');
+
+    Route::put('/courses/{id}', [CourseController::class, 'update'])->name('admin.courses.update');
+    Route::delete('/courses/content/{id}', [CourseController::class, 'deleteContent'])->name('courses.content.delete');
 
     // Lessons
     Route::get('/lessons', [LessonController::class, 'index'])->name('admin.lessons');
@@ -64,3 +69,4 @@ Route::get('/contact', function () { return view('home.contact'); })->name('cont
 require __DIR__ . '/auth.php';
 
 Route::post('/upload-video', [CourseController::class, 'uploadVideo'])->name('upload.video');
+Route::delete('/courses/content/{id}', [CourseController::class, 'deleteContent'])->name('courses.content.delete');
