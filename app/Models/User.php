@@ -47,7 +47,8 @@ class User extends Authenticatable
 
     public function courses()
     {
-        return $this->belongsToMany(Course::class, 'student_course_sub');
+        return $this->belongsToMany(Course::class, 'student_course_sub')->withPivot('created_at')
+        ->withTimestamps();
     }
 
     public function lessons()

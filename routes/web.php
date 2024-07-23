@@ -35,6 +35,8 @@ Route::middleware(['auth', 'verified', 'admin'])->prefix('admin-dashboard')->gro
 
     Route::put('/courses/{id}', [CourseController::class, 'update'])->name('admin.courses.update');
     Route::delete('/courses/content/{id}', [CourseController::class, 'deleteContent'])->name('courses.content.delete');
+    // detach course from student
+    Route::delete('/courses/detach/{course_id}/{student_id}', [CourseController::class, 'detach'])->name('admin.courses.detach');
 
     // Lessons
     Route::get('/lessons', [LessonController::class, 'index'])->name('admin.lessons');

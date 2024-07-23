@@ -26,8 +26,44 @@
             </div>
         </div>
         {{-- students table --}}
-        <div class="mt-6">
+        <div class="mt-8">
             <livewire:course-students-table :courseId="$course->id" />
         </div>
     </div>
+    <script>
+        function showDeleteConfirmationModal(studentId, courseId) {
+            Swal.fire({
+                title: 'تأكيد الحذف',
+                text: 'هل أنت متأكد أنك تريد إزالة هذا الطالب؟',
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'نعم، قم بالحذف',
+                cancelButtonText: 'إلغاء'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
+
+                    axios.post(`/admin-dashboard/courses/detach/${courseId}/${studentId}`, {
+                            _method: 'DELETE'
+                        }, {
+                            headers: {
+                                'X-CSRF-TOKEN': csrfToken,
+                                'Content-Type': 'application/json'
+                            }
+                        })
+                        .then(response => {
+                            Swal.fire('Success', 'تم إزالة الطالب بنجاح !', 'success');
+                            // Refresh the PowerGrid table
+                            Livewire.dispatch('pg:eventRefresh-' + window.livewire_table_id);
+                        })
+                        .catch(error => {
+                            console.error('Error:', error);
+                            Swal.fire('Error', 'حدث خطأ أثناء حذف الطالب', 'error');
+                        });
+                }
+            });
+        }
+    </script>
 @endsection

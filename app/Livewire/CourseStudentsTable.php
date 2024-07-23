@@ -25,7 +25,6 @@ final class CourseStudentsTable extends PowerGridComponent
 
     public function setUp(): array
     {
-        $this->showCheckBox();
 
         return [
             Exportable::make('export')
@@ -41,7 +40,9 @@ final class CourseStudentsTable extends PowerGridComponent
     {
         return User::whereHas('courses', function ($query) {
             $query->where('course_id', $this->courseId);
-        });
+        })->with(['courses' => function ($query) {
+            $query->where('course_id', $this->courseId);
+        }]);
     }
 
     public function relationSearch(): array
@@ -52,30 +53,32 @@ final class CourseStudentsTable extends PowerGridComponent
     public function fields(): PowerGridFields
     {
         return PowerGrid::fields()
-            ->add('avatar')
+            ->add('avatar', fn ($item) => '<img class="w-8 h-8 shrink-0 grow-0 rounded-full" src="' . asset("{$item->avatar}") . '" alt="">')
             ->add('name')
             ->add('email')
-            ->add('created_at');
+
+            ->add('subscription_date', function ($item) {
+                $course = $item->courses->first();
+                return $course ? $course->pivot->created_at->diffForHumans() : null;
+            });
     }
 
     public function columns(): array
     {
         return [
-            Column::make('Avatar', 'avatar')
-                ->sortable()
+            Column::make('الصورة', 'avatar'),
+
+            Column::make('الإسم', 'name')
                 ->searchable(),
 
-            Column::make('Name', 'name')
-                ->sortable()
+            Column::make('البريد الإلكتروني', 'email')
                 ->searchable(),
+            Column::add()
+                ->title('تاريخ الاشتراك')
+                ->field('subscription_date')
+                ->sortable(),
 
-            Column::make('Email', 'email')
-                ->sortable()
-                ->searchable(),
-
-
-
-            Column::action('Action')
+            Column::action('الإجراءات')
         ];
     }
 
@@ -90,14 +93,19 @@ final class CourseStudentsTable extends PowerGridComponent
         $this->js('alert(' . $rowId . ')');
     }
 
+    #[\Livewire\Attributes\On('showDeleteModal')]
+    public function showDeleteModal($studentId, $courseId): void
+        {
+            $this->js('showDeleteConfirmationModal(' . $studentId . ',' . $courseId . ')');
+        }
+
     public function actions(User $row): array
     {
         return [
-            Button::add('edit')
-                ->slot('Edit: ' . $row->id)
-                ->id()
-                ->class('pg-btn-white dark:ring-pg-primary-600 dark:border-pg-primary-600 dark:hover:bg-pg-primary-700 dark:ring-offset-pg-primary-800 dark:text-pg-primary-300 dark:bg-pg-primary-700')
-                ->dispatch('edit', ['rowId' => $row->id])
+            Button::add('remove')
+                ->slot('<div class="flex items-center justify-center gap-2"> <p> إزالة الطالب</p> <x-icons.remove-user class="w-5 h-5" /> </div>')
+                ->class('py-1 px-2 me-1 rounded-lg bg-red-400 text-white border border-red-500 hover:bg-red-500 transition-all duration-300 ease-in-out')
+                ->dispatch('showDeleteModal', ['studentId' => $row->id, 'courseId' => $this->courseId])
         ];
     }
 

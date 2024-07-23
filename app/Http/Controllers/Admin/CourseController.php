@@ -5,10 +5,12 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Models\Content;
 use App\Models\Course;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
+use RealRashid\SweetAlert\Facades\Alert;
 
 class CourseController extends Controller
 {
@@ -71,6 +73,7 @@ class CourseController extends Controller
             $this->cleanupTempFolder();
 
             DB::commit();
+            Alert::success('تم إنشاء الدرس بنجاح !');
             return redirect()->route('admin.courses')->with('success', 'Course created successfully!');
         } catch (\Exception $e) {
             DB::rollBack();
@@ -140,19 +143,19 @@ class CourseController extends Controller
      */
     public function update(Request $request, $id)
     {
-        // $request->validate([
-        //     'title' => 'required|string|max:255',
-        //     'description' => 'required|string',
-        //     'price' => 'required|numeric|min:0',
-        //     'published' => 'required|boolean',
-        //     'content_titles' => 'required|array|min:1',
-        //     'content_titles.*' => 'required|string|max:255',
-        //     'content_videos' => 'required|array|min:1',
-        //     'content_videos.*' => 'nullable|string',
-        //     'content_ids' => 'required|array|min:1',
-        //     'content_ids.*' => 'nullable|integer|exists:contents,id',
-        // ]);
+        $request->validate([
+            'title' => 'required|string|max:255',
+            'description' => 'required|string',
+            'price' => 'required|numeric|min:0',
+            'content_titles' => 'array|min:1',
+            'content_titles.*' => 'string|max:255',
+            'content_videos' => 'array|min:1',
+            'content_videos.*' => 'nullable|string',
+            'content_ids' => 'array|min:1',
+            'content_ids.*' => 'nullable|integer|exists:contents,id',
+        ]);
         // dd($request->all());
+        DB::beginTransaction();
 
         try {
             $course = Course::findOrFail($id);
@@ -164,36 +167,40 @@ class CourseController extends Controller
 
             ]);
 
-            foreach ($request->content_titles as $index => $title) {
-                $contentId = $request->content_ids[$index];
-                $videoPath = $request->content_videos[$index];
+            // check if content_titles array exist and not empty
+            if ($request->has('content_titles') && count($request->content_titles) > 0) {
+                foreach ($request->content_titles as $index => $title) {
+                    $contentId = $request->content_ids[$index];
+                    $videoPath = $request->content_videos[$index];
 
-                if ($contentId) {
-                    // Update existing content
-                    $content = Content::findOrFail($contentId);
-                    $content->title = $title;
-                    if ($videoPath && $videoPath !== $content->url) {
-                        // New video uploaded, move it to final location
+                    if ($contentId) {
+                        // Update existing content
+                        $content = Content::findOrFail($contentId);
+                        $content->title = $title;
+                        if ($videoPath && $videoPath !== $content->url) {
+                            // New video uploaded, move it to final location
+                            $finalPath = $this->moveVideoToFinalLocation($videoPath, $course->id);
+                            // Delete old video
+                            Storage::disk('public')->delete($content->url);
+                            $content->url = $finalPath;
+                        }
+                        $content->save();
+                    } else {
+                        // Create new content
                         $finalPath = $this->moveVideoToFinalLocation($videoPath, $course->id);
-                        // Delete old video
-                        Storage::disk('public')->delete($content->url);
-                        $content->url = $finalPath;
+                        Content::create([
+                            'course_id' => $course->id,
+                            'title' => $title,
+                            'url' => $finalPath,
+                        ]);
                     }
-                    $content->save();
-                } else {
-                    // Create new content
-                    $finalPath = $this->moveVideoToFinalLocation($videoPath, $course->id);
-                    Content::create([
-                        'course_id' => $course->id,
-                        'title' => $title,
-                        'url' => $finalPath,
-                    ]);
                 }
             }
-
+            
             $this->cleanupTempFolder();
 
             DB::commit();
+            Alert::success('تم تحديث الدرس بنجاح !');
             return redirect()->route('admin.courses')->with('success', 'Course updated successfully!');
         } catch (\Exception $e) {
             DB::rollBack();
@@ -219,5 +226,16 @@ class CourseController extends Controller
     public function destroy(string $id)
     {
         //
+    }
+
+    public function detach($course_id, $student_id, Request $request)
+    {
+        $course = Course::findOrFail($course_id);
+        $student = User::findOrFail($student_id);
+
+        $course->students()->detach($student);
+        Alert::success('تم إزالة الطالب بنجاح !');
+
+        return redirect()->route('admin.courses.view', ['id' => $course_id]);
     }
 }

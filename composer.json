@@ -12,7 +12,8 @@
         "laravel/tinker": "^2.8",
         "livewire/livewire": "^3.5",
         "power-components/livewire-powergrid": "^5.9",
-        "realrashid/sweet-alert": "^7.2"
+        "realrashid/sweet-alert": "^7.2",
+        "wireui/wireui": "^2.0"
     },
     "require-dev": {
         "barryvdh/laravel-debugbar": "^3.13",
