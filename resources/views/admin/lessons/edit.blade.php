@@ -10,13 +10,16 @@
             <div class="form-group flex lg:flex-row flex-col justify-start items-start gap-4">
 
                 <x-form.input-light name="title" label="العنوان" placeholder="مثال لعنوان: مقدمة يَعرُب في التأسيس للقدرات"
-                    type="text" required class="lg:w-[50%] w-full lg:order-1 order-2" id="title" value="{{ $lesson->title }}" required />
+                    type="text" required class="lg:w-[50%] w-full lg:order-1 order-2" id="title"
+                    value="{{ $lesson->title }}" required />
 
 
-                <x-form.input-light type="number" id="monthly_price" name="monthly_price" label="الإشتراك الشهري" currency="ريال سعودي"
-                    value="{{ $lesson->monthly_price }}" class="lg:w-[20%] w-full lg:order-2 order-3" required />
-                <x-form.input-light type="number" id="annual_price" name="annual_price" label="الإشتراك السنوي" currency="ريال سعودي"
-                    value="{{ $lesson->annual_price }}" class="lg:w-[20%] w-full lg:order-2 order-3" required />
+                <x-form.input-light type="number" id="monthly_price" name="monthly_price" label="الإشتراك الشهري"
+                    currency="ريال سعودي" value="{{ $lesson->monthly_price }}" class="lg:w-[20%] w-full lg:order-2 order-3"
+                    required />
+                <x-form.input-light type="number" id="annual_price" name="annual_price" label="الإشتراك السنوي"
+                    currency="ريال سعودي" value="{{ $lesson->annual_price }}" class="lg:w-[20%] w-full lg:order-2 order-3"
+                    required />
 
                 <x-form.toogle label="حالة النشر" name="published" value="{{ $lesson->published }}"
                     class="lg:w-[10%] w-full lg:items-center items-start justify-start lg:order-3 order-1" />
@@ -54,12 +57,12 @@
                                 فيديو الدرس
                             </label>
                             <div class="flex flex-col items-center gap-3 justify-center lg:w-2/3 w-full  mx-auto ">
-                                <label for="video"
+                                <label for="video{{ $loop->iteration }}"
                                     class="p-3 w-full bg-gray-900 text-white rounded-lg cursor-pointer hover:bg-gray-700 flex gap-2 items-center justify-center">
                                     تغيير الفيديو
                                 </label>
-                                <input id="video" type="file" class="form-control-file video-upload hidden"
-                                    accept="video/*">
+                                <input id="video{{ $loop->iteration }}" type="file"
+                                    class="form-control-file video-upload hidden" accept="video/*">
                                 <input type="hidden" name="content_videos[]" value="{{ $content->url }}">
                                 <div class="upload-status w-full flex justify-center items-center">
                                     <video src="{{ asset('storage/' . $content->url) }}" controls
@@ -97,7 +100,6 @@
         </button>
     </form>
 </div>
-
 @endsection
 
 @push('scripts')
@@ -199,5 +201,4 @@
         }
     });
 </script>
-
 @endpush

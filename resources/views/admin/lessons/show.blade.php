@@ -21,7 +21,7 @@
                     <p>مجموع المداخيل</p>
                 </div>
                 <div>
-                    <p>{{ $lesson->students->count() }}</p>
+                    <p>{{ $lesson->students()->sum('student_lesson_sub.payment_amount'); }}  ريال سعودي</p>
                 </div>
             </div>
         </div>

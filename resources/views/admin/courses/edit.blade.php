@@ -52,11 +52,11 @@
                                 فيديو الدرس
                             </label>
                             <div class="flex flex-col items-center gap-3 justify-center lg:w-2/3 w-full  mx-auto ">
-                                <label for="video"
+                                <label for="video{{ $loop->iteration }}"
                                     class="p-3 w-full bg-gray-900 text-white rounded-lg cursor-pointer hover:bg-gray-700 flex gap-2 items-center justify-center">
                                     تغيير الفيديو
                                 </label>
-                                <input id="video" type="file" class="form-control-file video-upload hidden"
+                                <input id="video{{ $loop->iteration }}" type="file" class="form-control-file video-upload hidden"
                                     accept="video/*">
                                 <input type="hidden" name="content_videos[]" value="{{ $content->url }}">
                                 <div class="upload-status w-full flex justify-center items-center">

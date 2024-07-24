@@ -11,7 +11,7 @@
                     <p>مجموع الطلاب</p>
                 </div>
                 <div>
-                    <p>{{ $course->students->count() }}</p>
+                    <p class="font-hacen text-3xl">{{ $course->students->count() }}</p>
                 </div>
             </div>
             <div
@@ -20,8 +20,9 @@
                     <x-icons.payments class="w-8 h-8 text-gray-50" />
                     <p>مجموع المداخيل</p>
                 </div>
-                <div>
-                    <p>{{ $course->students->count() }}</p>
+                <div class="">
+                    <p class="font-hacen text-3xl">{{ $course->students()->sum('student_course_sub.payment_amount'); }} </p>
+                    <p class="font-judur text-geay-700 text-sm">ريال سعودي</p>
                 </div>
             </div>
         </div>

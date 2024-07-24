@@ -35,7 +35,7 @@ class Lesson extends Model
 
     public function students()
     {
-        return $this->belongsToMany(User::class, 'student_lesson_sub')->withPivot('created_at')
+        return $this->belongsToMany(User::class, 'student_lesson_sub')->withPivot(['payment_amount','created_at'])
             ->withTimestamps();
     }
 }
