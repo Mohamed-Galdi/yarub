@@ -47,6 +47,7 @@ Route::middleware(['auth', 'verified', 'admin'])->prefix('admin-dashboard')->gro
     Route::get('/certificates', function () { return view('admin.certificates'); })->name('admin.certificates');
     Route::get('/payments', function () { return view('admin.payments'); })->name('admin.payments');
     Route::get('/support', function () { return view('admin.support'); })->name('admin.support');
+    Route::get('/coupons', function () { return view('admin.coupons'); })->name('admin.coupons');
 });
 
 

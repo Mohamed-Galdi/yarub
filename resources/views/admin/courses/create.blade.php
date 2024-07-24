@@ -5,11 +5,11 @@
         <h1 class="text-4xl text-indigo-700 mb-4">إنشاء دورة جديدة</h1>
         <form id="courseForm" action="{{ route('admin.courses.store') }}" method="POST" class="space-y-6">
             @csrf
-            <div class="form-group w-full flex gap-4 items-start justify-start">
+            <div class="form-group w-full flex lg:flex-row flex-col gap-4 items-start justify-start">
                 <x-form.input-light name="title" label="العنوان" placeholder="مثال لعنوان: مقدمة يَعرُب في التأسيس للقدرات"
-                    type="text" required class="w-3/4" id="title" required />
-                <x-form.input-light type="number" id="price" name="price" label="السعر (ريال سعودي)"
-                    :value="30" class="w-1/4" required />
+                    type="text" required class="lg:w-3/4 w-full" id="title" required />
+                <x-form.input-light type="number" id="price" name="price" label="السعر" currency="ريال سعودي"
+                    :value="30" class="lg:w-1/4 w-full" required />
 
             </div>
             <div class="form-group">

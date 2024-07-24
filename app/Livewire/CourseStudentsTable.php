@@ -6,6 +6,7 @@ use App\Models\Course;
 use App\Models\User;
 use Illuminate\Support\Carbon;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Support\Facades\Blade;
 use PowerComponents\LivewirePowerGrid\Button;
 use PowerComponents\LivewirePowerGrid\Column;
 use PowerComponents\LivewirePowerGrid\Exportable;
@@ -95,17 +96,30 @@ final class CourseStudentsTable extends PowerGridComponent
 
     #[\Livewire\Attributes\On('showDeleteModal')]
     public function showDeleteModal($studentId, $courseId): void
-        {
-            $this->js('showDeleteConfirmationModal(' . $studentId . ',' . $courseId . ')');
-        }
+    {
+        $this->js('showDeleteConfirmationModal(' . $studentId . ',' . $courseId . ')');
+    }
 
     public function actions(User $row): array
     {
         return [
             Button::add('remove')
-                ->slot('<div class="flex items-center justify-center gap-2"> <p> إزالة الطالب</p> <x-icons.remove-user class="w-5 h-5" /> </div>')
-                ->class('py-1 px-2 me-1 rounded-lg bg-red-400 text-white border border-red-500 hover:bg-red-500 transition-all duration-300 ease-in-out')
-                ->dispatch('showDeleteModal', ['studentId' => $row->id, 'courseId' => $this->courseId])
+                ->render(function ($row) {
+                    $url = route('admin.courses.detach', ['course_id' => $this->courseId, 'student_id' => $row->id]);
+                    $params = json_encode(['course_id' => $this->courseId]);
+
+                    return Blade::render(<<<HTML
+                    <x-delete-confirmation 
+                        url="{$url}"
+                        params='{$params}'
+                        elementName="طالب" 
+                        class="flex gap-3 py-1 px-2 me-1 rounded-lg bg-red-400 text-white border border-red-500 hover:bg-red-500 transition-all duration-300 ease-in-out"
+                    >
+                        <p> إزالة الطالب</p>
+                        <x-icons.remove-user class="w-5 h-5" />
+                    </x-delete-confirmation>
+                HTML);
+                }),
         ];
     }
 

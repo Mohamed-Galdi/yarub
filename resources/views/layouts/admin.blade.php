@@ -101,6 +101,12 @@
                         class="w-6 h-6 {{ request()->is('admin-dashboard/payments*') ? 'text-gray-200' : ' text-gray-800' }}" />
                 </x-btn.admin-dashboard-item>
                 {{-- ///////////////////////////////////// --}}
+                <x-btn.admin-dashboard-item route='admin.coupons' path='admin-dashboard/coupons*' class="w-full">
+                    <p class="ml-3"> القسائم </p>
+                    <x-icons.coupon
+                        class="w-6 h-6 {{ request()->is('admin-dashboard/coupons*') ? 'text-gray-200' : ' text-gray-800' }}" />
+                </x-btn.admin-dashboard-item>
+                {{-- ///////////////////////////////////// --}}
                 <x-btn.admin-dashboard-item route='admin.support' path='admin-dashboard/support*'>
                     <p class="ml-3"> الدعم </p>
                     <x-icons.support
