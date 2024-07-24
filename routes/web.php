@@ -37,11 +37,17 @@ Route::middleware(['auth', 'verified', 'admin'])->prefix('admin-dashboard')->gro
     Route::delete('/courses/content/{id}', [CourseController::class, 'deleteContent'])->name('courses.content.delete');
     // detach course from student
     Route::delete('/courses/detach/{course_id}/{student_id}', [CourseController::class, 'detach'])->name('admin.courses.detach');
+    // detach lesson from student
+    Route::delete('/lessons/detach/{lesson_id}/{student_id}', [LessonController::class, 'detach'])->name('admin.lessons.detach');
+    
 
     // Lessons
     Route::get('/lessons', [LessonController::class, 'index'])->name('admin.lessons');
     Route::get('/lessons/create', [LessonController::class, 'create'])->name('admin.lessons.create');
+    Route::post('/lessons', [LessonController::class, 'store'])->name('admin.lessons.store');
     Route::get('/lessons/edit/{id}', [LessonController::class, 'edit'])->name('admin.lessons.edit');
+    Route::get('/lessons/view/{id}', [LessonController::class, 'show'])->name('admin.lessons.view');
+    Route::put('/lessons/{id}', [LessonController::class, 'update'])->name('admin.lessons.update');
 
     Route::get('/tests', function () { return view('admin.tests'); })->name('admin.tests');
     Route::get('/certificates', function () { return view('admin.certificates'); })->name('admin.certificates');
@@ -73,3 +79,4 @@ require __DIR__ . '/auth.php';
 
 Route::post('/upload-video', [CourseController::class, 'uploadVideo'])->name('upload.video');
 Route::delete('/courses/content/{id}', [CourseController::class, 'deleteContent'])->name('courses.content.delete');
+Route::delete('/lessons/content/{id}', [LessonController::class, 'deleteContent'])->name('lessons.content.delete');

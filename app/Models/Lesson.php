@@ -10,7 +10,7 @@ class Lesson extends Model
     use HasFactory;
 
     protected $fillable = [
-        'title', 'description', 'subscription_type', 'published_at',
+        'title', 'description', 'monthly_price', 'annual_price', 'published'
     ];
 
     public function content()
@@ -35,6 +35,7 @@ class Lesson extends Model
 
     public function students()
     {
-        return $this->belongsToMany(User::class, 'student_lesson_sub');
+        return $this->belongsToMany(User::class, 'student_lesson_sub')->withPivot('created_at')
+            ->withTimestamps();
     }
 }
