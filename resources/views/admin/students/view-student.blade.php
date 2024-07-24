@@ -1,15 +1,89 @@
 @extends('layouts.admin')
 @section('content')
-    <div class=" flex flex-col md:flex-row gap-8">
+    <div class="space-y-8 ">
+
+        {{-- //////////////////// Student Info //////////////////// --}}
+        <div class=" w-full flex bg-white rounded-xl  h-fit border border-gray-800 shadow-md shadow-blue-500/50">
+            {{-- //////////////// Info //////////////// --}}
+            <div class="w-1/2 py-2 flex justify-start items-center">
+                <img src="{{ asset($student->avatar) }}" alt="" class="w-56 h-56">
+                <div class="w-full border-r-3 border-gray-600 px-4 py-6 h-full flex flex-col justify-between items-start ">
+                    <div>
+                        <p class="font-hacen text-4xl text-gray-800">{{ $student->name }}</p>
+                        <p class="font-hacen text-xl text-gray-500 ">{{ $student->email }}</p>
+                    </div>
+                    <div class="">
+                        <div class="flex items-start justify-start gap-x-1">
+                            <x-icons.calendar class="w-6 h-6 text-gray-800 " />
+                            <p class="text-xl text-gray-500 font-nitaqat mb-2 ">تاريخ الانضمام :</p>
+                        </div>    
+                            <div class="flex text-xl gap-1 ">
+                                <p class=" ">{{ $student->created_at->format('d-m-Y') }}</p>
+                                <p class=" ">({{ $student->created_at->diffForHumans() }})</p>
+                            </div>
+                    </div>
+                </div>
+
+            </div>
+            {{-- //////////////// Badges //////////////// --}}
+            <div class="w-1/2 grid grid-cols-2 gap-4 p-6 align-middle place-items-center">
+                <div
+                    class="w-[90%] p-3 rounded-lg h-20 bg-gradient-to-tr from-blue-400 to-blue-500 flex flex-col justify-center items-center">
+                    <div class="flex justify-center items-center gap-3">
+                        <p class="text-xl text-white">الدورات</p>
+                        <x-icons.course class="w-5 h-5 text-white" />
+                    </div>
+                    <p class="text-3xl text-white">8</p>
+                </div>
+                <div
+                    class="w-[90%] p-3 rounded-lg h-20 bg-gradient-to-tr from-red-400 to-red-500 flex flex-col justify-center items-center">
+                    <div class="flex justify-center items-center gap-3">
+                        <p class="text-xl text-white">الشروحات</p>
+                        <x-icons.lesson class="w-5 h-5 text-white" />
+                    </div>
+                    <p class="text-3xl text-white">2</p>
+                </div>
+                <div
+                    class="w-[90%] p-3 rounded-lg h-20 bg-gradient-to-tr from-green-400 to-green-500 flex flex-col justify-center items-center">
+                    <div class="flex justify-center items-center gap-3">
+                        <p class="text-xl text-white">الإختبارات</p>
+                        <x-icons.test class="w-5 h-5 text-white" />
+                    </div>
+                    <p class="text-3xl text-white">10</p>
+                </div>
+                <div
+                    class="w-[90%] p-3 rounded-lg h-20 bg-gradient-to-tr from-yellow-400 to-yellow-500 flex flex-col justify-center items-center">
+                    <div class="flex justify-center items-center gap-3">
+                        <p class="text-xl text-white">الشواهد</p>
+                        <x-icons.certificate class="w-5 h-5 text-white" />
+                    </div>
+                    <p class="text-3xl text-white">2</p>
+                </div>
+            </div>
+
+            {{-- //////////////// Join Date //////////////// --}}
+            {{-- <div class="px-8 my-4 flex gap-x-4">
+                <x-icons.calendar class="w-16 h-16 text-gray-600 " />
+                <div>
+                    <p class="text-xl text-gray-500 font-nitaqat mb-2 ">تاريخ الانضمام :</p>
+                    <div class="flex text-xl gap-1 ">
+                        <p class=" ">{{ $student->created_at->format('d-m-Y') }}</p>
+                        <p class=" ">({{ $student->created_at->diffForHumans() }})</p>
+                    </div>
+                </div>
+
+            </div> --}}
+        </div>
 
         {{-- //////////////////// Student Items //////////////////// --}}
-        <div class="order-2 md:order-1 md:w-2/3 w-full bg-gray-200 rounded-xl md:min-h-screen h-fit px-6 py-4">
+        <div class=" w-full bg-white rounded-xl md:min-h-screen h-fit px-6 py-4 border border-gray-800 shadow-md shadow-blue-500/50">
 
             <div class=" ">
                 {{-- /////////////////////////////////////////////////////// --}}
                 <div x-data="{ selectedTab: 'courses' }" class="w-full">
                     <div @keydown.right.prevent="$focus.wrap().next()" @keydown.left.prevent="$focus.wrap().previous()"
-                        class="flex gap-2 overflow-x-auto border-b border-slate-300 " role="tablist" aria-label="tab options">
+                        class="flex gap-2 overflow-x-auto border-b border-slate-300 " role="tablist"
+                        aria-label="tab options">
                         <button @click="selectedTab = 'courses'" :aria-selected="selectedTab === 'courses'"
                             :tabindex="selectedTab === 'courses' ? '0' : '-1'"
                             :class="selectedTab === 'courses' ?
@@ -90,31 +164,38 @@
 
                     </div>
                     <div class="p-2">
-                        <div x-show="selectedTab === 'courses'" id="tabpanelGroups" role="tabpanel" aria-label="courses">
+                        <div x-show="selectedTab === 'courses'" id="tabpanelGroups" role="tabpanel"
+                            aria-label="courses">
                             <div class="mt-4 space-y-6">
                                 {{-- course component --}}
                                 <x-card.student-profile-course title="مقدمة يَعرُب في التأسيس للقدرات - اللفظي"
-                                    startDate="منذ 10 ايام" lastVisitDate="منذ 5 ساعات" courseCount="2/5" testCount="1/4"
-                                    :progress="66" />
+                                    startDate="منذ 10 ايام" lastVisitDate="منذ 5 ساعات" courseCount="2/5"
+                                    testCount="1/4" :progress="66" />
                                 <x-card.student-profile-course
                                     title="التعريف بأقسام اختبار  القدرات -اللفظي  ( التناظر اللفظي )"
-                                    startDate="منذ 10 ايام" lastVisitDate="منذ 15 ساعات" courseCount="0/5" testCount="2/4"
-                                    :progress="5" />
+                                    startDate="منذ 10 ايام" lastVisitDate="منذ 15 ساعات" courseCount="0/5"
+                                    testCount="2/4" :progress="5" />
                                 <x-card.student-profile-course
-                                    title="شرح تفصيلي لقسم ( إكمال الجمل الناقصة ) مع تدريبات شاملة" startDate="منذ 10 ايام"
-                                    lastVisitDate="منذ 5 ايام" courseCount="3/5" testCount="2/4" :progress="33" />
+                                    title="شرح تفصيلي لقسم ( إكمال الجمل الناقصة ) مع تدريبات شاملة"
+                                    startDate="منذ 10 ايام" lastVisitDate="منذ 5 ايام" courseCount="3/5" testCount="2/4"
+                                    :progress="33" />
                                 <x-card.student-profile-course title="شرح تفصيلي لقسم ( الخطأ السياقي ) مع تدريبات شاملة "
-                                    startDate="منذ 10 ايام" lastVisitDate="منذ 10 ايام" courseCount="5/5" testCount="4/4"
-                                    :progress="80" />
+                                    startDate="منذ 10 ايام" lastVisitDate="منذ 10 ايام" courseCount="5/5"
+                                    testCount="4/4" :progress="80" />
 
                             </div>
                         </div>
-                        <div x-show="selectedTab === 'lessons'" id="tabpanelGroups" role="tabpanel" aria-label="lessons">
+                        <div x-show="selectedTab === 'lessons'" id="tabpanelGroups" role="tabpanel"
+                            aria-label="lessons">
                             <div class="mt-4 space-y-6">
-                                <x-card.student-profile-lesson title=" الخيل والليل لامروء القيس" startDate="01/07/2024" endDate="01/10/2024" duration=" 3 أشهر" testCount="1/4" :progress="10" />
-                                <x-card.student-profile-lesson title="التوابع" startDate="01/07/2024" endDate="01/10/2024" duration=" 3 أشهر" testCount="1/4" :progress="50" />
-                                <x-card.student-profile-lesson title=" همزة الوصل" startDate="01/07/2024" endDate="01/10/2024" duration=" 3 أشهر" testCount="1/4" :progress="75" />
-                                <x-card.student-profile-lesson title="المتممات" startDate="01/07/2024" endDate="01/10/2024" duration=" 3 أشهر" testCount="1/4" :progress="90" />
+                                <x-card.student-profile-lesson title=" الخيل والليل لامروء القيس" startDate="01/07/2024"
+                                    endDate="01/10/2024" duration=" 3 أشهر" testCount="1/4" :progress="10" />
+                                <x-card.student-profile-lesson title="التوابع" startDate="01/07/2024"
+                                    endDate="01/10/2024" duration=" 3 أشهر" testCount="1/4" :progress="50" />
+                                <x-card.student-profile-lesson title=" همزة الوصل" startDate="01/07/2024"
+                                    endDate="01/10/2024" duration=" 3 أشهر" testCount="1/4" :progress="75" />
+                                <x-card.student-profile-lesson title="المتممات" startDate="01/07/2024"
+                                    endDate="01/10/2024" duration=" 3 أشهر" testCount="1/4" :progress="90" />
                             </div>
                         </div>
                         <div x-show="selectedTab === 'tests'" id="tabpanelGroups" role="tabpanel" aria-label="tests">
@@ -136,70 +217,6 @@
             </div>
         </div>
 
-        {{-- //////////////////// Student Info //////////////////// --}}
-        <div class="order-1 md:order-2 md:w-1/3 w-full bg-gray-200 rounded-xl md:min-h-screen h-fit  ">
-            {{-- //////////////// Avatar //////////////// --}}
-            <div class="flex justify-center items-center h-56 p-2">
-                <img src="{{ asset($student->avatar) }}" alt="" class="w-56 h-56">
-            </div>
-            {{-- //////////////// Info //////////////// --}}
-            <div class="py-2 flex justify-center items-center gap-8">
-                <div>
-                    <p class="font-hacen text-4xl text-gray-800">{{ $student->name }}</p>
-                    <p class="font-hacen text-xl text-gray-500 ">{{ $student->email }}</p>
-                </div>
-                <div class="flex flex-col justify-center items-center">
-                    <img class="w-16 " src="{{ asset('assets/images/profile_badges/level_1.png') }}" />
-                </div>
-            </div>
-            {{-- //////////////// Badges //////////////// --}}
-            <div class="grid grid-cols-2 gap-4 p-6 align-middle place-items-center">
-                <div
-                    class="w-[90%] p-3 rounded-lg h-20 bg-gradient-to-tr from-blue-400 to-blue-500 flex flex-col justify-center items-center">
-                    <div class="flex justify-center items-center gap-3">
-                        <p class="text-xl text-white">الدورات</p>
-                        <x-icons.course class="w-5 h-5 text-white" />
-                    </div>
-                    <p class="text-3xl text-white">8</p>
-                </div>
-                <div
-                    class="w-[90%] p-3 rounded-lg h-20 bg-gradient-to-tr from-red-400 to-red-500 flex flex-col justify-center items-center">
-                    <div class="flex justify-center items-center gap-3">
-                        <p class="text-xl text-white">الشروحات</p>
-                        <x-icons.lesson class="w-5 h-5 text-white" />
-                    </div>
-                    <p class="text-3xl text-white">2</p>
-                </div>
-                <div
-                    class="w-[90%] p-3 rounded-lg h-20 bg-gradient-to-tr from-green-400 to-green-500 flex flex-col justify-center items-center">
-                    <div class="flex justify-center items-center gap-3">
-                        <p class="text-xl text-white">الإختبارات</p>
-                        <x-icons.test class="w-5 h-5 text-white" />
-                    </div>
-                    <p class="text-3xl text-white">10</p>
-                </div>
-                <div
-                    class="w-[90%] p-3 rounded-lg h-20 bg-gradient-to-tr from-yellow-400 to-yellow-500 flex flex-col justify-center items-center">
-                    <div class="flex justify-center items-center gap-3">
-                        <p class="text-xl text-white">الشواهد</p>
-                        <x-icons.certificate class="w-5 h-5 text-white" />
-                    </div>
-                    <p class="text-3xl text-white">2</p>
-                </div>
-            </div>
 
-            {{-- //////////////// Join Date //////////////// --}}
-            <div class="px-8 my-4 flex gap-x-4">
-                <x-icons.calendar class="w-16 h-16 text-gray-600 " />
-                <div>
-                    <p class="text-xl text-gray-500 font-nitaqat mb-2 ">تاريخ الانضمام :</p>
-                    <div class="flex text-xl gap-1 ">
-                        <p class=" ">{{ $student->created_at->format('d-m-Y') }}</p>
-                        <p class=" ">({{ $student->created_at->diffForHumans() }})</p>
-                    </div>
-                </div>
-
-            </div>
-        </div>
     </div>
 @endsection()
