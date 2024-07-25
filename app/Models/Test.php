@@ -9,27 +9,20 @@ class Test extends Model
 {
     use HasFactory;
 
-    protected $fillable = [
-        'title', 'description', 'course_id', 'lesson_id', 'status', 'user_id',
-    ];
-
-    public function user()
-    {
-        return $this->belongsTo(User::class);
-    }
-
-    public function course()
-    {
-        return $this->belongsTo(Course::class);
-    }
-
-    public function lesson()
-    {
-        return $this->belongsTo(Lesson::class);
-    }
+    protected $fillable = ['title', 'content_type', 'content_id', 'is_published', 'type'];
 
     public function questions()
     {
         return $this->hasMany(Question::class);
+    }
+
+    public function attempts()
+    {
+        return $this->hasMany(TestAttempt::class);
+    }
+
+    public function content()
+    {
+        return $this->morphTo();
     }
 }

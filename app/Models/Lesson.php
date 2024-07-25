@@ -30,7 +30,7 @@ class Lesson extends Model
 
     public function tests()
     {
-        return $this->hasMany(Test::class);
+        return $this->morphMany(Test::class, 'content');
     }
 
     public function students()

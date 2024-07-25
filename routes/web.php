@@ -4,6 +4,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Admin\CourseController;
 use App\Http\Controllers\Admin\LessonController;
 use App\Http\Controllers\Admin\StudentController;
+use App\Http\Controllers\TestController;
 use App\Models\Course;
 
 /*
@@ -20,7 +21,9 @@ use App\Models\Course;
 
 // ///////////// Admin Routes //////////////
 Route::middleware(['auth', 'verified', 'admin'])->prefix('admin-dashboard')->group(function () {
-    Route::get('/', function () { return view('admin.dashboard'); })->name('admin.dashboard');
+    Route::get('/', function () {
+        return view('admin.dashboard');
+    })->name('admin.dashboard');
 
     // students
     Route::get('/students', [StudentController::class, 'index'])->name('admin.students');
@@ -35,7 +38,7 @@ Route::middleware(['auth', 'verified', 'admin'])->prefix('admin-dashboard')->gro
     Route::get('/courses', [CourseController::class, 'index'])->name('admin.courses');
     Route::get('/courses/create', [CourseController::class, 'create'])->name('admin.courses.create');
     Route::post('/courses', [CourseController::class, 'store'])->name('admin.courses.store');
-    Route::get('/courses/{id}' , [CourseController::class, 'show'])->name('admin.courses.view');
+    Route::get('/courses/{id}', [CourseController::class, 'show'])->name('admin.courses.view');
     Route::get('/courses/edit/{id}', [CourseController::class, 'edit'])->name('admin.courses.edit');
 
     Route::put('/courses/{id}', [CourseController::class, 'update'])->name('admin.courses.update');
@@ -44,7 +47,7 @@ Route::middleware(['auth', 'verified', 'admin'])->prefix('admin-dashboard')->gro
     Route::delete('/courses/detach/{course_id}/{student_id}', [CourseController::class, 'detach'])->name('admin.courses.detach');
     // detach lesson from student
     Route::delete('/lessons/detach/{lesson_id}/{student_id}', [LessonController::class, 'detach'])->name('admin.lessons.detach');
-    
+
 
     // Lessons
     Route::get('/lessons', [LessonController::class, 'index'])->name('admin.lessons');
@@ -54,17 +57,31 @@ Route::middleware(['auth', 'verified', 'admin'])->prefix('admin-dashboard')->gro
     Route::get('/lessons/view/{id}', [LessonController::class, 'show'])->name('admin.lessons.view');
     Route::put('/lessons/{id}', [LessonController::class, 'update'])->name('admin.lessons.update');
 
-    Route::get('/tests', function () { return view('admin.tests'); })->name('admin.tests');
-    Route::get('/certificates', function () { return view('admin.certificates'); })->name('admin.certificates');
-    Route::get('/payments', function () { return view('admin.payments'); })->name('admin.payments');
-    Route::get('/support', function () { return view('admin.support'); })->name('admin.support');
-    Route::get('/coupons', function () { return view('admin.coupons'); })->name('admin.coupons');
+    // Tests
+    Route::get('/tests',[TestController::class, 'index'])->name('admin.tests');
+    // Route::resource('tests', TestController::class)->except(['index']);
+
+
+    Route::get('/certificates', function () {
+        return view('admin.certificates');
+    })->name('admin.certificates');
+    Route::get('/payments', function () {
+        return view('admin.payments');
+    })->name('admin.payments');
+    Route::get('/support', function () {
+        return view('admin.support');
+    })->name('admin.support');
+    Route::get('/coupons', function () {
+        return view('admin.coupons');
+    })->name('admin.coupons');
 });
 
 
 // ///////////// Student Routes //////////////
 Route::middleware(['auth', 'verified', 'student'])->group(function () {
-    Route::get('/student-dashboard', function () { return view('student.dashboard'); })->name('student.dashboard');
+    Route::get('/student-dashboard', function () {
+        return view('student.dashboard');
+    })->name('student.dashboard');
     // Route::get('/student-courses', function () { return view('student.courses'); })->name('student.courses');
     // Route::get('/student-lessons', function () { return view('student.lessons'); })->name('student.lessons');
 });
@@ -72,11 +89,21 @@ Route::middleware(['auth', 'verified', 'student'])->group(function () {
 
 
 // ///////////// Home Routes //////////////
-Route::get('/', function () { return view('home.home'); })->name('home');
-Route::get('/courses', function () { return view('home.courses.courses_list'); })->name('courses');
-Route::get('/lessons', function () { return view('home.lessons.lessons_list'); })->name('lessons');
-Route::get('/about', function () { return view('home.about'); })->name('about');
-Route::get('/contact', function () { return view('home.contact'); })->name('contact');
+Route::get('/', function () {
+    return view('home.home');
+})->name('home');
+Route::get('/courses', function () {
+    return view('home.courses.courses_list');
+})->name('courses');
+Route::get('/lessons', function () {
+    return view('home.lessons.lessons_list');
+})->name('lessons');
+Route::get('/about', function () {
+    return view('home.about');
+})->name('about');
+Route::get('/contact', function () {
+    return view('home.contact');
+})->name('contact');
 
 
 // ///////////// Auth Routes //////////////

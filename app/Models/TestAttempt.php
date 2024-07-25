@@ -5,16 +5,20 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Question extends Model
+class TestAttempt extends Model
 {
     use HasFactory;
-    protected $fillable = ['test_id', 'question', 'options', 'correct_answers', 'is_multiple_choice'];
+
+    protected $fillable = ['user_id', 'test_id', 'answers', 'score'];
 
     protected $casts = [
-        'options' => 'array',
-        'correct_answers' => 'array',
-        'is_multiple_choice' => 'boolean',
+        'answers' => 'array',
     ];
+
+    public function user()
+    {
+        return $this->belongsTo(User::class);
+    }
 
     public function test()
     {
