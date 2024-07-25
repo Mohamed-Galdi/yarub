@@ -22,7 +22,7 @@ class LessonController extends Controller
     public function index()
     {
         // order by published, then created_at
-        $lessons = Lesson::orderBy('published', 'desc')->orderBy('created_at', 'desc')->get();
+        $lessons = Lesson::orderBy('is_published', 'desc')->orderBy('created_at', 'desc')->get();
         return view('admin.lessons.lessons', compact('lessons'));
     }
 
@@ -167,7 +167,7 @@ class LessonController extends Controller
                 'description' => $request->description,
                 'monthly_price' => $request->monthly_price,
                 'annual_price' => $request->annual_price,
-                'published' => $request->has('published'),
+                'is_published' => $request->has('published'),
 
             ]);
 

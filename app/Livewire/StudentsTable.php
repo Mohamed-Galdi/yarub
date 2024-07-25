@@ -15,6 +15,8 @@ use PowerComponents\LivewirePowerGrid\PowerGrid;
 use PowerComponents\LivewirePowerGrid\PowerGridFields;
 use PowerComponents\LivewirePowerGrid\PowerGridComponent;
 use PowerComponents\LivewirePowerGrid\Traits\WithExport;
+use Illuminate\Support\Facades\Blade;
+
 
 final class StudentsTable extends PowerGridComponent
 {
@@ -86,29 +88,43 @@ final class StudentsTable extends PowerGridComponent
         return [];
     }
 
-    #[\Livewire\Attributes\On('edit')]
+    #[\Livewire\Attributes\On('view')]
     public function edit($rowId): void
     {
-        $this->js('alert(' . $rowId . ')');
     }
 
     public function actions(User $row): array
     {
         return [
             Button::add('view')
-                ->slot('<x-icons.user class="w-4 h-4" />')
-                ->class('py-2 px-3 me-1 rounded-lg bg-white text-blue-500 border border-blue-500 hover:bg-blue-500 hover:text-white transition-all duration-300 ease-in-out')
+                ->render(function ($row) {
+                    $url = route('admin.view_student', ['id' => $row->id]);
+                    return Blade::render(<<<HTML
+                    <a href="{$url}"  > 
+                        <div  class="flex items-center gap-3 py-1 px-2 me-1 rounded-lg bg-indigo-400 text-gray-100 border border-gray-100 hover:bg-indigo-500 hover:text-white transition-all duration-300 ease-in-out cursor-pointer">
+                            <p> عرض الطالب</p>
+                            <x-icons.user class="w-4 h-4" />
+                        </div>
+                    </a>
+                    
+                HTML);
+                })
                 ->route('admin.view_student', ['id' => $row->id]),
 
-            Button::add('edit')
-                ->slot('<x-icons.edit class="w-4 h-4" />')
-                ->id()
-                ->class('py-2 px-3 me-1 rounded-lg bg-white text-yellow-500 border border-yellow-500 hover:bg-yellow-500 hover:text-white transition-all duration-300 ease-in-out '),
-            Button::add('delete')
-                ->slot('<x-icons.trash class="w-4 h-4" />')
-                ->id()
-                ->confirm('هل أنت متأكد من حذف هذا المستخدم؟')
-                ->class('py-2 px-3 me-1 rounded-lg bg-white text-red-500 border border-red-500 hover:bg-red-500 hover:text-white transition-all duration-300 ease-in-out ')
+            Button::add('remove')
+                ->render(function ($row) {
+                    $url = route('admin.students.delete', ['student_id' =>  $row->id]);
+                    return Blade::render(<<<HTML
+                    <x-delete-confirmation 
+                        url="{$url}"
+                        elementName="طالب" 
+                        class="flex items-center gap-3 py-1 px-2 me-1 rounded-lg bg-red-400 text-white border border-red-500 hover:bg-red-500 transition-all duration-300 ease-in-out"
+                    >
+                        <p> حظر الطالب</p>
+                        <x-icons.remove-user class="w-5 h-5" />
+                    </x-delete-confirmation>
+                HTML);
+                }),
         ];
     }
 

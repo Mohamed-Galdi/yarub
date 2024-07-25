@@ -25,6 +25,11 @@ Route::middleware(['auth', 'verified', 'admin'])->prefix('admin-dashboard')->gro
     // students
     Route::get('/students', [StudentController::class, 'index'])->name('admin.students');
     Route::get('/students/view/{id}', [StudentController::class, 'show'])->name('admin.view_student');
+    Route::delete('/students/delete/{student_id}', [StudentController::class, 'destroy'])->name('admin.students.delete');
+    // list of deleted students
+    Route::get('/students/deleted', [StudentController::class, 'deleted'])->name('admin.students.deleted');
+    // restore deleted student
+    Route::delete('/students/restore/{student_id}', [StudentController::class, 'restore'])->name('admin.students.restore');
 
     // Courses
     Route::get('/courses', [CourseController::class, 'index'])->name('admin.courses');

@@ -21,7 +21,7 @@
                     currency="ريال سعودي" value="{{ $lesson->annual_price }}" class="lg:w-[20%] w-full lg:order-2 order-3"
                     required />
 
-                <x-form.toogle label="حالة النشر" name="published" value="{{ $lesson->published }}"
+                <x-form.toogle label="حالة النشر" name="published" value="{{ $lesson->is_published }}"
                     class="lg:w-[10%] w-full lg:items-center items-start justify-start lg:order-3 order-1" />
 
 

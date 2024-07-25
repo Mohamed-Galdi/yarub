@@ -16,7 +16,7 @@
                 <x-form.input-light type="number" id="price" name="price" label="السعر " currency="ريال سعودي"
                     value="{{ $course->price }}" class="lg:w-1/6 w-full lg:order-2 order-3" required />
 
-                <x-form.toogle label="حالة النشر" name="published" value="{{ $course->published }}"
+                <x-form.toogle label="حالة النشر" name="published" value="{{ $course->is_published }}"
                     class="lg:w-1/5 w-full lg:items-center items-start justify-start lg:order-3 order-1" />
 
 

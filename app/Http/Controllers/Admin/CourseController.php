@@ -22,7 +22,7 @@ class CourseController extends Controller
     public function index()
     {
         // order by published, then created_at
-        $courses = Course::orderBy('published', 'desc')->orderBy('created_at', 'desc')->get();
+        $courses = Course::orderBy('is_published', 'desc')->orderBy('created_at', 'desc')->get();
         return view('admin.courses.courses', compact('courses'));
     }
 
@@ -163,7 +163,7 @@ class CourseController extends Controller
                 'title' => $request->title,
                 'description' => $request->description,
                 'price' => $request->price,
-                'published' => $request->has('published'),
+                'is_published' => $request->has('published'),
 
             ]);
 

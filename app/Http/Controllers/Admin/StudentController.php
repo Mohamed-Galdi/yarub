@@ -13,7 +13,8 @@ class StudentController extends Controller
      */
     public function index()
     {
-        return view('admin.students.students');
+        $trashedCount = User::onlyTrashed()->count();
+        return view('admin.students.students', compact('trashedCount'));
     }
 
     /**
@@ -62,6 +63,22 @@ class StudentController extends Controller
      */
     public function destroy(string $id)
     {
-        //
+        $student = User::find($id);
+        $student->delete();
+        return redirect()->route('admin.students');
+        
+    }
+
+    public function deleted()
+    {
+        $students = User::onlyTrashed()->get();
+        return view('admin.students.deleted', compact('students'));
+    }
+
+    public function restore(string $id)
+    {
+        $student = User::onlyTrashed()->find($id);
+        $student->restore();
+        return redirect()->route('admin.students.deleted');
     }
 }

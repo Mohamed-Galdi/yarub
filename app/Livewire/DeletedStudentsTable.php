@@ -2,11 +2,9 @@
 
 namespace App\Livewire;
 
-use App\Models\Lesson;
 use App\Models\User;
 use Illuminate\Support\Carbon;
 use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Support\Facades\Blade;
 use PowerComponents\LivewirePowerGrid\Button;
 use PowerComponents\LivewirePowerGrid\Column;
 use PowerComponents\LivewirePowerGrid\Exportable;
@@ -17,18 +15,20 @@ use PowerComponents\LivewirePowerGrid\PowerGrid;
 use PowerComponents\LivewirePowerGrid\PowerGridFields;
 use PowerComponents\LivewirePowerGrid\PowerGridComponent;
 use PowerComponents\LivewirePowerGrid\Traits\WithExport;
+use Illuminate\Support\Facades\Blade;
 
-final class LessonStudentsTable extends PowerGridComponent
+
+final class DeletedStudentsTable extends PowerGridComponent
 {
     use WithExport;
 
-    public $lessonId;
-
     public function setUp(): array
     {
+        $this->showCheckBox();
 
         return [
             Exportable::make('export')
+                ->striped()
                 ->type(Exportable::TYPE_XLS, Exportable::TYPE_CSV),
             Header::make()->showSearchInput(),
             Footer::make()
@@ -39,11 +39,7 @@ final class LessonStudentsTable extends PowerGridComponent
 
     public function datasource(): Builder
     {
-        return User::whereHas('lessons', function ($query) {
-            $query->where('lesson_id', $this->lessonId);
-        })->with(['lessons' => function ($query) {
-            $query->where('lesson_id', $this->lessonId);
-        }]);
+        return User::onlyTrashed();
     }
 
     public function relationSearch(): array
@@ -54,29 +50,33 @@ final class LessonStudentsTable extends PowerGridComponent
     public function fields(): PowerGridFields
     {
         return PowerGrid::fields()
-            ->add('avatar', fn ($item) => '<img class="w-8 h-8 shrink-0 grow-0 rounded-full" src="' . asset("{$item->avatar}") . '" alt="">')
             ->add('name')
             ->add('email')
-
-            ->add('subscription_date', function ($item) {
-                $lesson = $item->lessons->first();
-                return $lesson ? $lesson->pivot->created_at->diffForHumans() : null;
-            });
+            ->add('role')
+            ->add('avatar', fn ($item) => '<img class="w-8 h-8 shrink-0 grow-0 rounded-full" src="' . asset("{$item->avatar}") . '" alt="">')
+            ->add('created_at', fn ($item) => Carbon::parse($item->created_at))
+            ->add('created_at_formatted', fn ($item) => Carbon::parse($item->created_at)->diffForhumans());
     }
 
     public function columns(): array
     {
         return [
+
             Column::make('الصورة', 'avatar'),
 
             Column::make('الإسم', 'name')
+            ->sortable()
                 ->searchable(),
 
             Column::make('البريد الإلكتروني', 'email')
+            ->sortable()
                 ->searchable(),
+
+
+
             Column::add()
-                ->title('تاريخ الاشتراك')
-                ->field('subscription_date')
+                ->title('تاريخ الإضافة')
+                ->field('created_at_formatted')
                 ->sortable(),
 
             Column::action('الإجراءات')
@@ -85,28 +85,32 @@ final class LessonStudentsTable extends PowerGridComponent
 
     public function filters(): array
     {
-        return [];
+        return [
+        ];
     }
 
-    
+    #[\Livewire\Attributes\On('edit')]
+    public function edit($rowId): void
+    {
+        $this->js('alert('.$rowId.')');
+    }
 
     public function actions(User $row): array
     {
         return [
-            Button::add('remove')
+            Button::add('restore')
                 ->render(function ($row) {
-                    $url = route('admin.lessons.detach', ['lesson_id' => $this->lessonId, 'student_id' => $row->id]);
-                    $params = json_encode(['lesson_id' => $this->lessonId]);
-
+                    $url = route('admin.students.restore', ['student_id' =>  $row->id]);
                     return Blade::render(<<<HTML
-                    <x-delete-confirmation 
+                    <x-delete-confirmation
+                        title="هل أنت متأكد من إزالة هذا الطالب من الحظر؟"
+                        confirmButtonText="نعم، قم بالإزالة!"
                         url="{$url}"
-                        params='{$params}'
                         elementName="طالب" 
-                        class="flex gap-3 py-1 px-2 me-1 rounded-lg bg-red-400 text-white border border-red-500 hover:bg-red-500 transition-all duration-300 ease-in-out"
+                        class="flex items-center gap-3 py-1 px-2 me-1 rounded-lg bg-green-400 text-white border border-green-500 hover:bg-green-500 transition-all duration-300 ease-in-out"
                     >
-                        <p> إزالة الطالب</p>
-                        <x-icons.remove-user class="w-5 h-5" />
+                        <p> إزالة الحظر </p>
+                        <x-icons.square-check class="w-5 h-5" />
                     </x-delete-confirmation>
                 HTML);
                 }),

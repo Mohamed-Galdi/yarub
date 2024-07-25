@@ -10,7 +10,7 @@ class Course extends Model
     use HasFactory;
 
     protected $fillable = [
-        'title', 'description', 'price', 'published',
+        'title', 'description', 'price', 'is_published',
     ];
 
     public function content()
@@ -37,5 +37,10 @@ class Course extends Model
     {
         return $this->belongsToMany(User::class, 'student_course_sub')->withPivot(['payment_amount','created_at'])
             ->withTimestamps();
+    }
+
+    public function scopePublished($query)
+    {
+        return $query->where('is_published', true);
     }
 }

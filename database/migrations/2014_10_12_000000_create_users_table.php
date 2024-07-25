@@ -20,6 +20,7 @@ return new class extends Migration
             $table->enum('role', ['student', 'admin']);
             $table->string('avatar')->nullable();
             $table->rememberToken();
+            $table->softDeletes();
             $table->timestamps();
         });
     }
