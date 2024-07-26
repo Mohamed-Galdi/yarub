@@ -68,9 +68,8 @@ class User extends Authenticatable
         return $this->hasMany(Progress::class);
     }
 
-    public function tests()
-    {
-        return $this->hasMany(Test::class);
+    public function test_attempts(){
+        return $this->hasMany(TestAttempt::class);
     }
 
     public function certificates()

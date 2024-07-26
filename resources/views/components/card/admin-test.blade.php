@@ -1,38 +1,31 @@
 <div
-    {{ $attributes->merge(['class' => 'w-full h-fit bg-gradient-to-tr rounded-xl shadow-lg p-4 space-y-4' . ($published ? ' from-orange-600 to-orange-400' : ' from-gray-800 to-gray-400')]) }}>
-    {{-- <div class="w-full h-44 rounded-xl overflow-hidden">
-         <x-card.course-img title="'{{ $title }}'" />
-     </div> --}}
-    <div class="flex justify-start items-center gap-2">
-        @if ($published)
-            <x-card.live />
-        @else
-            <x-card.not-live />
-        @endif
-        <p class="text-white text-3xl">{{ $title }}</p>
+    {{ $attributes->merge(['class' => 'w-full h-fit bg-gradient-to-tr rounded-xl shadow-lg p-4 space-y-4 overflow-hidden' . ($published ? ' from-orange-600 to-orange-400' : ' from-gray-800 to-gray-400')]) }}>
+    <div class="space-y-2">
+        <div class="flex justify-start items-center gap-2">
+            @if ($published)
+                <x-card.live />
+            @else
+                <x-card.not-live />
+            @endif
+            <p class="text-white text-3xl">{{ $title }}</p>
+        </div>
+        <p class="py-[2px] px-1 ms-6 bg-orange-800 text-gray-100 rounded-lg me-2 font-judur text-nowrap truncate"> {{ $courseTitle }}</p>
     </div>
     <div class="flex text-white justify-between items-center">
-        <div class="border-l-2 border-white flex flex-col justify-center items-center w-1/3">
-            <p class="text-yellow-300">الدروس</p>
+        <div class="border-l-2 border-white flex flex-col justify-center items-center w-1/2 gap-y-2">
+            <p class="text-indigo-200">نوع الإختبار</p>
             <div class="flex gap-2 items-center">
-                <x-icons.video class="w-5 h-5 " />
-                {{-- <p>{{ $numberOfLessons }}</p> --}}
+                <p class="py-1 px-2 bg-gray-100 text-gray-800 rounded-lg me-2 font-judur text-sm">{{ $type }}</p>
             </div>
         </div>
-        <div class="border-l-2 border-white flex flex-col justify-center items-center w-1/3">
-            <p class="text-yellow-300">المشتركين</p>
+        <div class=" flex flex-col justify-center items-center w-1/2 gap-y-2">
+            <p class="text-indigo-200">عداد الإجتيازات</p>
             <div class="flex gap-2 items-center justify-center">
                 <x-icons.user class="w-5 h-5 " />
-                {{-- <p>{{ $numberOfStudents }}</p> --}}
+                <p>{{ $attemptsCount }}</p>
             </div>
         </div>
-        <div class=" flex flex-col justify-center items-center w-1/3">
-            <p class="text-yellow-300">المبلغ</p>
-            <div class="flex gap-2 items-center justify-center">
-                <x-icons.money-bag class="w-5 h-5 " />
-                {{-- <p class="text-no-wrap truncate">{{ $price }} رس</p> --}}
-            </div>
-        </div>
+
 
     </div>
     <div class="pt-3 flex justify-center items-center gap-2">

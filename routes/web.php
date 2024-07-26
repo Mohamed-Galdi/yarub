@@ -59,7 +59,8 @@ Route::middleware(['auth', 'verified', 'admin'])->prefix('admin-dashboard')->gro
 
     // Tests
     Route::get('/tests',[TestController::class, 'index'])->name('admin.tests');
-    // Route::resource('tests', TestController::class)->except(['index']);
+    Route::get('/tests/create', [TestController::class, 'create'])->name('admin.tests.create');
+    Route::post('/tests', [TestController::class, 'store'])->name('admin.tests.store');
 
 
     Route::get('/certificates', function () {

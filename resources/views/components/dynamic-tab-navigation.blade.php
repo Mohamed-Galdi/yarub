@@ -25,14 +25,14 @@
                 <div class="text-xl flex items-center justify-start gap-2">
                     <p>{{ $tab['label'] }}</p>
                     <x-dynamic-component :component="$tab['icon']" class="w-5 h-5 text-blue" />
-                    @if ($tab['count'])
+                    @if ($tab['count'] || $tab['count'] === 0)
                     <span
                         :class="selectedTab === '{{ $tab['id'] }}' ?
                             'border-indigo-500' :
                             'border-gray-500'"
                         class="border-2 p-1 rounded-full min-w-6 text-xs"
                     >
-                        {{ $tab['count'] ?? '' }}
+                        {{ $tab['count'] ?? '0' }}
                     </span>
                     @endif
                 </div>

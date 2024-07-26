@@ -49,7 +49,7 @@
                         <p class="text-xl text-white">الإختبارات</p>
                         <x-icons.test class="w-5 h-5 text-white" />
                     </div>
-                    <p class="text-3xl text-white">{{ $student->tests()->count() }}</p>
+                    <p class="text-3xl text-white">{{ $student->test_attempts()->count() }}</p>
                 </div>
                 <div
                     class="w-[90%] p-3 rounded-lg h-20 bg-gradient-to-tr from-yellow-400 to-yellow-500 flex flex-col justify-center items-center">
@@ -69,129 +69,66 @@
             class=" w-full bg-white rounded-xl md:min-h-screen h-fit px-6 py-4 border border-gray-800 shadow-md shadow-blue-500/50">
 
             <div class=" ">
-                {{-- /////////////////////////////////////////////////////// --}}
-                <div x-data="{ selectedTab: 'courses' }" class="w-full">
-                    <div @keydown.right.prevent="$focus.wrap().next()" @keydown.left.prevent="$focus.wrap().previous()"
-                        class="flex gap-2 overflow-x-auto border-b border-slate-300 " role="tablist"
-                        aria-label="tab options">
-                        <button @click="selectedTab = 'courses'" :aria-selected="selectedTab === 'courses'"
-                            :tabindex="selectedTab === 'courses' ? '0' : '-1'"
-                            :class="selectedTab === 'courses' ?
-                                'font-bold text-blue-700 border-b-2 border-blue-700 ' :
-                                'text-slate-700 font-medium hover:border-b-2 hover:border-b-slate-800 hover:text-black'"
-                            class="flex h-min items-center gap-2 px-4 py-2 text-sm" type="button" role="tab"
-                            aria-controls="tabpanelGroups">
-
-
-                            <div class="text-xl flex items-center justify-start gap-2">
-                                <p>الدورات</p>
-                                <x-icons.course class="w-5 h-5 text-blue" />
-                                <span
-                                    :class="selectedTab === 'courses' ?
-                                        'border-indigo-500' :
-                                        'border-gray-500'"
-                                    class="border-2  p-1 rounded-full min-w-6  text-xs">{{ $student->publishedCourses->count() }}</span>
-                            </div>
-                        </button>
-                        <button @click="selectedTab = 'lessons'" :aria-selected="selectedTab === 'lessons'"
-                            :tabindex="selectedTab === 'lessons' ? '0' : '-1'"
-                            :class="selectedTab === 'lessons' ?
-                                'font-bold text-blue-700 border-b-2 border-blue-700 ' :
-                                'text-slate-700 font-medium hover:border-b-2 hover:border-b-slate-800 hover:text-black'"
-                            class="flex h-min items-center gap-2 px-4 py-2 text-sm" type="button" role="tab"
-                            aria-controls="tabpanelGroups">
-
-
-                            <div class="text-xl flex items-center justify-start gap-2">
-                                <p>الشروحات</p>
-                                <x-icons.lesson class="w-5 h-5 text-blue" />
-                                <span
-                                    :class="selectedTab === 'lessons' ?
-                                        'border-indigo-500' :
-                                        'border-gray-500'"
-                                    class="border-2  p-1 rounded-full min-w-6  text-xs">{{ $student->publishedLessons->count() }}</span>
-                            </div>
-                        </button>
-                        <button @click="selectedTab = 'tests'" :aria-selected="selectedTab === 'tests'"
-                            :tabindex="selectedTab === 'tests' ? '0' : '-1'"
-                            :class="selectedTab === 'tests' ?
-                                'font-bold text-blue-700 border-b-2 border-blue-700 ' :
-                                'text-slate-700 font-medium hover:border-b-2 hover:border-b-slate-800 hover:text-black'"
-                            class="flex h-min items-center gap-2 px-4 py-2 text-sm" type="button" role="tab"
-                            aria-controls="tabpanelGroups">
-
-
-                            <div class="text-xl flex items-center justify-start gap-2">
-                                <p>الإختبارات</p>
-                                <x-icons.test class="w-5 h-5 text-blue" />
-                                <span
-                                    :class="selectedTab === 'tests' ?
-                                        'border-indigo-500' :
-                                        'border-gray-500'"
-                                    class="border-2  p-1 rounded-full min-w-6  text-xs">{{ $student->tests()->count() }}</span>
-                            </div>
-                        </button>
-                        <button @click="selectedTab = 'certificates'" :aria-selected="selectedTab === 'certificates'"
-                            :tabindex="selectedTab === 'certificates' ? '0' : '-1'"
-                            :class="selectedTab === 'certificates' ?
-                                'font-bold text-blue-700 border-b-2 border-blue-700 ' :
-                                'text-slate-700 font-medium hover:border-b-2 hover:border-b-slate-800 hover:text-black'"
-                            class="flex h-min items-center gap-2 px-4 py-2 text-sm" type="button" role="tab"
-                            aria-controls="tabpanelGroups">
-
-
-                            <div class="text-xl flex items-center justify-start gap-2">
-                                <p>الشواهد</p>
-                                <x-icons.certificate class="w-5 h-5 text-blue" />
-                                <span
-                                    :class="selectedTab === 'certificates' ?
-                                        'border-indigo-500' :
-                                        'border-gray-500'"
-                                    class="border-2  p-1 rounded-full min-w-6  text-xs">{{ $student->certificates()->count() }}</span>
-                            </div>
-                        </button>
-
-
-                    </div>
-                    <div class="p-2">
-                        <div x-show="selectedTab === 'courses'" id="tabpanelGroups" role="tabpanel" aria-label="courses">
+                {{-- ///////////////////////// Tabs /////////////////////// --}}
+                <div class="w-full">
+                    <x-dynamic-tab-navigation :tabs="[
+                        [
+                            'id' => 'courses',
+                            'label' => 'الدورات',
+                            'icon' => 'icons.course',
+                            'count' => $coursesCount,
+                        ],
+                        [
+                            'id' => 'lessons',
+                            'label' => 'الشروحات',
+                            'icon' => 'icons.lesson',
+                            'count' => $lessonsCount,
+                        ],
+                        [
+                            'id' => 'tests',
+                            'label' => 'الإختبارات',
+                            'icon' => 'icons.test',
+                            'count' => $testsCount,
+                        ],
+                        [
+                            'id' => 'certificates',
+                            'label' => 'الشواهد',
+                            'icon' => 'icons.certificate',
+                            'count' => $certificatesCount,
+                        ],
+                    ]">
+                        <x-slot name="courses">
                             <div class="mt-4 space-y-6">
                                 @forelse ($student->publishedCourses as $course)
                                     <x-card.student-profile-course title="{{ $course->title }}"
                                         startDate="{{ $course->pivot->created_at->format('d-m-Y') }}"
-                                        lastVisitDate="منذ 5 ساعات" courseCount="2/5" testCount="1/4"
-                                        :progress="rand(0, 100)" />
+                                        lastVisitDate="منذ 5 ساعات" courseCount="2/5" testCount="1/4" :progress="rand(0, 100)" />
                                 @empty
                                     <x-card.empty-state title="لا توجد دورات بعد لدى هذا الطالب" message=""
                                         :image="true" class="w-1/2 h-auto mx-auto" />
                                 @endforelse
                             </div>
-                        </div>
-                        <div x-show="selectedTab === 'lessons'" id="tabpanelGroups" role="tabpanel"
-                            aria-label="lessons">
+                        </x-slot>
+
+                        <x-slot name="lessons">
                             <div class="mt-4 space-y-6">
                                 @forelse ($student->publishedLessons as $lesson)
                                     <x-card.student-profile-lesson title="{{ $lesson->title }}"
-                                        startDate="{{ $lesson->pivot->created_at->format('d-m-Y') }}"
-                                        endDate="منذ 5 ساعات" duration=" 3 أشهر" testCount="1/4" :progress="rand(0, 100)" />
+                                        startDate="{{ $lesson->pivot->created_at->format('d-m-Y') }}" endDate="منذ 5 ساعات"
+                                        duration=" 3 أشهر" testCount="1/4" :progress="rand(0, 100)" />
                                 @empty
                                     <x-card.empty-state title="لا توجد شروحات بعد لدى هذا الطالب" message=""
                                         :image="true" class="w-1/2 h-auto mx-auto" />
                                 @endforelse
                             </div>
-                        </div>
-                        <div x-show="selectedTab === 'tests'" id="tabpanelGroups" role="tabpanel" aria-label="tests">
+                        </x-slot>
+
+                        <x-slot name="tests">
                             <div class="mt-4 space-y-6">
-                                @forelse ($student->tests as $test)
-                                    <p>الإختبارات المنصوصة هي {{ $test->title }}</p>
-                                @empty
-                                    <x-card.empty-state title="لا توجد إختبارات بعد لدى هذا الطالب" message=""
-                                        :image="true" class="w-1/2 h-auto mx-auto" />
-                                @endforelse
+                                <p>test attempts</p>
                             </div>
-                        </div>
-                        <div x-show="selectedTab === 'certificates'" id="tabpanelGroups" role="tabpanel"
-                            aria-label="certificates">
+                        </x-slot>
+                        <x-slot name="certificates">
                             <div class="mt-4 space-y-6">
                                 @forelse ($student->certificates as $certificate)
                                     <p>الشواهد المنصوصة هي {{ $certificate->title }}</p>
@@ -201,11 +138,10 @@
                                         :image="true" class="w-1/2 h-auto mx-auto" />
                                 @endforelse
                             </div>
-                        </div>
+                        </x-slot>
 
-                    </div>
+                    </x-dynamic-tab-navigation>
                 </div>
-
                 {{-- /////////////////////////////////////////////////////// --}}
             </div>
         </div>

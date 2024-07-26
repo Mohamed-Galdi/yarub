@@ -13,14 +13,14 @@ return new class extends Migration
     {
         Schema::create('questions', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('test_id');
+            $table->foreignId('test_id')->constrained()->onDelete('cascade');
             $table->text('question');
-            $table->json('options');
-            $table->json('correct_answers');
-            $table->boolean('is_multiple_choice');
+            $table->text('option_1');
+            $table->text('option_2');
+            $table->text('option_3');
+            $table->text('option_4');
+            $table->enum('correct_answer', ['1', '2', '3', '4']);
             $table->timestamps();
-
-            $table->foreign('test_id')->references('id')->on('tests')->onDelete('cascade');
         });
     }
 

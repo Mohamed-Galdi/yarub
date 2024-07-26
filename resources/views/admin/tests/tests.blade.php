@@ -2,40 +2,39 @@
 @section('content')
     <div class="flex flex-col justify-start items-start min-h-screen space-y-6">
         <div>
-            <x-btn.add route="admin.courses.create">إضافة إختبار</x-btn.add>
+            <x-btn.add route="admin.tests.create">إضافة إختبار</x-btn.add>
         </div>
         <div class="w-full">
             <x-dynamic-tab-navigation :tabs="[
                 [
                     'id' => 'courses_tests',
-                    'label' => 'الدورات',
+                    'label' => 'إختبارات الدورات',
                     'icon' => 'icons.course',
                     'count' => false,
                 ],
                 [
                     'id' => 'lessons_test',
-                    'label' => 'الشروحات',
+                    'label' => 'إختبارات الشروحات',
                     'icon' => 'icons.lesson',
                     'count' => false,
                 ],
-                [
-                    'id' => 'lessons_exams',
-                    'label' => 'الاستجابات',
-                    'icon' => 'icons.course',
-                    'count' => false,
-                ]
             ]">
                 <x-slot name="courses_tests">
-                    <p>This is the content for the courses tab.</p>
+                    <div class="mt-4 space-y-6 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                        @forelse ($courses_tests as $test)
+                            <x-card.admin-test published="{{$test->is_published}}" testId="{{$test->id}}" title="{{$test->title}}" attemptsCount="{{$test->attempts->count()}}" type="{{$test->type}}" courseTitle="{{$test->course->title}}" />
+                        @empty
+                            <x-card.empty-state title="لا توجد إختبارات بعد للدورات" message="" :image="true"
+                                class="w-1/2 h-auto mx-auto" />
+                        @endforelse
+
+                    </div>
                 </x-slot>
 
                 <x-slot name="lessons_test">
                     <p>This is the content for the lessons tab.</p>
                 </x-slot>
 
-                <x-slot name="lessons_exams">
-                    <p>This is the content for the lessons exams tab.</p>
-                </x-slot>
 
             </x-dynamic-tab-navigation>
         </div>

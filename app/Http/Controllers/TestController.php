@@ -7,44 +7,70 @@ use App\Models\Question;
 use App\Models\Course;
 use App\Models\Lesson;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class TestController extends Controller
 {
     public function index()
     {
-        $tests = Test::all();
-        return view('admin.tests.tests', compact('tests'));
+        $courses_tests = Test::whereNotNull('course_id')->with('course')->get();
+        $lessons_tests = Test::whereNotNull('lesson_id')->with('lesson')->get();
+        return view('admin.tests.tests', compact('courses_tests', 'lessons_tests'));
     }
 
     public function create()
     {
         $courses = Course::all();
         $lessons = Lesson::all();
-        return view('tests.create', compact('courses', 'lessons'));
+        return view('admin.tests.create', compact('courses', 'lessons'));
     }
 
     public function store(Request $request)
     {
-        $validatedData = $request->validate([
+        $request->validate([
             'title' => 'required|string|max:255',
-            'content_type' => 'required|in:course,lesson',
-            'content_id' => 'required|integer',
-            'type' => 'required|in:before,after,regular',
-            'is_published' => 'boolean',
-            'questions' => 'required|array|min:1',
+            'related_id' => 'required|integer',
+            'type' => 'required|in:قبلي,بعدي,عادي',
+            'questions' => 'required|array|min:3',
             'questions.*.question' => 'required|string',
-            'questions.*.options' => 'required|array|min:4|max:4',
-            'questions.*.correct_answers' => 'required|array|min:1',
-            'questions.*.is_multiple_choice' => 'required|boolean',
+            'questions.*.option_1' => 'required|string',
+            'questions.*.option_2' => 'required|string',
+            'questions.*.option_3' => 'required|string',
+            'questions.*.option_4' => 'required|string',
+            'questions.*.correct_answer' => 'required|in:1,2,3,4',
         ]);
+        // dd($request->all());
 
-        $test = Test::create($validatedData);
+        try {
+            DB::beginTransaction();
 
-        foreach ($validatedData['questions'] as $questionData) {
-            $test->questions()->create($questionData);
+            $test = Test::create([
+                'title' => $request->title,
+                'description' => $request->description,
+                'course_id' => $request->has('is_for_course') ? $request->related_id : null,
+                'lesson_id' => $request->has('is_for_course') ? null : $request->related_id,
+                'type' => $request->type,
+            ]);
+
+            foreach ($request->questions as $questionData) {
+                Question::create([
+                    'test_id' => $test->id,
+                    'question' => $questionData['question'],
+                    'option_1' => $questionData['option_1'],
+                    'option_2' => $questionData['option_2'],
+                    'option_3' => $questionData['option_3'],
+                    'option_4' => $questionData['option_4'],
+                    'correct_answer' => $questionData['correct_answer'],
+                ]);
+            }
+
+            DB::commit();
+
+            return redirect()->route('admin.tests')->with('success', 'Test created successfully.');
+        } catch (\Exception $e) {
+            DB::rollBack();
+            return back()->with('error', 'An error occurred while creating the test. Please try again.')->withInput();
         }
-
-        return redirect()->route('tests.index')->with('success', 'Test created successfully.');
     }
 
     public function edit(Test $test)
