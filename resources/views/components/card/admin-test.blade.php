@@ -9,7 +9,9 @@
             @endif
             <p class="text-white text-3xl">{{ $title }}</p>
         </div>
-        <p class="py-[2px] px-1 ms-6 bg-orange-800 text-gray-100 rounded-lg me-2 font-judur text-nowrap truncate"> {{ $courseTitle }}</p>
+        <p
+            class="{{ 'py-[2px] px-1 ms-6 text-gray-100 rounded-lg me-2 font-judur text-nowrap truncate' . ($published ? ' bg-orange-800' : ' bg-gray-800') }}">
+            {{ $courseTitle }} </p>
     </div>
     <div class="flex text-white justify-between items-center">
         <div class="border-l-2 border-white flex flex-col justify-center items-center w-1/2 gap-y-2">
@@ -29,7 +31,7 @@
 
     </div>
     <div class="pt-3 flex justify-center items-center gap-2">
-        <x-btn.view class="w-1/2" route="admin.courses.view" id="{{ $testId }}">تصفح البيانات</x-btn.view>
-        <x-btn.edit class="w-1/2" route="admin.courses.edit" id="{{ $testId }}">تعديل</x-btn.edit>
+        <x-btn.view class="w-1/2" route="admin.tests.view" id="{{ $testId }}">تصفح البيانات</x-btn.view>
+        <x-btn.edit class="w-1/2" route="admin.tests.edit" id="{{ $testId }}">تعديل</x-btn.edit>
     </div>
 </div>

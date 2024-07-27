@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Admin\CourseController;
 use App\Http\Controllers\Admin\LessonController;
 use App\Http\Controllers\Admin\StudentController;
-use App\Http\Controllers\TestController;
+use App\Http\Controllers\Admin\TestController;
 use App\Models\Course;
 
 /*
@@ -61,6 +61,9 @@ Route::middleware(['auth', 'verified', 'admin'])->prefix('admin-dashboard')->gro
     Route::get('/tests',[TestController::class, 'index'])->name('admin.tests');
     Route::get('/tests/create', [TestController::class, 'create'])->name('admin.tests.create');
     Route::post('/tests', [TestController::class, 'store'])->name('admin.tests.store');
+    Route::get('/tests/edit/{id}', [TestController::class, 'edit'])->name('admin.tests.edit');
+    Route::put('/tests/{id}', [TestController::class, 'update'])->name('admin.tests.update');
+    Route::get('/tests/view/{id}', [TestController::class, 'show'])->name('admin.tests.view');
 
 
     Route::get('/certificates', function () {

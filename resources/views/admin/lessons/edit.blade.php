@@ -3,7 +3,7 @@
 @section('content')
     <div class="container">
         <h1 class="text-4xl text-indigo-700 mb-4">تعديل شرح: <span class="text-gray-500">{{ $lesson->title }}</span></h1>
-        <x-form.errors :errors="$errors" />
+        {{-- <x-form.errors :errors="$errors" /> --}}
         <form id="lessonForm" action="{{ route('admin.lessons.update', $lesson->id) }}" method="POST" class="space-y-6">
             @csrf
             @method('PUT')

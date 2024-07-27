@@ -4,6 +4,7 @@
         <div class="px-8">
             <h1 class="text-3xl text-gray-700 font-hacen"> إنشاء إختبار جديد </h1>
         </div>
+        {{-- <x-form.errors :errors="$errors" /> --}}
 
         <div class="py-8">
             <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
@@ -111,40 +112,47 @@
                 questionDiv.className = 'mb-6  border border-gray-300 rounded-md overflow-hidden bg-gray-300';
                 questionDiv.innerHTML = `
                 <h3 class="text-lg font-medium mb-2 bg-gray-800 p-1 text-center text-gray-100">السؤال ${questionCount}</h3>
+                <div class="p-4 space-y-4">
                 <div class="p-4">
                     <div class="mb-4">
-                    <label for="question_${questionCount}" class="block text-sm font-medium text-gray-700">السؤال</label>
-                    <input type="text" name="questions[${questionCount}][question]" id="question_${questionCount}" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50" required>
-                </div>
-                <div class="grid lg:grid-cols-2 grid-cols-1 gap-4">
+                        <label for="question_${questionCount}" class="block text-sm font-medium text-gray-700">نص السؤال (إختياري) </label>
+                        <textarea  name="questions[${questionCount}][question_text]" id="question_text_${questionCount}" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50" >
+                        </textarea>
+                    </div>
                     <div class="mb-4">
-                    <label for="option_1_${questionCount}" class="block text-sm font-medium text-gray-700">الخيار الأول</label>
-                    <input type="text" name="questions[${questionCount}][option_1]" id="option_1_${questionCount}" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50" required onchange="updateCorrectAnswerOptions(${questionCount})">
-                </div>
-                <div class="mb-4">
-                    <label for="option_2_${questionCount}" class="block text-sm font-medium text-gray-700">الخيار الثاني</label>
-                    <input type="text" name="questions[${questionCount}][option_2]" id="option_2_${questionCount}" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50" required onchange="updateCorrectAnswerOptions(${questionCount})">
-                </div>
-                <div class="mb-4">
-                    <label for="option_3_${questionCount}" class="block text-sm font-medium text-gray-700">الخيار الثالث</label>
-                    <input type="text" name="questions[${questionCount}][option_3]" id="option_3_${questionCount}" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50" required onchange="updateCorrectAnswerOptions(${questionCount})">
-                </div>
-                <div class="mb-4">
-                    <label for="option_4_${questionCount}" class="block text-sm font-medium text-gray-700">الخيار الرابع</label>
-                    <input type="text" name="questions[${questionCount}][option_4]" id="option_4_${questionCount}" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50" required onchange="updateCorrectAnswerOptions(${questionCount})">
-                </div>
-                </div>
-                
-                <div class="mb-4">
-                    <label for="correct_answer_${questionCount}" class="block text-sm font-medium text-gray-700">الجواب الصحيح</label>
-                    <select name="questions[${questionCount}][correct_answer]" id="correct_answer_${questionCount}" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50" required>
-                        <option value="">اختر الجواب الصحيح</option>
-                        <option value="1">الخيار الأول</option>
-                        <option value="2">الخيار الثاني</option>
-                        <option value="3">الخيار الثالث</option>
-                        <option value="4">الخيار الرابع</option>
-                    </select>
-                </div>
+                        <label for="question_${questionCount}" class="block text-sm font-medium text-gray-700">السؤال</label>
+                        <input type="text" name="questions[${questionCount}][question]" id="question_${questionCount}" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50" required>
+                    </div>
+                    
+                    <div class="grid lg:grid-cols-2 grid-cols-1 gap-4">
+                        <div class="mb-4">
+                        <label for="option_1_${questionCount}" class="block text-sm font-medium text-gray-700">الخيار الأول</label>
+                        <input type="text" name="questions[${questionCount}][option_1]" id="option_1_${questionCount}" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50" required onchange="updateCorrectAnswerOptions(${questionCount})">
+                    </div>
+                    <div class="mb-4">
+                        <label for="option_2_${questionCount}" class="block text-sm font-medium text-gray-700">الخيار الثاني</label>
+                        <input type="text" name="questions[${questionCount}][option_2]" id="option_2_${questionCount}" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50" required onchange="updateCorrectAnswerOptions(${questionCount})">
+                    </div>
+                    <div class="mb-4">
+                        <label for="option_3_${questionCount}" class="block text-sm font-medium text-gray-700">الخيار الثالث</label>
+                        <input type="text" name="questions[${questionCount}][option_3]" id="option_3_${questionCount}" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50" required onchange="updateCorrectAnswerOptions(${questionCount})">
+                    </div>
+                    <div class="mb-4">
+                        <label for="option_4_${questionCount}" class="block text-sm font-medium text-gray-700">الخيار الرابع</label>
+                        <input type="text" name="questions[${questionCount}][option_4]" id="option_4_${questionCount}" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50" required onchange="updateCorrectAnswerOptions(${questionCount})">
+                    </div>
+                    </div>
+                    
+                    <div class="mb-4">
+                        <label for="correct_answer_${questionCount}" class="block text-sm font-medium text-gray-700">الجواب الصحيح</label>
+                        <select name="questions[${questionCount}][correct_answer]" id="correct_answer_${questionCount}" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50" required>
+                            <option value="">اختر الجواب الصحيح</option>
+                            <option value="1">الخيار الأول</option>
+                            <option value="2">الخيار الثاني</option>
+                            <option value="3">الخيار الثالث</option>
+                            <option value="4">الخيار الرابع</option>
+                        </select>
+                    </div>
                 </div>
             `;
                 container.appendChild(questionDiv);

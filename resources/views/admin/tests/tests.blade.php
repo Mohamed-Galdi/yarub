@@ -20,7 +20,7 @@
                 ],
             ]">
                 <x-slot name="courses_tests">
-                    <div class="mt-4 space-y-6 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                    <div class="grid lg:grid-cols-3 gap-4 grid-cols-1 md:grid-cols-2">
                         @forelse ($courses_tests as $test)
                             <x-card.admin-test published="{{$test->is_published}}" testId="{{$test->id}}" title="{{$test->title}}" attemptsCount="{{$test->attempts->count()}}" type="{{$test->type}}" courseTitle="{{$test->course->title}}" />
                         @empty
@@ -32,7 +32,13 @@
                 </x-slot>
 
                 <x-slot name="lessons_test">
-                    <p>This is the content for the lessons tab.</p>
+                    <div class="grid lg:grid-cols-3 gap-4 grid-cols-1 md:grid-cols-2">
+                        @forelse ($lessons_tests as $test)
+                            <x-card.admin-test published="{{$test->is_published}}" testId="{{$test->id}}" title="{{$test->title}}" attemptsCount="{{$test->attempts->count()}}" type="{{$test->type}}" courseTitle="{{$test->lesson->title}}" />
+                        @empty
+                            <x-card.empty-state title="لا توجد إختبارات بعد للدورات" message="" :image="true"
+                                class="w-1/2 h-auto mx-auto" />
+                        @endforelse
                 </x-slot>
 
 
