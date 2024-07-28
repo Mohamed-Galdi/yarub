@@ -18,7 +18,6 @@ return new class extends Migration
             $table->json('answers');
             $table->integer('score')->nullable();
             $table->timestamps();
-
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
             $table->foreign('test_id')->references('id')->on('tests')->onDelete('cascade');
         });

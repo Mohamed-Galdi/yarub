@@ -93,13 +93,13 @@ class TestController extends Controller
             'type' => 'required|in:قبلي,بعدي,عادي',
             'questions' => 'required|array|min:3',
             'questions.*.question' => 'required|string',
+            // 'questions.*.question_text' => 'required|string',
             'questions.*.option_1' => 'required|string',
             'questions.*.option_2' => 'required|string',
             'questions.*.option_3' => 'required|string',
             'questions.*.option_4' => 'required|string',
             'questions.*.correct_answer' => 'required|in:1,2,3,4',
         ]);
-        // dd($request->all());
 
         try {
             DB::beginTransaction();
@@ -111,48 +111,53 @@ class TestController extends Controller
                 'type' => $request->type,
             ]);
 
+            // Get existing questions
+            $existingQuestions = $test->questions->keyBy('id');
+            $updatedQuestionIds = [];
+
             // Update or create questions
             foreach ($request->questions as $questionData) {
                 if (isset($questionData['id'])) {
-                    $question = Question::find($questionData['id']);
-                    $question->update([
-                        'question' => $questionData['question'],
-                        'option_1' => $questionData['option_1'],
-                        'option_2' => $questionData['option_2'],
-                        'option_3' => $questionData['option_3'],
-                        'option_4' => $questionData['option_4'],
-                        'correct_answer' => $questionData['correct_answer'],
-                    ]);
+                    $question = $existingQuestions->get($questionData['id']);
+                    if ($question) {
+                        $question->update([
+                            'question' => $questionData['question'],
+                            'question_text' => $questionData['question_text'],
+                            'option_1' => $questionData['option_1'],
+                            'option_2' => $questionData['option_2'],
+                            'option_3' => $questionData['option_3'],
+                            'option_4' => $questionData['option_4'],
+                            'correct_answer' => $questionData['correct_answer'],
+                        ]);
+                        $updatedQuestionIds[] = $question->id;
+                    }
                 } else {
-                    Question::create([
-                        'test_id' => $test->id,
+                    $newQuestion = $test->questions()->create([
                         'question' => $questionData['question'],
+                        'question_text' => $questionData['question_text'],
                         'option_1' => $questionData['option_1'],
                         'option_2' => $questionData['option_2'],
                         'option_3' => $questionData['option_3'],
                         'option_4' => $questionData['option_4'],
                         'correct_answer' => $questionData['correct_answer'],
                     ]);
+                    $updatedQuestionIds[] = $newQuestion->id;
                 }
             }
 
             // Delete questions that were removed
-            $existingQuestionIds = $test->questions->pluck('id')->toArray();
-            $updatedQuestionIds = collect($request->questions)->pluck('id')->filter()->toArray();
-            $questionIdsToDelete = array_diff($existingQuestionIds, $updatedQuestionIds);
+            $questionIdsToDelete = $existingQuestions->pluck('id')->diff($updatedQuestionIds);
             Question::destroy($questionIdsToDelete);
 
             DB::commit();
             Alert::success('تم تحديث الإختبار بنجاح');
             return redirect()->route('admin.tests')->with('success', 'Test updated successfully.');
         } catch (\Exception $e) {
-            Alert::error('حدث خطأ أثناء تحديث الإختبار');
-            dd($e);
             DB::rollBack();
+            Alert::error('حدث خطأ أثناء تحديث الإختبار');
             return back()->with('error', 'An error occurred while updating the test. Please try again.')->withInput();
         }
     }
-
     public function show($id)
     {
         $test = Test::findOrFail($id);

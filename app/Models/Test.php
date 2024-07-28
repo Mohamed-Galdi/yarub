@@ -10,7 +10,7 @@ class Test extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['title', 'course_id', 'lesson_id', 'is_published', 'type'];
+    protected $fillable = ['title', 'description', 'course_id', 'lesson_id', 'is_published', 'type'];
 
     public function questions()
     {

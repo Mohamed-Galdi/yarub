@@ -13,7 +13,7 @@
                         <form action="{{ route('admin.tests.store') }}" method="POST">
                             @csrf
                             {{-- //////////////// Course or Lesson //////////////// --}}
-                            <div class="mb-4 flex items-start justify-start gap-4">
+                            <div class="mb-4 flex lg:flex-row flex-col items-start justify-start gap-4">
                                 <label for="is_for_course" class="flex flex-col cursor-pointer w-1/4 items-center">
                                     <input name="is_for_course" id="is_for_course" type="checkbox" class="peer sr-only"
                                         role="switch" checked onchange="toggleSelect()" />
@@ -23,7 +23,7 @@
                                     <div class="relative h-6 w-11 after:h-5 after:w-5 peer-checked:after:translate-x-5 rounded-full border border-slate-300 bg-green-500 after:absolute after:bottom-0 after:left-[0.0625rem] after:top-0 after:my-auto after:rounded-full after:bg-white after:transition-all after:content-[''] peer-checked:bg-indigo-600 peer-checked:after:bg-white peer-focus:outline peer-focus:outline-2 peer-focus:outline-offset-2 peer-focus:outline-green-800 peer-focus:peer-checked:outline-indigo-600 peer-active:outline-offset-0 peer-disabled:cursor-not-allowed peer-disabled:opacity-70 "
                                         aria-hidden="true"></div>
                                 </label>
-                                <div class="mb-4 w-3/4">
+                                <div class="mb-4 lg:w-3/4 w-full">
                                     <label for="related_id" class="text-gray-800 font-judur ms-3 mb-1 font-semibold"> إختر
                                         <span id="course_or_lesson">الدورة</span></label>
                                     <select name="related_id" id="related_id"
@@ -35,8 +35,8 @@
                             </div>
 
                             {{-- //////////////// Title and Type //////////////// --}}
-                            <div class="mb-4 flex items-start justify-start gap-4 ">
-                                <div class="mb-4 w-1/4">
+                            <div class="mb-4 flex lg:flex-row flex-col items-start justify-start gap-4 ">
+                                <div class="mb-4 lg:w-1/4 w-full">
                                     <label for="type" class="text-gray-800 font-judur ms-3 mb-1 font-semibold">نوع
                                         الإختبار </label>
                                     <select name="type" id="type"
@@ -48,7 +48,7 @@
                                     </select>
                                 </div>
 
-                                <x-form.input-light class="mb-4 w-3/4" type="text" name="title" id="title"
+                                <x-form.input-light class="mb-4 lg:w-3/4 w-full" type="text" name="title" id="title"
                                     label="عنوان الإختبار" placeholder="" required />
 
                             </div>
@@ -116,8 +116,7 @@
                 <div class="p-4">
                     <div class="mb-4">
                         <label for="question_${questionCount}" class="block text-sm font-medium text-gray-700">نص السؤال (إختياري) </label>
-                        <textarea  name="questions[${questionCount}][question_text]" id="question_text_${questionCount}" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50" >
-                        </textarea>
+                        <textarea  name="questions[${questionCount}][question_text]" id="question_text_${questionCount}" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50" ></textarea>
                     </div>
                     <div class="mb-4">
                         <label for="question_${questionCount}" class="block text-sm font-medium text-gray-700">السؤال</label>

@@ -22,13 +22,12 @@
                 <p>معدل النتائج </p>
             </div>
             <div>
-                {{-- <p>{{ $lesson->students()->sum('student_lesson_sub.payment_amount') }} ريال سعودي</p> --}}
-                <p>0 %</p>
+                <p>{{ $test->attempts->avg('score') }} %</p>
             </div>
         </div>
     </div>
     {{-- students table --}}
     <div class="mt-8">
-        <livewire:lesson-students-table :lessonId="$test->id" />
+        <livewire:test-attempts-table :testId="$test->id" />
     </div>
 @endsection

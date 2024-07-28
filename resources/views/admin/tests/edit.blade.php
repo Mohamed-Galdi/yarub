@@ -15,15 +15,15 @@
                             <div class="w-full mb-4 ">
                                 <button type="submit"
                                     class="px-4 py-2 w-full bg-green-600 text-white rounded-md hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500">
-                                     تحديث الإختبار
+                                    تحديث الإختبار
                                 </button>
                             </div>
-                            <div class="mb-4 flex items-start justify-start gap-4">
+                            <div class=" flex items-start justify-start gap-4">
+                                <x-form.input-light class="mb-4 lg:w-3/5 w-full lg:block hidden" type="text"
+                                    name="title" id="title" label="عنوان الإختبار" placeholder="" required
+                                    value="{{ $test->title }}" />
 
-
-                                <x-form.input-light class="mb-4 w-3/5" type="text" name="title" id="title"
-                                    label="عنوان الإختبار" placeholder="" required value="{{ $test->title }}" />
-                                <div class="mb-4 w-1/5">
+                                <div class="mb-4 lg:w-1/5 w-1/2">
                                     <label for="type" class="text-gray-800 font-judur ms-3 mb-1 font-semibold">نوع
                                         الإختبار </label>
                                     <select name="type" id="type"
@@ -34,9 +34,13 @@
                                         <option {{ $test->type === 'عادي' ? 'selected' : '' }} value="عادي">عادي</option>
                                     </select>
                                 </div>
+
                                 <x-form.toogle label="حالة النشر" name="is_published" value="{{ $test->is_published }}"
-                                    class="lg:w-1/5 w-full lg:items-center items-start justify-start lg:order-3 order-1" />
+                                    class="lg:w-1/5 w-1/2 lg:items-center items-start justify-start " />
+
                             </div>
+                            <x-form.input-light class="mb-4 lg:w-3/5 w-full lg:hidden block" type="text" name="title"
+                                id="title" label="عنوان الإختبار" placeholder="" required value="{{ $test->title }}" />
                             <div class="mb-4">
                                 <x-form.textarea-light name="description" id="description" label="وصف الإختبار"
                                     placeholder="" required placeholder="{{ $test->description }}" />
@@ -66,9 +70,7 @@
                                                     class="block text-sm font-medium text-gray-700">نص السؤال (إختياري)
                                                 </label>
                                                 <textarea name="questions[{{ $index }}][question_text]" id="question_text_{{ $index }}"
-                                                    class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50">
-                                                    {{ $question->question_text }}
-                                                </textarea>
+                                                    class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50">{{ $question->question_text }}</textarea>
                                             </div>
                                             <div class="mb-4">
                                                 <label for="question_{{ $index }}"
@@ -104,7 +106,8 @@
                                                     @for ($i = 1; $i <= 4; $i++)
                                                         <option value="{{ $i }}"
                                                             {{ $question->correct_answer == $i ? 'selected' : '' }}>
-                                                            {{ $question->{'option_' . $i} }}</option>
+                                                            الخيار {{ $i }}
+                                                        </option>
                                                     @endfor
                                                 </select>
                                             </div>
@@ -124,7 +127,9 @@
         </div>
 
         <script>
-            let questionCount = 0;
+            // initialize the question coutner starting from number of questions
+            let questionCount = {{ $test->questions->count() }};
+            // let questionCount = 0;
 
             function toggleSelect() {
                 const isForCourse = document.getElementById('is_for_course').checked;
@@ -152,15 +157,22 @@
                 questionCount++;
                 const container = document.getElementById('questions-container');
                 const questionDiv = document.createElement('div');
-                questionDiv.className = 'mb-6  border border-gray-300 rounded-md overflow-hidden bg-gray-300';
+
+                questionDiv.className = 'question-form mb-6  border border-gray-300 rounded-md overflow-hidden bg-gray-300';
                 questionDiv.innerHTML = `
-                <h3 class="text-lg font-medium mb-2 bg-gray-800 p-1 text-center text-gray-100">السؤال ${questionCount}</h3>
+                <div
+                    class="text-lg font-medium mb-2 bg-gray-800 p-1 text-center text-gray-100 w-full flex relative justify-center items-center">
+                    <h3>  سؤال إضافي ${questionCount} </h3>
+                    <button  type="button"
+                        class="remove-question absolute left-0 top-0 px-2 py-1 bg-red-600 text-white w-8 h-full hover:bg-red-700 ">
+                        <x-icons.trash class="h-full w-full" />
+                    </button>
+                </div>
                 <div class="p-4 space-y-4">
                 <div class="p-4">
                     <div class="mb-4">
                         <label for="question_${questionCount}" class="block text-sm font-medium text-gray-700">نص السؤال (إختياري) </label>
-                        <textarea  name="questions[${questionCount}][question_text]" id="question_text_${questionCount}" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50" >
-                        </textarea>
+                        <textarea  name="questions[${questionCount}][question_text]" id="question_text_${questionCount}" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50" ></textarea>
                     </div>
                     <div class="mb-4">
                         <label for="question_${questionCount}" class="block text-sm font-medium text-gray-700">السؤال</label>
@@ -200,6 +212,13 @@
             `;
                 container.appendChild(questionDiv);
             }
+
+            document.getElementById('questions-container').addEventListener('click', function(event) {
+                if (event.target.closest('.remove-question')) {
+                    event.target.closest('.question-form').remove();
+                }
+            });
+
 
             function updateCorrectAnswerOptions(questionNumber) {
                 const correctAnswerSelect = document.getElementById(`correct_answer_${questionNumber}`);
