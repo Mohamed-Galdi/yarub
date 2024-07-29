@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\Admin\CouponController;
 use App\Http\Controllers\Admin\CourseController;
 use App\Http\Controllers\Admin\LessonController;
 use App\Http\Controllers\Admin\StudentController;
@@ -67,6 +68,11 @@ Route::middleware(['auth', 'verified', 'admin'])->prefix('admin-dashboard')->gro
     Route::get('/tests/view/{id}', [TestController::class, 'show'])->name('admin.tests.view');
     Route::get('/tests/test-attempts/view/{id}', [TestAttemptController::class, 'adminShow'])->name('admin.test_attempt');
 
+    // Coupons
+    Route::get('/coupons', [CouponController::class, 'index'])->name('admin.coupons');
+    Route::get('/coupons/create', [CouponController::class, 'create'])->name('admin.coupons.create');
+    Route::post('/coupons', [CouponController::class, 'store'])->name('admin.coupons.store');
+
 
     Route::get('/certificates', function () {
         return view('admin.certificates');
@@ -77,9 +83,7 @@ Route::middleware(['auth', 'verified', 'admin'])->prefix('admin-dashboard')->gro
     Route::get('/support', function () {
         return view('admin.support');
     })->name('admin.support');
-    Route::get('/coupons', function () {
-        return view('admin.coupons');
-    })->name('admin.coupons');
+    
 });
 
 

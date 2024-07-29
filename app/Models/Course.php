@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
 class Course extends Model
 {
@@ -37,6 +38,11 @@ class Course extends Model
     {
         return $this->belongsToMany(User::class, 'student_course_sub')->withPivot(['payment_amount','created_at'])
             ->withTimestamps();
+    }
+
+    public function coupons(): BelongsToMany
+    {
+        return $this->belongsToMany(Coupon::class);
     }
 
     public function scopePublished($query)

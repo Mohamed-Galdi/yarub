@@ -11,6 +11,7 @@
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <!-- Scripts -->
     @vite(['resources/css/app.css', 'resources/js/app.js'])
+    @include('flatpickr::components.style')
     <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
 
     <!-- Alpine Plugins -->
@@ -20,6 +21,8 @@
 
     {{-- SweetAlert2 --}}
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+
 
 
 
@@ -183,6 +186,8 @@
         });
     </script>
     @include('sweetalert::alert')
+    @include('flatpickr::components.script')
+    <script src="https://cdn.jsdelivr.net/npm/flowbite@2.4.1/dist/flowbite.min.js"></script>
 </body>
 @stack('scripts')
 
