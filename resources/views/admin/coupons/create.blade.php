@@ -84,12 +84,18 @@
                     <div class="lg:w-1/2 w-full">
                         <label for="applicable_to" class="text-gray-800 font-judur ms-3 mb-1 font-semibold"> تاريخ البداء
                         </label>
-                        <x-flatpickr placeholder="إختر تاريخ" name="start_date" class=""/>
+                        <x-flatpickr placeholder="إختر تاريخ" name="start_date" class="" required/>
+                        @error('start_date')
+                            <p class="text-red-500 text-xs italic">{{ $message }}</p>
+                        @enderror
                     </div>
                     <div class="lg:w-1/2 w-full">
                         <label for="applicable_to" class="text-gray-800 font-judur ms-3 mb-1 font-semibold"> تاريخ الانتهاء
                         </label>
-                        <x-flatpickr placeholder="إختر تاريخ" name="end_date" class="" />
+                        <x-flatpickr placeholder="إختر تاريخ" name="end_date" class=""  required/>
+                        @error('end_date')
+                            <p class="text-red-500 text-xs italic">{{ $message }}</p>
+                        @enderror
                     </div>
                 </div>
                 <button type="submit" class="w-full bg-green-500 my-4 p-3 rounded-lg text-white  hover:bg-green-700">إنشاء

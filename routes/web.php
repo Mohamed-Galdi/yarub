@@ -72,6 +72,8 @@ Route::middleware(['auth', 'verified', 'admin'])->prefix('admin-dashboard')->gro
     Route::get('/coupons', [CouponController::class, 'index'])->name('admin.coupons');
     Route::get('/coupons/create', [CouponController::class, 'create'])->name('admin.coupons.create');
     Route::post('/coupons', [CouponController::class, 'store'])->name('admin.coupons.store');
+    Route::get('/coupons/edit/{id}', [CouponController::class, 'edit'])->name('admin.coupons.edit');
+    Route::put('/coupons/{id}', [CouponController::class, 'update'])->name('admin.coupons.update');
 
 
     Route::get('/certificates', function () {

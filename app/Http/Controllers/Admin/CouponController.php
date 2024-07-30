@@ -7,6 +7,7 @@ use App\Models\Coupon;
 use App\Models\Course;
 use App\Models\Lesson;
 use Illuminate\Http\Request;
+use Illuminate\Validation\Rule;
 use RealRashid\SweetAlert\Facades\Alert;
 
 class CouponController extends Controller
@@ -16,7 +17,9 @@ class CouponController extends Controller
      */
     public function index()
     {
-        $coupons = Coupon::all();
+        $coupons = Coupon::orderBy('is_active', 'desc')
+            ->orderBy('end_date', 'desc')
+            ->get();
         return view('admin.coupons.coupons', compact('coupons'));
     }
 
@@ -40,8 +43,8 @@ class CouponController extends Controller
             'type' => 'required|in:percentage,fixed',
             'value' => 'required|numeric|min:0',
             'applicable_to' => 'required|in:all,courses,lessons,specific',
-            'start_date' => 'nullable|date',
-            'end_date' => 'nullable|date|after:start_date',
+            'start_date' => 'nullable|date|required',
+            'end_date' => 'nullable|date|after:start_date|required',
             'courses' => 'array',
             'lessons' => 'array',
         ]);
@@ -67,17 +70,53 @@ class CouponController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(Coupon $coupon)
+    public function edit($id)
     {
-        //
+        $courses = Course::all();
+        $lessons = Lesson::all();
+        $coupon = Coupon::findOrFail($id);
+        return view('admin.coupons.edit', compact('coupon', 'courses', 'lessons'));
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Coupon $coupon)
+    public function update(Request $request, $id)
     {
-        //
+        $coupon = Coupon::findOrFail($id);
+        $validatedData = $request->validate([
+            'code' => ['required', Rule::unique('coupons')->ignore($coupon)],
+            'type' => 'required|in:percentage,fixed',
+            'value' => 'required|numeric|min:0',
+            'applicable_to' => 'required|in:all,courses,lessons,specific',
+            'start_date' => 'nullable|date',
+            'end_date' => 'nullable|date|after:start_date',
+            'usage_limit' => 'nullable|integer|min:1',
+            'courses' => 'array',
+            'lessons' => 'array',
+        ]);
+        // dd($validatedData);
+
+        $coupon->update([
+            'code' => $validatedData['code'],
+            'type' => $validatedData['type'],
+            'value' => $validatedData['value'],
+            'applicable_to' => $validatedData['applicable_to'],
+            'start_date' => $validatedData['start_date'],
+            'end_date' => $validatedData['end_date'],
+            'is_active' => $request->has('is_active') ? 1 : 0,
+        ]);
+
+        if ($validatedData['applicable_to'] === 'specific') {
+            $coupon->courses()->sync($request->input('courses', []));
+            $coupon->lessons()->sync($request->input('lessons', []));
+        } else {
+            // If not specific, remove all associations
+            $coupon->courses()->detach();
+            $coupon->lessons()->detach();
+        }
+        Alert::success('تم تعديل القسيمة بنجاح !');
+        return redirect()->route('admin.coupons');
     }
 
     /**
