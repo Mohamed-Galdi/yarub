@@ -6,6 +6,7 @@ use App\Http\Controllers\Admin\CourseController;
 use App\Http\Controllers\Admin\LessonController;
 use App\Http\Controllers\Admin\StudentController;
 use App\Http\Controllers\Admin\TestController;
+use App\Http\Controllers\Admin\CertificateController;
 use App\Http\Controllers\TestAttemptController;
 use App\Models\Course;
 
@@ -75,10 +76,16 @@ Route::middleware(['auth', 'verified', 'admin'])->prefix('admin-dashboard')->gro
     Route::get('/coupons/edit/{id}', [CouponController::class, 'edit'])->name('admin.coupons.edit');
     Route::put('/coupons/{id}', [CouponController::class, 'update'])->name('admin.coupons.update');
 
+    // Certificates
+    Route::get('/certificates', [CertificateController::class, 'index'])->name('admin.certificates');
+    Route::get('/certificates/pdf', [CertificateController::class, 'pdf'])->name('admin.certificates.pdf');
+    Route::get('/certificates/view/{id}', [CertificateController::class, 'show'])->name('admin.certificates.view');
+    Route::get('/certificates/create', [CertificateController::class, 'create'])->name('admin.certificates.create');
+    Route::post('/certificates', [CertificateController::class, 'store'])->name('admin.certificates.store');
+    Route::get('/certificates/get-student-content', [CertificateController::class, 'getStudentContent'])->name('admin.certificates.get-student-content');
+    Route::get('/certificates/download/{id}', [CertificateController::class, 'download'])->name('admin.certificates.download');
 
-    Route::get('/certificates', function () {
-        return view('admin.certificates');
-    })->name('admin.certificates');
+    
     Route::get('/payments', function () {
         return view('admin.payments');
     })->name('admin.payments');

@@ -9,9 +9,24 @@ class Certificate extends Model
 {
     use HasFactory;
 
-    public function student()
+    protected $fillable = [
+        'user_id',
+        'course_id',
+        'lesson_id',
+    ];
+
+    public function user()
     {
-        return $this->belongsToMany(User::class, 'student_certificate_sub')->withPivot('created_at')
-        ->withTimestamps();
+        return $this->belongsTo(User::class);
+    }
+
+    public function course()
+    {
+        return $this->belongsTo(Course::class);
+    }
+
+    public function lesson()
+    {
+        return $this->belongsTo(Lesson::class);
     }
 }

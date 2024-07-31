@@ -34,6 +34,11 @@ class Lesson extends Model
         return $this->hasMany(Test::class);
     }
 
+    public function certificates()
+    {
+        return $this->hasMany(Certificate::class);
+    }
+
     public function students()
     {
         return $this->belongsToMany(User::class, 'student_lesson_sub')->withPivot(['payment_amount','created_at'])

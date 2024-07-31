@@ -74,9 +74,9 @@ class User extends Authenticatable
 
     public function certificates()
     {
-        return $this->belongsToMany(Certificate::class, 'student_certificate_sub')->withPivot('created_at')
-        ->withTimestamps();
+        return $this->hasMany(Certificate::class);
     }
+
 
     /**
      * Get the user's published courses.

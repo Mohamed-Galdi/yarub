@@ -45,6 +45,11 @@ class Course extends Model
         return $this->belongsToMany(Coupon::class);
     }
 
+    public function certificates()
+    {
+        return $this->hasMany(Certificate::class);
+    }
+
     public function scopePublished($query)
     {
         return $query->where('is_published', true);
