@@ -6,7 +6,6 @@ use App\Models\Certificate;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Models\User;
-use Barryvdh\DomPDF\Facade\Pdf;
 use RealRashid\SweetAlert\Facades\Alert;
 
 class CertificateController extends Controller
@@ -17,12 +16,6 @@ class CertificateController extends Controller
     public function index()
     {
         return view('admin.certificates.certificates');
-    }
-
-    public function pdf()
-    {
-        $pdf = Pdf::loadView('admin.certificates.template');
-        return $pdf->download('Certificate.pdf');
     }
 
     /**

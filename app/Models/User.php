@@ -49,13 +49,13 @@ class User extends Authenticatable
     public function courses()
     {
         return $this->belongsToMany(Course::class, 'student_course_sub')->withPivot('created_at')
-        ->withTimestamps();
+            ->withTimestamps();
     }
 
     public function lessons()
     {
         return $this->belongsToMany(Lesson::class, 'student_lesson_sub')->withPivot('created_at')
-        ->withTimestamps();
+            ->withTimestamps();
     }
 
     public function reviews()
@@ -68,7 +68,8 @@ class User extends Authenticatable
         return $this->hasMany(Progress::class);
     }
 
-    public function test_attempts(){
+    public function test_attempts()
+    {
         return $this->hasMany(TestAttempt::class);
     }
 
@@ -77,6 +78,10 @@ class User extends Authenticatable
         return $this->hasMany(Certificate::class);
     }
 
+    public function conversations()
+    {
+        return $this->hasMany(Conversation::class, 'student_id');
+    }
 
     /**
      * Get the user's published courses.

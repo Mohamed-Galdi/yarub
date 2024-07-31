@@ -7,6 +7,7 @@ use App\Http\Controllers\Admin\LessonController;
 use App\Http\Controllers\Admin\StudentController;
 use App\Http\Controllers\Admin\TestController;
 use App\Http\Controllers\Admin\CertificateController;
+use App\Http\Controllers\Admin\ConversationController;
 use App\Http\Controllers\TestAttemptController;
 use App\Models\Course;
 
@@ -61,7 +62,7 @@ Route::middleware(['auth', 'verified', 'admin'])->prefix('admin-dashboard')->gro
     Route::put('/lessons/{id}', [LessonController::class, 'update'])->name('admin.lessons.update');
 
     // Tests
-    Route::get('/tests',[TestController::class, 'index'])->name('admin.tests');
+    Route::get('/tests', [TestController::class, 'index'])->name('admin.tests');
     Route::get('/tests/create', [TestController::class, 'create'])->name('admin.tests.create');
     Route::post('/tests', [TestController::class, 'store'])->name('admin.tests.store');
     Route::get('/tests/edit/{id}', [TestController::class, 'edit'])->name('admin.tests.edit');
@@ -85,14 +86,19 @@ Route::middleware(['auth', 'verified', 'admin'])->prefix('admin-dashboard')->gro
     Route::get('/certificates/get-student-content', [CertificateController::class, 'getStudentContent'])->name('admin.certificates.get-student-content');
     Route::get('/certificates/download/{id}', [CertificateController::class, 'download'])->name('admin.certificates.download');
 
-    
+    // Support
+    Route::get('/support', [ConversationController::class, 'index'])->name('admin.support');
+
+    Route::get('/admin/conversations', [ConversationController::class, 'index'])->name('admin.conversations.index');
+    Route::get('/admin/conversations/{conversation}/reply', [ConversationController::class, 'showReplyForm'])->name('admin.conversations.reply');
+    Route::post(
+        '/admin/conversations/{conversation}/reply',
+        [ConversationController::class, 'reply']
+    )->name('admin.conversations.send-reply');
+
     Route::get('/payments', function () {
         return view('admin.payments');
     })->name('admin.payments');
-    Route::get('/support', function () {
-        return view('admin.support');
-    })->name('admin.support');
-    
 });
 
 
