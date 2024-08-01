@@ -85,16 +85,19 @@ Route::middleware(['auth', 'verified', 'admin'])->prefix('admin-dashboard')->gro
     Route::post('/certificates', [CertificateController::class, 'store'])->name('admin.certificates.store');
     Route::get('/certificates/get-student-content', [CertificateController::class, 'getStudentContent'])->name('admin.certificates.get-student-content');
     Route::get('/certificates/download/{id}', [CertificateController::class, 'download'])->name('admin.certificates.download');
-
+    
     // Support
     Route::get('/support', [ConversationController::class, 'index'])->name('admin.support');
-
-    Route::get('/admin/conversations', [ConversationController::class, 'index'])->name('admin.conversations.index');
-    Route::get('/admin/conversations/{conversation}/reply', [ConversationController::class, 'showReplyForm'])->name('admin.conversations.reply');
+    Route::get('/support/conversations', [ConversationController::class, 'index'])->name('admin.conversations.index');
+    Route::get('/support/conversations/{conversation}/reply', [ConversationController::class, 'showReplyForm'])->name('admin.conversations.reply');
     Route::post(
-        '/admin/conversations/{conversation}/reply',
+        '/support/conversations/{conversation}/reply',
         [ConversationController::class, 'reply']
     )->name('admin.conversations.send-reply');
+    Route::get('/support/conversations/create', [ConversationController::class, 'create'])->name('admin.conversations.create');
+    Route::post('/support/conversations', [ConversationController::class, 'store'])->name('admin.conversations.store');
+
+
 
     Route::get('/payments', function () {
         return view('admin.payments');

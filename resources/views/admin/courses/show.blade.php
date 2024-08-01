@@ -2,7 +2,12 @@
 
 @section('content')
     <div>
+        <div class="flex justify-between">
         <h1 class="text-4xl text-gray-500 mb-6">{{ $course->title }}</h1>
+            </h1>
+            {{-- // back button --}}
+            <x-btn.back route="admin.courses" />
+        </div>
         <div class="flex lg:flex-row flex-col justify-center items-center gap-6">
             <div
                 class="lg:w-1/2 w-full flex px-8 py-3 justify-between items-center bg-gray-800 text-gray-200 text-2xl rounded-xl border border-indigo-500 ">
@@ -21,7 +26,7 @@
                     <p>مجموع المداخيل</p>
                 </div>
                 <div class="">
-                    <p class="font-hacen text-3xl">{{ $course->students()->sum('student_course_sub.payment_amount'); }} </p>
+                    <p class="font-hacen text-3xl">{{ $course->students()->sum('student_course_sub.payment_amount') }} </p>
                     <p class="font-judur text-geay-700 text-sm">ريال سعودي</p>
                 </div>
             </div>

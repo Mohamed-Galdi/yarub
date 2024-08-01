@@ -1,8 +1,10 @@
 @extends('layouts.admin')
 @section('content')
     <div>
-        <div class="px-8">
-            <h1 class="text-3xl text-gray-700 font-hacen"> إنشاء إختبار جديد </h1>
+        <div class="flex justify-between px-8">
+            <h1 class="text-4xl text-indigo-700 mb-4">إنشاء إختبار جديد</h1>
+            {{-- // back button --}}
+            <x-btn.back route="admin.tests" />
         </div>
         {{-- <x-form.errors :errors="$errors" /> --}}
 

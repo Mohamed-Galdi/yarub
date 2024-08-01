@@ -2,16 +2,21 @@
 
 @section('content')
     <div class="container">
+        <div class="flex justify-between">
         <h1 class="text-4xl text-indigo-700 mb-4">تعديل شرح: <span class="text-gray-500">{{ $lesson->title }}</span></h1>
+            </h1>
+            {{-- // back button --}}
+            <x-btn.back route="admin.lessons" />
+        </div>
         {{-- <x-form.errors :errors="$errors" /> --}}
         <form id="lessonForm" action="{{ route('admin.lessons.update', $lesson->id) }}" method="POST" class="space-y-6">
             @csrf
             @method('PUT')
             <div class="form-group flex lg:flex-row flex-col justify-start items-start gap-4">
 
-                <x-form.input-light name="title" label="العنوان" placeholder="مثال لعنوان: مقدمة يَعرُب في التأسيس للقدرات"
-                    type="text" required class="lg:w-[50%] w-full lg:order-1 order-2" id="title"
-                    value="{{ $lesson->title }}" required />
+                <x-form.input-light name="title" label="العنوان"
+                    placeholder="مثال لعنوان: مقدمة يَعرُب في التأسيس للقدرات" type="text" required
+                    class="lg:w-[50%] w-full lg:order-1 order-2" id="title" value="{{ $lesson->title }}" required />
 
 
                 <x-form.input-light type="number" id="monthly_price" name="monthly_price" label="الإشتراك الشهري"

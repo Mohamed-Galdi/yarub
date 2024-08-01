@@ -1,10 +1,15 @@
 @extends('layouts.admin')
 @section('content')
     <div>
-        <h1 class="text-4xl text-indigo-700 mb-4">تعديل : <span class="text-gray-800">{{ $test->title }} <span
-                    class="font-nitaqat text-gray-500 text-2xl">({{ $test->course_id ? ' الدرس : ' . $test->course->title : ' الشرح : ' . $test->lesson->title }})</span></span>
-        </h1>
-        <x-form.errors :errors="$errors" />
+        <div class="flex justify-between px-8">
+            <h1 class="text-4xl text-indigo-700 mb-4">تعديل : <span class="text-gray-800">{{ $test->title }} <span
+                        class="font-nitaqat text-gray-500 text-2xl">({{ $test->course_id ? ' الدرس : ' . $test->course->title : ' الشرح : ' . $test->lesson->title }})</span></span>
+            </h1>
+            {{-- // back button --}}
+            <x-btn.back route="admin.tests" />
+        </div>
+
+        {{-- <x-form.errors :errors="$errors" /> --}}
         <div class="py-12">
             <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
                 <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">

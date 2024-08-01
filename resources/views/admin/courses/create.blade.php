@@ -2,20 +2,25 @@
 
 @section('content')
     <div class="">
+        <div class="flex justify-between">
         <h1 class="text-4xl text-indigo-700 mb-4">إنشاء دورة جديدة</h1>
+            </h1>
+            {{-- // back button --}}
+            <x-btn.back route="admin.courses" />
+        </div>
         <form id="courseForm" action="{{ route('admin.courses.store') }}" method="POST" class="space-y-6">
             @csrf
             <div class="form-group w-full flex lg:flex-row flex-col gap-4 items-start justify-start">
-                <x-form.input-light name="title" label="العنوان" placeholder="مثال لعنوان: مقدمة يَعرُب في التأسيس للقدرات"
-                    type="text" required class="lg:w-3/4 w-full" id="title" required />
+                <x-form.input-light name="title" label="العنوان"
+                    placeholder="مثال لعنوان: مقدمة يَعرُب في التأسيس للقدرات" type="text" required
+                    class="lg:w-3/4 w-full" id="title" required />
                 <x-form.input-light type="number" id="price" name="price" label="السعر" currency="ريال سعودي"
                     :value="30" class="lg:w-1/4 w-full" required />
 
             </div>
             <div class="form-group">
-                <x-form.textarea-light name="description" label="الوصف"
-                    placeholder="اكتب نص يصف محتويات الدورة" type="text" required
-                    class="w-full " />
+                <x-form.textarea-light name="description" label="الوصف" placeholder="اكتب نص يصف محتويات الدورة"
+                    type="text" required class="w-full " />
             </div>
             <div>
                 <h2 class="text-2xl text-indigo-500 mt-8 mb-2">محتوى الدورة </h2>
@@ -28,9 +33,8 @@
                         <h3 class="w-full text-center text-gray-200 text-2xl">الدرس 1</h3>
                     </div>
                     <div class="form-group">
-                        <x-form.input-light name="content_titles[]" label="عنوان الدرس"
-                            placeholder="اكتب عنوان للدرس" type="text" required
-                            class="px-4 form-control content-title" />
+                        <x-form.input-light name="content_titles[]" label="عنوان الدرس" placeholder="اكتب عنوان للدرس"
+                            type="text" required class="px-4 form-control content-title" />
                     </div>
                     <div class="form-group px-4">
                         <label for="dropzone-file"

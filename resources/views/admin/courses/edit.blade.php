@@ -2,15 +2,21 @@
 
 @section('content')
     <div class="container">
+        <div class="flex justify-between">
         <h1 class="text-4xl text-indigo-700 mb-4">تعديل دورة: <span class="text-gray-500">{{ $course->title }}</span></h1>
+            </h1>
+            {{-- // back button --}}
+            <x-btn.back route="admin.courses" />
+        </div>
         {{-- <x-form.validation-errors :errors="$errors" /> --}}
         <form id="courseForm" action="{{ route('admin.courses.update', $course->id) }}" method="POST" class="space-y-6">
             @csrf
             @method('PUT')
             <div class="form-group flex lg:flex-row flex-col justify-start items-start gap-4">
 
-                <x-form.input-light name="title" label="العنوان" placeholder="مثال لعنوان: مقدمة يَعرُب في التأسيس للقدرات"
-                    type="text" required class="lg:w-3/5 w-full lg:order-1 order-2" id="title" value="{{ $course->title }}" required />
+                <x-form.input-light name="title" label="العنوان"
+                    placeholder="مثال لعنوان: مقدمة يَعرُب في التأسيس للقدرات" type="text" required
+                    class="lg:w-3/5 w-full lg:order-1 order-2" id="title" value="{{ $course->title }}" required />
 
 
                 <x-form.input-light type="number" id="price" name="price" label="السعر " currency="ريال سعودي"
@@ -56,8 +62,8 @@
                                     class="p-3 w-full bg-gray-900 text-white rounded-lg cursor-pointer hover:bg-gray-700 flex gap-2 items-center justify-center">
                                     تغيير الفيديو
                                 </label>
-                                <input id="video{{ $loop->iteration }}" type="file" class="form-control-file video-upload hidden"
-                                    accept="video/*">
+                                <input id="video{{ $loop->iteration }}" type="file"
+                                    class="form-control-file video-upload hidden" accept="video/*">
                                 <input type="hidden" name="content_videos[]" value="{{ $content->url }}">
                                 <div class="upload-status w-full flex justify-center items-center">
                                     <video src="{{ asset('storage/' . $content->url) }}" controls
@@ -95,7 +101,6 @@
         </button>
     </form>
 </div>
-
 @endsection
 
 @push('scripts')
@@ -197,5 +202,4 @@
         }
     });
 </script>
-
 @endpush

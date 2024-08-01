@@ -1,8 +1,14 @@
 @extends('layouts.admin')
 @section('content')
-    <h1 class="text-4xl text-indigo-700 mb-4"><span class="text-gray-800">{{ $test->title }} <span
-                class="font-nitaqat text-gray-500 text-2xl">({{ $test->course_id ? ' الدرس : ' . $test->course->title : ' الشرح : ' . $test->lesson->title }})</span></span>
-    </h1>
+    <div class="flex justify-between">
+        <h1 class="text-4xl text-indigo-700 mb-4"><span class="text-gray-800">{{ $test->title }} <span
+                    class="font-nitaqat text-gray-500 text-2xl">({{ $test->course_id ? ' الدرس : ' . $test->course->title : ' الشرح : ' . $test->lesson->title }})</span></span>
+        </h1>
+        {{-- // back button --}}
+        <x-btn.back route="admin.tests" />
+    </div>
+    
+    
     <div class="flex lg:flex-row flex-col justify-center items-center gap-6">
         <div
             class="lg:w-1/2 w-full flex px-8 py-3 justify-between items-center bg-gray-800 text-gray-200 text-2xl rounded-xl border border-indigo-500 ">

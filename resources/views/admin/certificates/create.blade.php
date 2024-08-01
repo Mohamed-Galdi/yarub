@@ -2,8 +2,12 @@
 
 @section('content')
     <div class="container">
-        <x-form.errors :errors="$errors" />
-        <h1 class="text-4xl text-indigo-700 mb-4">منح شهادة جديدة</h1>
+        {{-- <x-form.errors :errors="$errors" /> --}}
+        <div class="flex justify-between">
+            <h1 class="text-4xl text-indigo-700 mb-4">منح شهادة جديدة</h1>
+            {{-- // back button --}}
+            <x-btn.back route="admin.conversations.index" />
+        </div>
         <form action="{{ route('admin.certificates.store') }}" method="POST">
             @csrf
             <div class="grid lg:grid-cols-3 grid-cols-1 gap-3 py-4">

@@ -1,6 +1,11 @@
 @extends('layouts.admin')
 @section('content')
+    <div class="flex justify-end mb-4"> 
+        {{-- // back button --}}
+        <x-btn.back route="admin.tests" />
+    </div>
     <div class="container">
+
         <div class="grid grid-cols-1 lg:grid-cols-3 gap-4">
             {{-- student --}}
             <div

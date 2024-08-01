@@ -1,8 +1,12 @@
 @extends('layouts.admin')
 @section('content')
     <div>
+        <div class="flex justify-between">
         <h1 class="text-4xl text-indigo-700 mb-4">إنشاء قسيمة جديدة</h1>
-        <x-form.errors :errors="$errors" />
+            {{-- // back button --}}
+            <x-btn.back route="admin.coupons" />
+        </div>
+        {{-- <x-form.errors :errors="$errors" /> --}}
         <div class="bg-white shadow-md rounded-lg p-4 mb-4">
             <form action="{{ route('admin.coupons.store') }}" method="POST">
                 @csrf
@@ -48,12 +52,12 @@
                             type="button" disabled>تحديد الدروس و الشروحات</button>
                         <!-- Dropdown menu -->
                         <div id="dropdownSearch" class="z-10 hidden bg-white rounded-lg shadow w-fit">
-                            <ul class="h-48 px-3 pb-3 overflow-y-auto text-lg text-gray-700 dark:text-gray-200"
+                            <ul class="h-48 px-3 pb-3 overflow-y-auto text-lg text-gray-700 "
                                 aria-labelledby="dropdownSearchButton">
                                 <p>تحديد الدروس:</p>
                                 @foreach ($courses as $course)
                                     <li>
-                                        <div class="flex items-center p-2 rounded hover:bg-gray-100 dark:hover:bg-gray-600">
+                                        <div class="flex items-center p-2 rounded hover:bg-gray-100 ">
                                             <input id="course-checkbox-{{ $course->id }}" type="checkbox" name="courses[]"
                                                 value="{{ $course->id }}"
                                                 class="w-4 h-4 text-slate-600 bg-gray-100 focus:ring-0 focus:ring-transparent ">
@@ -65,7 +69,7 @@
                                 <p>تحديد الشروحات:</p>
                                 @foreach ($lessons as $lesson)
                                     <li>
-                                        <div class="flex items-center p-2 rounded hover:bg-gray-100 dark:hover:bg-gray-600">
+                                        <div class="flex items-center p-2 rounded hover:bg-gray-100 ">
                                             <input id="lesson-checkbox-{{ $lesson->id }}" type="checkbox" name="lessons[]"
                                                 value="{{ $lesson->id }}"
                                                 class="w-4 h-4 text-slate-600 bg-gray-100 focus:ring-0 focus:ring-transparent">

@@ -24,7 +24,7 @@ class Demo extends Seeder
 
         // Demo Student --------------------------------------------------------------------------------
         $Student = [
-            'name' => 'DemoStudent',
+            'name' => 'طالب إفتراضي',
             'email' => 'student@demo.com',
             'password' => '00000000',
             'role' => 'student',

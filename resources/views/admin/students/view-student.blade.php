@@ -1,6 +1,11 @@
 @extends('layouts.admin')
 @section('content')
     <div class="space-y-8 ">
+        <div class="flex justify-between">
+            <h1 class="text-4xl text-indigo-700">المعلومات الشخصية</h1>
+            {{-- // back button --}}
+            <x-btn.back route="admin.students" />
+        </div>
 
         {{-- //////////////////// Student Info //////////////////// --}}
         <div class=" w-full flex bg-white rounded-xl  h-fit border border-gray-800 shadow-md shadow-blue-500/50">

@@ -1,7 +1,11 @@
 @extends('layouts.admin')
 
 @section('content')
-        <h1 class="text-4xl text-indigo-700 mb-4">تعديل   القسيمة: <span class="text-gray-500">{{$coupon->code }}</span></h1>
+    <div class="flex justify-between">
+        <h1 class="text-4xl text-indigo-700 mb-4">تعديل القسيمة: <span class="text-gray-500">{{ $coupon->code }}</span></h1>
+        {{-- // back button --}}
+        <x-btn.back route="admin.coupons" />
+    </div>
     <form action="{{ route('admin.coupons.update', $coupon->id) }}" method="POST">
         @csrf
         @method('PUT')
@@ -49,12 +53,12 @@
                     type="button" disabled>تحديد الدروس و الشروحات</button>
                 <!-- Dropdown menu -->
                 <div id="dropdownSearch" class="z-10 hidden bg-white rounded-lg shadow w-fit">
-                    <ul class="h-48 px-3 pb-3 overflow-y-auto text-lg text-gray-700 dark:text-gray-200"
+                    <ul class="h-48 px-3 pb-3 overflow-y-auto text-lg text-gray-700 "
                         aria-labelledby="dropdownSearchButton">
                         <p>تحديد الدروس:</p>
                         @foreach ($courses as $course)
                             <li>
-                                <div class="flex items-center p-2 rounded hover:bg-gray-100 dark:hover:bg-gray-600">
+                                <div class="flex items-center p-2 rounded hover:bg-gray-100 ">
                                     <input id="course-checkbox-{{ $course->id }}" type="checkbox" name="courses[]"
                                         value="{{ $course->id }}"
                                         {{ $coupon->courses->contains($course->id) ? 'checked' : '' }}
@@ -67,7 +71,7 @@
                         <p>تحديد الشروحات:</p>
                         @foreach ($lessons as $lesson)
                             <li>
-                                <div class="flex items-center p-2 rounded hover:bg-gray-100 dark:hover:bg-gray-600">
+                                <div class="flex items-center p-2 rounded hover:bg-gray-100 ">
                                     <input id="lesson-checkbox-{{ $lesson->id }}" type="checkbox" name="lessons[]"
                                         value="{{ $lesson->id }}"
                                         {{ $coupon->lessons->contains($lesson->id) ? 'checked' : '' }}

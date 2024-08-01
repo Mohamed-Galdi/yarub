@@ -30,4 +30,9 @@ class Conversation extends Model
     {
         $this->update(['admin_unread_count' => 0]);
     }
+    
+    public function lastMessage()
+    {
+        return $this->hasOne(Message::class)->latestOfMany();
+    }
 }
