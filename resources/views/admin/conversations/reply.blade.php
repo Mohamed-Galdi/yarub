@@ -3,7 +3,7 @@
 @section('content')
     <div class="container">
         <div class="flex justify-between items-center gap-2 mb-4">
-            <div class="flex justify-start gap-2 items-center text-3xl">
+            <div class="flex justify-start gap-2 items-center lg:text-3xl text-2xl text-nowrap truncate">
                 <p class="text-indigo-500">الرد على المحادثة:</p>
                 <p class="text-slate-500">{{ $conversation->student->name }} - {{ $conversation->subject }}</p>
             </div>
@@ -23,7 +23,7 @@
                                     <x-icons.admin class="w-6 h-6 text-gray-100" />
                                 </div>
                             @else
-                                <img class="w-8 h-8 rounded-full " src="{{ asset($conversation->student->avatar) }}"
+                                <img class="min-w-8 min-h-8 max-h-8 max-w-8 rounded-full " src="{{ asset($conversation->student->avatar) }}"
                                     alt="Student Avatar">
                             @endif
                         </div>
@@ -46,7 +46,7 @@
                 </div>
             @endforeach
 
-            <form class="mx-8 mt-6" action="{{ route('admin.conversations.send-reply', $conversation) }}" method="POST">
+            <form class="lg:mx-8 mx-2 mt-6" action="{{ route('admin.conversations.send-reply', $conversation) }}" method="POST">
                 @csrf
                 <div class="relative">
                     <textarea name="content" id="content" rows="4"

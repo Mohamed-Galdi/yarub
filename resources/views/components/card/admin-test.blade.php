@@ -7,7 +7,7 @@
             @else
                 <x-card.not-live />
             @endif
-            <p class="text-white text-3xl">{{ $title }}</p>
+            <p class="text-white text-3xl text-nowrap truncate">{{ $title }}</p>
         </div>
         <p
             class="{{ 'py-[2px] px-1 ms-6 text-gray-100 rounded-lg me-2 font-judur text-nowrap truncate' . ($published ? ' bg-orange-800' : ' bg-gray-800') }}">
@@ -31,7 +31,7 @@
 
     </div>
     <div class="pt-3 flex justify-center items-center gap-2">
-        <x-btn.view class="w-1/2" route="admin.tests.view" id="{{ $testId }}">تصفح البيانات</x-btn.view>
+        <x-btn.view class="w-1/2 text-nowrap truncate" route="admin.tests.view" id="{{ $testId }}">تصفح البيانات</x-btn.view>
         <x-btn.edit class="w-1/2" route="admin.tests.edit" id="{{ $testId }}">تعديل</x-btn.edit>
     </div>
 </div>

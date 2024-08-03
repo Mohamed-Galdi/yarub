@@ -14,6 +14,11 @@ class Course extends Model
         'title', 'description', 'price', 'is_published',
     ];
 
+    // always cast the price to int
+    protected $casts = [
+        'price' => 'integer',
+    ];
+
     public function content()
     {
         return $this->hasMany(Content::class);

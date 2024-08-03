@@ -9,7 +9,7 @@
          @else
              <x-card.not-live />
          @endif
-         <p class="text-white">{{ $title }}</p>
+         <p class="text-white text-nowrap truncate">{{ $title }}</p>
      </div>
      <div class="flex text-white justify-between items-start">
          <div class=" flex flex-col justify-center items-center w-1/3 ">
@@ -19,11 +19,11 @@
                  <p>{{ $numberOfLessons }}</p>
              </div>
          </div>
-         <div class=" flex flex-col justify-center items-center w-1/3 border-x-2 border-white  ">
+         <div class=" flex flex-col justify-center items-center w-1/3 border-x-2 border-white  overflow-hidden ">
              <p class="text-yellow-300">الإشتراك</p>
-             <div class=" text-sm font-judur">
-                 <p>{{ $monthlyPrice }} رس/ شهريا</p>
-                 <p>{{ $annualPrice }} رس/ سنويا</p>
+             <div class=" text-sm font-judur w-fit">
+                 <p class="text-xs text-nowrap truncate">{{ $monthlyPrice }} ر.س/ شهريا</p>
+                 <p class="text-xs text-nowrap truncate">{{ $annualPrice }} ر,س/ سنويا</p>
              </div>
          </div>
          <div class=" flex flex-col justify-center items-center w-1/3 ">
@@ -37,7 +37,7 @@
 
      </div>
       <div class="pt-3 flex justify-center items-center gap-2">
-         <x-btn.view class="w-1/2" route="admin.lessons.view" id="{{ $lessonId }}">تصفح البيانات</x-btn.view>
+         <x-btn.view class="w-1/2 text-nowrap truncate" route="admin.lessons.view" id="{{ $lessonId }}">تصفح البيانات</x-btn.view>
          <x-btn.edit class="w-1/2" route="admin.lessons.edit" id="{{ $lessonId }}">تعديل</x-btn.edit>
      </div>
  </div>

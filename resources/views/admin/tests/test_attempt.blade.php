@@ -12,8 +12,8 @@
                 class="flex justify-start items-start gap-6 bg-gradient-to-l from-indigo-500 to-purple-800 rounded-lg p-4 shadow-md text-gray-200">
                 <img src="{{ asset($testAttempt->user->avatar) }}" alt="Profile Picture" class="rounded-circle" width="100"
                     height="100">
-                <div>
-                    <h2 class="text-2xl font-bold text-white"> {{ $testAttempt->user->name }}</h2>
+                <div class="w-full">
+                    <h2 class="text-2xl font-bold text-white "> {{ $testAttempt->user->name }}</h2>
                     <p>تاريخ الإجتياز: {{ $testAttempt->created_at->format('d-m-Y') }}</p>
 
                 </div>
@@ -21,7 +21,7 @@
             {{-- test --}}
             <div class=" gap-6 bg-gradient-to-l from-indigo-500 to-purple-800 rounded-lg p-4 shadow-md text-gray-200">
                 <h2 class="text-2xl font-bold text-white"> {{ $testAttempt->test->title }}</h2>
-                <p class="font-judur">
+                <p class="font-judur text-nowrap truncate">
                     {{ $testAttempt->test->course_id ? $testAttempt->test->course->title : $testAttempt->test->lesson->title }}
                 </p>
                 <div class="m-2 py-2 px-4 bg-gray-200 text-gray-800 rounded-lg shadow-md w-fit ">

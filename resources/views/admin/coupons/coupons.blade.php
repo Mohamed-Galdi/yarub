@@ -67,24 +67,24 @@
 
                         <div class="flex justify-between items-center gap-4">
                             <div
-                                class="border-4 font-judur font-bold  rounded-full flex justify-center items-center w-16 h-16 text-3xl text-center text-slate-800 {{ $is_active ? 'bg-blue-500 text-blue-200' : 'bg-slate-500 text-slate-800' }}">
+                                class="border-4 font-judur font-bold  rounded-full flex justify-center items-center w-16 h-16 text-3xl text-center text-slate-200 {{ $is_active ? 'bg-blue-500 text-blue-200' : 'bg-slate-500 text-slate-800' }}">
                                 {{ $coupon->used_count }}
                             </div>
 
                             <div class="space-y-2 flex flex-col justify-center items-center">
                                 <p
-                                    class="w-full py-1 px-4 text-gray-100 rounded-lg text-center {{ $is_active ? 'bg-blue-400' : 'bg-slate-500' }}">
+                                    class="w-full py-1 px-4 text-gray-100 rounded-lg text-center text-nowrap truncate {{ $is_active ? 'bg-blue-400' : 'bg-slate-500' }}">
                                     {{ $coupon->start_date->format('d-m-Y') }}</p>
                                 <x-icons.arrow-down class="w-4 h-4" />
                                 <p
-                                    class="w-full py-1 px-4 text-gray-100 rounded-lg text-center {{ $is_active ? 'bg-blue-400' : 'bg-slate-500' }}">
+                                    class="w-full py-1 px-4 text-gray-100 rounded-lg text-center text-nowrap truncate {{ $is_active ? 'bg-blue-400' : 'bg-slate-500' }}">
                                     {{ $coupon->end_date->format('d-m-Y') }}</p>
                             </div>
 
                         </div>
-                        <div class="w-[85%]">
+                        <div class="w-full">
                             <a href="{{ route('admin.coupons.edit', ['id' => $coupon->id]) }}"
-                                class = "flex justify-center items-cente gap-2  p-2 rounded-xl border-2  overflow-hidden hover:scale-[0.97] transition-all duration-300 ease-in-out cursor-pointer {{ $is_active ? 'bg-blue-400 hover:bg-blue-500 text-white border-white' : 'bg-slate-400 hover:bg-slate-500 text-white ' }}">
+                                class = "flex justify-center items-cente gap-2 mx-6  p-2 rounded-xl border-2  overflow-hidden hover:scale-[0.97] transition-all duration-300 ease-in-out cursor-pointer {{ $is_active ? 'bg-blue-400 hover:bg-blue-500 text-white border-white' : 'bg-slate-400 hover:bg-slate-500 text-white ' }}">
                                 <p> Edit </p>
                                 <x-icons.edit class="w-5 h-5 " />
                             </a>

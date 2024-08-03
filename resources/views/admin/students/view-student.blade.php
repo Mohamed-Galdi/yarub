@@ -2,25 +2,25 @@
 @section('content')
     <div class="space-y-8 ">
         <div class="flex justify-between">
-            <h1 class="text-4xl text-indigo-700">المعلومات الشخصية</h1>
+            <h1 class="lg:text-4xl text-2xl text-nowrap truncate text-indigo-700">المعلومات الشخصية</h1>
             {{-- // back button --}}
             <x-btn.back route="admin.students" />
         </div>
 
         {{-- //////////////////// Student Info //////////////////// --}}
-        <div class=" w-full flex bg-white rounded-xl  h-fit border border-gray-800 shadow-md shadow-blue-500/50">
+        <div class=" w-full flex flex-col lg:flex-row   bg-white rounded-xl  h-fit border border-gray-800 shadow-md shadow-blue-500/50">
             {{-- //////////////// Info //////////////// --}}
-            <div class="w-1/2 py-2 flex justify-start items-center">
+            <div class="lg:w-1/2 w-full py-2 flex flex-col lg:flex-row justify-start items-center">
                 <img src="{{ asset($student->avatar) }}" alt="" class="w-56 h-56">
-                <div class="w-full border-r-3 border-gray-600 px-4 py-6 h-full flex flex-col justify-between items-start ">
-                    <div>
-                        <p class="font-hacen text-4xl text-gray-800">{{ $student->name }}</p>
-                        <p class="font-judur text-base text-gray-400 ">{{ $student->email }}</p>
+                <div class="w-full border-r-3 border-gray-600 px-4 py-6 h-full flex flex-col justify-between lg:items-start items-center ">
+                    <div class="text-center lg:text-right">
+                        <p class="font-hacen text-3xl text-gray-800">{{ $student->name }}</p>
+                        <p class="font-judur text-sm text-gray-400 ">{{ $student->email }}</p>
                     </div>
-                    <div class="">
+                    <div class="flex flex-row lg:flex-col justify-start items-start lg:items-center lg:gap-0 gap-2 ">
                         <div class="flex items-start justify-start gap-x-1">
                             <x-icons.calendar class="w-5 h-5 text-gray-800 " />
-                            <p class="text-base text-gray-500 font-judur mb-2 ">تاريخ الانضمام :</p>
+                            <p class="text-base text-gray-500 font-judur mb-2 ">تاريخ الانضمام : </p>
                         </div>
                         <div class="flex text-lg gap-1 text-indigo-400">
                             <p class=" ">{{ $student->created_at->format('d-m-Y') }}</p>
@@ -31,7 +31,7 @@
 
             </div>
             {{-- //////////////// Badges //////////////// --}}
-            <div class="w-1/2 grid grid-cols-2 gap-4 p-6 align-middle place-items-center">
+            <div class="lg:w-1/2 w-full grid grid-cols-2 gap-4 p-6 align-middle place-items-center">
                 <div
                     class="w-[90%] p-3 rounded-lg h-20 bg-gradient-to-tr from-blue-400 to-blue-500 flex flex-col justify-center items-center">
                     <div class="flex justify-center items-center gap-3">

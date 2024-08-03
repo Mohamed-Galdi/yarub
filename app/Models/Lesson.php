@@ -14,6 +14,12 @@ class Lesson extends Model
         'title', 'description', 'monthly_price', 'annual_price', 'is_published'
     ];
 
+    // always cast the price to int
+    protected $casts = [
+        'monthly_price' => 'integer',
+        'annual_price' => 'integer',
+    ];
+
     public function content()
     {
         return $this->hasMany(Content::class);

@@ -2,7 +2,7 @@
 @section('content')
     <div>
         <div class="flex justify-between px-8">
-            <h1 class="text-4xl text-indigo-700 mb-4">إنشاء إختبار جديد</h1>
+            <h1 class="lg:text-4xl text-2xl text-nowrap truncate text-indigo-700 mb-4">إنشاء إختبار جديد</h1>
             {{-- // back button --}}
             <x-btn.back route="admin.tests" />
         </div>
@@ -16,7 +16,7 @@
                             @csrf
                             {{-- //////////////// Course or Lesson //////////////// --}}
                             <div class="mb-4 flex lg:flex-row flex-col items-start justify-start gap-4">
-                                <label for="is_for_course" class="flex flex-col cursor-pointer w-1/4 items-center">
+                                <label for="is_for_course" class="flex flex-col cursor-pointer lg:w-1/4 w-full lg:items-center items-start">
                                     <input name="is_for_course" id="is_for_course" type="checkbox" class="peer sr-only"
                                         role="switch" checked onchange="toggleSelect()" />
                                     <span
