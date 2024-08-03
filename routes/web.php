@@ -29,6 +29,13 @@ Route::middleware(['auth', 'verified', 'admin'])->prefix('admin-dashboard')->gro
     // Dashboard
     Route::get('/', [AdminDashboardController::class, 'index'])->name('admin.dashboard');
 
+    // Admin account
+    Route::get('/account', [AdminDashboardController::class, 'show'])->name('admin.account');
+    Route::post('/account', [AdminDashboardController::class, 'updateMain'])->name('admin.account.update-main');
+    Route::post('/account/update-main-password', [AdminDashboardController::class, 'updateMainPassword'])->name('admin.account.update-main-password');
+    Route::delete('/account/delete-admin/{admin_id}', [AdminDashboardController::class, 'deleteAdmin'])->name('admin.account.delete-admin');
+    Route::post('/account/create', [AdminDashboardController::class, 'createAdmin'])->name('admin.account.create');
+
     // students
     Route::get('/students', [StudentController::class, 'index'])->name('admin.students');
     Route::get('/students/view/{id}', [StudentController::class, 'show'])->name('admin.view_student');

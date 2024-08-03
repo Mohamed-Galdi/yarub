@@ -52,7 +52,7 @@
             </svg>
         </button>
         <div class="p-4 font-judur  ">
-            <div
+            <a href="{{ route('admin.account') }}"
                 class="flex justify-start items-center gap-4 bg-gray-100 p-2 rounded-lg shadow-lg shadow-blue-500 cursor-pointer hover:shadow-none hover:scale-[0.99] transition-all duration-300 ease-in-out">
                 <div class="rounded-full flex items-center justify-center text-pr-300 bg-indigo-400 w-12 h-12 ">
                     <x-icons.admin class="w-6 h-6 text-gray-100" />
@@ -61,7 +61,7 @@
                     <p class=" font-bold">المشرف</p>
                     <p class="text-sm font-hacen">{{ Auth::user()->email }}</p>
                 </div>
-            </div>
+            </a>
         </div>
         {{-- <div class="w-full h-[2px] bg-gray-100"></div> --}}
         <div class="h-full p-4 overflow-y-auto">
