@@ -30,7 +30,7 @@ class UserFactory extends Factory
             'email' => $faker->unique()->safeEmail(),
             'password' => Hash::make('password'),
             'role' => 'student',
-            'avatar' => 'storage/users_avatars/default.png',
+            'avatar' => 'storage/users_avatars/boy_1.jpg',
 
         ];
     }

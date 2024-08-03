@@ -11,7 +11,7 @@
         <div class=" w-full flex flex-col lg:flex-row   bg-white rounded-xl  h-fit border border-gray-800 shadow-md shadow-blue-500/50">
             {{-- //////////////// Info //////////////// --}}
             <div class="lg:w-1/2 w-full py-2 flex flex-col lg:flex-row justify-start items-center">
-                <img src="{{ asset($student->avatar) }}" alt="" class="w-56 h-56">
+                <img src="{{ asset($student->avatar ?? 'storage/users_avatars/default.png') }}" alt="" class="w-56 h-56 rounded-full">
                 <div class="w-full border-r-3 border-gray-600 px-4 py-6 h-full flex flex-col justify-between lg:items-start items-center ">
                     <div class="text-center lg:text-right">
                         <p class="font-hacen text-3xl text-gray-800">{{ $student->name }}</p>

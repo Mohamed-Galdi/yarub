@@ -24,11 +24,11 @@ class Demo extends Seeder
 
         // Demo Student --------------------------------------------------------------------------------
         $Student = [
-            'name' => 'طالب إفتراضي',
+            'name' => 'طالبة  افتراضية',
             'email' => 'student@demo.com',
             'password' => '00000000',
             'role' => 'student',
-            'avatar'=> 'storage/users_avatars/default.png',
+            'avatar'=> 'storage/users_avatars/girl_6.jpg'
         ];
         User::create($Student);
     }
