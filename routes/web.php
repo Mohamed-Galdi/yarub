@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Admin\AdminDashboardController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Admin\CouponController;
 use App\Http\Controllers\Admin\CourseController;
@@ -25,9 +26,8 @@ use App\Models\Course;
 
 // ///////////// Admin Routes //////////////
 Route::middleware(['auth', 'verified', 'admin'])->prefix('admin-dashboard')->group(function () {
-    Route::get('/', function () {
-        return view('admin.dashboard');
-    })->name('admin.dashboard');
+    // Dashboard
+    Route::get('/', [AdminDashboardController::class, 'index'])->name('admin.dashboard');
 
     // students
     Route::get('/students', [StudentController::class, 'index'])->name('admin.students');
@@ -100,7 +100,7 @@ Route::middleware(['auth', 'verified', 'admin'])->prefix('admin-dashboard')->gro
 
 
     Route::get('/payments', function () {
-        return view('admin.payments');
+        return view('admin.payments.payments');
     })->name('admin.payments');
 });
 
