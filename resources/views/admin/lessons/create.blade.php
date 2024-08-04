@@ -14,12 +14,24 @@
             <div class="form-group w-full flex lg:flex-row flex-col gap-4 items-start justify-start">
                 <x-form.input-light name="title" label="العنوان" placeholder="مثال لعنوان: همزة الوصل" type="text"
                     required class="lg:w-1/2 w-full" id="title" required />
+                <div class="lg:w-1/2 w-full">
+                    <label for="type" class="text-gray-800 font-judur ms-3 mb-1 font-semibold">نوع الشرح</label>
+                    <select name="type" id="type"
+                        class=" block w-full  h-[3.1rem] rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
+                        required>
+                        <option value="الصف الأول الثانوي">الصف الأول الثانوي</option>
+                        <option value="الصف الثاني الثانوي">الصف الثاني الثانوي</option>
+                        <option value="الصف الثالث الثانوي">الصف الثالث الثانوي</option>
+                        <option value="غير مصنفة">غير مصنفة</option>
+                    </select>
+                </div>
+            </div>
+            <div class="form-group w-full flex lg:flex-row flex-col gap-4 items-start justify-start">
+               
                 <x-form.input-light type="number" id="monthly_price" name="monthly_price" label="الإشتراك الشهري"
-                    currency="ريال سعودي" :value="30" class="lg:w-1/4 w-full" required />
+                    currency="ريال سعودي" :value="30" class="lg:w-1/2 w-full" required />
                 <x-form.input-light type="number" id="annual_price" name="annual_price" label="الإشتراك السنوي"
-                    currency="ريال سعودي" :value="300" class="lg:w-1/4 w-full" required />
-
-
+                    currency="ريال سعودي" :value="300" class="lg:w-1/2 w-full" required />
             </div>
             <div class="form-group">
                 <x-form.textarea-light name="description" label="الوصف" placeholder="اكتب نص يصف محتويات الشرح"

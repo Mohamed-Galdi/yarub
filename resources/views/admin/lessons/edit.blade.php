@@ -3,7 +3,8 @@
 @section('content')
     <div class="container">
         <div class="flex justify-between">
-        <h1 class="lg:text-4xl text-2xl text-nowrap truncate text-indigo-700 mb-4">تعديل شرح: <span class="text-gray-500">{{ $lesson->title }}</span></h1>
+            <h1 class="lg:text-4xl text-2xl text-nowrap truncate text-indigo-700 mb-4">تعديل شرح: <span
+                    class="text-gray-500">{{ $lesson->title }}</span></h1>
             </h1>
             {{-- // back button --}}
             <x-btn.back route="admin.lessons" />
@@ -13,27 +14,37 @@
             @csrf
             @method('PUT')
             <div class="form-group flex lg:flex-row flex-col justify-start items-start gap-4">
-
                 <x-form.input-light name="title" label="العنوان"
                     placeholder="مثال لعنوان: مقدمة يَعرُب في التأسيس للقدرات" type="text" required
                     class="lg:w-[50%] w-full lg:order-1 order-2" id="title" value="{{ $lesson->title }}" required />
-
-
-                <x-form.input-light type="number" id="monthly_price" name="monthly_price" label="الإشتراك الشهري"
-                    currency="ريال سعودي" value="{{ $lesson->monthly_price }}" class="lg:w-[20%] w-full lg:order-2 order-3"
-                    required />
-                <x-form.input-light type="number" id="annual_price" name="annual_price" label="الإشتراك السنوي"
-                    currency="ريال سعودي" value="{{ $lesson->annual_price }}" class="lg:w-[20%] w-full lg:order-2 order-3"
-                    required />
-
+                <div class="lg:w-1/2 w-full lg:order-1 order-2">
+                    <label for="type" class="text-gray-800 font-judur ms-3 mb-1 font-semibold">تصنيف الشرح</label>
+                    <select name="type" id="type"
+                        class=" block w-full  h-[3.1rem] rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
+                        required>
+                        <option value="الصف الأول الثانوي" {{ $lesson->type === 'الصف الأول الثانوي' ? 'selected' : '' }}>
+                            الصف الأول الثانوي</option>
+                        <option value="الصف الثاني الثانوي" {{ $lesson->type === 'الصف الثاني الثانوي' ? 'selected' : '' }}>
+                            الصف الثاني الثانوي</option>
+                        <option value="الصف الثالث الثانوي" {{ $lesson->type === 'الصف الثالث الثانوي' ? 'selected' : '' }}>
+                            الصف الثالث الثانوي</option>
+                        <option value="غير مصنفة" {{ $lesson->type === 'غير مصنفة' ? 'selected' : '' }}>غير مصنفة</option>
+                    </select>
+                </div>
                 <x-form.toogle label="حالة النشر" name="published" value="{{ $lesson->is_published }}"
                     class="lg:w-[10%] w-full lg:items-center items-start justify-start lg:order-3 order-1" />
-
-
-
             </div>
-            <div class="form-group">
+            <div class="form-group flex lg:flex-row flex-col justify-start items-start gap-4">
+                <x-form.input-light type="number" id="monthly_price" name="monthly_price" label="الإشتراك الشهري"
+                    currency="ريال سعودي" value="{{ $lesson->monthly_price }}" class="lg:w-[44.5%] w-full lg:order-2 order-3"
+                    required />
+                <x-form.input-light type="number" id="annual_price" name="annual_price" label="الإشتراك السنوي"
+                    currency="ريال سعودي" value="{{ $lesson->annual_price }}" class="lg:w-[44.5%] w-full lg:order-2 order-3"
+                    required />
+            </div>
 
+
+            <div class="form-group">
                 <x-form.textarea-light name="description" label="الوصف" placeholder="{{ $lesson->description }}"
                     type="text" required class="w-full" id="description" />
             </div>

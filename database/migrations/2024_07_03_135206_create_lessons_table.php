@@ -15,6 +15,7 @@ return new class extends Migration
             $table->id();
             $table->string('title');
             $table->text('description');
+            $table->string('type')->nullable();
             $table->decimal('monthly_price', 8, 2);
             $table->decimal('annual_price', 8, 2);
             $table->boolean('is_published')->default(true);

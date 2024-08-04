@@ -11,7 +11,7 @@ class Lesson extends Model
     use HasFactory;
 
     protected $fillable = [
-        'title', 'description', 'monthly_price', 'annual_price', 'is_published'
+        'title', 'description','type', 'monthly_price', 'annual_price', 'is_published'
     ];
 
     // always cast the price to int

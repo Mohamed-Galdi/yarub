@@ -43,6 +43,7 @@ class CourseController extends Controller
             'title' => 'required|string|max:255',
             'description' => 'required|string',
             'price' => 'required|numeric|min:0',
+            'type' => 'required|string|max:255',
             'content_titles' => 'required|array|min:1',
             'content_titles.*' => 'required|string|max:255',
             'content_videos' => 'required|array|min:1',
@@ -57,6 +58,7 @@ class CourseController extends Controller
                 'title' => $request->title,
                 'description' => $request->description,
                 'price' => $request->price,
+                'type' => $request->type,
             ]);
 
             foreach ($request->content_titles as $index => $title) {
@@ -147,6 +149,7 @@ class CourseController extends Controller
             'title' => 'required|string|max:255',
             'description' => 'required|string',
             'price' => 'required|numeric|min:0',
+            'type' => 'required|string|max:255',
             'content_titles' => 'array|min:1',
             'content_titles.*' => 'string|max:255',
             'content_videos' => 'array|min:1',
@@ -163,6 +166,7 @@ class CourseController extends Controller
                 'title' => $request->title,
                 'description' => $request->description,
                 'price' => $request->price,
+                'type' => $request->type,
                 'is_published' => $request->has('published'),
 
             ]);

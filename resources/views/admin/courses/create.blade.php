@@ -2,8 +2,9 @@
 
 @section('content')
     <div class="">
+        <x-errors :errors="$errors" />
         <div class="flex justify-between">
-        <h1 class="lg:text-4xl text-2xl text-nowrap truncate text-indigo-700 mb-4">إنشاء دورة جديدة</h1>
+            <h1 class="lg:text-4xl text-2xl text-nowrap truncate text-indigo-700 mb-4">إنشاء دورة جديدة</h1>
             </h1>
             {{-- // back button --}}
             <x-btn.back route="admin.courses" />
@@ -11,9 +12,19 @@
         <form id="courseForm" action="{{ route('admin.courses.store') }}" method="POST" class="space-y-6">
             @csrf
             <div class="form-group w-full flex lg:flex-row flex-col gap-4 items-start justify-start">
-                <x-form.input-light name="title" label="العنوان"
-                    placeholder="مثال لعنوان: مقدمة يَعرُب في التأسيس للقدرات" type="text" required
-                    class="lg:w-3/4 w-full" id="title" required />
+                <x-form.input-light name="title" label="العنوان" placeholder="مثال لعنوان: مقدمة يَعرُب في التأسيس للقدرات"
+                    type="text" required class="lg:w-1/2 w-full" id="title" required />
+                <div class="lg:w-1/4 w-full">
+                    <label for="type" class="text-gray-800 font-judur ms-3 mb-1 font-semibold">نوع الدورة</label>
+                    <select name="type" id="type"
+                        class=" block w-full  h-[3.1rem] rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
+                        required>
+                        <option value="دورة تأسيس">دورة تأسيس</option>
+                        <option value="دورة تدريب">دورة تدريب</option>
+                        <option value="غير مصنفة">غير مصنفة</option>
+                    </select>
+                </div>
+
                 <x-form.input-light type="number" id="price" name="price" label="السعر" currency="ريال سعودي"
                     :value="30" class="lg:w-1/4 w-full" required />
 

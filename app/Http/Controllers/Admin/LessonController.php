@@ -42,6 +42,7 @@ class LessonController extends Controller
         $request->validate([
             'title' => 'required|string|max:255',
             'description' => 'required|string',
+            'type' => 'required|string|max:255',
             'monthly_price' => 'required|numeric|min:0',
             'annual_price' => 'required|numeric|min:0',
             'content_titles' => 'required|array|min:1',
@@ -57,6 +58,7 @@ class LessonController extends Controller
             $lesson = Lesson::create([
                 'title' => $request->title,
                 'description' => $request->description,
+                'type' => $request->type,
                 'monthly_price' => $request->monthly_price,
                 'annual_price' => $request->annual_price,
             ]);
@@ -148,6 +150,7 @@ class LessonController extends Controller
         $request->validate([
             'title' => 'required|string|max:255',
             'description' => 'required|string',
+            'type' => 'required|string|max:255',
             'monthly_price' => 'required|numeric|min:0',
             'annual_price' => 'required|numeric|min:0',
             'content_titles' => 'array|min:1',
@@ -165,6 +168,7 @@ class LessonController extends Controller
             $lesson->update([
                 'title' => $request->title,
                 'description' => $request->description,
+                'type' => $request->type,
                 'monthly_price' => $request->monthly_price,
                 'annual_price' => $request->annual_price,
                 'is_published' => $request->has('published'),

@@ -3,7 +3,8 @@
 @section('content')
     <div class="container">
         <div class="flex justify-between">
-        <h1 class="lg:text-4xl text-2xl text-nowrap truncate text-indigo-700 mb-4">تعديل دورة: <span class="text-gray-500">{{ $course->title }}</span></h1>
+            <h1 class="lg:text-4xl text-2xl text-nowrap truncate text-indigo-700 mb-4">تعديل دورة: <span
+                    class="text-gray-500">{{ $course->title }}</span></h1>
             </h1>
             {{-- // back button --}}
             <x-btn.back route="admin.courses" />
@@ -12,11 +13,21 @@
         <form id="courseForm" action="{{ route('admin.courses.update', $course->id) }}" method="POST" class="space-y-6">
             @csrf
             @method('PUT')
-            <div class="form-group flex lg:flex-row flex-col justify-start items-start gap-4">
+            <div class="form-group flex lg:flex-row flex-col justify-start items-start gap-4 ">
 
                 <x-form.input-light name="title" label="العنوان"
                     placeholder="مثال لعنوان: مقدمة يَعرُب في التأسيس للقدرات" type="text" required
                     class="lg:w-3/5 w-full lg:order-1 order-2" id="title" value="{{ $course->title }}" required />
+                <div class="lg:w-1/4 w-full lg:order-2 order-3">
+                    <label for="type" class="text-gray-800 font-judur ms-3 mb-1 font-semibold">نوع الدورة</label>
+                    <select name="type" id="type"
+                        class=" block w-full  h-[3.1rem] rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
+                        required>
+                        <option value="دورة تأسيس" {{ $course->type === 'دورة تأسيس' ? 'selected' : '' }}>دورة تأسيس</option>
+                        <option value="دورة تدريب" {{ $course->type === 'دورة تدريب' ? 'selected' : '' }}>دورة تدريب</option>
+                        <option value="غير مصنفة" {{ $course->type === 'غير مصنفة' ? 'selected' : '' }}>غير مصنفة</option>
+                    </select>
+                </div>
 
 
                 <x-form.input-light type="number" id="price" name="price" label="السعر " currency="ريال سعودي"

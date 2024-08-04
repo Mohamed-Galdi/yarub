@@ -11,7 +11,7 @@ class Course extends Model
     use HasFactory;
 
     protected $fillable = [
-        'title', 'description', 'price', 'is_published',
+        'title', 'description', 'price','type', 'is_published',
     ];
 
     // always cast the price to int
