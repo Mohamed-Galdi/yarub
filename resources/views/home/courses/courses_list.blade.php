@@ -2,7 +2,7 @@
 @section('content')
     <div class="mx-auto max-w-screen-xl py-6 px-2 space-y-12 text-primary pb-12">
         {{-- ////////////////////////////// Title ////////////////////////////// --}}
-        <h1 class="text-center lg:text-7xl md:text-5xl text-4xl ">دورات منصة يعرب</h1>
+        <h1 class="text-center lg:text-4xl md:text-5xl text-4xl ">دورات منصة يعرب</h1>
 
         {{-- ////////////////////////////// Search form ////////////////////////////// --}}
         <form class="mx-8 md:mx-4 lg:mx-3 ">
