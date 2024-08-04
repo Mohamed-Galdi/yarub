@@ -219,7 +219,8 @@ class LessonController extends Controller
         $lessonId = $content->lesson_id;
 
         Storage::disk('public')->delete($content->url);
-        $content->delete();
+        $content->forceDelete();
+        // $content->delete();
 
         return response()->json(['success' => true]);
     }

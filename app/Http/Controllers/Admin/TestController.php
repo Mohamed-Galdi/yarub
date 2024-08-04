@@ -166,7 +166,8 @@ class TestController extends Controller
 
     public function destroy(Test $test)
     {
-        $test->delete();
+        $test->forceDelete();
+        // $test->delete();
         return redirect()->route('tests.index')->with('success', 'Test deleted successfully.');
     }
 }

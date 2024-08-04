@@ -98,4 +98,9 @@ class User extends Authenticatable
     {
         return $this->belongsToMany(Lesson::class, 'student_lesson_sub')->published()->withPivot('created_at');
     }
+
+    public function isSuperAdmin()
+    {
+        return $this->role === 'admin' && $this->id === 1; 
+    }
 }

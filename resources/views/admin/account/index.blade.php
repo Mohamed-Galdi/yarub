@@ -1,14 +1,15 @@
 @extends('layouts.admin')
 @section('content')
-    <h1 class="text-4xl font-bold text-gradient-to-r  p-2 w-fit text-indigo-500 ">حسابات المشرفين</h1>
+    <h1 class="lg:text-4xl text-3xl text-nowrap truncate font-bold text-gradient-to-r  p-2 w-fit text-indigo-500 ">حسابات المشرفين</h1>
     <div class="mt-6">
         <div class="p-2 ms-2 flex gap-2 items-center">
             <x-icons.star class="w-4 h-4 text-yellow-500" />
             <h2>الحساب الرئيسي</h2>
         </div>
-        <form action="{{ route('admin.account.update-main') }}" method="POST" class="w-full  rounded-2xl bg-white shadow-xl px-4 pb-6 pt-4 " >
+        <form action="{{ route('admin.account.update-main') }}" method="POST"
+            class="w-full  rounded-2xl bg-white shadow-xl px-4 pb-6 pt-4 ">
             @csrf
-            <div class="flex justify-start items-start py-2  gap-4">
+            <div class="grid lg:grid-cols-2 grid-cols-1 justify-start items-start py-2  gap-4 ">
                 <x-form.input-light type="text" name="name" label="الاسم" placeholder="الاسم" class="w-full"
                     value="{{ $superAdmin->name }}" />
                 <x-form.input-light type="text" name="email" label="البريد الإلكتروني" placeholder="البريد الإلكتروني"
@@ -33,20 +34,26 @@
             <x-icons.admin class="w-4 h-4 text-white" />
             <p> إضافة مشرف </p>
         </button>
-        <div class="mt-8">
+        <div class="mt-8 space-y-6">
             @forelse($admins as $admin)
-                <form class="w-full  rounded-2xl bg-slate-300 shadow-xl px-4 pb-6 pt-4 border-2 border-blue-500">
+                <form action="{{ route('admin.account.update-admin', $admin->id) }}" method="POST" class="w-full  rounded-2xl bg-slate-300 shadow-xl px-4 pb-6 pt-4 border-2 border-blue-500">
+                    @csrf
+                    @method('PUT')
+                    <input type="hidden" name="admin_id" value="{{ $admin->id }}">
                     <div class="w-full flex justify-end items-center">
-                        <x-delete-confirmation url="{{ route('admin.account.delete-admin', $admin->id) }}"
-                                :params="['admin_id' => $admin->id]" elementName="المشرف" class="bg-red-400 text-white px-4 py-2 rounded-lg hover:bg-red-500">
+                        {{-- show button only for super admin --}}
+                        @if(auth()->user()->isSuperAdmin())
+                            <x-delete-confirmation url="{{ route('admin.account.delete-admin', $admin->id) }}" :params="['admin_id' => $admin->id]"
+                                elementName="المشرف" class="bg-red-400 text-white px-4 py-2 rounded-lg hover:bg-red-500">
                                 حذف المشرف
                             </x-delete-confirmation>
+                        @endif
 
                     </div>
-                    <div class="flex justify-start items-start py-2  gap-4">
-                        <x-form.input-light type="text" name="name" label="الاسم" placeholder="الاسم" class="w-full"
+                    <div class="grid lg:grid-cols-2 grid-cols-1 justify-start items-start py-2  gap-4 w-full">
+                        <x-form.input-light type="text" name="admin_name" label="الاسم" placeholder="الاسم" class="w-full"
                             value="{{ $admin->name }}" />
-                        <x-form.input-light type="text" name="email" label="البريد الإلكتروني"
+                        <x-form.input-light type="text" name="admin_email" label="البريد الإلكتروني"
                             placeholder="البريد الإلكتروني" class="w-full" value="{{ $admin->email }}" />
                     </div>
                     <button type="submit"
@@ -85,14 +92,17 @@
                     </button>
                 </div>
                 <!-- Modal body -->
-                <form action="{{ route('admin.account.update-main-password') }}" method="POST" class="flex flex-col gap-4 p-4 md:p-5">
+                <form action="{{ route('admin.account.update-main-password') }}" method="POST"
+                    class="flex flex-col gap-4 p-4 md:p-5">
                     @csrf
-                        <x-form.input-light type="text" name="old_password" label="" placeholder="الكلمة السابقة"
-                            class="w-[90%]" value="{{ old('password') }}" />
-                        <x-form.input-light type="text" name="new_password" label=""
-                            placeholder="كلمة المرور الجديدة" class="w-[90%]" value="{{ old('password') }}" />
-                        <x-form.input-light type="text" name="confirm_password" label=""
-                            placeholder="تأكيد كلمة المرور الجديدة" class="w-[90%]" value="{{ old('password') }}" />
+                    <x-form.input-light type="text" name="old_password" label="" placeholder="الكلمة السابقة"
+                        class="w-[90%]" value="{{ old('password') }}" />
+                    <x-form.input-light type="text" name="password" label="" placeholder="كلمة المرور الجديدة"
+                        class="w-[90%]" value="{{ old('password') }}" />
+                    <x-form.input-light type="text" name="password_confirmation" label=""
+                        placeholder="تأكيد كلمة المرور الجديدة" class="w-[90%]"
+                        value="{{ old('password_confirmation') }}" />
+
 
 
                     <button type="submit"
@@ -127,14 +137,15 @@
                     </button>
                 </div>
                 <!-- Modal body -->
-                <form action="{{ route('admin.account.create') }}" method="POST" class="flex flex-col gap-4 p-4 md:p-5">
+                <form action="{{ route('admin.account.create') }}" method="POST"
+                    class="flex flex-col gap-4 p-4 md:p-5">
                     @csrf
-                        <x-form.input-light type="text" name="name" label="" placeholder=" الاسم"
-                            class="w-[90%]" value="{{ old('name') }}" />
-                        <x-form.input-light type="text" name="email" label=""
-                            placeholder="البريد الإلكتروني" class="w-[90%]" value="{{ old('email') }}" />
-                        <x-form.input-light type="password" name="password" label=""
-                            placeholder=" كلمة المرور " class="w-[90%]" value="{{ old('password') }}" />
+                    <x-form.input-light type="text" name="new_admin_name" label="" placeholder=" الاسم"
+                        class="w-[90%]" value="{{ old('name') }}" />
+                    <x-form.input-light type="text" name="new_admin_email" label="" placeholder="البريد الإلكتروني"
+                        class="w-[90%]" value="{{ old('email') }}" />
+                    <x-form.input-light type="password" name="new_admin_password" label="" placeholder=" كلمة المرور "
+                        class="w-[90%]" value="{{ old('password') }}" />
 
 
                     <button type="submit"

@@ -215,7 +215,8 @@ class CourseController extends Controller
         $courseId = $content->course_id;
 
         Storage::disk('public')->delete($content->url);
-        $content->delete();
+        $content->forceDelete();
+        // $content->delete();
 
         return response()->json(['success' => true]);
     }

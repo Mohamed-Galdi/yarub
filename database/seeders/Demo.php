@@ -15,6 +15,7 @@ class Demo extends Seeder
     {
         // Demo Admin --------------------------------------------------------------------------------
         $Admin = [
+            'id' => 1,
             'name' => 'DemoAdmin',
             'email' => 'admin@demo.com',
             'password' => '00000000',
