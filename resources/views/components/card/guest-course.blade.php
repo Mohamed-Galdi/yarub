@@ -1,11 +1,13 @@
- <div
-     {{ $attributes->merge(['class' => ' h-[26rem] bg-gradient-to-tr from-indigo-800 to-indigo-400 rounded-xl shadow-lg p-4 space-y-4   cursor-pointer shadow-indigo-600 shadow-lg hover:shadow-none hover:scale-[0.98] transition-all duration-300 ease-in-out overflow-hidden']) }}>
-     <div class="w-full h-1/2 rounded-xl overflow-hidden  ">
+ <div data-type="{{ $type }}"
+     {{ $attributes->merge(['class' => ' h-fit bg-gradient-to-tr from-indigo-800 to-indigo-400 rounded-xl shadow-lg p-4 space-y-4   cursor-pointer shadow-indigo-600 shadow-lg hover:shadow-none hover:scale-[0.98] transition-all duration-300 ease-in-out overflow-hidden']) }}>
+     <div class="w-full h-44 rounded-xl overflow-hidden  ">
          <x-card.course-img title="'{{ $title }}'" />
      </div>
      <div class="">
          <p class="text-white text-nowarp truncate">{{ $title }}</p>
-         <p class="font-nitaqat font-bold text-sm truncate text-gray-200 ">{{ $description }}</p>
+         {{-- <p class="font-nitaqat font-bold text-sm truncate text-gray-200 ">{{ $description }}</p> --}}
+         <p class="  text-slate-800 px-1 bg-slate-100 rounded-xl w-fit mt-2 text-base">{{ $type }}</p>
+
      </div>
      <div class="flex w-full">
          <div class="bg-orange-400 px-2 pb-2 rounded-2xl w-fit">
