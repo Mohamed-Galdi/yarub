@@ -203,23 +203,25 @@
 
                         <div class="mt-7 sm:mt-12 mx-auto max-w-xl relative">
                             <!-- Form -->
-                            <form>
+                            <form action="{{ route('admin.guest_messages.store') }}" method="POST">
+                                @csrf
                                 <div
                                     class="relative z-10 flex items-center space-x-3 p-3 bg-white border rounded-lg shadow-lg shadow-gray-100">
                                     <div class="flex-[1_0_0%] ">
-                                        <label for="hs-search-article-1"
+                                        <input type="hidden" name="source" value="about_page">
+                                        <label for="message"
                                             class="block text-sm text-gray-700 font-medium"><span class="sr-only">أكتب سؤالك
                                                 هنا...</span></label>
-                                        <input type="email" name="hs-search-article-1" id="hs-search-article-1"
+                                        <input type="text" name="message" id="message"
                                             class="py-2.5 px-4 block w-full border-transparent rounded-lg focus:border-transparent focus:ring-transparent"
                                             placeholder="أكتب سؤالك هنا...">
                                     </div>
-                                    <div class="flex-[0_0_auto] ">
-                                        <x-btn.scale-dark class="w-32 gap-3">
+                                    <button type="submit" class="flex-[0_0_auto] w-32 gap-3">
+                                        <x-btn.scale-dark class="w-32 gap-3" type="submit">
                                             <p>إرسال</p>
                                             <x-icons.send class="w-4 h-4" />
                                         </x-btn.scale-dark></>
-                                    </div>
+                                    </button>
                                 </div>
                             </form>
 

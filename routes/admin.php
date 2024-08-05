@@ -8,6 +8,8 @@ use App\Http\Controllers\Admin\StudentController;
 use App\Http\Controllers\Admin\TestController;
 use App\Http\Controllers\Admin\CertificateController;
 use App\Http\Controllers\Admin\ConversationController;
+use App\Http\Controllers\Admin\GuestMessagesController;
+use App\Http\Controllers\Admin\PagesController;
 use App\Http\Controllers\Admin\TestAttemptController;
 use Illuminate\Support\Facades\Route;
 
@@ -93,9 +95,20 @@ Route::middleware(['auth', 'verified', 'admin'])->prefix('admin-dashboard')->gro
     Route::get('/support/conversations/create', [ConversationController::class, 'create'])->name('admin.conversations.create');
     Route::post('/support/conversations', [ConversationController::class, 'store'])->name('admin.conversations.store');
 
+    // Messages
+    Route::get('/guest-messages-from-about', [GuestMessagesController::class, 'messages_from_about'])->name('messages_from_about');
+    Route::get('/guest-messages-from-contact', [GuestMessagesController::class, 'messages_from_contact'])->name('messages_from_contact');
+    Route::get('/guest-messages/{id}', [GuestMessagesController::class, 'show'])->name('admin.guest_messages.show');
+
+    // Pages
+    Route::get('/pages', [PagesController::class, 'index'])->name('admin.pages');
+    
+
 
 
     Route::get('/payments', function () {
         return view('admin.payments.payments');
     })->name('admin.payments');
 });
+
+Route::post('/guest-messages', [GuestMessagesController::class, 'store'])->name('admin.guest_messages.store');

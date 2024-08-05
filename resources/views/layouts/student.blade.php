@@ -10,6 +10,28 @@
     <link rel="icon" type="image/x-icon" href="/assets/favicon.ico">
     <!-- Scripts -->
     @vite(['resources/css/app.css', 'resources/js/app.js'])
+    <style>
+        /* Style the autofill inputes */
+        input:-webkit-autofill,
+        input:-webkit-autofill:hover,
+        input:-webkit-autofill:focus,
+        input:-webkit-autofill:active {
+            /* text color */
+            transition: background-color 5000s ease-in-out 0s;
+            -webkit-text-fill-color: #6a6a6a !important;
+        }
+
+        /* Style the autofill text */
+        input:-webkit-autofill {
+            -webkit-text-fill-color: #6a6a6a !important;
+        }
+
+        /* For Firefox */
+        input:autofill {
+            background-color: transparent !important;
+            color: inherit !important;
+        }
+    </style>
 
 </head>
 

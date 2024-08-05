@@ -10,7 +10,29 @@
     <link rel="icon" type="image/x-icon" href="/assets/favicon.ico">
     <!-- Scripts -->
     @vite(['resources/css/app.css', 'resources/js/app.js'])
-   <script src="//unpkg.com/alpinejs" defer></script>
+    <script src="//unpkg.com/alpinejs" defer></script>
+
+    <style>
+        input:-webkit-autofill,
+        input:-webkit-autofill:hover,
+        input:-webkit-autofill:focus,
+        input:-webkit-autofill:active {
+            /* text color */
+            transition: background-color 5000s ease-in-out 0s;
+            -webkit-text-fill-color: #ffffff !important;
+        }
+
+        /* Style the autofill text */
+        input:-webkit-autofill {
+            -webkit-text-fill-color: #ffffff !important;
+        }
+
+        /* For Firefox */
+        input:autofill {
+            background-color: transparent !important;
+            color: inherit !important;
+        }
+    </style>
 
 
 </head>

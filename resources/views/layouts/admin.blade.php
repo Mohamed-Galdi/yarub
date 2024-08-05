@@ -23,11 +23,64 @@
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
     {{-- Ajax cdn --}}
- <script script src = "https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"
-            integrity = "sha512-v2CJ7UaYy4JwqLDIrZUI/4hqeoQieOmAZNXBeQyjo21dadnwR+8ZaIJVT8EE2iyI61OV8e6M8PP2/4hpQINQ/g=="
-            crossorigin = "anonymous"
-            referrerpolicy = "no-referrer" >
-        </script>
+    <script script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"
+        integrity="sha512-v2CJ7UaYy4JwqLDIrZUI/4hqeoQieOmAZNXBeQyjo21dadnwR+8ZaIJVT8EE2iyI61OV8e6M8PP2/4hpQINQ/g=="
+        crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+
+    <style>
+        /* Scrollbar */
+        ::-webkit-scrollbar {
+            width: 10px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background-color: #ebebeb;
+            -webkit-border-radius: 10px;
+            border-radius: 10px;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            -webkit-border-radius: 10px;
+            border-radius: 10px;
+            background: #bdc4d5;
+        }
+
+        .sidebar::-webkit-scrollbar {
+            width: 5px;
+        }
+
+        .sidebar::-webkit-scrollbar-track {
+            background-color: #ebebeb;
+            -webkit-border-radius: 10px;
+            border-radius: 10px;
+        }
+
+        .sidebar::-webkit-scrollbar-thumb {
+            -webkit-border-radius: 10px;
+            border-radius: 10px;
+            background: #25282e;
+        }
+        /* Style the autofill inputes */
+        input:-webkit-autofill,
+        input:-webkit-autofill:hover,
+        input:-webkit-autofill:focus,
+        input:-webkit-autofill:active {
+            /* text color */
+            transition: background-color 5000s ease-in-out 0s;
+            -webkit-text-fill-color: #6a6a6a !important;
+        }
+
+        /* Style the autofill text */
+        input:-webkit-autofill {
+            -webkit-text-fill-color: #6a6a6a !important;
+        }
+
+        /* For Firefox */
+        input:autofill {
+            background-color: transparent !important;
+            color: inherit !important;
+        }
+    </style>
 
 
 
@@ -64,8 +117,8 @@
             </a>
         </div>
         {{-- <div class="w-full h-[2px] bg-gray-100"></div> --}}
-        <div class="h-full p-4 overflow-y-auto">
-            <ul class="space-y-4 font-medium">
+        <div class="h-full p-4 overflow-y-auto sidebar" dir="ltr">
+            <ul class="space-y-4 font-medium pb-36 " dir="rtl">
                 {{-- ///////////////////////////////////// --}}
                 <x-btn.admin-dashboard-item route='admin.dashboard' path='admin-dashboard'>
                     <p class="ml-3">لوحة التحكم</p>
@@ -121,8 +174,19 @@
                         class="w-6 h-6 {{ request()->is('admin-dashboard/support*') ? 'text-gray-200' : ' text-gray-800' }}" />
                 </x-btn.admin-dashboard-item>
                 {{-- ///////////////////////////////////// --}}
-
+                {{-- messages --}}
+                <x-btn.admin-dashboard-item route='messages_from_about' path='admin-dashboard/guest-messages*'>
+                    <p class="ml-3"> الرسائل </p>
+                    <x-icons.email
+                        class="w-6 h-6 {{ request()->is('admin-dashboard/guest-messages*') ? 'text-gray-200' : ' text-gray-800' }}" />
+                </x-btn.admin-dashboard-item>
+                <x-btn.admin-dashboard-item route='admin.pages' path='admin-dashboard/pages*'>
+                    <p class="ml-3"> محتوى الواجهات </p>
+                    <x-icons.desktop
+                        class="w-6 h-6 {{ request()->is('admin-dashboard/pages*') ? 'text-gray-200' : ' text-gray-800' }}" />
+                </x-btn.admin-dashboard-item>
             </ul>
+            {{-- side footer buttons --}}
             <div
                 class="w-full h-12 right-0 border-t text-gray-100 bg-indigo-800 border-gray-100 bottom-0 absolute flex justify-between items-center text-sm font-bold">
                 <a href="{{ route('home') }}"

@@ -4,12 +4,15 @@
     <div style="background-image: url('./assets/images/contact-bg-2.jpg')"
         class=" h-[40rem]  bg-no-repeat bg-cover md:bg-buttom bg-right flex px-6 md:px-0">
         <div class="max-w-screen-xl mx-auto flex justify-end items-center w-full ">
+            {{-- <x-errors :errors="$errors" /> --}}
             <div class=" w-[480px] h-[500px] rounded-xl p-8  backdrop-blur-md bg-white/20  ">
-                <form class="w-full space-y-4" enctype="multipart/form-data" method="POST">
+                <form action="{{ route('admin.guest_messages.store') }}" method="POST">
+                    @csrf
+                    <input type="hidden" name="source" value="contact_page">
                     <div class="w-full lg:flex gap-6">
                         <div class="relative z-0 w-full mb-5 group">
                             <input type="text" name="name" id="floating_name"
-                                class="block py-2.5 px-0 w-full text-lg text-gray-900 bg-transparent border-0 border-b-2 border-pr-200 focus:outline-none focus:ring-0 focus:border-pr-500 peer"
+                                class="block py-3.5 px-5 w-full text-lg text-gray-900 bg-transparent border-0 border-b-2 border-pr-200 focus:outline-none focus:ring-0 focus:border-pr-500 peer"
                                 placeholder=" " required />
 
                             <label for="floating_name"
@@ -20,8 +23,8 @@
                     </div>
                     <div class="w-full lg:flex gap-6">
                         <div class="relative z-0 w-full mb-5 group">
-                            <input type="text" name="email" id="floating_email"
-                                class="block py-2.5 px-0 w-full text-lg text-gray-900 bg-transparent border-0 border-b-2 border-pr-200 focus:outline-none focus:ring-0 focus:border-pr-500 peer"
+                            <input type="email" name="email" id="floating_email"
+                                class="block py-3.5 px-5 w-full text-lg text-gray-900 bg-transparent border-0 border-b-2 border-pr-200 focus:outline-none focus:ring-0 focus:border-pr-500 peer"
                                 placeholder=" " required />
 
                             <label for="floating_email"
@@ -40,7 +43,7 @@
                                 required></textarea>
                         </div>
                     </div>
-                    <x-btn.scale-light class="flex gap-8 w-full">
+                    <x-btn.scale-light type="submit" class="flex gap-8 w-full">
                         <p>ارسال الرسالة</p>
                         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" class="w-6 h-6 text-pr-500">
                             <path class="fill-current"

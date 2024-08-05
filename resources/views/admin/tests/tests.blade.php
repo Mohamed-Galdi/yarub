@@ -40,8 +40,6 @@
                                 class="w-1/2 h-auto mx-auto" />
                         @endforelse
                 </x-slot>
-
-
             </x-dynamic-tab-navigation>
         </div>
     </div>
