@@ -6,13 +6,16 @@
             class="mx-auto max-w-screen-xl px-8 md:px-4 lg:px-3 flex md:flex-row flex-col justify-between items-center pt-3 ">
             <div
                 class="md:w-1/2 w-full flex flex-col md:items-start items-center gap-6  md:justify-start justify-center md:text-start text-center">
-                <h1 class="md:text-6xl lg:text-7xl text-5xl font-hacen">منصتك <span class="">الرقمية</span> الاولى<br />
+                <h1 class="md:text-6xl lg:text-7xl text-5xl font-hacen">منصتك <span class="">الرقمية</span> الأولى<br />
                     لتعلم <span class="text-pr-100">اللغة العربية</span></h1>
                 <p class="text-3xl font-nitaqat">مهمتنا تسهيل تعلم اللغة العربية لمختلف المستويات بشكل رقمي، سهل، وفعال.</p>
                 <div class="mt-4 md:space-y-0 space-y-4">
-                    <x-btn.slide-dark class="w-64">انضم الينا </x-btn.slide-dark>
-                    <x-btn.slide-light class="w-64">استكشف الدورات </x-btn.slide-light>
-
+                    <a href="{{ route('register') }}">
+                        <x-btn.slide-dark class="w-64">انضم إلينا </x-btn.slide-dark>
+                    </a>
+                    <a href="{{ route('courses') }}">
+                        <x-btn.slide-light class="w-64">استكشف الدورات </x-btn.slide-light>
+                    </a>
                 </div>
             </div>
             <div class="md:w-1/2 w-full flex justify-end items-end relative">
@@ -44,8 +47,8 @@
                                 <x-icons.book />
                             </div>
                         </div>
-                        <h3 class="underline font-judur underline-offset-8">اعلى جودة </h3>
-                        <p class="text-lg font-nitaqat">دروس ودورات بمواد تعليمية من طرف مؤطرين باعلى الكفاءات في اللغة
+                        <h3 class="underline font-judur underline-offset-8">أعلى جودة جودة </h3>
+                        <p class="text-lg font-nitaqat">دروس ودورات بمواد تعليمية من طرف مؤطرين بأعلى جودة الكفاءات في اللغة
                             العربية</p>
                     </div>
                     <div
@@ -74,7 +77,7 @@
                     </div>
                     <div class="text-lg">
                         <a href="{{ route('courses') }}">
-                            <x-btn.scale-dark class="md:h-12 h-8 text-sm md:text-lg  md:w-40 w-32 ">إكتشف المزيد
+                            <x-btn.scale-dark class="md:h-12 h-8 text-sm md:text-lg  md:w-40 w-32 ">اكتشف المزيد
                                 ...</x-btn.scale-dark>
                         </a>
                     </div>
@@ -100,7 +103,7 @@
                         <p class="text-gray-500 font-judur text-sm ms-2">الشروحات الاكثر تداولا في المنصة</p>
                     </div>
                     <div class="">
-                        <a href="{{ route('courses') }}">
+                        <a href="{{ route('lessons') }}">
                             <x-btn.scale-dark class="md:h-12 h-8 text-sm md:text-lg  md:w-40 w-32 ">إكتشف المزيد
                                 ...</x-btn.scale-dark>
                         </a>
@@ -177,7 +180,9 @@
 
                     </p>
                     <div class="mt-4">
-                        <x-btn.anime class="w-64">إنضم الينا الان </x-btn.anime>
+                        <a href="{{ route('register') }}">
+                            <x-btn.anime class="w-64">إنضم الينا الان </x-btn.anime>
+                        </a>
                     </div>
                 </div>
                 <div class="md:w-1/2 w-full flex justify-end items-end relative mt-8 md:mt-0">

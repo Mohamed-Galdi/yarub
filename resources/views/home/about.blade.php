@@ -10,13 +10,14 @@
         </h1>
 
         {{-- Who we are --}}
-        <div class="my-16 mx-auto max-w-screen-xl flex md:flex-row flex-col  gap-12 justify-between items-start px-6 md:px-0">
+        <div
+            class="my-16 mx-auto max-w-screen-xl flex md:flex-row flex-col  gap-12 justify-between items-start px-6 md:px-0">
             <div class="text-start md:w-1/2 w-full space-y-6">
                 <h2 class="text-4xl">فريقنا</h2>
                 <p class="text-justify font-judur">
-                    تُدار منصة يعرب من طرف خبراء في اللغة العربية، حاصلين على شواهد و جوائز في دروس اللغة العربية. بالإضافة
-                    الى فريق من التقنيين الذين يسهرون على إشتغال المنصة على اعلى كفائة و بشكل مستمر و كذالك تطويرها دائما
-                    للأفضل. إلى جانب دعم تقني و فني يسهر على تلبية كل متطلباتكم على مدار الساعة.
+                    تدار منصة يعُرب بأيدي خبراء في اللغة العربية حاصلين على على جوائز محلية ودولية بالإضافة إلى فريق فريق من
+                    التقنيين الذين يبذلون جل وقتهم في تشغيل المنصة على أعلى كفاءة وبشكل دوري ويعملون على تطويرها لألفضل إلى
+                    جانب دعم فني لا يتوانى عن تلبية كل متطلباتكم وعلى مدار الساعة
                 </p>
             </div>
             <div class="text-start md:w-1/2 w-full space-y-6">
@@ -92,7 +93,8 @@
                             <div x-ref="tab" :style="handleToggle()"
                                 class="border-l-8 border-pr-500 overflow-hidden max-h-0 duration-500 transition-all bg-gray-200">
                                 <p class="p-3 text-gray-800 font-sec text-xl "> نوفر عدة طرق للدفع مثل البطاقات الائتمانية،
-                                    الدفع عبر PayPal، والتحويلات البنكية. يمكنك اختيار الطريقة التي تناسبك عند إتمام عملية
+                                    الدفع عبر Apple Pay، والتحويلات البنكية. يمكنك اختيار الطريقة التي تناسبك عند إتمام
+                                    عملية
                                     الشراء.
                                 </p>
                             </div>
@@ -134,8 +136,9 @@
                             </h2>
                             <div x-ref="tab" :style="handleToggle()"
                                 class="border-l-8 border-pr-500 overflow-hidden max-h-0 duration-500 transition-all bg-gray-200">
-                                <p class="p-3 text-gray-800 font-sec text-xl "> نعم، بمجرد تسجيلك في الدورة، سيكون لديك وصول
-                                    دائم إلى المحتوى. يمكنك العودة إلى المواد والدروس في أي وقت تحتاج إليه.
+                                <p class="p-3 text-gray-800 font-sec text-xl ">
+                                    بمجرد تسجيلك في الدورة، سيكون لديك وصول إلى المحتوى لمدة ثلاثة أشهر بعد الدفع. يمكنك
+                                    العودة إلى المواد والدروس في أي وقت تحتاج إليه خلال هذه الفترة.
                             </div>
                         </li>
                         {{-- /////////////////////////// Question 5 ///////////////////////////////////////////////// --}}
@@ -163,8 +166,7 @@
                         <li class="bg-pr-500 my-2 shadow-lg rounded-xl overflow-hidden" x-data="accordion(6)">
                             <h2 @click="handleClick()"
                                 class="flex flex-row justify-between items-center p-3 cursor-pointer">
-                                <span class="font-pr text-2xl text-gray-200">هل يتم تقديم شهادة بعد الانتهاء من
-                                    الدورة؟</span>
+                                <span class="font-pr text-2xl text-gray-200">كيف يمكنني تقييم مستواي في الدورة؟</span>
                                 <svg :class="handleRotate()"
                                     class="fill-current text-gray-100  h-10 min-w-10 transform transition-transform duration-500"
                                     viewBox="0 0 20 20">
@@ -175,8 +177,7 @@
                             </h2>
                             <div x-ref="tab" :style="handleToggle()"
                                 class="border-l-8 border-pr-500 overflow-hidden max-h-0 duration-500 transition-all bg-gray-200">
-                                <p class="p-3 text-gray-800 font-sec text-xl "> نعم، عند إتمام الدورة بنجاح، ستحصل على شهادة
-                                    معتمدة تثبت مشاركتك وإتمامك لجميع متطلبات الدورة. </p>
+                                <p class="p-3 text-gray-800 font-sec text-xl "> توفر المنصة إختبارات قبلية و بعدية تتيح للطالب و المشرفين تقييم المستواى </p>
                             </div>
                         </li>
 
