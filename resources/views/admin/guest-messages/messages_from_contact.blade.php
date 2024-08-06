@@ -2,16 +2,16 @@
 @section('content')
     <div class="space-y-4">
         <h1 class="lg:text-4xl text-2xl text-nowrap truncate font-bold text-gray-800">الرسائل المرسلة</h1>
-        <div class="w-full flex">
+        <div class="w-full flex md:flex-row flex-col md:justify-between">
             <a href="{{ route('messages_from_about') }}"
-                class="w-1/2 py-2 text-center rounded-s-xl cursor-pointer {{ request()->routeIs('messages_from_about') ? 'bg-indigo-500 text-slate-200 font-semibold ' : 'bg-slate-300 text-gray-800' }}">صفحة
+                class="md:w-1/2 w-full py-2 text-center md:rounded-tr-xl md:rounded-br-xl md:rounded-bl-none md:rounded-tl-none rounded-tl-xl rounded-tr-xl  cursor-pointer {{ request()->routeIs('messages_from_about') ? 'bg-indigo-500 text-slate-200 font-semibold ' : 'bg-slate-300 text-gray-800' }}">صفحة
                 من نحن</a>
             <a href="{{ route('messages_from_contact') }}"
-                class="w-1/2  py-2 text-center rounded-e-xl cursor-pointer {{ request()->routeIs('messages_from_contact') ? 'bg-indigo-500 text-slate-200 font-semibold ' : 'bg-slate-300 text-gray-800' }}">صفحة
+                class="md:w-1/2 w-full  py-2 text-center md:rounded-tl-xl md:rounded-bl-xl md:rounded-br-none md:rounded-tr-none rounded-br-xl rounded-bl-xl  cursor-pointer {{ request()->routeIs('messages_from_contact') ? 'bg-indigo-500 text-slate-200 font-semibold ' : 'bg-slate-300 text-gray-800' }}">صفحة
                 تواصل معنا
             </a>
         </div>
-        <div>
+        <div class="overflow-x-auto">
             <table class="w-full text-left rtl:text-right text-gray-500 ">
                 <thead class="text-lg  text-gray-700 uppercase bg-gray-300 w-full">
                     <tr>
@@ -64,18 +64,16 @@
                                 <div class="relative bg-white rounded-lg shadow dark:bg-gray-700">
                                     <!-- Modal header -->
                                     <div
-                                        class="flex items-center justify-between p-4 md:p-5 border-b rounded-t dark:border-gray-600">
+                                        class="flex flex-col items-start justify-center p-4 md:p-5 border-b rounded-t dark:border-gray-600 gap-3">
                                         <h3
-                                            class="text-xl w-full text-nowrap truncate font-semibold text-gray-900 dark:text-white">
+                                            class="text-xl w-fit text-nowrap truncate font-semibold text-gray-900 dark:text-white">
                                             رسالة من صفحة تواصل معنا
                                         </h3>
-                                        <button type="button" data-modal-hide="message-modal-{{ $message->id }}">
-                                            <span class="sr-only">X</span>
-                                        </button>
+                                        <p class="text-sm text-gray-600 text-nowrap truncate w-fit">({{ $message->name }} - {{ $message->email }})</p>
+
                                     </div>
                                     <!-- Modal body -->
                                     <div class="p-4 md:p-5 space-y-4">
-                                        <p class="text-sm text-gray-600 text-nowrap truncate w-full">(<p>{{ $message->name }} - {{ $message->email }}</p>)</p>
                                         <p class="text-base leading-relaxed text-gray-500 dark:text-gray-400">
                                             {{ $message->message }}
                                         </p>

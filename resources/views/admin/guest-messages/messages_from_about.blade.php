@@ -2,17 +2,17 @@
 @section('content')
     <div class="space-y-4">
         <h1 class="lg:text-4xl text-2xl text-nowrap truncate font-bold text-gray-800">الرسائل المرسلة</h1>
-        <div class="w-full flex">
+        <div class="w-full flex md:flex-row flex-col md:justify-between">
             <a href="{{ route('messages_from_about') }}"
-                class="w-1/2 py-2 text-center rounded-s-xl cursor-pointer {{ request()->routeIs('messages_from_about') ? 'bg-indigo-500 text-slate-200 font-semibold ' : 'bg-slate-300 text-gray-800' }}">صفحة
+                class="md:w-1/2 w-full py-2 text-center md:rounded-tr-xl md:rounded-br-xl md:rounded-bl-none md:rounded-tl-none rounded-tl-xl rounded-tr-xl  cursor-pointer {{ request()->routeIs('messages_from_about') ? 'bg-indigo-500 text-slate-200 font-semibold ' : 'bg-slate-300 text-gray-800' }}">صفحة
                 من نحن</a>
             <a href="{{ route('messages_from_contact') }}"
-                class="w-1/2  py-2 text-center rounded-e-xl cursor-pointer {{ request()->routeIs('messages_from_contact') ? 'bg-indigo-500 text-slate-200 font-semibold ' : 'bg-slate-300 text-gray-800' }}">صفحة
+                class="md:w-1/2 w-full  py-2 text-center md:rounded-tl-xl md:rounded-bl-xl md:rounded-br-none md:rounded-tr-none rounded-br-xl rounded-bl-xl  cursor-pointer {{ request()->routeIs('messages_from_contact') ? 'bg-indigo-500 text-slate-200 font-semibold ' : 'bg-slate-300 text-gray-800' }}">صفحة
                 تواصل معنا
             </a>
         </div>
-        <div>
-            <table class="w-full text-left rtl:text-right text-gray-500 ">
+        <div class="overflow-x-auto">
+            <table class="w-full text-left rtl:text-right text-gray-500  ">
                 <thead class="text-lg  text-gray-700 uppercase bg-gray-300 w-full">
                     <tr>
                         <th scope="col" class="ps-8 py-3 w-4/6 ">

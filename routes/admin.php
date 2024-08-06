@@ -98,7 +98,6 @@ Route::middleware(['auth', 'verified', 'admin'])->prefix('admin-dashboard')->gro
     // Messages
     Route::get('/guest-messages-from-about', [GuestMessagesController::class, 'messages_from_about'])->name('messages_from_about');
     Route::get('/guest-messages-from-contact', [GuestMessagesController::class, 'messages_from_contact'])->name('messages_from_contact');
-    Route::get('/guest-messages/{id}', [GuestMessagesController::class, 'show'])->name('admin.guest_messages.show');
 
     // Pages
     Route::get('/pages', [PagesController::class, 'index'])->name('admin.pages');

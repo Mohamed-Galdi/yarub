@@ -5,6 +5,8 @@ namespace Database\Seeders;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
+use Faker\Factory as Faker;
+
 
 class GuestMessagesSeeder extends Seeder
 {
@@ -26,15 +28,18 @@ class GuestMessagesSeeder extends Seeder
         $arabicNames = [
             'محمد', 'أحمد', 'فاطمة', 'مريم', 'علي', 'خالد', 'عائشة', 'زينب', 'عمر', 'حسن'
         ];
-
+        $faker = Faker::create('ar_SA');
         for ($i = 0; $i < 10; $i++) {
             $source = rand(0, 1) ? 'about_page' : 'contact_page';
+
+            
+
 
             DB::table('guest_messages')->insert([
                 'message' => $arabicMessages[$i],
                 'source' => $source,
                 'name' => $source === 'about_page' ? null : $arabicNames[array_rand($arabicNames)],
-                'email' => $source === 'about_page' ? null : Str::random(10) . '@example.com',
+                'email' => $source === 'about_page' ? null : $faker->unique()->safeEmail(),
                 'created_at' => now(),
                 'updated_at' => now(),
             ]);

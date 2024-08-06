@@ -21,12 +21,6 @@ class GuestMessagesController extends Controller
         return view('admin.guest-messages.messages_from_contact', compact('messages_from_contact'));
     }
 
-    public function show($id)
-    {
-        $message = GuestMessage::find($id);
-        return view('admin.guest-messages.show', compact('message'));
-    }
-
     public function store(Request $request)
     {
         $request->validate([
