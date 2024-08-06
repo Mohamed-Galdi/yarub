@@ -14,3 +14,14 @@ users_avatars/*
 !users_avatars/girl_4.jpg
 !users_avatars/girl_5.jpg
 !users_avatars/girl_6.jpg
+!reviewers/
+reviewers/*
+!reviewers/man-1.webp
+!reviewers/man-2.webp
+!reviewers/man-3.webp
+!reviewers/man-4.webp
+!reviewers/man-5.webp
+!reviewers/woman-1.webp
+!reviewers/woman-2.webp
+!reviewers/woman-3.webp
+!reviewers/woman-4.webp

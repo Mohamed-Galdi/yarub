@@ -101,6 +101,13 @@ Route::middleware(['auth', 'verified', 'admin'])->prefix('admin-dashboard')->gro
 
     // Pages
     Route::get('/pages', [PagesController::class, 'index'])->name('admin.pages');
+    Route::get('/pages/edit-home' , [PagesController::class, 'editHome'])->name('admin.pages.edit-home');
+    Route::post('/pages/edit-home' , [PagesController::class, 'updateHome'])->name('admin.pages.update-home');
+    Route::post('/pages/edit-review/{review_id}' , [PagesController::class, 'updateReview'])->name('admin.pages.update-review');
+    Route::get('/pages/edit-about' , [PagesController::class, 'editAbout'])->name('admin.pages.edit-about');
+    Route::post('/pages/edit-about' , [PagesController::class, 'updateAbout'])->name('admin.pages.update-about');
+    Route::get('/pages/edit-contact' , [PagesController::class, 'editContact'])->name('admin.pages.edit-contact');
+    Route::post('/pages/edit-contact' , [PagesController::class, 'updateContact'])->name('admin.pages.update-contact');
     
 
 

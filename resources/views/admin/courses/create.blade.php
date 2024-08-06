@@ -2,7 +2,7 @@
 
 @section('content')
     <div class="">
-        <x-errors :errors="$errors" />
+        {{-- <x-errors :errors="$errors" /> --}}
         <div class="flex justify-between">
             <h1 class="lg:text-4xl text-2xl text-nowrap truncate text-indigo-700 mb-4">إنشاء دورة جديدة</h1>
             </h1>

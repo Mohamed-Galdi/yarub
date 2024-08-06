@@ -187,7 +187,7 @@
                 </x-btn.admin-dashboard-item>
             </ul>
             {{-- side footer buttons --}}
-            <div
+            <div dir="rtl"
                 class="w-full h-12 right-0 border-t text-gray-100 bg-indigo-800 border-gray-100 bottom-0 absolute flex justify-between items-center text-sm font-bold">
                 <a href="{{ route('home') }}"
                     class="flex justify-center items-center gap-2 border-l border-gray-100 pl-2 w-1/2 cursor-pointer hover:text-indigo-400">
