@@ -101,11 +101,20 @@ Route::middleware(['auth', 'verified', 'admin'])->prefix('admin-dashboard')->gro
 
     // Pages
     Route::get('/pages', [PagesController::class, 'index'])->name('admin.pages');
+
     Route::get('/pages/edit-home' , [PagesController::class, 'editHome'])->name('admin.pages.edit-home');
     Route::post('/pages/edit-home' , [PagesController::class, 'updateHome'])->name('admin.pages.update-home');
     Route::post('/pages/edit-review/{review_id}' , [PagesController::class, 'updateReview'])->name('admin.pages.update-review');
+
     Route::get('/pages/edit-about' , [PagesController::class, 'editAbout'])->name('admin.pages.edit-about');
     Route::post('/pages/edit-about' , [PagesController::class, 'updateAbout'])->name('admin.pages.update-about');
+    Route::post('/pages/add-partner' , [PagesController::class, 'addPartner'])->name('admin.pages.add-partner');
+    Route::put('/pages/edit-partner/{partner_id}' , [PagesController::class, 'updatePartner'])->name('admin.pages.update-partner');
+    Route::delete('/pages/delete-partner/{partner_id}', [PagesController::class, 'deletePartner'])->name('admin.pages.delete-partner');
+    Route::post('/pages/add-faq' , [PagesController::class, 'addFaq'])->name('admin.pages.add-faq');
+    Route::put('/pages/edit-faq/{faq_id}' , [PagesController::class, 'updateFaq'])->name('admin.pages.update-faq');
+    Route::delete('/pages/delete-faq/{faq_id}', [PagesController::class, 'deleteFaq'])->name('admin.pages.delete-faq');
+
     Route::get('/pages/edit-contact' , [PagesController::class, 'editContact'])->name('admin.pages.edit-contact');
     Route::post('/pages/edit-contact' , [PagesController::class, 'updateContact'])->name('admin.pages.update-contact');
     

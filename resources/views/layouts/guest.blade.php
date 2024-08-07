@@ -158,7 +158,7 @@
 
             <div class="text-center flex flex-col items-center gap-2 py-2 md:order-2 order-3">
                 <p class="text-gray-200 text-base">رقم السجل التجاري : <span
-                        class=" font-bold underline">4030408810</span>
+                        class=" font-bold underline">{{ $commercial_registration_no }} </span>
                 <p> منصة يعرب | جميع الحقوق محفوظة © 2024.</p>
 
                 </p>
@@ -172,19 +172,19 @@
                         class="text-gray-200 hover:scale-110 hover:text-white transition-all">
                         <x-icons.youtube class="w-6 h-6" />
                     </a> --}}
-                    <a href="https://wa.me/0539867197" target='_blank'
+                    <a href="{{ $whatsapp_number }}" target='_blank'
                         class="text-gray-200 hover:scale-110 hover:text-white transition-all">
                         <x-icons.whatsapp class="w-6 h-6" />
                     </a>
-                    <a href="https://www.instagram.com/yarub_ar" target='_blank'
+                    <a href="{{ $instagram }}" target='_blank'
                         class="text-gray-200 hover:scale-110 hover:text-white transition-all">
                         <x-icons.instagram class="w-6 h-6" />
                     </a>
-                    <a href="https://www.tiktok.com/@yarub_ar" target='_blank'
+                    <a href="{{ $tiktok }}" target='_blank'
                         class="text-gray-200 hover:scale-110 hover:text-white transition-all">
                         <x-icons.tiktok class="w-6 h-6" />
                     </a>
-                    <a href="https://www.snapchat.com/add/yarub_ar" target='_blank'
+                    <a href="{{ $snapchat }}" target='_blank'
                         class="text-gray-200 hover:scale-110 hover:text-white transition-all">
                         <x-icons.snapchat class="w-6 h-6" />
                     </a>

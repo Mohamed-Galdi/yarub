@@ -70,7 +70,8 @@
                     <div class="flex gap-4 items-end ">
                         <h3 class="underline font-judur underline-offset-8"> البريد الإلكتروني </h3>
                         {{-- clcik to copy --}}
-                        <button class=" flex justify-start items-center gap-2 group " onclick="copyEmail()">
+                        <button class=" flex justify-start items-center gap-2 group "
+                            onclick="copyEmail('{{ $contactPage->email }}')">
                             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"
                                 class=" text-white w-6 h-6 group-hover:scale-[0.95] transition-all duration-300 ease-in-out ">
                                 <path class="fill-current"
@@ -79,7 +80,7 @@
                             <p class=" text-sm hidden" id="copyEmail">تم النسخ !</p>
                         </button>
                     </div>
-                    <p class="text-lg font-nitaqat">yarubsa25@gmail.com</p>
+                    <p class="text-lg font-nitaqat">{{ $contactPage->email }}</p>
                 </div>
                 <div
                     class="text-white flex flex-col md:items-start items-center md:text-start text-center  gap-4 py-4 md:pe-12 ps-4 md:w-1/3 w-full">
@@ -90,7 +91,8 @@
                     <div class="flex gap-4 items-end ">
                         <h3 class="underline font-judur underline-offset-8"> الهاتف </h3>
                         {{-- clcik to copy --}}
-                        <button class=" flex justify-start items-center gap-2 group " onclick="copyPhone()">
+                        <button class=" flex justify-start items-center gap-2 group "
+                            onclick="copyPhone('{{$contactPage->phone_number}}')">
                             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"
                                 class=" text-white w-6 h-6 group-hover:scale-[0.95] transition-all duration-300 ease-in-out ">
                                 <path class="fill-current"
@@ -99,7 +101,7 @@
                             <p class=" text-sm hidden" id="copyPhone">تم النسخ !</p>
                         </button>
                     </div>
-                    <p class="text-lg font-nitaqat" dir="ltr">+966 5 0004 4502</p>
+                    <p class="text-lg font-nitaqat" dir="ltr">{{ $contactPage->phone_number }}</p>
                 </div>
                 <div
                     class="text-white flex flex-col md:items-start items-center md:text-start text-center  gap-4 py-4 md:pe-12 ps-4 md:w-1/3 w-full">
@@ -110,7 +112,9 @@
                     <div class="flex gap-4 items-end ">
                         <h3 class="underline font-judur underline-offset-8"> موقعنا </h3>
                         {{-- clcik to copy --}}
-                        <button class=" flex justify-start items-center gap-2 group " onclick="copyAddress()">
+                        <button class="flex justify-start items-center gap-2 group"
+                            onclick="copyAddress('{{ $contactPage->address }}')">
+
                             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"
                                 class=" text-white w-6 h-6 group-hover:scale-[0.95] transition-all duration-300 ease-in-out ">
                                 <path class="fill-current"
@@ -119,7 +123,7 @@
                             <p class=" text-sm hidden" id="copyAddress">تم النسخ !</p>
                         </button>
                     </div>
-                    <p class="text-lg font-nitaqat">جدة، المملكة العربية السعودية</p>
+                    <p class="text-lg font-nitaqat">{{ $contactPage->address }}</p>
 
                 </div>
             </div>
@@ -136,7 +140,7 @@
                 <div class="bg-white w-full h-auto py-8 flex items-center justify-center gap-4 flex-wrap">
                     {{-- Icons Sourse: https://pagedone.io/docs/social-media-icons --}}
                     {{-- instagram --}}
-                    <a href="https://www.instagram.com/yarub_ar" target="_blank"><button
+                    <a href="{{ $contactPage->instagram }}" target="_blank"><button
                             class="w-20 h-20 flex items-center justify-center rounded-full relative overflow-hidden bg-slate-200 shadow-md shadow-gray-200 group transition-all duration-500">
                             <x-icons.instagram
                                 class="fill-gray-900 relative z-10 transition-all duration-300 group-hover:text-white w-10 h-10" />
@@ -147,7 +151,7 @@
                     </a>
 
                     {{-- tiktok --}}
-                    <a href="https://www.tiktok.com/@yarub_ar" target="_blank"><button
+                    <a href="{{ $contactPage->tiktok }}" target="_blank"><button
                             class="w-20 h-20 flex items-center justify-center rounded-full relative overflow-hidden bg-slate-200 shadow-md shadow-gray-200 group transition-all duration-500">
                             <x-icons.tiktok
                                 class="fill-gray-900 relative z-10 transition-all duration-300 group-hover:text-white w-10 h-10" />
@@ -157,7 +161,7 @@
                         </button></a>
 
                     {{-- whatsapp --}}
-                    <a href="https://wa.me/0539867197" target="_blank">
+                    <a href="{{ $contactPage->whatsapp_number }}" target="_blank">
                         <button
                             class="w-20 h-20 flex items-center justify-center rounded-full relative overflow-hidden bg-slate-200 shadow-md shadow-gray-200 group transition-all duration-500">
                             <x-icons.whatsapp
@@ -168,7 +172,7 @@
                         </button></a>
 
                     {{-- snapchat --}}
-                    <a href="https://www.snapchat.com/add/yarub_ar" target="_blank">
+                    <a href="{{ $contactPage->snapchat }}" target="_blank">
                         <button
                             class="w-20 h-20 flex items-center justify-center rounded-full relative overflow-hidden bg-slate-200 shadow-md shadow-gray-200 group transition-all duration-500">
                             <x-icons.snapchat
@@ -219,24 +223,27 @@
     <!-- End Hero -->
 
     <script>
-        function copyAddress() {
-            navigator.clipboard.writeText('الرياض، المملكة العربية السعودية');
-            document.getElementById('copyAddress').style.display = 'block';
-            setTimeout(function() {
-                document.getElementById('copyAddress').style.display = 'none';
-            }, 2000);
+        function copyAddress(address) {
+            navigator.clipboard.writeText(address).then(function() {
+                document.getElementById('copyAddress').style.display = 'block';
+                setTimeout(function() {
+                    document.getElementById('copyAddress').style.display = 'none';
+                }, 2000);
+            }).catch(function(error) {
+                console.error('Error copying address:', error);
+            });
         }
 
-        function copyEmail() {
-            navigator.clipboard.writeText('yarubsa25@gmail.com');
+        function copyEmail(email) {
+            navigator.clipboard.writeText(email);
             document.getElementById('copyEmail').style.display = 'block';
             setTimeout(function() {
                 document.getElementById('copyEmail').style.display = 'none';
             }, 2000);
         }
 
-        function copyPhone() {
-            navigator.clipboard.writeText('+966 5 0004 4502');
+        function copyPhone(phone) {
+            navigator.clipboard.writeText(phone);
             document.getElementById('copyPhone').style.display = 'block';
             setTimeout(function() {
                 document.getElementById('copyPhone').style.display = 'none';

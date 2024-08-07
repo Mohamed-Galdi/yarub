@@ -2,10 +2,14 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\AboutPage;
+use App\Models\ContactPage;
 use App\Models\Course;
+use App\Models\FAQ;
 use App\Models\HomePage;
 use App\Models\HomePageReview;
 use App\Models\Lesson;
+use App\Models\Partners;
 use Illuminate\Http\Request;
 
 class HomePagesController extends Controller
@@ -73,11 +77,15 @@ class HomePagesController extends Controller
 
     public function aboutPage()
     {
-        return view('home.about');
+        $aboutPage = AboutPage::first();
+        $partners = Partners::all();
+        $faqs = FAQ::all();
+        return view('home.about', compact('faqs', 'aboutPage', 'partners'));
     }
 
     public function contactPage()
     {
-        return view('home.contact');
+        $contactPage = ContactPage::first();
+        return view('home.contact', compact('contactPage'));
     }
 }

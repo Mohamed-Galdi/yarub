@@ -13,7 +13,7 @@
         <img src="{{ $userImg }}" alt="" class="w-12 h-12 rounded-full">
         <div>
             <p>{{ $userName }}</p>
-            <div class="flex gap-2 justify-start items-center ">
+            <div class="flex gap-2 justify-start items-center overflow-hidden ">
                 @foreach (range(1, $stars) as $star)
                     <svg xmlns="http://www.w3.org/2000/svg" class="w-3 h-3" viewBox="0 0 512 512">
                         <path fill="#396dc6"
