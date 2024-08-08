@@ -11,6 +11,17 @@
     <!-- Scripts -->
     @vite(['resources/css/app.css', 'resources/js/app.js'])
     <script src="//unpkg.com/alpinejs" defer></script>
+    {{-- csrf token --}}
+    <meta name="csrf-token" content="{{ csrf_token() }}">
+
+    {{-- SweetAlert2 --}}
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+    {{-- Ajax cdn --}}
+    <script script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"
+        integrity="sha512-v2CJ7UaYy4JwqLDIrZUI/4hqeoQieOmAZNXBeQyjo21dadnwR+8ZaIJVT8EE2iyI61OV8e6M8PP2/4hpQINQ/g=="
+        crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+
 
     <style>
         input:-webkit-autofill,
@@ -83,11 +94,20 @@
                     @if (Auth::check() && Auth::user()->role === 'admin')
                         <span></span>
                     @else()
-                        <div class="w-8 h-8 relative">
+                        {{-- <div class="w-8 h-8 relative">
                             <x-icons.cart class="text-sm text-pr-500 w-full h-full "></x-icons.cart>
                             <div
                                 class="text-white bg-pr-500 rounded-full absolute top-0 right-0 w-4 h-4 flex justify-center items-center">
-                                2</div>
+                                0</div>
+                        </div> --}}
+                        <div class="w-8 h-8 relative cursor-pointer">
+                            <a href="{{ route('cart.index') }}">
+                                <x-icons.cart class="text-sm text-pr-500 w-full h-full "></x-icons.cart>
+                                <div
+                                    class="text-white bg-pr-500 rounded-full absolute top-0 right-0 w-4 h-4 flex justify-center items-center cart-count">
+                                    {{ $cart ? count($cart) : 0 }}
+                                </div>
+                            </a>
                         </div>
                     @endif
 
@@ -194,7 +214,112 @@
     </footer>
     @include('sweetalert::alert')
     @stack('scripts')
+    {{-- Cart Script --}}
+    <script>
+        // Add to Cart
+        $('.add-to-cart').click(function() {
+            let itemId = $(this).data('item-id');
+            let type = $(this).data('type');
+            let title = $(this).data('title');
+            let description = $(this).data('description');
+            let price = $(this).data('price');
+            let monthlyPrice = $(this).data('monthly-price');
+            let yearlyPrice = $(this).data('yearly-price');
 
+            $.ajax({
+                url: '{{ route('cart.add') }}',
+                type: 'POST',
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                },
+                data: {
+                    id: itemId,
+                    type: type,
+                    title: title,
+                    description: description,
+                    price: price,
+                    monthly_price: monthlyPrice,
+                    yearly_price: yearlyPrice
+                },
+                success: function(response) {
+                    // Update cart count in the header
+                    $('.cart-count').text(response.count);
+                    showAlert(response.success, 'success');
+                },
+                error: function(xhr) {
+                    showAlert(xhr.responseJSON.error, 'error');
+                }
+            });
+        });
+
+        // Remove from Cart
+        $('.remove-from-cart').click(function() {
+            let itemId = $(this).data('item-id');
+            let type = $(this).data('type');
+
+            $.ajax({
+                url: '{{ route('cart.remove') }}',
+                type: 'POST',
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                },
+                data: {
+                    itemId: itemId,
+                    type: type
+                },
+                success: function(response) {
+                    // Update cart count in the header
+                    $('.cart-count').text(response.count);
+                    showAlert(response.success, 'success');
+                },
+                error: function(xhr) {
+                    showAlert(xhr.responseJSON.error, 'error');
+                }
+            });
+            location.reload();
+        });
+
+        // Update Cart Plan
+        $('.plan-selector').change(function() {
+            let itemId = $(this).data('item-id');
+            let type = $(this).data('type');
+            let newPlan = $(this).val();
+
+            $.ajax({
+                url: '{{ route('cart.update') }}',
+                type: 'POST',
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                },
+                data: {
+                    itemId: itemId,
+                    type: type,
+                    newPlan: newPlan
+                },
+                success: function(response) {
+                    // Refresh the cart view
+                    location.reload();
+                    showAlert(response.success, 'success');
+                },
+                error: function(xhr) {
+                    showAlert(xhr.responseJSON.error, 'error');
+                }
+            });
+            location.reload();
+        });
+
+        // SweetAlert Functions
+        function showAlert(message, type) {
+
+            Swal.fire({
+                title: message ,
+                // text: message,
+                icon: type === 'success' ? 'success' : 'info',
+                timer: 1500,
+                showConfirmButton: false
+            });
+        }
+    </script>
 
 </body>
 

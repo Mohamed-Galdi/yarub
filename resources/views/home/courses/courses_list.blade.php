@@ -31,6 +31,7 @@
         @forelse ($courses as $course)
             <x-card.guest-course 
                 class="w-[22rem]" 
+                :id="$course->id"
                 :title="$course->title" 
                 :description="$course->description" 
                 :price="$course->price" 

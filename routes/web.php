@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\CartController;
 use App\Http\Controllers\HomePagesController;
 use Illuminate\Support\Facades\Route;
 
@@ -22,7 +23,11 @@ Route::get('/lessons', [HomePagesController::class, 'lessonsPage'])->name('lesso
 Route::get('/about', [HomePagesController::class, 'aboutPage'])->name('about');
 Route::get('/contact', [HomePagesController::class, 'contactPage'])->name('contact');
 
-
+// ///////////// Cart Routes //////////////
+Route::get('/cart', [CartController::class, 'index'])->name('cart.index');
+Route::post('/cart/add', [CartController::class, 'addToCart'])->name('cart.add');
+Route::post('/cart/update', [CartController::class, 'updateCart'])->name('cart.update');
+Route::post('/cart/remove', [CartController::class, 'removeFromCart'])->name('cart.remove');
 
 // Include Admin Routes
 require __DIR__ . '/admin.php';

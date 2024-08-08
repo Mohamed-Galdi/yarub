@@ -4,6 +4,7 @@ namespace App\Providers;
 
 use Illuminate\Support\Facades\View;
 use App\Models\ContactPage;
+use Illuminate\Support\Facades\Session;
 use Illuminate\Support\ServiceProvider;
 
 class ViewServiceProvider extends ServiceProvider
@@ -21,6 +22,7 @@ class ViewServiceProvider extends ServiceProvider
      */
     public function boot()
     {
+
         View::composer('layouts.guest', function ($view) {
             $contactPage = ContactPage::first();
 
@@ -30,6 +32,7 @@ class ViewServiceProvider extends ServiceProvider
                 'tiktok' => $contactPage->tiktok,
                 'snapchat' => $contactPage->snapchat,
                 'commercial_registration_no' => $contactPage->commercial_registration_no,
+                'cart' => Session::get('cart', [])
             ]);
         });
     }
