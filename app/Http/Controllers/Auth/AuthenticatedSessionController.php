@@ -9,6 +9,7 @@ use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\View\View;
+use RealRashid\SweetAlert\Facades\Alert;
 
 class AuthenticatedSessionController extends Controller
 {
@@ -33,12 +34,20 @@ class AuthenticatedSessionController extends Controller
         // Check if the user is a student
         if ($user->role !== 'student') {
             Auth::logout();
+            if ($request->cart) {
+                alert()->error('البريد الإلكتروني أو كلمة المرور غير صحيح !')->timerProgressBar();
+                return redirect()->route('cart.index');
+            }
             return redirect()->route('login')->withErrors(['email' => 'البريد الإلكتروني أو كلمة المرور غير صحيح !']);
         }
 
         $request->session()->regenerate();
 
         toast('تم تسجيل الدخول بنجاح !', 'success');
+
+        if ($request->cart) {
+            return redirect()->route('cart.index');
+        }
 
         return redirect()->route('student.dashboard');
     }

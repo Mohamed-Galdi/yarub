@@ -16,7 +16,7 @@
                          شهريا</span></p>
              </div>
              <div class="bg-orange-400 px-2 pb-2 rounded-2xl w-1/2">
-                 <p class="font-nitaqat font-bold text-xl">{{ $yearlyPrice }} ر.س <span class="text-white "> /
+                 <p class="font-nitaqat font-bold text-xl">{{ $annualPrice }} ر.س <span class="text-white "> /
                          سنويا</span></p>
              </div>
          </div>
@@ -29,7 +29,8 @@
                  class="bg-green-500 w-full text-white border-2 border-gray-100 text-xl py-2 px-4 rounded-2xl flex gap-4 justify-center items-center 
             hover:border-gray-800 hover:bg-gray-100 hover:text-pr-500 hover:border group transition-all duration-300 ease-in-out add-to-cart "
                  data-item-id="{{ $id }}" data-type="lesson" data-title="{{ $title }}"
-                 data-description="{{ $description }}" data-yearly-price="{{ $yearlyPrice }}" data-monthly-price="{{ $monthlyPrice }}">
+                 data-description="{{ $description }}" data-annual-price="{{ $annualPrice }}"
+                 data-monthly-price="{{ $monthlyPrice }}">
                  <p> أضف الى السلة</p>
 
                  <x-icons.cart class="w-6 h-6" />

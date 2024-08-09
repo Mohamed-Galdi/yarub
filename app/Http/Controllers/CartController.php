@@ -2,18 +2,25 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Coupon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Session;
+use RealRashid\SweetAlert\Facades\Alert;
 
 class CartController extends Controller
 {
     public function index()
     {
         $cart = $this->getCartItems();
-        return view('home.cart', compact('cart'));
+        $totalBeforeDiscount = $this->calculateTotal($cart);
+        $discount = session('discount', 0);
+        $totalAfterDiscount = $totalBeforeDiscount - $discount;
+        return view('home.cart', compact('cart', 'totalBeforeDiscount', 'totalAfterDiscount'));
     }
 
+    // private function to update the discount on the session
+    
     public function addToCart(Request $request)
     {
         $item = [
@@ -23,7 +30,8 @@ class CartController extends Controller
             'description' => $request->input('description'),
             'price' => $request->input('price'),
             'monthly_price' => $request->input('monthly_price'),
-            'yearly_price' => $request->input('yearly_price'),
+            'annual_price' => $request->input('annual_price'),
+            'plan' => 'monthly',
         ];
 
         $cart = $this->getCartItems();
@@ -36,6 +44,7 @@ class CartController extends Controller
 
         $cart[] = $item;
         $this->storeCartItems($cart);
+        session(['discount' => 0]);
 
         return response()->json([
             'success' => 'تمت الإضافة إلى السلة',
@@ -58,7 +67,7 @@ class CartController extends Controller
         }, $cart);
 
         $this->storeCartItems($updatedCart);
-
+        session(['discount' => 0]);
         return response()->json([
             'success' => 'تم تغيير الخطة في السلة',
             'count' => count($updatedCart)
@@ -76,11 +85,90 @@ class CartController extends Controller
         });
 
         $this->storeCartItems($updatedCart);
+        session(['discount' => 0]);
 
         return response()->json([
             'success' => 'تمت إزالة العنصر من السلة',
             'count' => count($updatedCart)
         ]);
+    }
+
+    public function applyCoupon(Request $request)
+    {
+        $couponCode = $request->input('coupon');
+        $coupon = Coupon::where('code', $couponCode)
+            ->where('is_active', true)
+            ->where('start_date', '<=', now())
+            ->where('end_date', '>=', now())
+            ->first();
+        
+        if (!$coupon) {
+            // update the session discount to 0
+            session(['discount' => 0]);
+            Alert::error('قسيمة غير صالحة أو منتهية الصلاحية.');
+            return redirect()->back();
+        }
+
+        $cart = $this->getCartItems();
+        $totalBeforeDiscount = $this->calculateTotal($cart);
+        $discount = $this->calculateDiscount($coupon, $cart);
+        $totalAfterDiscount = $totalBeforeDiscount - $discount;
+
+        session(['coupon' => $coupon->toArray(), 'discount' => $discount]);
+
+        Alert::success('تم تطبيق القسيمة بنجاح.');
+        return redirect()->back();
+    }
+
+    private function calculateTotal($cart)
+    {
+        return collect($cart)->sum(function ($item) {
+            if ($item['type'] === 'course') {
+                return $item['price'];
+            } elseif ($item['type'] === 'lesson') {
+                if ($item['plan'] === 'monthly') {
+                    return $item['monthly_price'];
+                } else {
+                    return $item['annual_price'];
+                }
+            }
+            // return $item['type'] === 'course' ? $item['price'] : $item['monthly_price'];
+        });
+    }
+
+    private function calculateDiscount($coupon, $cart)
+    {
+        $applicableItems = collect($cart)->filter(function ($item) use ($coupon) {
+            if ($coupon->applicable_to === 'all') {
+                return true;
+            } elseif ($coupon->applicable_to === 'courses' && $item['type'] === 'course') {
+                return true;
+            } elseif ($coupon->applicable_to === 'lessons' && $item['type'] === 'lesson') {
+                return true;
+            } elseif ($coupon->applicable_to === 'specific') {
+                return $coupon->courses->contains($item['id']) || $coupon->lessons->contains($item['id']);
+            }
+            return false;
+        });
+
+        $totalApplicable = $applicableItems->sum(function ($item) {
+            if ($item['type'] === 'course') {
+                return $item['price'];
+            } elseif ($item['type'] === 'lesson') {
+                if ($item['plan'] === 'monthly') {
+                    return $item['monthly_price'];
+                } else {
+                    return $item['annual_price'];
+                }
+            }
+            // return $item['type'] === 'course' ? $item['price'] : $item['monthly_price'];
+        });
+
+        if ($coupon->type === 'percentage') {
+            return $totalApplicable * ($coupon->value / 100);
+        } else {
+            return min($coupon->value, $totalApplicable);
+        }
     }
 
     private function getCartItems()

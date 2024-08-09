@@ -1,8 +1,8 @@
 <div
     {{ $attributes->merge([
         'class' => 'bg-gray-200 flex flex-col items-start justify-start border-2 border-pr-500 overflow-hidden
-            rounded-xl shadow-lg shadow-pr-400 hover:shadow-sm cursor-pointer transition-all duration-300 ease-in-out hover:scale-[0.99]
-            relative  h-96',
+                rounded-xl shadow-lg shadow-pr-400 hover:shadow-sm cursor-pointer transition-all duration-300 ease-in-out hover:scale-[0.99]
+                relative  h-96',
     ]) }}>
     <div class="w-full h-1/2">
         <x-card.course-img :title="$title" />
@@ -15,7 +15,7 @@
                 <p class="font-nitaqat font-bold text-xl">{{ $monthlyPrice }} ر.س شهريا</p>
             </div>
             <div class="bg-orange-300 px-2 pb-2 rounded-2xl w-fit">
-                <p class="font-nitaqat font-bold text-xl">{{ $yearlyPrice }} ر.س سنويا</p>
+                <p class="font-nitaqat font-bold text-xl">{{ $annualPrice }} ر.س سنويا</p>
             </div>
         </div>
         <x-card.rating />

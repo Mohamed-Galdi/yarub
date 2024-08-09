@@ -34,8 +34,8 @@
         {{--  Courses list  --}}
         <div id="lessonsList" class="grid grid-cols-1  md:grid-cols-2 lg:grid-cols-3  gap-12  px-8 place-items-center">
             @forelse ($lessons as $lesson)
-                <x-card.guest-lesson class="w-[22rem] " :id="$lesson->id" :title="$lesson->title" :description="$lesson->description" :monthly-price="$lesson->monthly_price"
-                    :yearly-price="$lesson->yearly_price" :type="$lesson->type" />
+                <x-card.guest-lesson class="w-[22rem] " :id="$lesson->id" :title="$lesson->title" :description="$lesson->description"
+                    :monthly-price="$lesson->monthly_price" :annual-price="$lesson->annual_price" :type="$lesson->type" />
             @empty
                 <div class="col-span-3 flex flex-col justify-center items-center w-full ">
                     <p class="text-2xl">لا توجد نتائج مطابقة حاليا</p>

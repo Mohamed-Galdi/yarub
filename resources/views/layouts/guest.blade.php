@@ -24,18 +24,35 @@
 
 
     <style>
-        input:-webkit-autofill,
-        input:-webkit-autofill:hover,
-        input:-webkit-autofill:focus,
-        input:-webkit-autofill:active {
-            /* text color */
-            transition: background-color 5000s ease-in-out 0s;
-            -webkit-text-fill-color: #ffffff !important;
+        :root {
+            --dark-autofill-color: #ffffff;
+            --light-autofill-color: #272626;
         }
 
-        /* Style the autofill text */
-        input:-webkit-autofill {
-            -webkit-text-fill-color: #ffffff !important;
+        .dark-input:-webkit-autofill,
+        .dark-input:-webkit-autofill:hover,
+        .dark-input:-webkit-autofill:focus,
+        .dark-input:-webkit-autofill:active,
+        .light-input:-webkit-autofill,
+        .light-input:-webkit-autofill:hover,
+        .light-input:-webkit-autofill:focus,
+        .light-input:-webkit-autofill:active {
+            /* common properties */
+            transition: background-color 5000s ease-in-out 0s;
+        }
+
+        .dark-input:-webkit-autofill,
+        .dark-input:-webkit-autofill:hover,
+        .dark-input:-webkit-autofill:focus,
+        .dark-input:-webkit-autofill:active {
+            -webkit-text-fill-color: var(--dark-autofill-color) !important;
+        }
+
+        .light-input:-webkit-autofill,
+        .light-input:-webkit-autofill:hover,
+        .light-input:-webkit-autofill:focus,
+        .light-input:-webkit-autofill:active {
+            -webkit-text-fill-color: var(--light-autofill-color) !important;
         }
 
         /* For Firefox */
@@ -44,6 +61,7 @@
             color: inherit !important;
         }
     </style>
+
 
 
 </head>
@@ -224,7 +242,7 @@
             let description = $(this).data('description');
             let price = $(this).data('price');
             let monthlyPrice = $(this).data('monthly-price');
-            let yearlyPrice = $(this).data('yearly-price');
+            let annualPrice = $(this).data('annual-price');
 
             $.ajax({
                 url: '{{ route('cart.add') }}',
@@ -239,7 +257,7 @@
                     description: description,
                     price: price,
                     monthly_price: monthlyPrice,
-                    yearly_price: yearlyPrice
+                    annual_price: annualPrice
                 },
                 success: function(response) {
                     // Update cart count in the header
@@ -284,6 +302,7 @@
             let itemId = $(this).data('item-id');
             let type = $(this).data('type');
             let newPlan = $(this).val();
+            console.log(newPlan);
 
             $.ajax({
                 url: '{{ route('cart.update') }}',
@@ -312,7 +331,7 @@
         function showAlert(message, type) {
 
             Swal.fire({
-                title: message ,
+                title: message,
                 // text: message,
                 icon: type === 'success' ? 'success' : 'info',
                 timer: 1500,
