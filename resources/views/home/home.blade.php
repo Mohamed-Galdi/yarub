@@ -102,8 +102,10 @@
                 <div class="mt-8 flex md:flex-row flex-col justify-between items-center gap-4  w-full">
                     {{-- card --}}
                     @foreach ($courses as $course)
+                        {{-- <p>{{ $course->reviews_avg_rating }}</p>
+                    <p>{{ $course->reviews_count }}</p> --}}
                         <x-card.guest-course class="w-[22rem]" :id="$course->id" :title="$course->title" :description="$course->description"
-                            :price="$course->price" :type="$course->type" />
+                            :price="$course->price" :type="$course->type" :averagerating="$course->reviews_avg_rating" :totalreviews="$course->reviews_count" />
                     @endforeach
                 </div>
 
@@ -130,7 +132,8 @@
                     {{-- card --}}
                     @foreach ($lessons as $lesson)
                         <x-card.guest-lesson class="w-[22rem]" :id="$lesson->id" :title="$lesson->title" :description="$lesson->description"
-                            :monthly-price="$lesson->monthly_price" :annual-price="$lesson->annual_price" :type="$lesson->type" />
+                            :monthly-price="$lesson->monthly_price" :annual-price="$lesson->annual_price" :type="$lesson->type" :averagerating="$lesson->reviews_avg_rating"
+                            :totalreviews="$lesson->reviews_count" />
                     @endforeach
 
                 </div>

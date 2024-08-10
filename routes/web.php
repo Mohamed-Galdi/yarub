@@ -1,7 +1,9 @@
 <?php
 
 use App\Http\Controllers\CartController;
+use App\Http\Controllers\CoursesPageController;
 use App\Http\Controllers\HomePagesController;
+use App\Http\Controllers\LessonsPageController;
 use Illuminate\Support\Facades\Route;
 
 
@@ -18,10 +20,16 @@ use Illuminate\Support\Facades\Route;
 
 // ///////////// Home Routes //////////////
 Route::get('/', [HomePagesController::class, 'homePage'])->name('home');
-Route::get('/courses', [HomePagesController::class, 'coursesPage'])->name('courses');
-Route::get('/lessons', [HomePagesController::class, 'lessonsPage'])->name('lessons');
 Route::get('/about', [HomePagesController::class, 'aboutPage'])->name('about');
 Route::get('/contact', [HomePagesController::class, 'contactPage'])->name('contact');
+
+// Courses Routes
+Route::get('/courses', [CoursesPageController::class, 'coursesPage'])->name('courses');
+Route::get('/courses/{course}', [CoursesPageController::class, 'coursePage'])->name('course');
+
+// Lessons Routes
+Route::get('/lessons', [LessonsPageController::class, 'lessonsPage'])->name('lessons');
+Route::get('/lessons/{lesson}', [LessonsPageController::class, 'coursePage'])->name('lesson');
 
 // ///////////// Cart Routes //////////////
 Route::get('/cart', [CartController::class, 'index'])->name('cart.index');

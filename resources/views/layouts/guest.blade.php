@@ -63,7 +63,7 @@
         <nav class="bg-white   w-full z-20 top-0 start-0 border-b border-gray-200 ">
             <div dir="rtl" class="max-w-screen-xl flex flex-wrap items-center justify-between mx-auto p-2">
                 <a href="/" class="flex items-center space-x-3 ">
-                    <img src="./assets/logos/logo_dark.png" class="w-24" alt="منصة يعرب">
+                    <img src="{{ asset('assets/logos/logo_dark.png') }}" class="w-24" alt="منصة يعرب">
                 </a>
                 <div class="flex md:order-2 space-x-0 md:space-x-2 items-center gap-3  ">
 
@@ -193,7 +193,7 @@
             </div>
             <div class="flex flex-col items-center gap-4 py-2 md:order-3 order-2">
                 <a href="/">
-                    <img src="./assets/logos/logo_white.png" class="w-24" alt="منصة يعرب">
+                    <img src="{{ asset('assets/logos/logo_white.png') }}" class="w-24" alt="منصة يعرب">
                 </a>
                 <div class="flex gap-3 mb-2 sm:justify-center sm:mt-0">
                     {{-- <a href="https://youtube.com" target='_blank'
@@ -229,7 +229,8 @@
         crossorigin="anonymous" referrerpolicy="no-referrer"></script>
     <script>
         // Add to Cart
-        $('.add-to-cart').click(function() {
+        $('.add-to-cart').click(function( event) {
+            event.preventDefault();
             let itemId = $(this).data('item-id');
             let type = $(this).data('type');
             let title = $(this).data('title');

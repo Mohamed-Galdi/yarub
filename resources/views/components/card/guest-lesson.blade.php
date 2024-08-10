@@ -1,4 +1,4 @@
- <div
+ <a href="{{ route('lesson', $id) }}"
      {{ $attributes->merge(['class' => ' h-fit bg-gradient-to-tr from-teal-800 to-teal-400 rounded-xl shadow-lg p-4 space-y-4   cursor-pointer shadow-teal-600 shadow-lg hover:shadow-none hover:scale-[0.98] transition-all duration-300 ease-in-out overflow-hidden']) }}>
      <div class="w-full h-44 rounded-xl overflow-hidden">
          <x-card.course-img title="'{{ $title }}'" />
@@ -20,7 +20,7 @@
                          سنويا</span></p>
              </div>
          </div>
-         <x-card.rating />
+         <x-card.rating :averagerating="$averagerating" :totalreviews="$totalreviews" />
 
      </div>
      <div class="">
@@ -37,4 +37,4 @@
              </button>
          </div>
      </div>
- </div>
+ </a>

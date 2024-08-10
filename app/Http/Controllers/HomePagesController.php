@@ -19,60 +19,19 @@ class HomePagesController extends Controller
         $homePage = HomePage::first();
         $reviews = HomePageReview::all();
 
-        // first 3 courses
-        $courses = Course::where('is_published', true)->take(3)->get();
-        // first 3 lessons
-        $lessons = Lesson::where('is_published', true)->take(3)->get();
-
+        // first 3 courses with reviews count and average rating
+        $courses = Course::where('is_published', true)
+            ->withCount('reviews')
+            ->withAvg('reviews', 'rating')
+            ->take(3)
+            ->get();
+        // first 3 lessons with reviews count and average rating
+        $lessons = Lesson::where('is_published', true)
+            ->withCount('reviews')
+            ->withAvg('reviews', 'rating')
+            ->take(3)
+            ->get();
         return view('home.home', compact('courses', 'lessons', 'homePage', 'reviews'));
-    }
-
-
-    public function coursesPage(Request $request)
-    {
-        $search = $request->input('search');
-        $selectedType = $request->input('type');
-
-        $query = Course::where('is_published', true);
-
-        if ($search) {
-            $query->where('title', 'like', '%' . $search . '%');
-        }
-
-        if ($selectedType && $selectedType !== 'الكل') {
-            $query->where('type', $selectedType);
-        }
-
-        $courses = $query->paginate(9);
-
-        // Get all unique types from the filtered courses
-        $availableTypes = $query->clone()->pluck('type')->unique()->sort()->values();
-
-        return view('home.courses.courses_list', compact('courses', 'search', 'availableTypes', 'selectedType'));
-    }
-
-
-    public function lessonsPage(Request $request)
-    {
-        $search = $request->input('search');
-        $selectedType = $request->input('type');
-
-        $query = Lesson::where('is_published', true);
-
-        if ($search) {
-            $query->where('title', 'like', '%' . $search . '%');
-        }
-
-        if ($selectedType && $selectedType !== 'الكل') {
-            $query->where('type', $selectedType);
-        }
-
-        $lessons = $query->paginate(9);
-
-        // Get all unique types from the filtered lessons
-        $availableTypes = $query->clone()->pluck('type')->unique()->sort()->values();
-
-        return view('home.lessons.lessons_list', compact('lessons', 'search', 'availableTypes', 'selectedType'));
     }
 
     public function aboutPage()

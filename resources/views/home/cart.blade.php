@@ -106,7 +106,7 @@
                                         {{ $item['description'] }}
                                     </p>
                                     <div class="flex w-full">
-                                        <x-card.rating />
+                                        {{-- <x-card.rating /> --}}
                                     </div>
                                 </div>
                                 <div class="w-1/4 flex flex-col justify-center items-center gap-2">

@@ -1,32 +1,90 @@
 @extends('layouts.admin')
 @section('content')
     <div class="flex flex-col justify-start items-start min-h-screen space-y-6">
+        {{-- ////////////////////// Banner ///////////////////// --}}
+        <div class="w-full lg:h-64 rounded-2xl bg-gradient-to-b from-indigo-400 to-blue-700 shadow-xl flex lg:flex-row flex-col justify-start items-start lg:ps-0 ps-6">
+            <div class="h-full lg:w-1/3 w-full  lg:relative flex flex-col justify-center items-center pe-3 ">  
+                <img src="{{ asset('assets/illustrations/admin_panel_character_cropped.svg') }}" alt="الصورة الرمزية"
+                    class="lg:h-full h-56 lg:absolute -bottom-4 right-0 object-cover" />
+                <h1 class="lg:absolute top-12 right-32 text-3xl  text-gray-200 text-center text-wrap w-2/3 font-judur font-bold pe-3">
+                    لوحة تحكم منصة يعرب</h1>
+            </div>
+            <div class="h-full lg:w-2/3 w-full pl-6 pt-6  grid md:grid-cols-2 grid-cols-1  gap-4 pb-8">
+                <div
+                    class="w-full  rounded-lg bg-gradient-to-b border-2 border-gray-100 overflow-hidden from-green-400 to-green-600 flex justify-between items-start py-2 px-4  ">
+                    <div class="w-1/4 h-full  flex justify-start items-start ">
+                        <x-icons.students class="w-full h-full text-green-800" />
+                    </div>
+                    <div class="w-3/4  flex  justify-center items-center h-full ">
+                        <div class="w-fit  flex flex-col justify-center items-center ">
+                            <h1 class="lg:text-4xl text-2xl text-nowrap truncate text-green-900">الطلاب</h1>
+                            <p class="text-gray-50 text-3xl">{{$students_count}}</p>
+                        </div>
+                    </div>
+                </div>
+                <div
+                    class="w-full  rounded-lg bg-gradient-to-b border-2 border-gray-100 overflow-hidden from-red-400 to-red-500 flex justify-start items-start  py-2 px-4  ">
+                    <div class="w-1/4 h-full  flex justify-start items-start ">
+                        <x-icons.course class="w-full h-full text-red-800" />
+                    </div>
+                    <div class="w-3/4  flex  justify-center items-center h-full ">
+                        <div class="w-fit  flex flex-col justify-center items-center ">
+                            <h1 class="lg:text-3xl text-2xl text-nowrap truncate text-red-800">الدورات و الشروحات</h1>
+                            <p class="text-gray-50 text-3xl">{{$courses_and_lessons_count}}</p>
+                        </div>
+                    </div>
+                </div>
+                <div
+                    class="w-full  rounded-lg bg-gradient-to-b border-2 border-gray-100 overflow-hidden from-blue-500 to-blue-600 flex justify-start items-start  py-2 px-4  ">
+                    <div class="w-1/4 h-full  flex justify-center items-center ">
+                        <x-icons.eye class="w-[4.5rem] h-[4.5rem] text-blue-900" />
+                    </div>
+                    <div class="w-3/4  flex  justify-center items-center h-full ">
+                        <div class="w-fit  flex flex-col justify-center items-center ">
+                            <h1 class="lg:text-4xl text-2xl text-nowrap truncate text-blue-900">زوار المنصة</h1>
+                            <p class="text-gray-50 text-3xl">{{$visitors_count}}</p>
+                        </div>
+                    </div>
 
-        {{-- //////////////////// Overview Charts //////////////////// --}}
-        <div dir="rtl" class="w-full grid grid-cols-1  lg:grid-cols-2 xl:grid-cols-4  gap-8 mb-12  pb-12">
-            {{-- //////////////////// Users //////////////////// --}}
-            <x-charts.overview :id="'users'" :title="' الزوار'" :value="6324" :trend="'+ 63,6 %'" :color="'text-blue-500'"
-                icon="icons.eye" />
-            {{-- //////////////////// Students //////////////////// --}}
-            <x-charts.overview :id="'students'" :title="'الطلاب '" :value="120" :trend="'+ 13,6 %'" :color="'text-red-500'"
-                icon="icons.students" />
+                </div>
+                <div
+                    class="w-full  rounded-lg bg-gradient-to-b border-2 border-gray-100 overflow-hidden from-warning-300 to-yellow-400 flex justify-start items-start  py-2 px-4  ">
+                    <div class="w-1/4 h-full  flex justify-start items-start ">
+                        <x-icons.money-bag class="w-full h-full text-warning-800" />
+                    </div>
+                    <div class="w-3/4  flex  justify-center items-center h-full ">
+                        <div class="w-fit  flex flex-col justify-center items-center ">
+                            <h1 class="lg:text-4xl text-2xl text-nowrap truncate text-warning-800">المداخيل</h1>
+                            <p class="text-white text-3xl align-middle">{{$sales_count}} <span class="text-sm">(ريال سعودي)</span></p>
+                        </div>
+                    </div>
+                </div>
 
-            {{-- //////////////////// Courses //////////////////// --}}
-            <x-charts.overview :id="'courses'" :title="'الدورات  '" :value="12" :trend="'+ 20 %'"
-                :color="'text-yellow-500'" icon="icons.lesson" />
-            {{-- //////////////////// Sales //////////////////// --}}
-            <x-charts.overview :id="'sales'" :title="'المبيعات'" :value="12000" :trend="'+ 3,6 %'"
-                :color="'text-green-500'" icon="icons.money-bag" />
+
+
+            </div>
+
         </div>
 
+
+        {{-- //////////////////// Overview Charts //////////////////// --}}
+        {{-- <div dir="rtl" class="w-full grid grid-cols-1  lg:grid-cols-2 xl:grid-cols-4  gap-8 mb-12  pb-12">
+            <x-charts.overview :id="'users'" :title="' الزوار'" :value="5720" :trend="'+ 63,6 %'" :color="'text-blue-500'"
+                icon="icons.eye" />
+            <x-charts.overview :id="'students'" :title="'الطلاب '" :value="120" :trend="'+ 13,6 %'" :color="'text-red-500'"
+                icon="icons.students" />
+            <x-charts.overview :id="'courses'" :title="'الدورات  '" :value="12" :trend="'+ 20 %'"
+                :color="'text-yellow-500'" icon="icons.lesson" />
+            <x-charts.overview :id="'sales'" :title="'المبيعات'" :value="3000" :trend="'+ 3,6 %'"
+                :color="'text-green-500'" icon="icons.money-bag" />
+        </div> --}}
+
         {{-- //////////////////// Detail Charts //////////////////// --}}
-        <div class="w-full bg-gray-200 rounded-lg min-h-screen shadow-md  border border-white lg:px-12 px-2 py-6 ">
-            <p class="text-3xl text-gray-700 text-center  ">الإحصائيات المفصلة</p>
+        <div class="w-full bg-slate-300 rounded-lg min-h-screen shadow-md  border border-white lg:px-12 px-2 py-3">
+            {{-- <p class="text-3xl text-gray-700 text-center  ">الإحصائيات المفصلة</p> --}}
             {{-- //////////////////// Users //////////////////// --}}
-            <div class="mt-12">
-                <p class="text-2xl text-indigo-500 ">الزوار </p>
-                <div class="w-full h-1 rounded-lg bg-gradient-to-r from-pr-500 to-indigo-500"></div>
-                <div class="mt-12">
+            <div class="mt-6 ">
+                <div class="rounded-2xl overflow-hidden">
                     <div id="usersDetail"></div>
                 </div>
             </div>
@@ -144,25 +202,16 @@
         // ///////////////////////////////////////// Detail Charts //////////////////////////////////////////////////
         // ///////////////// Users and Students /////////////////
         function createDetailUsersChart() {
-            const options2 = {
+            const options = {
                 series: [{
-                    name: 'الطلاب الجدد',
-                    type: 'column',
-                    data: [0, 0, 0, 0, 0, 15, 32, 73, 0, 0, 0, 0]
-                }, {
                     name: 'زوار المنصة',
+                    type: 'column',
+                    data: [440, 505, 414, 671, 227, 413, 201],
+                }, {
+                    name: 'المشتركين الجدد',
                     type: 'line',
-                    data: [0, 0, 0, 0, 0, 812, 1751, 3761, 0, 0, 0, 0],
+                    data: [23, 25, 20, 37, 18, 22, 17]
                 }],
-                // series: [{
-                //     name: 'زوار المنصة',
-                //     type: 'column',
-                //     data: [0, 0, 0, 0, 0, 812, 1751, 3761, 0, 0, 0, 0],
-                // }, {
-                //     name: 'المشتركين الجدد',
-                //     type: 'line',
-                //     data: [0, 0, 0, 0, 0, 15, 32, 73, 0, 0, 0, 0, 0]
-                // }],
                 chart: {
                     height: 400,
                     type: 'line',
@@ -189,18 +238,15 @@
                 },
                 title: {
                     align: 'center',
-                    text: 'الزوار والمشتركين'
+                    text: 'الزوار و المشتركين اخر أسبوع'
                 },
                 colors: ['#43399f', '#92a3fe'],
                 dataLabels: {
                     enabled: true,
                     enabledOnSeries: [1]
                 },
-                labels: ['01 يناير ', '02 فبراير ', '03 مارس ', '04 أبريل ', '05 مايو ',
-                    '06 يونيو ',
-                    '07 يوليو ', '08 أغسطس ', '09 سبتمبر ', '10 أكتوبر ', '11 نوفمبر ',
-                    '12 ديسمبر '
-                ],
+                // arabic weekdays days
+                labels: ['الاحد', 'الاثنين', 'الثلاثاء', 'الاربعاء', 'الخميس', 'الجمعة', 'السبت'],
                 grid: {
                     show: true,
                 },
@@ -210,52 +256,12 @@
                 }, {
                     opposite: true,
                     title: {
-                        text: 'fff المشتركين الجدد'
+                        text: ' المشتركين الجدد'
                     }
                 }]
             };
 
-            const options1 = {
-                series: [{
-                    name: 'Website Blog',
-                    type: 'column',
-                    data: [440, 505, 414, 671, 227, 413, 201, 352, 752, 320, 257, 160]
-                }, {
-                    name: 'Social Media',
-                    type: 'line',
-                    data: [23, 42, 35, 27, 43, 22, 17, 31, 22, 22, 12, 16]
-                }],
-                chart: {
-                    height: 350,
-                    type: 'line',
-                },
-                stroke: {
-                    width: [0, 4]
-                },
-                title: {
-                    text: 'Traffic Sources'
-                },
-                dataLabels: {
-                    enabled: true,
-                    enabledOnSeries: [1]
-                },
-                labels: ['01 Jan 2001', '02 Jan 2001', '03 Jan 2001', '04 Jan 2001', '05 Jan 2001', '06 Jan 2001',
-                    '07 Jan 2001', '08 Jan 2001', '09 Jan 2001', '10 Jan 2001', '11 Jan 2001', '12 Jan 2001'
-                ],
-                yaxis: [{
-                    title: {
-                        text: 'Website Blog',
-                    },
-
-                }, {
-                    opposite: true,
-                    title: {
-                        text: 'Social Media'
-                    }
-                }]
-            };
-
-            var chart = new ApexCharts(document.querySelector("#usersDetail"), options2);
+            var chart = new ApexCharts(document.querySelector("#usersDetail"), options);
             chart.render();
         }
         createDetailUsersChart();
