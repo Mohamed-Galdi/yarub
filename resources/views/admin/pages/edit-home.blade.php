@@ -89,7 +89,7 @@
                         value="{{ $review->reviewer_name }}" required />
                     <x-form.textarea-light class="w-full" name="review_content" label=""
                         placeholder="{{ $review->review }}" required />
-                    <x-form.input-light class="w-full" type="number" name="stars" label=""
+                    <x-form.input-light class="w-full ms-3" type="number" name="stars" label=""
                         value="{{ $review->stars }}" required />
                     <div class="w-full flex justify-start items-center gap-4">
                         <div class="w-1/4 flex justify-center">

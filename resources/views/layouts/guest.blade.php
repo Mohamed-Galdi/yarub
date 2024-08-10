@@ -10,19 +10,9 @@
     <link rel="icon" type="image/x-icon" href="/assets/favicon.ico">
     <!-- Scripts -->
     @vite(['resources/css/app.css', 'resources/js/app.js'])
-    <script src="//unpkg.com/alpinejs" defer></script>
     {{-- csrf token --}}
     <meta name="csrf-token" content="{{ csrf_token() }}">
-
-    {{-- SweetAlert2 --}}
-    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-
-    {{-- Ajax cdn --}}
-    <script script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"
-        integrity="sha512-v2CJ7UaYy4JwqLDIrZUI/4hqeoQieOmAZNXBeQyjo21dadnwR+8ZaIJVT8EE2iyI61OV8e6M8PP2/4hpQINQ/g=="
-        crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-
-
+    
     <style>
         :root {
             --dark-autofill-color: #ffffff;
@@ -233,6 +223,10 @@
     @include('sweetalert::alert')
     @stack('scripts')
     {{-- Cart Script --}}
+    {{-- Ajax cdn --}}
+    <script script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"
+        integrity="sha512-v2CJ7UaYy4JwqLDIrZUI/4hqeoQieOmAZNXBeQyjo21dadnwR+8ZaIJVT8EE2iyI61OV8e6M8PP2/4hpQINQ/g=="
+        crossorigin="anonymous" referrerpolicy="no-referrer"></script>
     <script>
         // Add to Cart
         $('.add-to-cart').click(function() {
@@ -339,6 +333,12 @@
             });
         }
     </script>
+    {{-- Alpine JS --}}
+    <script src="//unpkg.com/alpinejs" defer></script>
+    {{-- SweetAlert2 --}}
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+    
 
 </body>
 
