@@ -1,0 +1,36 @@
+:root {
+    --dark-autofill-color: #ffffff;
+    --light-autofill-color: #272626;
+}
+
+.dark-input:-webkit-autofill,
+.dark-input:-webkit-autofill:hover,
+.dark-input:-webkit-autofill:focus,
+.dark-input:-webkit-autofill:active,
+.light-input:-webkit-autofill,
+.light-input:-webkit-autofill:hover,
+.light-input:-webkit-autofill:focus,
+.light-input:-webkit-autofill:active {
+    /* common properties */
+    transition: background-color 5000s ease-in-out 0s;
+}
+
+.dark-input:-webkit-autofill,
+.dark-input:-webkit-autofill:hover,
+.dark-input:-webkit-autofill:focus,
+.dark-input:-webkit-autofill:active {
+    -webkit-text-fill-color: var(--dark-autofill-color) !important;
+}
+
+.light-input:-webkit-autofill,
+.light-input:-webkit-autofill:hover,
+.light-input:-webkit-autofill:focus,
+.light-input:-webkit-autofill:active {
+    -webkit-text-fill-color: var(--light-autofill-color) !important;
+}
+
+/* For Firefox */
+input:autofill {
+    background-color: transparent !important;
+    color: inherit !important;
+}

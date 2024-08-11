@@ -5,7 +5,8 @@
             <h1 class="text-4xl text-slate-800 lg:ms-0 ms-6">سلة التسوق</h1>
             <div class="flex lg:flex-row flex-col h-full gap-8 lg:px-0 px-4">
                 {{-- Forms --}}
-                <div class="bg-gray-100 text-slate-700 rounded-lg shadow-lg lg:w-1/3 w-full lg:min-h-screen h-fit flex flex-col justify-start p-3 lg:order-1 order-2">
+                <div
+                    class="bg-gray-100 text-slate-700 rounded-lg shadow-lg lg:w-1/3 w-full lg:min-h-screen h-fit flex flex-col justify-start p-3 lg:order-1 order-2">
                     {{-- User Acount --}}
                     <div>
                         <form action="{{ route('student.login') }}" method="POST" class="px-4 space-y-2">
@@ -59,18 +60,20 @@
                                     <p class="text-nowrap truncate">{{ number_format($totalBeforeDiscount, 2) }} ر.س</p>
                                 </div>
                                 {{-- @if (session('discount')) --}}
-                                    <div class="text-base font-bold flex justify-between items-center text-warning-500">
-                                        <p class="text-nowrap truncate">خصم القسيمة</p>
-                                        <p class="text-nowrap truncate">{{ number_format(session('discount'), 2) }} ر.س</p>
-                                    </div>
+                                <div class="text-base font-bold flex justify-between items-center text-warning-500">
+                                    <p class="text-nowrap truncate">خصم القسيمة</p>
+                                    <p class="text-nowrap truncate">{{ number_format(session('discount'), 2) }} ر.س</p>
+                                </div>
                                 {{-- @endif --}}
                                 <div class=" flex justify-between items-center font-bold">
                                     <p class="text-nowrap truncate">المبلغ النهائي</p>
-                                    <p class="text-nowrap truncate">{{ number_format($totalAfterDiscount, 2) > 0 ? number_format($totalAfterDiscount, 2) : '0' }} ر.س</p>
+                                    <p class="text-nowrap truncate">
+                                        {{ number_format($totalAfterDiscount, 2) > 0 ? number_format($totalAfterDiscount, 2) : '0' }}
+                                        ر.س</p>
                                 </div>
                             </div>
-                            <button
-                                class="bg-gray-50 mt-4 text-slate-700 rounded-lg shadow-lg w-full text-nowrap truncate p-1 hover:bg-warning-200">
+                            <button id="payButton" data-modal-target="payment-modal" data-modal-toggle="payment-modal"
+                                class="pay-button bg-gray-50 mt-4 text-slate-700 rounded-lg shadow-lg w-full text-nowrap truncate p-1 hover:bg-warning-200">
                                 إتمام عملية الشراء
                             </button>
                         </div>
@@ -79,14 +82,16 @@
                 {{-- Cart Items --}}
                 <div class="bg-gray-100 rounded-lg shadow-lg lg:w-2/3 w-full lg:min-h-screen h-fit  p-4 lg:order-2 order-1">
                     <div class="w-full  flex justify-center items-center gap-4">
-                        <a href="{{ route('courses') }}" >
+                        <a href="{{ route('courses') }}">
                             <button class="bg-indigo-500 hover:bg-indigo-700 text-white  py-1 px-2 rounded">
-                                <p class="ml-2 lg:text-xl text-base text-nowrap truncate lg:w-32 w-24 text-center">صفحة الدورات</p>
+                                <p class="ml-2 lg:text-xl text-base text-nowrap truncate lg:w-32 w-24 text-center">صفحة
+                                    الدورات</p>
                             </button>
                         </a>
-                        <a href="{{ route('lessons') }}" >
+                        <a href="{{ route('lessons') }}">
                             <button class="bg-teal-500 hover:bg-teal-700 text-white  py-1 px-2 rounded">
-                                <p class="ml-2 lg:text-xl text-base text-nowrap truncate lg:w-32 w-24 text-center">صفحة الشروحات</p>
+                                <p class="ml-2 lg:text-xl text-base text-nowrap truncate lg:w-32 w-24 text-center">صفحة
+                                    الشروحات</p>
                             </button>
                         </a>
                     </div>
@@ -111,11 +116,13 @@
                                 </div>
                                 <div class="w-1/4 flex flex-col justify-center items-center gap-2">
                                     @if ($item['type'] == 'course')
-                                        <p class="text-slate-500 text-2xl p-2 bg-warning-200 rounded-xl text-nowrap truncate">
+                                        <p
+                                            class="text-slate-500 text-2xl p-2 bg-warning-200 rounded-xl text-nowrap truncate">
                                             {{ $item['price'] }}
                                             ر.س</p>
                                     @else
-                                        <p class="text-slate-500 text-2xl p-2 bg-warning-200 rounded-xl text-nowrap truncate">
+                                        <p
+                                            class="text-slate-500 text-2xl p-2 bg-warning-200 rounded-xl text-nowrap truncate">
                                             {{ $item['plan'] == 'annual' ? $item['annual_price'] : $item['monthly_price'] }}
                                             ر.س</p>
                                         <select
@@ -138,7 +145,8 @@
                             </div>
                         @empty
                             <div class="w-full h-full flex flex-col lg:mt-20 mt-4 justify-center items-center">
-                                <h2 class="lg:text-3xl text-xl text-nowrap truncate w-full text-center">السلة الخاصة بك فارغة</h2>
+                                <h2 class="lg:text-3xl text-xl text-nowrap truncate w-full text-center">السلة الخاصة بك
+                                    فارغة</h2>
                                 <img src="{{ asset('assets/images/empty_cart.png') }}" alt="cart" class="w-1/2" />
                             </div>
                     </div>
@@ -147,4 +155,85 @@
             </div>
         </div>
     </div>
+    <!-- Payment modal -->
+    <div id="payment-modal" tabindex="-1" aria-hidden="true"
+        class="hidden overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 justify-center items-center w-full md:inset-0 max-h-full bg-gray-800/70">
+        <div class="relative p-4 w-full max-w-md max-h-full">
+            <!-- Modal content -->
+            <div class="relative bg-white rounded-lg shadow  ">
+                <!-- Modal header -->
+                <div class="flex items-center justify-between p-4 md:p-5 border-b rounded-t ">
+                    <h3 class="text-lg font-semibold text-gray-900 ">
+                        إتمام عملية الدفع
+                    </h3>
+                    <button type="button"
+                        class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ms-auto inline-flex justify-center items-center "
+                        data-modal-toggle="payment-modal">
+                        <svg class="w-3 h-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none"
+                            viewBox="0 0 14 14">
+                            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6" />
+                        </svg>
+                        <span class="sr-only">Close modal</span>
+                    </button>
+                </div>
+                <!-- Modal body -->
+                <div class="py-4">
+                    <div class="mysr-form"></div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const user = @json(Auth::check() ? Auth::user() : null);
+            const amount = {{ $totalAfterDiscount }};
+            const cartCount = {{ count($cart) }};
+            const moyasarKey = '{{ config('services.moyasar.test_key') }}';
+            const thanksUrl = '{{ route('thanks') }}';
+
+
+
+            document.getElementById('payButton').onclick = function() {
+                if (!user) {
+                    Swal.fire({
+                        title: 'المرجوا تسجيل الدخول أولا',
+                        icon: 'warning',
+                        showConfirmButton: false,
+                        timer: 2500,
+                        timerProgressBar: true,
+                    });
+                } else if (cartCount === 0) {
+                    Swal.fire({
+                        title: ' السلة الخاصة بك فارغة',
+                        icon: 'warning',
+                        showConfirmButton: false,
+                        timer: 2500,
+                        timerProgressBar: true,
+                    });
+                } else if (amount <= 0) {
+                    Swal.fire({
+                        title: 'لا يمكن إتمام العملية بمبلغ اقل من 0',
+                        icon: 'warning',
+                        showConfirmButton: false,
+                        timer: 2500,
+                        timerProgressBar: true,
+                    });
+
+                } else {
+                    // All conditions are met, initialize Moyasar
+                    Moyasar.init({
+                        element: '.mysr-form',
+                        amount: amount * 100,
+                        currency: 'SAR',
+                        description: 'order for ' + user.name,
+                        publishable_api_key: moyasarKey,
+                        callback_url: thanksUrl,
+                        methods: ['creditcard'],
+                    });
+                }
+            };
+        });
+    </script>
 @endsection

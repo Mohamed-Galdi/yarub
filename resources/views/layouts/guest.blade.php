@@ -12,46 +12,13 @@
     @vite(['resources/css/app.css', 'resources/js/app.js'])
     {{-- csrf token --}}
     <meta name="csrf-token" content="{{ csrf_token() }}">
-    
-    <style>
-        :root {
-            --dark-autofill-color: #ffffff;
-            --light-autofill-color: #272626;
-        }
 
-        .dark-input:-webkit-autofill,
-        .dark-input:-webkit-autofill:hover,
-        .dark-input:-webkit-autofill:focus,
-        .dark-input:-webkit-autofill:active,
-        .light-input:-webkit-autofill,
-        .light-input:-webkit-autofill:hover,
-        .light-input:-webkit-autofill:focus,
-        .light-input:-webkit-autofill:active {
-            /* common properties */
-            transition: background-color 5000s ease-in-out 0s;
-        }
+    <!-- Moyasar Styles -->
+  <link rel="stylesheet" href="https://cdn.moyasar.com/mpf/1.14.0/moyasar.css" />
 
-        .dark-input:-webkit-autofill,
-        .dark-input:-webkit-autofill:hover,
-        .dark-input:-webkit-autofill:focus,
-        .dark-input:-webkit-autofill:active {
-            -webkit-text-fill-color: var(--dark-autofill-color) !important;
-        }
-
-        .light-input:-webkit-autofill,
-        .light-input:-webkit-autofill:hover,
-        .light-input:-webkit-autofill:focus,
-        .light-input:-webkit-autofill:active {
-            -webkit-text-fill-color: var(--light-autofill-color) !important;
-        }
-
-        /* For Firefox */
-        input:autofill {
-            background-color: transparent !important;
-            color: inherit !important;
-        }
-    </style>
-
+  <!-- Moyasar Scripts -->
+  <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?version=4.8.0&features=fetch"></script>
+  <script src="https://cdn.moyasar.com/mpf/1.14.0/moyasar.js"></script>
 
 
 </head>

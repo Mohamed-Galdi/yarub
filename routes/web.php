@@ -22,6 +22,7 @@ use Illuminate\Support\Facades\Route;
 Route::get('/', [HomePagesController::class, 'homePage'])->name('home');
 Route::get('/about', [HomePagesController::class, 'aboutPage'])->name('about');
 Route::get('/contact', [HomePagesController::class, 'contactPage'])->name('contact');
+Route::get('/thanks', [HomePagesController::class, 'thanksPage'])->name('thanks');
 
 // Courses Routes
 Route::get('/courses', [CoursesPageController::class, 'coursesPage'])->name('courses');

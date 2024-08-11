@@ -47,4 +47,9 @@ class HomePagesController extends Controller
         $contactPage = ContactPage::first();
         return view('home.contact', compact('contactPage'));
     }
+
+    public function thanksPage()
+    {
+        return view('home.thanks');
+    }
 }

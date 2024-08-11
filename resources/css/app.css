@@ -1,3 +1,6 @@
+@import "./fireworks.css";
+@import "./autofill.css";
+@import "./success-check.css";
 @layer base {
     @font-face {
         font-family: "hacen";
@@ -23,6 +26,7 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
 
 .course-img {
     width: 100%;
