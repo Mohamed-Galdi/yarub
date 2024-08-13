@@ -52,6 +52,6 @@ class RegisteredUserController extends Controller
         toast('تم إنشاء الحساب بنجاح !', 'success');
 
 
-        return redirect()->route('student.dashboard');
+        return redirect()->route('student.courses.index');
     }
 }

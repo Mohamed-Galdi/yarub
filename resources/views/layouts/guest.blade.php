@@ -36,7 +36,7 @@
 
                     @auth
                         @if (Auth::user()->role === 'student')
-                            <a href="{{ route('student.dashboard') }}">
+                            <a href="{{ route('student.courses.index') }}">
                                 <x-btn.slide-dark
                                     class="text-base px-4 text-nowrap truncate w-full flex gap-2 items-end justify-center">
                                     <p class="align-text-bottom">حسابي </p>
@@ -99,11 +99,11 @@
                 <div class="items-center justify-between hidden w-full md:flex md:w-auto md:order-1" id="navbar-sticky">
                     <ul
                         class="flex flex-col p-4 md:p-0 mt-4 font-medium border border-gray-100 rounded-lg bg-gray-50 md:space-x-8 rtl:space-x-reverse md:flex-row md:mt-0 md:border-0 md:bg-white ">
-                        <x-btn.nav-item :route="'home'" :title="'الرئيسية'" />
-                        <x-btn.nav-item :route="'courses'" :title="'الدورات'" />
-                        <x-btn.nav-item :route="'lessons'" :title="'الشروحات'" />
-                        <x-btn.nav-item :route="'about'" :title="'من نحن'" />
-                        <x-btn.nav-item :route="'contact'" :title="'تواصل معنا'" />
+                        <x-btn.guest-nav-item :route="'home'" :title="'الرئيسية'" />
+                        <x-btn.guest-nav-item :route="'courses'" :title="'الدورات'" />
+                        <x-btn.guest-nav-item :route="'lessons'" :title="'الشروحات'" />
+                        <x-btn.guest-nav-item :route="'about'" :title="'من نحن'" />
+                        <x-btn.guest-nav-item :route="'contact'" :title="'تواصل معنا'" />
                     </ul>
                 </div>
             </div>

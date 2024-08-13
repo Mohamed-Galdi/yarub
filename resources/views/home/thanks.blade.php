@@ -10,8 +10,9 @@
             </div>
             <div class="w-full flex flex-col items-center justify-center mt-8 space-y-3">
                 <h1 class="md:text-5xl text-2xl text-center font-bold font-judur text-white">شكرا على ثقتكم !</h1>
-                <p class="md:text-2xl text-xl text-center funt-nitaqat text-white">ثمت عملية الشراء بنجاح، المرجوا الان التوجه لحسابكم </p>
-                <a href="{{ route('student.dashboard')}}">
+                <p class="md:text-2xl text-xl text-center funt-nitaqat text-white">ثمت عملية الشراء بنجاح، المرجوا الان
+                    التوجه لحسابكم </p>
+                <a href="{{ route('student.courses.index') }}">
                     <x-btn.scale-light>
                         <p>حسابي</p>
                         <x-icons.user class="w-5 h-5 text-primary" />

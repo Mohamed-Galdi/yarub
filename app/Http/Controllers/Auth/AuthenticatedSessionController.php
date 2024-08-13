@@ -49,7 +49,7 @@ class AuthenticatedSessionController extends Controller
             return redirect()->route('cart.index');
         }
 
-        return redirect()->route('student.dashboard');
+        return redirect()->route('student.courses.index');
     }
 
     public function loginAdmin(LoginRequest $request): RedirectResponse
