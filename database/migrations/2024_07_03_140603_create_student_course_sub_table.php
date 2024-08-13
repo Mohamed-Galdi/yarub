@@ -15,13 +15,14 @@ return new class extends Migration
             $table->id();
             $table->unsignedBigInteger('user_id');
             $table->unsignedBigInteger('course_id');
+            $table->unsignedBigInteger('payment_id');
             $table->enum('stage', ['enrolled', 'completed'])->default('enrolled');
-            $table->enum('staus', ['active', 'inactive'])->default('active');
-            $table->integer('payment_amount')->default(0);
+            $table->enum('status', ['active', 'inactive'])->default('active');
             $table->timestamps();
-
+            
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
             $table->foreign('course_id')->references('id')->on('courses')->onDelete('cascade');
+            $table->foreign('payment_id')->references('id')->on('payments')->onDelete('cascade');
        
         });
     }

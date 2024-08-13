@@ -3,6 +3,8 @@
 namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
+
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
@@ -54,7 +56,7 @@ class User extends Authenticatable
 
     public function lessons()
     {
-        return $this->belongsToMany(Lesson::class, 'student_lesson_sub')->withPivot('created_at')
+        return $this->belongsToMany(Lesson::class, 'student_lesson_sub')->withPivot(['sub_plan', 'created_at'])
             ->withTimestamps();
     }
 
@@ -101,6 +103,35 @@ class User extends Authenticatable
 
     public function isSuperAdmin()
     {
-        return $this->role === 'admin' && $this->id === 1; 
+        return $this->role === 'admin' && $this->id === 1;
     }
+
+    public function getAccessibleCourses()
+    {
+        $courses = $this->courses()->get();
+        return $courses;
+    }
+
+    public function getAccessibleLessons()
+    {
+
+        $lessons = $this->lessons()
+            ->withPivot(['sub_plan', 'created_at'])
+            ->get()
+            ->filter(function ($lesson) {
+                $createdAt = Carbon::parse($lesson->pivot->created_at);
+                $now = Carbon::now();
+
+                if ($lesson->pivot->sub_plan === 'monthly') {
+                    return $createdAt->addMonth()->greaterThan($now);
+                } elseif ($lesson->pivot->sub_plan === 'annual') {
+                    return $createdAt->addYear()->greaterThan($now);
+                }
+
+                return false;
+            });
+
+        return $lessons;
+    }
+    
 }

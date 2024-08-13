@@ -4,6 +4,7 @@ use App\Http\Controllers\CartController;
 use App\Http\Controllers\CoursesPageController;
 use App\Http\Controllers\HomePagesController;
 use App\Http\Controllers\LessonsPageController;
+use App\Http\Controllers\SubController;
 use Illuminate\Support\Facades\Route;
 
 
@@ -22,7 +23,6 @@ use Illuminate\Support\Facades\Route;
 Route::get('/', [HomePagesController::class, 'homePage'])->name('home');
 Route::get('/about', [HomePagesController::class, 'aboutPage'])->name('about');
 Route::get('/contact', [HomePagesController::class, 'contactPage'])->name('contact');
-Route::get('/thanks', [HomePagesController::class, 'thanksPage'])->name('thanks');
 
 // Courses Routes
 Route::get('/courses', [CoursesPageController::class, 'coursesPage'])->name('courses');
@@ -38,6 +38,10 @@ Route::post('/cart/add', [CartController::class, 'addToCart'])->name('cart.add')
 Route::post('/cart/update', [CartController::class, 'updateCart'])->name('cart.update');
 Route::post('/cart/remove', [CartController::class, 'removeFromCart'])->name('cart.remove');
 Route::post('/cart/apply-coupon', [CartController::class, 'applyCoupon'])->name('cart.apply-coupon');
+
+// ///////////// Subscription Routes ///////////////
+Route::get('/subscription',[SubController::class, 'subscribe'])->name('subscription');
+Route::get('/thanks', [HomePagesController::class, 'thanksPage'])->name('thanks');
 
 // Include Admin Routes
 require __DIR__ . '/admin.php';

@@ -191,7 +191,7 @@
             const amount = {{ $totalAfterDiscount }};
             const cartCount = {{ count($cart) }};
             const moyasarKey = '{{ config('services.moyasar.test_key') }}';
-            const thanksUrl = '{{ route('thanks') }}';
+            const callBackUrl = '{{ route('subscription') }}';
 
 
 
@@ -229,7 +229,7 @@
                         currency: 'SAR',
                         description: 'order for ' + user.name,
                         publishable_api_key: moyasarKey,
-                        callback_url: thanksUrl,
+                        callback_url: callBackUrl,
                         methods: ['creditcard'],
                     });
                 }

@@ -59,4 +59,8 @@ class Course extends Model
     {
         return $query->where('is_published', true);
     }
+    public function hasValidAccess(User $user)
+    {
+        return $this->students()->where('user_id', $user->id)->exists();
+    }
 }

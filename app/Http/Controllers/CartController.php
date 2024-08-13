@@ -45,6 +45,7 @@ class CartController extends Controller
         $cart[] = $item;
         $this->storeCartItems($cart);
         session(['discount' => 0]);
+        session(['coupon' => []]);
 
         return response()->json([
             'success' => 'تمت الإضافة إلى السلة',
@@ -68,6 +69,7 @@ class CartController extends Controller
 
         $this->storeCartItems($updatedCart);
         session(['discount' => 0]);
+        session(['coupon' => []]);
         return response()->json([
             'success' => 'تم تغيير الخطة في السلة',
             'count' => count($updatedCart)
@@ -86,6 +88,7 @@ class CartController extends Controller
 
         $this->storeCartItems($updatedCart);
         session(['discount' => 0]);
+        session(['coupon' => []]);
 
         return response()->json([
             'success' => 'تمت إزالة العنصر من السلة',
@@ -105,6 +108,7 @@ class CartController extends Controller
         if (!$coupon) {
             // update the session discount to 0
             session(['discount' => 0]);
+            session(['coupon' => []]);
             Alert::error('قسيمة غير صالحة أو منتهية الصلاحية.');
             return redirect()->back();
         }
