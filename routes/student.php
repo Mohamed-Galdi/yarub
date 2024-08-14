@@ -1,6 +1,6 @@
 <?php
 
-
+use App\Http\Controllers\Student\CoursesController;
 use Illuminate\Support\Facades\Route;
 
 
@@ -11,8 +11,12 @@ Route::middleware(['auth', 'verified', 'student'])->group(function () {
     Route::get('/student-dashboard/account', function () { return view('student.account.index');})->name('student.account.index');
 
     // /////////// Courses Routes ////////////
-    Route::get('/student-dashboard/courses', function () { return view('student.courses.index');})->name('student.courses.index');
+    Route::get('/student-dashboard/courses', [CoursesController::class, 'index'])->name('student.courses.index');
 
+
+
+
+    
     // /////////// Lessons Routes ////////////
     Route::get('/student-dashboard/lessons', function () { return view('student.lessons.index');})->name('student.lessons.index');
 

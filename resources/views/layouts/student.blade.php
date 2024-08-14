@@ -60,7 +60,7 @@
                     class="overflow-hidden overflow-y-auto  flex lg:flex-row flex-col  lg:h-16 justify-between lg:gap-0 gap-4 lg:rounded-none rounded-md lg:p-0 p-2 lg:bg-pr-600 bg-pr-300 items-stretch [&::-webkit-scrollbar]:w-2 [&::-webkit-scrollbar-thumb]:rounded-full [&::-webkit-scrollbar-track]:bg-gray-100 [&::-webkit-scrollbar-thumb]:bg-gray-300">
                     <div
                         class=" lg:py-0 h-full flex flex-col lg:flex-row lg:items-center lg:justify-end gap-0.5 lg:gap-1">
-                        <x-btn.student-nav-item :route="'student.courses.index'" :title="'الدروس'">
+                        <x-btn.student-nav-item :route="'student.courses.index'" :title="'الدورات'">
                             <x-icons.course class="w-5 h-5 text-white" />
                             <!-- Replace with your actual icon component -->
                         </x-btn.student-nav-item>

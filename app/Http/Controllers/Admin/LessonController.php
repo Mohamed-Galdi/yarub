@@ -77,7 +77,7 @@ class LessonController extends Controller
             $this->cleanupTempFolder();
 
             DB::commit();
-            Alert::success('تم إنشاء الدرس بنجاح !');
+            Alert::success('تم إنشاء الشرح بنجاح !');
             return redirect()->route('admin.lessons')->with('success', 'Lesson created successfully!');
         } catch (\Exception $e) {
             DB::rollBack();
@@ -208,7 +208,7 @@ class LessonController extends Controller
             $this->cleanupTempFolder();
 
             DB::commit();
-            Alert::success('تم تحديث الدرس بنجاح !');
+            Alert::success('تم تحديث الشرح بنجاح !');
             return redirect()->route('admin.lessons')->with('success', 'Lesson updated successfully!');
         } catch (\Exception $e) {
             DB::rollBack();

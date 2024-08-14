@@ -20,7 +20,7 @@
             </div>
             <div class="border-e-2 border-white p-2 md:w-full">
                 <div class="flex w-full justify-center items-center gap-1 text-orange-200">
-                    <p class="">الدروس </p>
+                    <p class="">الدورات </p>
                     <x-icons.course class="w-5 h-5 " />
                 </div>
                 <p> {{ $courseCount }} </p>

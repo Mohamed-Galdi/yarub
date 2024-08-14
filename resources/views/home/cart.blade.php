@@ -166,7 +166,7 @@
                     <h3 class="text-lg font-semibold text-gray-900 ">
                         إتمام عملية الدفع
                     </h3>
-                    <button type="button"
+                    <button type="button" id="closeModalButton"
                         class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ms-auto inline-flex justify-center items-center "
                         data-modal-toggle="payment-modal">
                         <svg class="w-3 h-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none"
@@ -188,12 +188,35 @@
     <script>
         document.addEventListener('DOMContentLoaded', function() {
             const user = @json(Auth::check() ? Auth::user() : null);
+            const activeCourses = @json(collect(Auth::user()?->getAccessibleCourses()->pluck('id')->toArray()));
+            const activeLessons = @json(collect(Auth::user()?->getAccessibleLessons()->pluck('id')->toArray()));
+            const cart = @json(collect($cart));
             const amount = {{ $totalAfterDiscount }};
             const cartCount = {{ count($cart) }};
             const moyasarKey = '{{ config('services.moyasar.test_key') }}';
             const callBackUrl = '{{ route('subscription') }}';
 
-
+            function checkActiveSubscriptions() {
+                for (const item of Object.values(cart)) {
+                    if (item.type === 'course' && activeCourses.includes(parseInt(item.id))) {
+                        return {
+                            hasActive: true,
+                            type: 'course',
+                            title: item.title
+                        };
+                    }
+                    if (item.type === 'lesson' && activeLessons.includes(parseInt(item.id))) {
+                        return {
+                            hasActive: true,
+                            type: 'lesson',
+                            title: item.title
+                        };
+                    }
+                }
+                return {
+                    hasActive: false
+                };
+            }
 
             document.getElementById('payButton').onclick = function() {
                 if (!user) {
@@ -204,6 +227,7 @@
                         timer: 2500,
                         timerProgressBar: true,
                     });
+                    document.getElementById('closeModalButton').click();
                 } else if (cartCount === 0) {
                     Swal.fire({
                         title: ' السلة الخاصة بك فارغة',
@@ -212,6 +236,7 @@
                         timer: 2500,
                         timerProgressBar: true,
                     });
+                    document.getElementById('closeModalButton').click();
                 } else if (amount <= 0) {
                     Swal.fire({
                         title: 'لا يمكن إتمام العملية بمبلغ اقل من 0',
@@ -220,18 +245,35 @@
                         timer: 2500,
                         timerProgressBar: true,
                     });
+                    document.getElementById('closeModalButton').click();
 
                 } else {
-                    // All conditions are met, initialize Moyasar
-                    Moyasar.init({
-                        element: '.mysr-form',
-                        amount: amount * 100,
-                        currency: 'SAR',
-                        description: 'order for ' + user.name,
-                        publishable_api_key: moyasarKey,
-                        callback_url: callBackUrl,
-                        methods: ['creditcard'],
-                    });
+                    // check if there is an active subscription for the current user
+                    const activeSubscription = checkActiveSubscriptions();
+                    if (activeSubscription.hasActive) {
+                        const itemType = activeSubscription.type === 'course' ? 'الدورة' : 'الشرح';
+                        const shortTitle = activeSubscription.title.split(' ').slice(0, 5).join(' ');
+                        Swal.fire({
+                            title: `لديك بالفعل اشتراك نشط في ${itemType}`,
+                            text: `${shortTitle} `,
+                            icon: 'warning',
+                            showConfirmButton: false,
+                            timer: 2500,
+                            timerProgressBar: true,
+                        });
+                        document.getElementById('closeModalButton').click();
+                    } else {
+                        // All conditions are met, initialize Moyasar
+                        Moyasar.init({
+                            element: '.mysr-form',
+                            amount: amount * 100,
+                            currency: 'SAR',
+                            description: 'order for ' + user.name,
+                            publishable_api_key: moyasarKey,
+                            callback_url: callBackUrl,
+                            methods: ['creditcard'],
+                        });
+                    }
                 }
             };
         });

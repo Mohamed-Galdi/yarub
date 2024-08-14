@@ -2,7 +2,8 @@
 
 @section('content')
     <div class="flex justify-between">
-        <h1 class="lg:text-4xl text-2xl text-nowrap truncate text-indigo-700 mb-4">تعديل القسيمة: <span class="text-gray-500">{{ $coupon->code }}</span></h1>
+        <h1 class="lg:text-4xl text-2xl text-nowrap truncate text-indigo-700 mb-4">تعديل القسيمة: <span
+                class="text-gray-500">{{ $coupon->code }}</span></h1>
         {{-- // back button --}}
         <x-btn.back route="admin.coupons" />
     </div>
@@ -38,7 +39,7 @@
                     required>
                     <option value="all" {{ $coupon->applicable_to == 'all' ? 'selected' : '' }}>كل المواد التعليمية
                     </option>
-                    <option value="courses" {{ $coupon->applicable_to == 'courses' ? 'selected' : '' }}> كل الدروس</option>
+                    <option value="courses" {{ $coupon->applicable_to == 'courses' ? 'selected' : '' }}> كل الدورات</option>
                     <option value="lessons" {{ $coupon->applicable_to == 'lessons' ? 'selected' : '' }}> كل الشروحات
                     </option>
                     <option value="specific" {{ $coupon->applicable_to == 'specific' ? 'selected' : '' }}> دروس و شروحات
@@ -46,16 +47,16 @@
                 </select>
             </div>
             <div class="lg:w-2/3 w-full">
-                <label for="applicable_to" class="text-gray-800 font-judur ms-3 mb-1 font-semibold">تحديد الدروس و
+                <label for="applicable_to" class="text-gray-800 font-judur ms-3 mb-1 font-semibold">تحديد الدورات و
                     الشروحات</label>
                 <button id="dropdownSearchButton" data-dropdown-toggle="dropdownSearch"
                     class="block w-full h-[3.1rem] rounded-md bg-indigo-500 text-white disabled:text-black disabled:bg-slate-300 shadow-sm disabled:cursor-not-allowed"
-                    type="button" disabled>تحديد الدروس و الشروحات</button>
+                    type="button" disabled>تحديد الدورات و الشروحات</button>
                 <!-- Dropdown menu -->
                 <div id="dropdownSearch" class="z-10 hidden bg-white rounded-lg shadow w-fit">
                     <ul class="h-48 px-3 pb-3 overflow-y-auto text-lg text-gray-700 "
                         aria-labelledby="dropdownSearchButton">
-                        <p>تحديد الدروس:</p>
+                        <p>تحديد الدورات:</p>
                         @foreach ($courses as $course)
                             <li>
                                 <div class="flex items-center p-2 rounded hover:bg-gray-100 ">

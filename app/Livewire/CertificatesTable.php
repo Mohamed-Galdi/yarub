@@ -53,7 +53,7 @@ final class CertificatesTable extends PowerGridComponent
             })
             ->add('content_type', function ($item) {
                 if ($item->course) {
-                    return 'الدروس';
+                    return 'الدورات';
                 }
                 if ($item->lesson) {
                     return 'الشروحات';
@@ -78,7 +78,7 @@ final class CertificatesTable extends PowerGridComponent
             Column::make('إسم الطالب (ة)', 'student_name')
                 ->searchable(),
             Column::make('نوع المادة', 'content_type'),
-            Column::make('عنوان الدرس/ الشرح', 'content_title')
+            Column::make('عنوان الدورة/ الشرح', 'content_title')
                 ->searchable(),
             Column::add()
                 ->title('تاريخ المنح')

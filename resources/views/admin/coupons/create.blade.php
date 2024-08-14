@@ -2,7 +2,7 @@
 @section('content')
     <div>
         <div class="flex justify-between">
-        <h1 class="lg:text-4xl text-2xl text-nowrap truncate text-indigo-700 mb-4">إنشاء قسيمة جديدة</h1>
+            <h1 class="lg:text-4xl text-2xl text-nowrap truncate text-indigo-700 mb-4">إنشاء قسيمة جديدة</h1>
             {{-- // back button --}}
             <x-btn.back route="admin.coupons" />
         </div>
@@ -37,24 +37,24 @@
                             class=" block w-full h-[3.1rem] rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
                             required>
                             <option value="all">كل المواد التعليمية</option>
-                            <option value="courses"> كل الدروس</option>
+                            <option value="courses"> كل الدورات</option>
                             <option value="lessons"> كل الشروحات</option>
                             <option value="specific"> دروس و شروحات محددة </option>
                         </select>
                     </div>
 
                     <div class=" lg:w-2/3 w-full">
-                        <label for="applicable_to" class="text-gray-800 font-judur ms-3 mb-1 font-semibold"> تحديد الدروس و
+                        <label for="applicable_to" class="text-gray-800 font-judur ms-3 mb-1 font-semibold"> تحديد الدورات و
                             الشروحات
                         </label>
                         <button id="dropdownSearchButton" data-dropdown-toggle="dropdownSearch"
                             class="block w-full h-[3.1rem] rounded-md bg-indigo-500 text-white disabled:text-black disabled:bg-slate-300 shadow-sm disabled:cursor-not-allowed "
-                            type="button" disabled>تحديد الدروس و الشروحات</button>
+                            type="button" disabled>تحديد الدورات و الشروحات</button>
                         <!-- Dropdown menu -->
                         <div id="dropdownSearch" class="z-10 hidden bg-white rounded-lg shadow w-fit">
                             <ul class="h-48 px-3 pb-3 overflow-y-auto text-lg text-gray-700 "
                                 aria-labelledby="dropdownSearchButton">
-                                <p>تحديد الدروس:</p>
+                                <p>تحديد الدورات:</p>
                                 @foreach ($courses as $course)
                                     <li>
                                         <div class="flex items-center p-2 rounded hover:bg-gray-100 ">
@@ -88,7 +88,7 @@
                     <div class="lg:w-1/2 w-full">
                         <label for="applicable_to" class="text-gray-800 font-judur ms-3 mb-1 font-semibold"> تاريخ البداء
                         </label>
-                        <x-flatpickr placeholder="إختر تاريخ" name="start_date" class="" required/>
+                        <x-flatpickr placeholder="إختر تاريخ" name="start_date" class="" required />
                         @error('start_date')
                             <p class="text-red-500 text-xs italic">{{ $message }}</p>
                         @enderror
@@ -96,7 +96,7 @@
                     <div class="lg:w-1/2 w-full">
                         <label for="applicable_to" class="text-gray-800 font-judur ms-3 mb-1 font-semibold"> تاريخ الانتهاء
                         </label>
-                        <x-flatpickr placeholder="إختر تاريخ" name="end_date" class=""  required/>
+                        <x-flatpickr placeholder="إختر تاريخ" name="end_date" class="" required />
                         @error('end_date')
                             <p class="text-red-500 text-xs italic">{{ $message }}</p>
                         @enderror

@@ -12,11 +12,11 @@
              @endif
              <p class="text-white text-nowrap truncate">{{ $title }}</p>
          </div>
-         <p class=" ms-4 text-slate-900 px-1 bg-slate-300 rounded-xl w-fit mt-1">{{ Str::words($type, 3)  }}</p>
+         <p class=" ms-4 text-slate-900 px-1 bg-slate-300 rounded-xl w-fit mt-1">{{ Str::words($type, 3) }}</p>
      </div>
      <div class="flex text-white justify-between items-start">
          <div class=" flex flex-col justify-center items-center w-1/3 ">
-             <p class="text-yellow-300">الدروس</p>
+             <p class="text-yellow-300">الدورات</p>
              <div class="flex gap-2 items-center">
                  <x-icons.video class="w-5 h-5 " />
                  <p>{{ $numberOfLessons }}</p>

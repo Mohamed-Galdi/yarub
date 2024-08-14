@@ -75,7 +75,7 @@
                         <h3 class="underline font-judur underline-offset-8">
                             {{ $homePage->third_feature_title ?: ' مواكبة مستمرة' }}</h3>
                         <p class="text-lg font-nitaqat">
-                            {{ $homePage->third_feature_content ?: 'مواكبة مستمرة خلال مراحل التعلم من الدروس حتى الاختبارات' }}
+                            {{ $homePage->third_feature_content ?: 'مواكبة مستمرة خلال مراحل التعلم من الدورات حتى الاختبارات' }}
                         </p>
                     </div>
 
@@ -178,12 +178,12 @@
                     <x-card.review :review="'دورة ممتازة! المحتوى غني ومفيد للغاية. أنصح الجميع بالالتحاق بها.'" :user-name="'محمد العلي'" :user-img="'./assets/users-img/man-1.webp'" />
                     <x-card.review :review="'استفدت كثيرًا من هذه الدورة، فقد حسّنت مستواي في اللغة العربية بشكل ملحوظ.'" :user-name="'فاطمة الزهراء'" :user-img="'./assets/users-img/woman-1.webp'" />
                     <x-card.review :review="'الشرح كان واضحًا والأساتذة كانوا محترفين. هذه أفضل دورة قمت بها على الإنترنت.'" :user-name="'أحمد السعدي'" :user-img="'./assets/users-img/man-2.webp'" />
-                    <x-card.review :review="'الدروس مكثفة ولكنها مفيدة جدًا. ساعدتني كثيرًا في تحسين كتابتي وقراءتي.'" :user-name="'نورة العمري'" :user-img="'./assets/users-img/woman-2.webp'" />
+                    <x-card.review :review="'الدورات مكثفة ولكنها مفيدة جدًا. ساعدتني كثيرًا في تحسين كتابتي وقراءتي.'" :user-name="'نورة العمري'" :user-img="'./assets/users-img/woman-2.webp'" />
                     <x-card.review :review="'الدورة تحتوي على مواد تعليمية ممتازة وتطبيقات عملية تعزز الفهم.'" :user-name="'خالد البدر'" :user-img="'./assets/users-img/man-3.webp'" />
                     <x-card.review :review="'الدورة تحتوي على مواد تعليمية ممتازة وتطبيقات عملية تعزز الفهم.'" :user-name="'ريم الحربي'" :user-img="'./assets/users-img/woman-3.webp'" />
                     <x-card.review :review="'أنصح بشدة بهذه الدورة لمن يرغب في تعزيز مهاراته اللغوية.'" :user-name="'سعيد الهاشمي'" :user-img="'./assets/users-img/man-4.webp'" />
                     <x-card.review :review="'المنصة سهلة الاستخدام والمحتوى التعليمي رائع. شكرًا لكم!'" :user-name="'ليلى الطيب'" :user-img="'./assets/users-img/woman-4.webp'" />
-                    <x-card.review :review="'أحببت الطريقة التي يتم بها تقديم الدروس، فهي تتسم بالوضوح والتفصيل.'" :user-name="'يوسف الأنصاري'" :user-img="'./assets/users-img/man-5.webp'" />
+                    <x-card.review :review="'أحببت الطريقة التي يتم بها تقديم الدورات، فهي تتسم بالوضوح والتفصيل.'" :user-name="'يوسف الأنصاري'" :user-img="'./assets/users-img/man-5.webp'" />
                     <x-card.review :review="'دورة رائعة! تحسنت مهاراتي اللغوية بشكل كبير بعد إتمامها.'" :user-name="'منى الحارثي'" :user-img="'./assets/users-img/woman-2.webp'" />
                 @endif
 

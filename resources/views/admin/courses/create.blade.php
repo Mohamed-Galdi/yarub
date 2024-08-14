@@ -41,15 +41,15 @@
                 <div
                     class="content-form bg-white rounded-xl border-gray-700 border-2 shadow-lg overflow-hidden pb-6 space-y-6">
                     <div class="w-full bg-gray-800 py-2">
-                        <h3 class="w-full text-center text-gray-200 text-2xl">الدرس 1</h3>
+                        <h3 class="w-full text-center text-gray-200 text-2xl">الدورة 1</h3>
                     </div>
                     <div class="form-group">
-                        <x-form.input-light name="content_titles[]" label="عنوان الدرس" placeholder="اكتب عنوان للدرس"
+                        <x-form.input-light name="content_titles[]" label="عنوان الدورة" placeholder="اكتب عنوان للدورة"
                             type="text" required class="px-4 form-control content-title" />
                     </div>
                     <div class="form-group px-4">
                         <label for="dropzone-file"
-                            class="text-gray-800 font-judur ms-6 mb-1 font-semibold w-full text-start"> فيديو الدرس
+                            class="text-gray-800 font-judur ms-6 mb-1 font-semibold w-full text-start"> فيديو الدورة
                         </label>
                         <label for="dropzone-file"
                             class="flex flex-col items-center justify-center w-full h-24 border-2 border-gray-300 border-dashed rounded-lg cursor-pointer bg-gray-50  hover:bg-gray-100 ">
@@ -68,12 +68,12 @@
             <button type="button"
                 class="w-36 bg-indigo-500 text-white flex gap-2 items-center justify-center rounded-lg p-2 mt-2"
                 id="add-content">
-                <p>إضافة درس</p>
+                <p>إضافة دورة</p>
                 <x-icons.plus class="w-4 h-4 mr-2" />
             </button>
             <button type="submit" class="w-full bg-green-500 my-4 p-3 rounded-lg text-white  hover:bg-green-700"
                 id="submit-form">إنشاء
-                الدرس</button>
+                الدورة</button>
         </form>
     </div>
 @endsection
@@ -88,19 +88,19 @@
                     class="content-form bg-white rounded-xl border-gray-700 border-2 shadow-lg overflow-hidden pb-6 space-y-6 mt-4">
                     <div class="w-full bg-gray-800  py-2 flex justify-start items-center">
                         <p class="remove-content px-3 py-1 bg-red-500 text-white text-center rounded-xl ms-5 cursor-pointer hover:bg-red-600  font-hacen">X</p>
-                        <h3 class="w-full text-center text-gray-200 text-2xl">الدرس ${formCount +1}</h3>
+                        <h3 class="w-full text-center text-gray-200 text-2xl">الدورة ${formCount +1}</h3>
 
                     </div>
                     <div class="form-group">
                         
-                        <x-form.input-light name="content_titles[]" label="عنوان الدرس"
+                        <x-form.input-light name="content_titles[]" label="عنوان الدورة"
                             placeholder="مقدمة يَعرُب في التأسيس للقدرات - اللفظي" type="text" required class="px-4" />
                     </div>
                     <div class="form-group px-4">
                       
 
                         <label for="dropzone-file-2"
-                            class="text-gray-800 font-judur ms-6 mb-1 font-semibold w-full text-start"> فيديو الدرس
+                            class="text-gray-800 font-judur ms-6 mb-1 font-semibold w-full text-start"> فيديو الدورة
                         </label>
                         <label for="dropzone-file-${formCount+1}"
                             class="flex flex-col items-center justify-center w-full h-24 border-2 border-gray-300 border-dashed rounded-lg cursor-pointer bg-gray-50  hover:bg-gray-100 ">

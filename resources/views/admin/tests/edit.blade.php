@@ -2,8 +2,9 @@
 @section('content')
     <div>
         <div class="flex justify-between px-8">
-            <h1 class="lg:text-4xl text-2xl text-nowrap truncate text-indigo-700 mb-4">تعديل : <span class="text-gray-800">{{ $test->title }} <span
-                        class="font-nitaqat text-gray-500 text-2xl">({{ $test->course_id ? ' الدرس : ' . $test->course->title : ' الشرح : ' . $test->lesson->title }})</span></span>
+            <h1 class="lg:text-4xl text-2xl text-nowrap truncate text-indigo-700 mb-4">تعديل : <span
+                    class="text-gray-800">{{ $test->title }} <span
+                        class="font-nitaqat text-gray-500 text-2xl">({{ $test->course_id ? ' الدورة : ' . $test->course->title : ' الشرح : ' . $test->lesson->title }})</span></span>
             </h1>
             {{-- // back button --}}
             <x-btn.back route="admin.tests" />
