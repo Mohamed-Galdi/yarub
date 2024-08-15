@@ -38,12 +38,9 @@ class StudentController extends Controller
      */
     public function show(string $id)
     {
-        $student = User::find($id);
-        $coursesCount = $student->courses()->count();
-        $lessonsCount = $student->lessons()->count();
-        $testsCount = $student->test_attempts()->count();
-        $certificatesCount = $student->certificates()->count();
-        return view('admin.students.view-student', compact('student', 'coursesCount', 'lessonsCount', 'testsCount', 'certificatesCount'));
+        $student = User::with('certificates', 'certificates.course', 'certificates.lesson', 'test_attempts')->find($id);
+        
+        return view('admin.students.view-student', compact('student'));
     }
 
     /**

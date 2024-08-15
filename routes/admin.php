@@ -10,6 +10,7 @@ use App\Http\Controllers\Admin\CertificateController;
 use App\Http\Controllers\Admin\ConversationController;
 use App\Http\Controllers\Admin\GuestMessagesController;
 use App\Http\Controllers\Admin\PagesController;
+use App\Http\Controllers\Admin\PaymentsController;
 use App\Http\Controllers\Admin\TestAttemptController;
 use Illuminate\Support\Facades\Route;
 
@@ -121,9 +122,7 @@ Route::middleware(['auth', 'verified', 'admin'])->prefix('admin-dashboard')->gro
 
 
 
-    Route::get('/payments', function () {
-        return view('admin.payments.payments');
-    })->name('admin.payments');
+    Route::get('/payments', [PaymentsController::class, 'index'])->name('admin.payments');
 });
 
 Route::post('/guest-messages', [GuestMessagesController::class, 'store'])->name('admin.guest_messages.store');

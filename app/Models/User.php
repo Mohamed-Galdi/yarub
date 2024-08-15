@@ -60,6 +60,11 @@ class User extends Authenticatable
             ->withTimestamps();
     }
 
+    public function payments()
+    {
+        return $this->hasMany(Payment::class);
+    }
+
     public function reviews()
     {
         return $this->hasMany(Review::class);
@@ -85,20 +90,16 @@ class User extends Authenticatable
         return $this->hasMany(Conversation::class, 'student_id');
     }
 
-    /**
-     * Get the user's published courses.
-     */
-    public function publishedCourses()
+    
+    public function activeCourses()
     {
-        return $this->belongsToMany(Course::class, 'student_course_sub')->published()->withPivot('created_at');
+        return $this->belongsToMany(Course::class, 'student_course_sub')->published()->where('is_active', true)->withPivot('created_at', 'cost');
     }
 
-    /**
-     * Get the user's published lessons.
-     */
-    public function publishedLessons()
+    
+    public function activeLessons()
     {
-        return $this->belongsToMany(Lesson::class, 'student_lesson_sub')->published()->withPivot('created_at');
+        return $this->belongsToMany(Lesson::class, 'student_lesson_sub')->published()->where('is_active', true)->withPivot('created_at', 'cost', 'sub_plan');
     }
 
     public function isSuperAdmin()

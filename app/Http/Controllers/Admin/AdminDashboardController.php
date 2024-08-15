@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Models\Course;
 use App\Models\Lesson;
+use App\Models\Payment;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -21,8 +22,8 @@ class AdminDashboardController extends Controller
         $lessons_count = Lesson::count();
         $courses_and_lessons_count = Course::count() + Lesson::count();
         $visitors_count = 0;
-        $sales_count = 0;
-        return view('admin.dashboard', compact('students_count', 'courses_count', 'lessons_count', 'courses_and_lessons_count', 'visitors_count', 'sales_count'));
+        $total_sales = Payment::where('payment_status', 'paid')->sum('payment_amount');
+        return view('admin.dashboard', compact('students_count', 'courses_count', 'lessons_count', 'courses_and_lessons_count', 'visitors_count', 'total_sales'));
     }
 
     public function show()

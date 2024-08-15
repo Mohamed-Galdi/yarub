@@ -11,7 +11,11 @@ class Course extends Model
     use HasFactory;
 
     protected $fillable = [
-        'title', 'description', 'price','type', 'is_published',
+        'title',
+        'description',
+        'price',
+        'type',
+        'is_published',
     ];
 
     // always cast the price to int
@@ -41,7 +45,7 @@ class Course extends Model
 
     public function students()
     {
-        return $this->belongsToMany(User::class, 'student_course_sub')->withPivot(['payment_amount','created_at'])
+        return $this->belongsToMany(User::class, 'student_course_sub')->withPivot(['cost', 'created_at'])
             ->withTimestamps();
     }
 

@@ -3,7 +3,7 @@
 @section('content')
     <div>
         <div class="flex justify-between">
-        <h1 class="lg:text-4xl text-2xl text-nowrap truncate text-gray-500 mb-6">{{ $lesson->title }}</h1>
+            <h1 class="lg:text-4xl text-2xl text-nowrap truncate text-gray-500 mb-6">{{ $lesson->title }}</h1>
             </h1>
             {{-- // back button --}}
             <x-btn.back route="admin.lessons" />
@@ -26,7 +26,7 @@
                     <p>مجموع المداخيل</p>
                 </div>
                 <div>
-                    <p>{{ $lesson->students()->sum('student_lesson_sub.payment_amount') }} ريال سعودي</p>
+                    <p>{{ $lesson->students()->sum('student_lesson_sub.cost') }} ريال سعودي</p>
                 </div>
             </div>
         </div>

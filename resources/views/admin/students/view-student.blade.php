@@ -8,11 +8,14 @@
         </div>
 
         {{-- //////////////////// Student Info //////////////////// --}}
-        <div class=" w-full flex flex-col lg:flex-row   bg-white rounded-xl  h-fit border border-gray-800 shadow-md shadow-blue-500/50">
+        <div
+            class=" w-full flex flex-col lg:flex-row   bg-white rounded-xl  h-fit border border-gray-800 shadow-md shadow-blue-500/50">
             {{-- //////////////// Info //////////////// --}}
             <div class="lg:w-1/2 w-full py-2 flex flex-col lg:flex-row justify-start items-center">
-                <img src="{{ asset($student->avatar ?? 'storage/users_avatars/default.png') }}" alt="" class="w-44 h-44 rounded-full ms-4">
-                <div class="w-full border-r-3 border-gray-600 px-4 py-6 h-full flex flex-col justify-between lg:items-start items-center ">
+                <img src="{{ asset($student->avatar ?? 'storage/users_avatars/default.png') }}" alt=""
+                    class="w-44 h-44 rounded-full ms-4">
+                <div
+                    class="w-full border-r-3 border-gray-600 px-4 py-6 h-full flex flex-col justify-between lg:items-start items-center ">
                     <div class="text-center lg:text-right">
                         <p class="font-hacen text-3xl text-gray-800">{{ $student->name }}</p>
                         <p class="font-judur text-sm text-gray-400 ">{{ $student->email }}</p>
@@ -38,7 +41,7 @@
                         <p class="text-xl text-white">الدورات</p>
                         <x-icons.course class="w-5 h-5 text-white" />
                     </div>
-                    <p class="text-3xl text-white">{{ $student->courses()->count() }}</p>
+                    <p class="text-3xl text-white">{{ $student->activeCourses->count() }}</p>
                 </div>
                 <div
                     class="w-[90%] p-3 rounded-lg h-20 bg-gradient-to-tr from-red-400 to-red-500 flex flex-col justify-center items-center">
@@ -46,7 +49,7 @@
                         <p class="text-xl text-white">الشروحات</p>
                         <x-icons.lesson class="w-5 h-5 text-white" />
                     </div>
-                    <p class="text-3xl text-white">{{ $student->lessons()->count() }}</p>
+                    <p class="text-3xl text-white">{{ $student->activeLessons->count() }}</p>
                 </div>
                 <div
                     class="w-[90%] p-3 rounded-lg h-20 bg-gradient-to-tr from-green-400 to-green-500 flex flex-col justify-center items-center">
@@ -81,67 +84,277 @@
                             'id' => 'courses',
                             'label' => 'الدورات',
                             'icon' => 'icons.course',
-                            'count' => $coursesCount,
+                            'count' => $student->activeCourses->count(),
                         ],
                         [
                             'id' => 'lessons',
                             'label' => 'الشروحات',
                             'icon' => 'icons.lesson',
-                            'count' => $lessonsCount,
+                            'count' => $student->activeLessons->count(),
                         ],
                         [
                             'id' => 'tests',
                             'label' => 'الإختبارات',
                             'icon' => 'icons.test',
-                            'count' => $testsCount,
+                            'count' => $student->test_attempts->count(),
                         ],
                         [
                             'id' => 'certificates',
                             'label' => 'الشواهد',
                             'icon' => 'icons.certificate',
-                            'count' => $certificatesCount,
+                            'count' => $student->certificates->count(),
                         ],
                     ]">
                         <x-slot name="courses">
-                            <div class="mt-4 space-y-6">
-                                @forelse ($student->publishedCourses as $course)
-                                    <x-card.student-profile-course title="{{ $course->title }}"
-                                        startDate="{{ $course->pivot->created_at->format('d-m-Y') }}"
-                                        lastVisitDate="منذ 5 ساعات" courseCount="2/5" testCount="1/4" :progress="rand(0, 100)" />
-                                @empty
+                            <div class="flex mt-4 gap-4">
+                                @if ($student->activeCourses->count() > 0)
+                                    <table class="w-full text-left rtl:text-right text-gray-500 ">
+                                        <thead class="text-lg  text-gray-100 uppercase bg-indigo-500 w-full">
+                                            <tr>
+                                                <th scope="col" class="px-6 py-3 w-6/12">
+                                                    عنوان الدورة
+                                                </th>
+                                                <th scope="col" class="px-6 py-3 w-3/12 text-nowrap truncate">
+                                                    تاريخ الإنضمام
+                                                </th>
+                                                <th scope="col" class="px-6 py-3 w-3/12 text-nowrap truncate">
+                                                    مبلغ الإشتراك
+                                                </th>
+
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            @foreach ($student->activeCourses as $course)
+                                                <tr
+                                                    class="border-b cursor-pointer  w-full text-slate-800 transition-all ease-in-out duration-00 bg-slate-200 hover:bg-slate-300">
+
+                                                    <td class="px-6 py-4">
+                                                        <div class="flex items-center">
+                                                            <p class=" text-nowrap truncate w-full">
+                                                                {{ $course->title }}</p>
+                                                        </div>
+                                                    </td>
+                                                    <td class="px-6 py-4">
+                                                        <div class="flex items-center">
+                                                            <p class=" text-nowrap truncate w-full">
+                                                                {{ $course->pivot->created_at->format('d-m-Y') }}</p>
+                                                        </div>
+                                                    </td>
+                                                    <td class="px-6 py-4">
+                                                        <div class="flex items-center">
+                                                            <p class=" text-nowrap truncate w-full">
+                                                                {{ $course->pivot->cost }} ريال</p>
+                                                        </div>
+                                                    </td>
+
+                                                </tr>
+                                            @endforeach
+                                        </tbody>
+                                    </table>
+                                @else
                                     <x-card.empty-state title="لا توجد دورات بعد لدى هذا الطالب" message=""
                                         :image="true" class="w-1/2 h-auto mx-auto" />
-                                @endforelse
+                                @endif
                             </div>
                         </x-slot>
 
                         <x-slot name="lessons">
                             <div class="mt-4 space-y-6">
-                                @forelse ($student->publishedLessons as $lesson)
-                                    <x-card.student-profile-lesson title="{{ $lesson->title }}"
-                                        startDate="{{ $lesson->pivot->created_at->format('d-m-Y') }}" endDate="منذ 5 ساعات"
-                                        duration=" 3 أشهر" testCount="1/4" :progress="rand(0, 100)" />
-                                @empty
+                                @if ($student->activeCourses->count() > 0)
+                                    <table class="w-full text-left rtl:text-right text-gray-500 ">
+                                        <thead class="text-lg  text-gray-100 uppercase bg-indigo-500 w-full">
+                                            <tr>
+                                                <th scope="col" class="px-6 py-3 w-2/6">
+                                                    عنوان الشرح
+                                                </th>
+                                                <th scope="col" class="px-6 py-3 w-1/6">
+                                                    الإشتراك
+                                                </th>
+                                                <th scope="col" class="px-6 py-3 w-1/6 text-nowrap truncate">
+                                                    تاريخ الإنضمام
+                                                </th>
+                                                <th scope="col" class="px-6 py-3 w-1/6 text-nowrap truncate">
+                                                    تاريخ الإنتهاء
+                                                </th>
+                                                <th scope="col" class="px-6 py-3 w-1/6 text-nowrap truncate">
+                                                    مبلغ الإشتراك
+                                                </th>
+
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            @foreach ($student->activeLessons as $lesson)
+                                                <tr
+                                                    class="border-b cursor-pointer  w-full text-slate-800 transition-all ease-in-out duration-00 bg-slate-200 hover:bg-slate-300">
+
+                                                    <td class="px-6 py-4">
+                                                        <div class="flex items-center">
+                                                            <p class=" text-nowrap truncate w-full">
+                                                                {{ $lesson->title }}</p>
+                                                        </div>
+                                                    </td>
+                                                    <td class="px-6 py-4">
+                                                        <div class="flex items-center">
+                                                            <p class=" text-nowrap truncate w-full">
+                                                                {{ $lesson->pivot->sub_plan == 'monthly' ? 'شهري' : 'سنوي' }}
+                                                            </p>
+                                                        </div>
+                                                    </td>
+                                                    <td class="px-6 py-4">
+                                                        <div class="flex items-center">
+                                                            <p class=" text-nowrap truncate w-full">
+                                                                {{ $lesson->pivot->created_at->format('d-m-Y') }}</p>
+                                                        </div>
+                                                    </td>
+                                                    <td class="px-6 py-4">
+                                                        <div class="flex items-center">
+                                                            <p class=" text-nowrap truncate w-full">
+                                                                {{ $lesson->pivot->sub_plan == 'monthly' ? $lesson->pivot->created_at->addMonth()->format('d-m-Y') : $lesson->pivot->created_at->addYear()->format('d-m-Y') }}
+                                                            </p>
+                                                        </div>
+                                                    </td>
+                                                    <td class="px-6 py-4">
+                                                        <div class="flex items-center">
+                                                            <p class=" text-nowrap truncate w-full">
+                                                                {{ $lesson->pivot->cost }} ريال</p>
+                                                        </div>
+                                                    </td>
+
+                                                </tr>
+                                            @endforeach
+                                        </tbody>
+                                    </table>
+                                @else
                                     <x-card.empty-state title="لا توجد شروحات بعد لدى هذا الطالب" message=""
                                         :image="true" class="w-1/2 h-auto mx-auto" />
-                                @endforelse
+                                @endif
                             </div>
                         </x-slot>
 
                         <x-slot name="tests">
                             <div class="mt-4 space-y-6">
-                                <p>test attempts</p>
+                                @if ($student->test_attempts->count() > 0)
+                                    <table class="w-full text-left rtl:text-right text-gray-500 ">
+                                        <thead class="text-lg  text-gray-100 uppercase bg-indigo-500 w-full">
+                                            <tr>
+                                                <th scope="col" class="px-6 py-3 w-2/6">
+                                                    عنوان الإختبار
+                                                </th>
+                                                <th scope="col" class="px-6 py-3 w-2/6">
+                                                    الدورة/الشرح
+                                                </th>
+                                                <th scope="col" class="px-6 py-3 w-1/6 text-nowrap truncate">
+                                                    النتيجة </th>
+                                                <th scope="col" class="px-6 py-3 w-1/6 text-nowrap truncate">
+                                                    تاريخ الإجتياز
+                                                </th>
+
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            @foreach ($student->test_attempts as $test_attempt)
+                                                <tr
+                                                    class="border-b cursor-pointer  w-full text-slate-800 transition-all ease-in-out duration-00 bg-slate-200 hover:bg-slate-300">
+
+                                                    <td class="px-6 py-4">
+                                                        <div class="flex items-center">
+                                                            <p class=" text-nowrap truncate w-full">
+                                                                {{ $test_attempt->test->title }}</p>
+                                                        </div>
+                                                    </td>
+                                                    <td class="px-6 py-4">
+                                                        <div class="flex items-center">
+                                                            <p class=" text-nowrap truncate w-full">
+                                                                {{ $test_attempt->test->course_id ? $test_attempt->test->course->title : $test_attempt->test->lesson->title }}
+                                                            </p>
+                                                            </p>
+                                                        </div>
+                                                    </td>
+                                                    <td class="px-6 py-4">
+                                                        <div class="flex items-center">
+                                                            <p class=" text-nowrap truncate w-full">
+                                                                {{ $test_attempt->score }} % </p>
+                                                        </div>
+                                                    </td>
+
+                                                    <td class="px-6 py-4">
+                                                        <div class="flex items-center">
+                                                            <p class=" text-nowrap truncate w-full">
+                                                                {{ $test_attempt->created_at->format('d-m-Y') }}</p>
+                                                        </div>
+                                                    </td>
+
+                                                </tr>
+                                            @endforeach
+                                        </tbody>
+                                    </table>
+                                @else
+                                    <x-card.empty-state title="لا توجد إختبارات بعد لدى هذا الطالب" message=""
+                                        :image="true" class="w-1/2 h-auto mx-auto" />
+                                @endif
                             </div>
                         </x-slot>
+
                         <x-slot name="certificates">
                             <div class="mt-4 space-y-6">
-                                @forelse ($student->certificates as $certificate)
-                                    <p>الشواهد المنصوصة هي {{ $certificate->title }}</p>
+                                @if ($student->certificates->count() > 0)
+                                    <table class="w-full text-left rtl:text-right text-gray-500 ">
+                                        <thead class="text-lg  text-gray-100 uppercase bg-indigo-500 w-full">
+                                            <tr>
+                                                <th scope="col" class="px-6 py-3 w-2/6">
+                                                    الدورة/الشرح
+                                                </th>
+                                                <th scope="col" class="px-6 py-3 w-2/6">
+                                                    تاريخ المنح
+                                                </th>
+                                                <th scope="col" class="px-6 py-3 w-1/6 text-nowrap truncate">
+                                                    الإطلاع
+                                                </th>
 
-                                @empty
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            @foreach ($student->certificates as $certificate)
+                                                <tr
+                                                    class="border-b cursor-pointer  w-full text-slate-800 transition-all ease-in-out duration-00 bg-slate-200 hover:bg-slate-300">
+
+
+                                                    <td class="px-6 py-4">
+                                                        <div class="flex items-center">
+                                                            <p class=" text-nowrap truncate w-full">
+                                                                {{ $certificate->course_id ? $certificate->course->title : $certificate->lesson->title }}
+                                                            </p>
+                                                            </p>
+                                                        </div>
+                                                    </td>
+
+
+                                                    <td class="px-6 py-4">
+                                                        <div class="flex items-center">
+                                                            <p class=" text-nowrap truncate w-full">
+                                                                {{ $certificate->created_at->format('d-m-Y') }}</p>
+                                                        </div>
+                                                    </td>
+                                                    <td class="px-6 py-4">
+                                                        <div class="flex items-center">
+                                                            <a href="{{ route('admin.certificates.view', ['id' => $certificate->id]) }}" target="_blank">
+                                                                <div
+                                                                    class="flex items-center gap-3 py-1 px-2 me-1 rounded-lg bg-indigo-400 text-gray-100 border border-gray-100 hover:bg-indigo-500 hover:text-white transition-all duration-300 ease-in-out cursor-pointer">
+                                                                    <p> عرض </p>
+                                                                    <x-icons.eye class="w-4 h-4" />
+                                                                </div>
+                                                            </a>
+                                                        </div>
+                                                    </td>
+
+                                                </tr>
+                                            @endforeach
+                                        </tbody>
+                                    </table>
+                                @else
                                     <x-card.empty-state title="لا توجد شواهد بعد لدى هذا الطالب" message=""
                                         :image="true" class="w-1/2 h-auto mx-auto" />
-                                @endforelse
+                                @endif
                             </div>
                         </x-slot>
 

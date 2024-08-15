@@ -9,5 +9,10 @@ class Payment extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['payment_id', 'payment_status', 'payment_amount', 'payment_message'];
+    protected $fillable = ['user_id', 'payment_id', 'payment_status', 'original_amount', 'coupon_used', 'coupon_reduction', 'payment_amount', 'payment_message'];
+
+    public function user()
+    {
+        return $this->belongsTo(User::class);
+    }
 }

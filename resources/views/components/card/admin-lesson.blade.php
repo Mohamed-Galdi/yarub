@@ -16,7 +16,7 @@
      </div>
      <div class="flex text-white justify-between items-start">
          <div class=" flex flex-col justify-center items-center w-1/3 ">
-             <p class="text-yellow-300">الدورات</p>
+             <p class="text-yellow-300">الدروس</p>
              <div class="flex gap-2 items-center">
                  <x-icons.video class="w-5 h-5 " />
                  <p>{{ $numberOfLessons }}</p>

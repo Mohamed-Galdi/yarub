@@ -16,8 +16,8 @@ return new class extends Migration
             $table->unsignedBigInteger('user_id');
             $table->unsignedBigInteger('lesson_id');
             $table->unsignedBigInteger('payment_id');
-            $table->enum('stage', ['enrolled', 'completed'])->default('enrolled');
-            $table->enum('status', ['active', 'inactive'])->default('active');
+            $table->integer('cost');
+            $table->boolean('is_active')->default(true);
             $table->enum('sub_plan', ['monthly', 'annual'])->default('monthly');
             $table->timestamps();
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Coupon;
 use App\Models\CourseSubscription;
 use App\Models\LessonSubscription;
 use App\Models\Payment;
@@ -41,6 +42,7 @@ class SubController extends Controller
 
         try {
             $payment = new Payment();
+            $payment->user_id = Auth::id();
             $payment->payment_id = $paymentId;
             $payment->payment_status = $paymentStatus;
             $payment->payment_message = $paymentMessage;
@@ -58,17 +60,35 @@ class SubController extends Controller
                         $courseSub = new CourseSubscription();
                         $courseSub->user_id = Auth::id();
                         $courseSub->course_id = $item['id'];
-                        $courseSub->status = 'active';
+                        $courseSub->is_active = true;
                         $courseSub->payment_id = $payment->id;
+                        if ($coupon) {
+                            $courseSub->cost = $item['cost'];
+                        } else {
+                            $courseSub->cost = $item['price'];
+                        }
                         $courseSub->save();
                     } else {
                         $lessonSub = new LessonSubscription();
                         $lessonSub->user_id = Auth::id();
                         $lessonSub->lesson_id = $item['id'];
                         $lessonSub->sub_plan = $item['plan'];
-                        $lessonSub->status = 'active';
+                        $lessonSub->is_active = true;
                         $lessonSub->payment_id = $payment->id;
+                        if ($coupon) {
+                            $lessonSub->cost = $item['cost'];
+                        } else {
+                            $lessonSub->cost = $item['plan'] === 'monthly' ? $item['monthly_price'] : $item['annual_price'];
+                        }
                         $lessonSub->save();
+                    }
+                }
+                // increase the coupon value usage count
+                if ($coupon) {
+                    $cpn = Coupon::where('code', $coupon['code'])->first();
+                    if ($cpn) {
+                        $cpn->used_count += 1;
+                        $cpn->save();
                     }
                 }
                 session()->forget(['cart', 'coupon', 'discount']);

@@ -45,7 +45,7 @@ class CertificateController extends Controller
             'lesson_id' => $is_course ? null : $request->content_id,
         ]);
 
-        Alert::success('Certificate created successfully.');
+        Alert::success('تم منح الشهادة بنجاح');
         return redirect()->route('admin.certificates');
     }
 

@@ -20,7 +20,7 @@ class CartController extends Controller
     }
 
     // private function to update the discount on the session
-    
+
     public function addToCart(Request $request)
     {
         $item = [
@@ -104,7 +104,7 @@ class CartController extends Controller
             ->where('start_date', '<=', now())
             ->where('end_date', '>=', now())
             ->first();
-        
+
         if (!$coupon) {
             // update the session discount to 0
             session(['discount' => 0]);
@@ -115,10 +115,12 @@ class CartController extends Controller
 
         $cart = $this->getCartItems();
         $totalBeforeDiscount = $this->calculateTotal($cart);
-        $discount = $this->calculateDiscount($coupon, $cart);
-        $totalAfterDiscount = $totalBeforeDiscount - $discount;
-
-        session(['coupon' => $coupon->toArray(), 'discount' => $discount]);
+        $result = $this->calculateDiscount($coupon, $cart);
+        $updatedCart = $result['updatedCart'];
+        $totalAfterDiscount = $totalBeforeDiscount - $result['totalDiscount'];
+        
+        session(['cart' => $updatedCart]);
+        session(['coupon' => $coupon->toArray(), 'discount' => $result['totalDiscount']]);
 
         Alert::success('تم تطبيق القسيمة بنجاح.');
         return redirect()->back();
@@ -136,44 +138,91 @@ class CartController extends Controller
                     return $item['annual_price'];
                 }
             }
-            // return $item['type'] === 'course' ? $item['price'] : $item['monthly_price'];
         });
     }
+
+    // private function calculateDiscount($coupon, $cart)
+    // {
+    //     $applicableItems = collect($cart)->filter(function ($item) use ($coupon) {
+    //         if ($coupon->applicable_to === 'all') {
+    //             return true;
+    //         } elseif ($coupon->applicable_to === 'courses' && $item['type'] === 'course') {
+    //             return true;
+    //         } elseif ($coupon->applicable_to === 'lessons' && $item['type'] === 'lesson') {
+    //             return true;
+    //         } elseif ($coupon->applicable_to === 'specific') {
+    //             return $coupon->courses->contains($item['id']) || $coupon->lessons->contains($item['id']);
+    //         }
+    //         return false;
+    //     });
+
+    //     $totalApplicable = $applicableItems->sum(function ($item) {
+    //         if ($item['type'] === 'course') {
+    //             return $item['price'];
+    //         } elseif ($item['type'] === 'lesson') {
+    //             if ($item['plan'] === 'monthly') {
+    //                 return $item['monthly_price'];
+    //             } else {
+    //                 return $item['annual_price'];
+    //             }
+    //         }
+    //     });
+
+    //     if ($coupon->type === 'percentage') {
+    //         return $totalApplicable * ($coupon->value / 100);
+    //     } else {
+    //         return min($coupon->value, $totalApplicable);
+    //     }
+    // }
 
     private function calculateDiscount($coupon, $cart)
     {
-        $applicableItems = collect($cart)->filter(function ($item) use ($coupon) {
-            if ($coupon->applicable_to === 'all') {
-                return true;
-            } elseif ($coupon->applicable_to === 'courses' && $item['type'] === 'course') {
-                return true;
-            } elseif ($coupon->applicable_to === 'lessons' && $item['type'] === 'lesson') {
-                return true;
-            } elseif ($coupon->applicable_to === 'specific') {
-                return $coupon->courses->contains($item['id']) || $coupon->lessons->contains($item['id']);
+        $applicableItems = collect($cart)->map(function ($item) use ($coupon) {
+            $item['applicable'] = false;
+
+            if (
+                $coupon->applicable_to === 'all' ||
+                ($coupon->applicable_to === 'courses' && $item['type'] === 'course') ||
+                ($coupon->applicable_to === 'lessons' && $item['type'] === 'lesson') ||
+                ($coupon->applicable_to === 'specific' &&
+                    ($coupon->courses->contains($item['id']) || $coupon->lessons->contains($item['id'])))
+            ) {
+                $item['applicable'] = true;
             }
-            return false;
+
+            return $item;
         });
 
-        $totalApplicable = $applicableItems->sum(function ($item) {
-            if ($item['type'] === 'course') {
-                return $item['price'];
-            } elseif ($item['type'] === 'lesson') {
-                if ($item['plan'] === 'monthly') {
-                    return $item['monthly_price'];
+        $totalDiscount = 0;
+        $updatedCart = $applicableItems->map(function ($item) use ($coupon, &$totalDiscount) {
+            $originalPrice = $item['type'] === 'course' ? $item['price'] : ($item['plan'] === 'monthly' ? $item['monthly_price'] : $item['annual_price']);
+
+            if ($item['applicable']) {
+                if (
+                    $coupon->type === 'percentage'
+                ) {
+                    $itemDiscount = $originalPrice * ($coupon->value / 100);
                 } else {
-                    return $item['annual_price'];
+                    $itemDiscount = min($coupon->value, $originalPrice);
+                    $totalDiscount += $itemDiscount;
+                    $coupon->value -= $itemDiscount; // Decrease the remaining fixed discount
                 }
-            }
-            // return $item['type'] === 'course' ? $item['price'] : $item['monthly_price'];
-        });
 
-        if ($coupon->type === 'percentage') {
-            return $totalApplicable * ($coupon->value / 100);
-        } else {
-            return min($coupon->value, $totalApplicable);
-        }
+                $item['cost'] = $originalPrice - $itemDiscount;
+                $totalDiscount += ($coupon->type === 'percentage' ? $itemDiscount : 0);
+            } else {
+                $item['cost'] = $originalPrice;
+            }
+
+            return $item;
+        })->all();
+
+        return [
+            'totalDiscount' => $totalDiscount,
+            'updatedCart' => $updatedCart
+        ];
     }
+
 
     private function getCartItems()
     {
