@@ -12,6 +12,7 @@ Route::middleware(['auth', 'verified', 'student'])->group(function () {
 
     // /////////// Courses Routes ////////////
     Route::get('/student-dashboard/courses', [CoursesController::class, 'index'])->name('student.courses.index');
+    Route::get('/student-dashboard/courses/{course}', [CoursesController::class, 'show'])->name('student.courses.show');
 
 
 

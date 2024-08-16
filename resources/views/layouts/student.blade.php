@@ -115,7 +115,7 @@
     </header>
 
 
-    <main dir="rtl" class="min-h-[calc(100vh-6rem)] bg-slate-200">
+    <main dir="rtl" class="min-h-[calc(100vh-6rem)] bg-gradient-to-bl from-indigo-300 to-indigo-100 ">
         @yield('content')
     </main>
     <footer class="bg-pr-800 text-white h-40 w-full">
