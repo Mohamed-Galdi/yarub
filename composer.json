@@ -14,6 +14,7 @@
         "livewire/livewire": "^3.5",
         "power-components/livewire-powergrid": "^5.9",
         "realrashid/sweet-alert": "^7.2",
+        "vimeo/vimeo-api": "^3.0",
         "wireui/wireui": "^2.0"
     },
     "require-dev": {

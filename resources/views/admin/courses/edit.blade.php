@@ -81,7 +81,9 @@
                                 <div class="upload-status w-full flex justify-center items-center">
                                     <video src="{{ asset('storage/' . $content->url) }}" controls
                                         class="w-full h-full"></video>
+                                        <div class="w-full h-full" id="vimeoPlayer"></div>
                                 </div>
+                                
                             </div>
 
 
@@ -213,6 +215,29 @@
         } else {
             alert('Please wait for all videos to finish uploading before submitting the form.');
         }
+    });
+</script>
+<script src="https://player.vimeo.com/api/player.js"></script>
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const playerContainer = document.getElementById('vimeoPlayer');
+        let player = new Vimeo.Player(playerContainer, {
+            id: '{{ $content->video_id }}',
+            width: 780,
+        });
+
+        const contentLinks = document.querySelectorAll('.content-link');
+
+        contentLinks.forEach(link => {
+            link.addEventListener('click', function(e) {
+                e.preventDefault();
+                player.loadVideo(this.dataset.videoId);
+
+                // Remove bold from all links and add to clicked link
+                contentLinks.forEach(l => l.classList.remove('font-bold'));
+                this.classList.add('font-bold');
+            });
+        });
     });
 </script>
 @endpush

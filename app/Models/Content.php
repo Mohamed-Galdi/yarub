@@ -12,6 +12,7 @@ class Content extends Model
     protected $fillable = [
         'title',
         'url',
+        'video_id',
         'course_id',
         'lesson_id',   
     ];

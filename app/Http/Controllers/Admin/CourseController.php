@@ -11,11 +11,84 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 use RealRashid\SweetAlert\Facades\Alert;
+use Vimeo\Vimeo;
 
 class CourseController extends Controller
 {
     private $tempFolder = 'temp_videos';
     private $finalFolder = 'course_videos';
+
+    private $vimeoClient;
+
+    public function __construct()
+    {
+        $this->vimeoClient = new Vimeo(
+            env('VIMEO_CLIENT_ID'),
+            env('VIMEO_CLIENT_SECRET'),
+            env('VIMEO_ACCESS_TOKEN')
+        );
+    }
+
+    public function store(Request $request)
+    {
+        DB::beginTransaction();
+
+        try {
+            $course = Course::create([
+                'title' => $request->title,
+                'description' => $request->description,
+                'price' => $request->price,
+                'type' => $request->type,
+            ]);
+
+            foreach ($request->content_titles as $index => $title) {
+                $tempPath = storage_path('app/public/' . $request->content_videos[$index]);
+
+                // Upload to Vimeo
+                $videoUri = $this->uploadToVimeo($tempPath, $title);
+                preg_match('/\/videos\/(\d+)/', $videoUri, $matches);
+                $videoId = $matches[1] ?? null;
+
+                Content::create([
+                    'course_id' => $course->id,
+                    'title' => $title,
+                    'url' => $videoUri,
+                    'video_id' => $videoId
+                ]);
+            }
+
+            $this->cleanupTempFolder();
+
+            DB::commit();
+            return response()->json([
+                'success' => true,
+                'message' => 'تم إنشاء الدورة بنجاح !',
+                'redirect' => route('admin.courses')
+            ]);
+        } catch (\Exception $e) {
+            DB::rollback();
+            return response()->json([
+                'success' => false,
+                'message' => 'حدث خطأ أثناء إنشاء الدورة !',
+                'error' => $e->getMessage()
+            ], 500);
+        }
+    }
+
+    private function uploadToVimeo($filePath, $title)
+    {
+        $uri = $this->vimeoClient->upload($filePath, [
+            'name' => $title,
+            'description' => 'Video content for ' . $title,
+        ]);
+
+        // Delete the temporary file
+        Storage::delete($filePath);
+
+        return $uri;
+    }
+
+
     /**
      * Display a listing of the resource.
      */
@@ -37,54 +110,54 @@ class CourseController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
-    {
-        $request->validate([
-            'title' => 'required|string|max:255',
-            'description' => 'required|string',
-            'price' => 'required|numeric|min:0',
-            'type' => 'required|string|max:255',
-            'content_titles' => 'required|array|min:1',
-            'content_titles.*' => 'required|string|max:255',
-            'content_videos' => 'required|array|min:1',
-            'content_videos.*' => 'required|string',
-        ]);
-        // dd($request->all());
+    // public function store(Request $request)
+    // {
+    //     $request->validate([
+    //         'title' => 'required|string|max:255',
+    //         'description' => 'required|string',
+    //         'price' => 'required|numeric|min:0',
+    //         'type' => 'required|string|max:255',
+    //         'content_titles' => 'required|array|min:1',
+    //         'content_titles.*' => 'required|string|max:255',
+    //         'content_videos' => 'required|array|min:1',
+    //         'content_videos.*' => 'required|string',
+    //     ]);
+    //     // dd($request->all());
 
-        DB::beginTransaction();
+    //     DB::beginTransaction();
 
-        try {
-            $course = Course::create([
-                'title' => $request->title,
-                'description' => $request->description,
-                'price' => $request->price,
-                'type' => $request->type,
-            ]);
+    //     try {
+    //         $course = Course::create([
+    //             'title' => $request->title,
+    //             'description' => $request->description,
+    //             'price' => $request->price,
+    //             'type' => $request->type,
+    //         ]);
 
-            foreach ($request->content_titles as $index => $title) {
-                $tempPath = $request->content_videos[$index];
-                $finalPath = $this->moveVideoToFinalLocation($tempPath, $course->id);
-                // dd($title, $finalPath);
-                Content::create([
-                    'course_id' => $course->id,
-                    'title' => $title,
-                    'url' => $finalPath,
-                ]);
-            }
+    //         foreach ($request->content_titles as $index => $title) {
+    //             $tempPath = $request->content_videos[$index];
+    //             $finalPath = $this->moveVideoToFinalLocation($tempPath, $course->id);
+    //             // dd($title, $finalPath);
+    //             Content::create([
+    //                 'course_id' => $course->id,
+    //                 'title' => $title,
+    //                 'url' => $finalPath,
+    //             ]);
+    //         }
 
-            $this->cleanupTempFolder();
+    //         $this->cleanupTempFolder();
 
-            DB::commit();
-            Alert::success('تم إنشاء الدورة بنجاح !');
-            return redirect()->route('admin.courses')->with('success', 'Course created successfully!');
-        } catch (\Exception $e) {
-            DB::rollBack();
-            $this->cleanupTempFolder();
-            throw $e;
+    //         DB::commit();
+    //         Alert::success('تم إنشاء الدورة بنجاح !');
+    //         return redirect()->route('admin.courses')->with('success', 'Course created successfully!');
+    //     } catch (\Exception $e) {
+    //         DB::rollBack();
+    //         $this->cleanupTempFolder();
+    //         throw $e;
 
-            return back()->with('error', 'An error occurred while creating the course. Please try again.');
-        }
-    }
+    //         return back()->with('error', 'An error occurred while creating the course. Please try again.');
+    //     }
+    // }
 
     public function uploadVideo(Request $request)
     {
@@ -99,19 +172,19 @@ class CourseController extends Controller
         return response()->json(['path' => $path]);
     }
 
-    private function moveVideoToFinalLocation($tempPath, $courseId)
-    {
-        if (!Storage::disk('public')->exists($tempPath)) {
-            throw new \Exception("Temporary file not found: {$tempPath}");
-        }
+    // private function moveVideoToFinalLocation($tempPath, $courseId)
+    // {
+    //     if (!Storage::disk('public')->exists($tempPath)) {
+    //         throw new \Exception("Temporary file not found: {$tempPath}");
+    //     }
 
-        $fileName = basename($tempPath);
-        $finalPath = "{$this->finalFolder}/course-{$courseId}_{$fileName}";
+    //     $fileName = basename($tempPath);
+    //     $finalPath = "{$this->finalFolder}/course-{$courseId}_{$fileName}";
 
-        Storage::disk('public')->move($tempPath, $finalPath);
+    //     Storage::disk('public')->move($tempPath, $finalPath);
 
-        return $finalPath;
-    }
+    //     return $finalPath;
+    // }
 
     private function cleanupTempFolder()
     {
