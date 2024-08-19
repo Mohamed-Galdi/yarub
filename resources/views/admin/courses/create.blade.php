@@ -1,14 +1,14 @@
 @extends('layouts.admin')
 
 @section('content')
-    <div class="relative">
+    <div class="">
+        {{-- <x-errors :errors="$errors" /> --}}
         <div class="flex justify-between">
-            <h1 class="lg:text-4xl text-2xl text-nowrap truncate text-indigo-700 mb-4">إنشاء دورة جديدة</h1>
+            <h1 class="lg:text-4xl text-2xl text-nowrap truncate text-indigo-700 mb-4"> إنشاء دورة جديدة</h1>
             </h1>
             {{-- // back button --}}
             <x-btn.back route="admin.courses" />
         </div>
-
         <form id="courseForm" action="{{ route('admin.courses.store') }}" method="POST" class="space-y-6">
             @csrf
             <div class="form-group w-full flex lg:flex-row flex-col gap-4 items-start justify-start">
@@ -37,8 +37,7 @@
                 <h2 class="text-2xl text-indigo-500 mt-8 mb-2">محتوى الدورة </h2>
                 <div class="w-full h-1 bg-gray-400 rounded-md mb-6"></div>
             </div>
-
-            <div id="content-sections">
+            <div id="content-forms">
                 <div
                     class="content-form bg-white rounded-xl border-gray-700 border-2 shadow-lg overflow-hidden pb-6 space-y-6">
                     <div class="w-full bg-gray-800 py-2">
@@ -67,7 +66,7 @@
                 </div>
             </div>
             <button type="button"
-                class="w-36 bg-indigo-400 text-white flex gap-2 items-center justify-center rounded-lg p-2 mt-2"
+                class="w-36 bg-indigo-500 text-white flex gap-2 items-center justify-center rounded-lg p-2 mt-2"
                 id="add-content">
                 <p>إضافة درس</p>
                 <x-icons.plus class="w-4 h-4 mr-2" />
@@ -77,35 +76,28 @@
                 الدورة</button>
         </form>
         <div id="loader" style="display: none;"
-            class="absolute  w-full h-screen  flex flex-col items-center justify-center">
-            <p class="text-indigo-600 text-5xl mb-2">جاري إنشاء الدورة...</p>
+            class="absolute  w-3/4 h-screen  flex flex-col items-center justify-center">
+            <p class="text-indigo-600 lg:text-5xl text-2xl mb-2">جاري إنشاء الدورة...</p>
             <lottie-player src="https://lottie.host/25165b5d-de71-47e1-b452-1a7daf8a6aec/6b0mvv9d9K.json" class="mb-24"
                 background="##ffffff" speed="1" style="width: 400px; height: 400px" loop autoplay direction="1"
                 mode="normal"></lottie-player>
         </div>
-
     </div>
+@endsection
 
-
+@push('scripts')
     <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <script src="https://unpkg.com/sweetalert2@11"></script>
+    <script src="https://unpkg.com/@lottiefiles/lottie-player@latest/dist/lottie-player.js"></script>
     <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            let contentCount = 1;
-            const addContentBtn = document.getElementById('add-content');
-            const contentSections = document.getElementById('content-sections');
-
-            addContentBtn.addEventListener('click', function() {
-                contentCount++;
-                const newSection = document.createElement('div');
-                newSection.className = 'content-section mb-4';
-                newSection.innerHTML = `
+        function createContentForm() {
+            const formCount = document.querySelectorAll('.content-form').length;
+            return `
             <div
                     class="content-form bg-white rounded-xl border-gray-700 border-2 shadow-lg overflow-hidden pb-6 space-y-6 mt-4">
                     <div class="w-full bg-gray-800  py-2 flex justify-start items-center">
                         <p class="remove-content px-3 py-1 bg-red-500 text-white text-center rounded-xl ms-5 cursor-pointer hover:bg-red-600  font-hacen">X</p>
-                        <h3 class="w-full text-center text-gray-200 text-2xl">الدرس ${contentCount }</h3>
+                        <h3 class="w-full text-center text-gray-200 text-2xl">الدرس ${formCount +1}</h3>
 
                     </div>
                     <div class="form-group">
@@ -119,12 +111,12 @@
                         <label for="dropzone-file-2"
                             class="text-gray-800 font-judur ms-6 mb-1 font-semibold w-full text-start"> فيديو الدرس
                         </label>
-                        <label for="dropzone-file-${contentCount}"
+                        <label for="dropzone-file-${formCount+1}"
                             class="flex flex-col items-center justify-center w-full h-24 border-2 border-gray-300 border-dashed rounded-lg cursor-pointer bg-gray-50  hover:bg-gray-100 ">
                             <div class="flex items-center justify-center pt-5 pb-6 gap-4">
                                 <x-icons.uplaod class="w-8 h-8 mb-4 text-indigo-500 " />
                                 <p class="text-indigo-500">أنقر للتحميل </p>
-                                <input id="dropzone-file-${contentCount}" type="file" class="form-control-file video-upload hidden"
+                                <input id="dropzone-file-${formCount+1}" type="file" class="form-control-file video-upload hidden"
                                      accept="video/*" required>
                                 <input type="hidden" name="content_videos[]">
                                 <div class="upload-status text-green-500"></div>
@@ -132,45 +124,65 @@
                         </label>
                     </div>
         `;
-                contentSections.appendChild(newSection);
-            });
-            document.getElementById('content-sections').addEventListener('click', function(event) {
-                if (event.target.classList.contains('remove-content')) {
-                    event.target.closest('.content-form').remove();
+        }
+
+        document.getElementById('add-content').addEventListener('click', function() {
+            const contentForms = document.getElementById('content-forms');
+            contentForms.insertAdjacentHTML('beforeend', createContentForm());
+        });
+
+        document.getElementById('content-forms').addEventListener('click', function(event) {
+            if (event.target.classList.contains('remove-content')) {
+                event.target.closest('.content-form').remove();
+            }
+        });
+
+        document.getElementById('content-forms').addEventListener('change', function(event) {
+            if (event.target.classList.contains('video-upload')) {
+                const file = event.target.files[0];
+                const statusDiv = event.target.nextElementSibling.nextElementSibling;
+                const hiddenInput = event.target.nextElementSibling;
+
+                if (file) {
+                    const formData = new FormData();
+                    formData.append('video', file);
+
+                    statusDiv.innerHTML = 'جاري التحميل...';
+
+                    axios.post('{{ route('upload.video') }}', formData, {
+                        headers: {
+                            'Content-Type': 'multipart/form-data'
+                        },
+                        onUploadProgress: function(progressEvent) {
+                            const percentCompleted = Math.round((progressEvent.loaded * 100) /
+                                progressEvent.total);
+                            statusDiv.innerHTML = `جاري التحميل: ${percentCompleted}%`;
+                        }
+                    }).then(function(response) {
+                        statusDiv.innerHTML = `تم التحميل: ${file.name}`;
+                        hiddenInput.value = response.data.path;
+                    }).catch(function(error) {
+                        statusDiv.innerHTML = 'فشل التحميل. يرجى المحاولة مرة أخرى.';
+                        console.error('Upload error:', error);
+                    });
+                }
+            }
+        });
+
+        document.getElementById('courseForm').addEventListener('submit', function(event) {
+            event.preventDefault();
+            const videoInputs = document.querySelectorAll('input[name="content_videos[]"]');
+            let allUploaded = true;
+            videoInputs.forEach(input => {
+                if (!input.value) {
+                    allUploaded = false;
                 }
             });
-            document.getElementById('content-sections').addEventListener('change', function(event) {
-                if (event.target.classList.contains('video-upload')) {
-                    const file = event.target.files[0];
-                    const statusDiv = event.target.nextElementSibling.nextElementSibling;
-                    const hiddenInput = event.target.nextElementSibling;
-
-                    if (file) {
-                        const formData = new FormData();
-                        formData.append('video', file);
-
-                        statusDiv.innerHTML = 'جاري التحميل...';
-
-                        axios.post('{{ route('upload.video') }}', formData, {
-                            headers: {
-                                'Content-Type': 'multipart/form-data'
-                            },
-                            onUploadProgress: function(progressEvent) {
-                                const percentCompleted = Math.round((progressEvent.loaded *
-                                        100) /
-                                    progressEvent.total);
-                                statusDiv.innerHTML = `جاري التحميل: ${percentCompleted}%`;
-                            }
-                        }).then(function(response) {
-                            statusDiv.innerHTML = `تم التحميل: ${file.name}`;
-                            hiddenInput.value = response.data.path;
-                        }).catch(function(error) {
-                            statusDiv.innerHTML = 'فشل التحميل. يرجى المحاولة مرة أخرى.';
-                            console.error('Upload error:', error);
-                        });
-                    }
-                }
-            });
+            if (allUploaded) {
+                this.submit();
+            } else {
+                alert('يرجى انتظار التحميل النهائي للمقاطع قبل إرسال النموذج.');
+            }
         });
     </script>
     <script>
@@ -200,9 +212,8 @@
                                 timerProgressBar: true,
                                 showConfirmButton: false,
                             });
-                            setTimeout(() => {
-                                window.location.href = response.redirect;
-                            }, 2500);
+                            // 
+                            window.location.href = response.redirect;
                         } else {
                             Swal.fire({
                                 title: response.message,
@@ -215,7 +226,7 @@
                     },
                     error: function(xhr) {
                         Swal.fire({
-                            title: 'An error occurred. Please try again.',
+                            title: 'حدث خطأ أثناء تحديث الدورة !',
                             icon: 'error',
                             timer: 3000,
                             timerProgressBar: true,
@@ -231,5 +242,4 @@
             });
         });
     </script>
-    <script src="https://unpkg.com/@lottiefiles/lottie-player@latest/dist/lottie-player.js"></script>
-@endsection
+@endpush

@@ -60,6 +60,7 @@
             border-radius: 10px;
             background: #25282e;
         }
+
         /* Style the autofill inputes */
         input:-webkit-autofill,
         input:-webkit-autofill:hover,
@@ -80,6 +81,26 @@
             background-color: transparent !important;
             color: inherit !important;
         }
+
+        /* video from edit course */
+        /* .embed-responsive {
+            position: relative;
+            display: block;
+            width: 100%;
+            padding: 0;
+            overflow: hidden;
+        }
+
+        .embed-responsive::before {
+            content: "";
+            display: block;
+            padding-top: 56.25%;
+        }
+            */
+            .vimeo iframe {            
+            width: 500px;
+            border: 250px;
+        } 
     </style>
 
 
