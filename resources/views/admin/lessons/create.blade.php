@@ -79,11 +79,20 @@
                 id="submit-form">إنشاء
                 الشرح</button>
         </form>
+        <div id="loader" style="display: none;"
+            class="absolute  w-3/4 h-screen  flex flex-col items-center justify-center">
+            <p class="text-indigo-600 lg:text-5xl text-2xl mb-2">جاري إنشاء الشرح...</p>
+            <lottie-player src="https://lottie.host/25165b5d-de71-47e1-b452-1a7daf8a6aec/6b0mvv9d9K.json" class="mb-24"
+                background="##ffffff" speed="1" style="width: 400px; height: 400px" loop autoplay direction="1"
+                mode="normal"></lottie-player>
+        </div>
     </div>
 @endsection
 
 @push('scripts')
     <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://unpkg.com/@lottiefiles/lottie-player@latest/dist/lottie-player.js"></script>
     <script>
         function createContentForm() {
             const formCount = document.querySelectorAll('.content-form').length;
@@ -178,6 +187,69 @@
             } else {
                 alert('يرجى انتظار التحميل النهائي للمقاطع قبل إرسال النموذج.');
             }
+        });
+    </script>
+    <script>
+        $(document).ready(function() {
+            $('#lessonForm').on('submit', function(e) {
+                e.preventDefault();
+
+                var formData = new FormData(this);
+
+                $.ajax({
+                    url: '{{ route('admin.lessons.store') }}',
+                    type: 'POST',
+                    data: formData,
+                    processData: false,
+                    contentType: false,
+                    beforeSend: function() {
+                        $('#loader').show();
+                        $('#submitBtn').prop('disabled', true);
+                        $('#lessonForm').hide();
+                    },
+                    success: function(response) {
+                        if (response.success) {
+                            Swal.fire({
+                                title: response.message,
+                                icon: 'success',
+                                timer: 3000,
+                                timerProgressBar: true,
+                                showConfirmButton: false,
+                            }).then(() => {
+                                // Redirect after the Swal alert is closed
+                                window.location.href = response.redirect;
+                            });
+                        } else {
+                            Swal.fire({
+                                title: response.message,
+                                icon: 'error',
+                                timer: 3000,
+                                timerProgressBar: true,
+                                showConfirmButton: false,
+                            }).then(() => {
+                                // Redirect after the Swal alert is closed
+                                window.location.href = response.redirect;
+                            });
+                        }
+                    },
+                    error: function(xhr) {
+                        Swal.fire({
+                            title: 'حدث خطأ أثناء تحديث الشرح !',
+                            icon: 'error',
+                            timer: 3000,
+                            timerProgressBar: true,
+                            showConfirmButton: false,
+                        }).then(() => {
+                            // Redirect after the Swal alert is closed
+                            window.location.href = response.redirect;
+                        });
+                    },
+                    complete: function() {
+                        $('#loader').hide();
+                        $('#submitBtn').prop('disabled', false);
+                    }
+                });
+            });
         });
     </script>
 @endpush

@@ -81,8 +81,15 @@
                                     class="form-control-file video-upload hidden" accept="video/*">
                                 <input type="hidden" name="content_videos[]" value="{{ $content->url }}">
                                 <div class="upload-status w-full flex justify-center items-center">
-                                    <video src="{{ asset('storage/' . $content->url) }}" controls
-                                        class="w-full h-full"></video>
+                                    {{-- //////////////////////////////////////////////////////////////////////////////////////////// --}}
+                                    @if ($content->url)
+                                        <video class="plyr-player" playsinline controls>
+                                            <source src="{{ $cloudFrontDomain . $content->url }}"
+                                                type="video/mp4">
+                                        </video>
+                                    @endif
+                                    {{-- //////////////////////////////////////////////////////////////////////////////////////////// --}}
+
                                 </div>
                             </div>
 
@@ -115,11 +122,23 @@
             <x-icons.save class="w-6 h-6 mr-2" />
         </button>
     </form>
+     <div id="loader" style="display: none;"
+        class="absolute  w-3/4 h-screen  flex flex-col items-center justify-center">
+        <p class="text-indigo-600 lg:text-5xl text-2xl mb-2">جاري تحديث الشرح...</p>
+        <lottie-player src="https://lottie.host/25165b5d-de71-47e1-b452-1a7daf8a6aec/6b0mvv9d9K.json" class="mb-24"
+            background="##ffffff" speed="1" style="width: 400px; height: 400px" loop autoplay direction="1"
+            mode="normal"></lottie-player>
+    </div>
 </div>
 @endsection
 
 @push('scripts')
 <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://unpkg.com/sweetalert2@11"></script>
+<script src="https://cdn.plyr.io/3.7.8/plyr.polyfilled.js"></script>
+
+{{-- add content script --}}
 <script>
     function createContentForm() {
         const formCount = document.querySelectorAll('.content-form').length;
@@ -217,4 +236,95 @@
         }
     });
 </script>
+
+{{-- Update Ajax request script --}}
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const form = document.getElementById('lessonForm');
+        form.addEventListener('submit', function(e) {
+            e.preventDefault();
+
+            var form = this;
+            var formData = new FormData(form);
+
+            // Manually append file inputs
+            $('input[type="file"]').each(function() {
+                var files = $(this)[0].files;
+                var inputName = $(this).attr('name');
+                if (files.length > 0) {
+                    formData.append(inputName, files[0]);
+                }
+            });
+
+            // Log FormData contents (for debugging)
+            // for (var pair of formData.entries()) {
+            //     console.log(pair[0] + ': ' + pair[1]);
+            // }
+
+            $.ajax({
+                url: '{{ route('admin.lessons.update', $lesson->id) }}',
+                type: 'POST', // Change to POST
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                },
+                data: formData,
+                processData: false,
+                contentType: false,
+                beforeSend: function() {
+                    $('#loader').show();
+                    $('#submitBtn').prop('disabled', true);
+                    $('#lessonForm').hide();
+                },
+                success: function(response) {
+                    if (response.success) {
+                        Swal.fire({
+                            title: response.message,
+                            icon: 'success',
+                            timer: 1500,
+                            timerProgressBar: true,
+                            showConfirmButton: false,
+                        }).then(() => {
+                            // Redirect after the Swal alert is closed
+                            window.location.href = response.redirect;
+                        });
+                    } else {
+                        Swal.fire({
+                            title: response.message,
+                            icon: 'error',
+                            timer: 1500,
+                            timerProgressBar: true,
+                            showConfirmButton: false,
+                        });
+                        setTimeout(() => {
+                            window.location.href = response.redirect;
+                        }, 2000);
+                    }
+                },
+                error: function(xhr) {
+                    Swal.fire({
+                        title: ' حدث خطأ أثناء تحديث الشرح !',
+                        icon: 'error',
+                        timer: 3000,
+                        timerProgressBar: true,
+                        showConfirmButton: false,
+                    }).then(() => {
+                        // Redirect after the Swal alert is closed
+                        window.location.href = response.redirect;
+                    });
+                },
+                complete: function() {
+                    $('#loader').hide();
+                    $('#submitBtn').prop('disabled', false);
+                    $('#lessonForm').show();
+                }
+            });
+        });
+    });
+</script>
+<script>
+    const players = Plyr.setup('.plyr-player');
+</script>
+
+{{-- loader from lottie --}}
+<script src="https://unpkg.com/@lottiefiles/lottie-player@latest/dist/lottie-player.js"></script>
 @endpush

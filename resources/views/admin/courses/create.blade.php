@@ -211,9 +211,10 @@
                                 timer: 3000,
                                 timerProgressBar: true,
                                 showConfirmButton: false,
+                            }).then(() => {
+                                // Redirect after the Swal alert is closed
+                                window.location.href = response.redirect;
                             });
-                            // 
-                            window.location.href = response.redirect;
                         } else {
                             Swal.fire({
                                 title: response.message,
@@ -221,6 +222,9 @@
                                 timer: 3000,
                                 timerProgressBar: true,
                                 showConfirmButton: false,
+                            }).then(() => {
+                                // Redirect after the Swal alert is closed
+                                window.location.href = response.redirect;
                             });
                         }
                     },
@@ -231,8 +235,10 @@
                             timer: 3000,
                             timerProgressBar: true,
                             showConfirmButton: false,
+                        }).then(() => {
+                            // Redirect after the Swal alert is closed
+                            window.location.href = response.redirect;
                         });
-                        console.error(xhr.responseText);
                     },
                     complete: function() {
                         $('#loader').hide();

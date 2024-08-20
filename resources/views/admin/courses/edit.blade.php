@@ -79,13 +79,14 @@
                                     class="form-control-file video-upload hidden" accept="video/*">
                                 <input type="hidden" name="content_videos[]" value="{{ $content->url }}">
                                 <div class="upload-status w-full flex justify-center items-center">
+                                    {{-- //////////////////////////////////////////////////////////////////////////////////////////// --}}
                                     @if ($content->url)
-                                        <video id="my-video" class="video-js" controls preload="auto" width="640"
-                                            height="360">
-                                            <source src="{{ 'https://d2ukev9ec5j8nj.cloudfront.net/' . $content->url }}"
+                                        <video  class="plyr-player" playsinline controls>
+                                            <source src="{{ $cloudFrontDomain . $content->url }}"
                                                 type="video/mp4">
                                         </video>
                                     @endif
+                                    {{-- //////////////////////////////////////////////////////////////////////////////////////////// --}}
 
                                 </div>
 
@@ -131,11 +132,12 @@
 @endsection
 
 @push('scripts')
-<script src="https://player.vimeo.com/api/player.js"></script>
 <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script src="https://unpkg.com/sweetalert2@11"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/video.js/8.17.3/video.min.js" integrity="sha512-gqDlEVSJBx2sY4FCoF8fElKc1JpQqbKnZSBmBEW/qQ6rRSyfIEAkevSH22LnGZ5vsNrhv79fM4S+AMmmCEMQKA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+<script src="https://cdn.plyr.io/3.7.8/plyr.polyfilled.js"></script>
+
+{{-- add content script --}}
 <script>
     function createContentForm() {
         const formCount = document.querySelectorAll('.content-form').length;
@@ -233,9 +235,15 @@
         }
     });
 </script>
+
+{{-- Update Ajax request script --}}
 <script>
-    $(document).ready(function() {
-        $('#courseForm').on('submit', function(e) {
+    // $(document).ready(function() {
+    //     $('#courseForm').on('submit', function(e) {
+    //         e.preventDefault();
+    document.addEventListener('DOMContentLoaded', function() {
+        const form = document.getElementById('courseForm');
+        form.addEventListener('submit', function(e) {
             e.preventDefault();
 
             var form = this;
@@ -251,9 +259,9 @@
             });
 
             // Log FormData contents (for debugging)
-            for (var pair of formData.entries()) {
-                console.log(pair[0] + ': ' + pair[1]);
-            }
+            // for (var pair of formData.entries()) {
+            //     console.log(pair[0] + ': ' + pair[1]);
+            // }
 
             $.ajax({
                 url: '{{ route('admin.courses.update', $course->id) }}',
@@ -277,8 +285,10 @@
                             timer: 1500,
                             timerProgressBar: true,
                             showConfirmButton: false,
+                        }).then(() => {
+                            // Redirect after the Swal alert is closed
+                            window.location.href = response.redirect;
                         });
-                        window.location.href = response.redirect;
                     } else {
                         Swal.fire({
                             title: response.message,
@@ -287,6 +297,9 @@
                             timerProgressBar: true,
                             showConfirmButton: false,
                         });
+                        setTimeout(() => {
+                            window.location.href = response.redirect;
+                        }, 2000);
                     }
                 },
                 error: function(xhr) {
@@ -296,8 +309,10 @@
                         timer: 3000,
                         timerProgressBar: true,
                         showConfirmButton: false,
+                    }).then(() => {
+                        // Redirect after the Swal alert is closed
+                        window.location.href = response.redirect;
                     });
-                    console.error(xhr.responseText);
                 },
                 complete: function() {
                     $('#loader').hide();
@@ -308,16 +323,12 @@
         });
     });
 </script>
-{{-- video.js --}}
+
+{{-- plyr --}}
 <script>
-    document.addEventListener('DOMContentLoaded', function() {
-        const player = videojs('my-video', {
-            controls: true,
-            autoplay: false,
-            preload: 'auto',
-        });
-    });
+    const players = Plyr.setup('.plyr-player');
 </script>
+
 {{-- loader from lottie --}}
 <script src="https://unpkg.com/@lottiefiles/lottie-player@latest/dist/lottie-player.js"></script>
 @endpush

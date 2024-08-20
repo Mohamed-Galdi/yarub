@@ -27,6 +27,9 @@
         integrity="sha512-v2CJ7UaYy4JwqLDIrZUI/4hqeoQieOmAZNXBeQyjo21dadnwR+8ZaIJVT8EE2iyI61OV8e6M8PP2/4hpQINQ/g=="
         crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 
+    {{-- plyr styles cdn --}}
+    <link rel="stylesheet" href="https://cdn.plyr.io/3.7.8/plyr.css" />
+
     <style>
         /* Scrollbar */
         ::-webkit-scrollbar {
@@ -82,28 +85,29 @@
             color: inherit !important;
         }
 
-        /* video from edit course */
-        /* .embed-responsive {
-            position: relative;
-            display: block;
-            width: 100%;
-            padding: 0;
-            overflow: hidden;
+        .vjs-big-play-button {
+            background-color: rgba(222, 0, 0, 0.45);
+            border: none;
+            border-radius: 50%;
+            height: 80px;
+            width: 80px;
         }
 
-        .embed-responsive::before {
-            content: "";
-            display: block;
-            padding-top: 56.25%;
+        /* Custom progress bar */
+        .vjs-play-progress {
+            background-color: #ff0000;
         }
-            */
-            .vimeo iframe {            
-            width: 500px;
-            border: 250px;
-        } 
+
+        /* Custom control bar */
+        .vjs-control-bar {
+            background-color: rgba(248, 0, 0, 0.7);
+        }
+
+        /* ////////////// plyr main color ////////////// */
+        :root {
+            --plyr-color-main: #6875f5;
+        }
     </style>
-
-
 
 </head>
 
@@ -279,6 +283,7 @@
     @include('flatpickr::components.script')
     <script src="https://cdn.jsdelivr.net/npm/flowbite@2.4.1/dist/flowbite.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/puppeteer@22.14.0/lib/cjs/puppeteer/puppeteer.min.js"></script>
+    
 </body>
 @stack('scripts')
 

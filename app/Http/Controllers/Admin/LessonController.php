@@ -39,6 +39,7 @@ class LessonController extends Controller
      */
     public function store(Request $request)
     {
+        set_time_limit(3000);
         $request->validate([
             'title' => 'required|string|max:255',
             'description' => 'required|string',
@@ -52,39 +53,48 @@ class LessonController extends Controller
         ]);
         // dd($request->all());
 
-        DB::beginTransaction();
+        if (request()->ajax()) {
+            DB::beginTransaction();
 
-        try {
-            $lesson = Lesson::create([
-                'title' => $request->title,
-                'description' => $request->description,
-                'type' => $request->type,
-                'monthly_price' => $request->monthly_price,
-                'annual_price' => $request->annual_price,
-            ]);
-
-            foreach ($request->content_titles as $index => $title) {
-                $tempPath = $request->content_videos[$index];
-                $finalPath = $this->moveVideoToFinalLocation($tempPath, $lesson->id);
-                // dd($title, $finalPath);
-                Content::create([
-                    'lesson_id' => $lesson->id,
-                    'title' => $title,
-                    'url' => $finalPath,
+            try {
+                $lesson = Lesson::create([
+                    'title' => $request->title,
+                    'description' => $request->description,
+                    'type' => $request->type,
+                    'monthly_price' => $request->monthly_price,
+                    'annual_price' => $request->annual_price,
                 ]);
+
+                foreach ($request->content_titles as $index => $title) {
+                    $tempPath = $request->content_videos[$index];
+                    $finalPath = $this->moveVideoToFinalLocation($tempPath, $lesson->id);
+                    Content::create([
+                        'lesson_id' => $lesson->id,
+                        'title' => $title,
+                        'url' => $finalPath,
+                    ]);
+                }
+
+                $this->cleanupTempFolder();
+
+                DB::commit();
+                return response()->json([
+                    'success' => true,
+                    'message' => 'تم إنشاء الشرح بنجاح !',
+                    'redirect' => route('admin.lessons')
+                ]);
+            } catch (\Exception $e) {
+                DB::rollBack();
+                $this->cleanupTempFolder();
+                throw $e;
+                return response()->json([
+                    'success' => false,
+                    'message' => 'حدث خطأ أثناء إنشاء الشرح !',
+                    'error' => $e->getMessage()
+                ], 500);
             }
-
-            $this->cleanupTempFolder();
-
-            DB::commit();
-            Alert::success('تم إنشاء الشرح بنجاح !');
-            return redirect()->route('admin.lessons')->with('success', 'Lesson created successfully!');
-        } catch (\Exception $e) {
-            DB::rollBack();
-            $this->cleanupTempFolder();
-            throw $e;
-
-            return back()->with('error', 'An error occurred while creating the lesson. Please try again.');
+        } else {
+            return redirect()->route('admin.lessons');
         }
     }
 
@@ -104,15 +114,21 @@ class LessonController extends Controller
     private function moveVideoToFinalLocation($tempPath, $lessonId)
     {
         if (!Storage::disk('public')->exists($tempPath)) {
-            throw new \Exception("Temporary file not found: {$tempPath}");
+            // throw new \Exception("Temporary file not found: {$tempPath}");
+            return null;
         }
 
         $fileName = basename($tempPath);
         $finalPath = "{$this->finalFolder}/lesson-{$lessonId}_{$fileName}";
 
-        Storage::disk('public')->move($tempPath, $finalPath);
+        $fileContents = Storage::disk('public')->get($tempPath);
 
-        return $finalPath;
+        if (Storage::disk('s3')->put($finalPath, $fileContents)) {
+            return $finalPath;
+        } else {
+            throw new \Exception("Failed to upload file to S3: {$finalPath}");
+            return null;
+        }
     }
 
     private function cleanupTempFolder()
@@ -137,8 +153,9 @@ class LessonController extends Controller
      */
     public function edit($id)
     {
+        $cloudFrontDomain = env('AWS_CLOUDFRONT_DOMAIN');
         $lesson = Lesson::with('content')->findOrFail($id);
-        return view('admin.lessons.edit', compact('lesson'));
+        return view('admin.lessons.edit', compact('lesson', 'cloudFrontDomain'));
     }
 
 
@@ -147,6 +164,10 @@ class LessonController extends Controller
      */
     public function update(Request $request, $id)
     {
+        set_time_limit(3000);
+
+        
+
         $request->validate([
             'title' => 'required|string|max:255',
             'description' => 'required|string',
@@ -160,60 +181,70 @@ class LessonController extends Controller
             'content_ids' => 'array|min:1',
             'content_ids.*' => 'nullable|integer|exists:contents,id',
         ]);
-        // dd($request->all());
-        DB::beginTransaction();
+        if (request()->ajax()) {
+            DB::beginTransaction();
 
-        try {
-            $lesson = Lesson::findOrFail($id);
-            $lesson->update([
-                'title' => $request->title,
-                'description' => $request->description,
-                'type' => $request->type,
-                'monthly_price' => $request->monthly_price,
-                'annual_price' => $request->annual_price,
-                'is_published' => $request->has('published'),
+            try {
+                $lesson = Lesson::findOrFail($id);
+                $lesson->update([
+                    'title' => $request->title,
+                    'description' => $request->description,
+                    'type' => $request->type,
+                    'monthly_price' => $request->monthly_price,
+                    'annual_price' => $request->annual_price,
+                    'is_published' => $request->has('published'),
 
-            ]);
+                ]);
 
-            // check if content_titles array exist and not empty
-            if ($request->has('content_titles') && count($request->content_titles) > 0) {
-                foreach ($request->content_titles as $index => $title) {
-                    $contentId = $request->content_ids[$index];
-                    $videoPath = $request->content_videos[$index];
+                // check if content_titles array exist and not empty
+                if ($request->has('content_titles') && count($request->content_titles) > 0) {
+                    foreach ($request->content_titles as $index => $title) {
+                        $contentId = $request->content_ids[$index];
+                        $videoPath = $request->content_videos[$index];
 
-                    if ($contentId) {
-                        // Update existing content
-                        $content = Content::findOrFail($contentId);
-                        $content->title = $title;
-                        if ($videoPath && $videoPath !== $content->url) {
-                            // New video uploaded, move it to final location
+                        if ($contentId) {
+                            // Update existing content
+                            $content = Content::findOrFail($contentId);
+                            $content->title = $title;
+                            if ($videoPath && $videoPath !== $content->url) {
+                                // New video uploaded, move it to final location
+                                $finalPath = $this->moveVideoToFinalLocation($videoPath, $lesson->id);
+                                // Delete old video
+                                Storage::disk('public')->delete($content->url);
+                                $content->url = $finalPath;
+                            }
+                            $content->save();
+                        } else {
+                            // Create new content
                             $finalPath = $this->moveVideoToFinalLocation($videoPath, $lesson->id);
-                            // Delete old video
-                            Storage::disk('public')->delete($content->url);
-                            $content->url = $finalPath;
+                            Content::create([
+                                'lesson_id' => $lesson->id,
+                                'title' => $title,
+                                'url' => $finalPath,
+                            ]);
                         }
-                        $content->save();
-                    } else {
-                        // Create new content
-                        $finalPath = $this->moveVideoToFinalLocation($videoPath, $lesson->id);
-                        Content::create([
-                            'lesson_id' => $lesson->id,
-                            'title' => $title,
-                            'url' => $finalPath,
-                        ]);
                     }
                 }
+
+                $this->cleanupTempFolder();
+
+                DB::commit();
+                return response()->json([
+                    'success' => true,
+                    'message' => 'تم تحديث الشرح بنجاح !',
+                    'redirect' => route('admin.lessons')
+                ]);
+            } catch (\Exception $e) {
+                DB::rollBack();
+                $this->cleanupTempFolder();
+                return response()->json([
+                    'success' => false,
+                    'message' => 'حدث خطأ أثناء تحديث الشرح !',
+                    'error' => $e->getMessage()
+                ], 500);
             }
-
-            $this->cleanupTempFolder();
-
-            DB::commit();
-            Alert::success('تم تحديث الشرح بنجاح !');
-            return redirect()->route('admin.lessons')->with('success', 'Lesson updated successfully!');
-        } catch (\Exception $e) {
-            DB::rollBack();
-            $this->cleanupTempFolder();
-            return back()->with('error', 'An error occurred while updating the lesson. Please try again.');
+        } else {
+            return redirect()->route('admin.lessons.edit', $id);
         }
     }
 
