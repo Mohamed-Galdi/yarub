@@ -16,6 +16,44 @@
     <!-- Preline -->
     <script src="https://cdn.jsdelivr.net/npm/preline@2.4.1/dist/preline.min.js"></script>
 
+    {{-- plyr styles cdn --}}
+    <link rel="stylesheet" href="https://cdn.plyr.io/3.7.8/plyr.css" />
+
+    <style>
+        /* Scrollbar */
+        ::-webkit-scrollbar {
+            width: 10px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background-color: #ebebeb;
+            -webkit-border-radius: 10px;
+            border-radius: 10px;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            -webkit-border-radius: 10px;
+            border-radius: 10px;
+            background: #bdc4d5;
+        }
+
+        .sidebar::-webkit-scrollbar {
+            width: 5px;
+        }
+
+        .sidebar::-webkit-scrollbar-track {
+            background-color: #ebebeb;
+            -webkit-border-radius: 10px;
+            border-radius: 10px;
+        }
+
+        .sidebar::-webkit-scrollbar-thumb {
+            -webkit-border-radius: 10px;
+            border-radius: 10px;
+            background: #25282e;
+        }
+    </style>
+
 
 </head>
 
@@ -60,18 +98,18 @@
                     class="overflow-hidden overflow-y-auto  flex lg:flex-row flex-col  lg:h-16 justify-between lg:gap-0 gap-4 lg:rounded-none rounded-md lg:p-0 p-2 lg:bg-pr-600 bg-pr-300 items-stretch [&::-webkit-scrollbar]:w-2 [&::-webkit-scrollbar-thumb]:rounded-full [&::-webkit-scrollbar-track]:bg-gray-100 [&::-webkit-scrollbar-thumb]:bg-gray-300">
                     <div
                         class=" lg:py-0 h-full flex flex-col lg:flex-row lg:items-center lg:justify-end gap-0.5 lg:gap-1">
-                        <x-btn.student-nav-item :route="'student.courses.index'" :title="'الدورات'">
+                        <x-btn.student-nav-item :route="'student.courses.index'" :item="'courses'" :title="'الدورات'">
                             <x-icons.course class="w-5 h-5 text-white" />
                             <!-- Replace with your actual icon component -->
                         </x-btn.student-nav-item>
-                        <x-btn.student-nav-item :route="'student.lessons.index'" :title="'الشروحات'">
+                        <x-btn.student-nav-item :route="'student.lessons.index'" :item="'lessons'" :title="'الشروحات'">
                             <x-icons.lesson class="w-5 h-5 text-white" />
                             <!-- Replace with your actual icon component -->
                         </x-btn.student-nav-item>
-                        <x-btn.student-nav-item :route="'student.tests.index'" :title="'الإختبارات'">
+                        <x-btn.student-nav-item :route="'student.tests.index'" :item="'tests'" :title="'الإختبارات'">
                             <x-icons.test class="w-5 h-5 text-white" /> <!-- Replace with your actual icon component -->
                         </x-btn.student-nav-item>
-                        <x-btn.student-nav-item :route="'student.certificates.index'" :title="'الشواهد'">
+                        <x-btn.student-nav-item :route="'student.certificates.index'" :item="'certificates'" :title="'الشواهد'">
                             <x-icons.certificate class="w-5 h-5 text-white" />
                             <!-- Replace with your actual icon component -->
                         </x-btn.student-nav-item>
@@ -115,7 +153,7 @@
     </header>
 
 
-    <main dir="rtl" class="min-h-[calc(100vh-6rem)] bg-gradient-to-bl from-indigo-300 to-indigo-100 ">
+    <main dir="rtl" class="">
         @yield('content')
     </main>
     <footer class="bg-pr-800 text-white h-40 w-full">
@@ -166,10 +204,6 @@
     <script src="//unpkg.com/alpinejs" defer></script>
     {{-- SweetAlert2 --}}
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-
-
-
-
 </body>
 
 </html>

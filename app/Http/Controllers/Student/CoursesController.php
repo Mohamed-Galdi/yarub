@@ -19,7 +19,8 @@ class CoursesController extends Controller
 
     public function show(Course $course)
     {
+        $cloudFrontDomain = env('AWS_CLOUDFRONT_DOMAIN');
         $course->load('content');
-        return view('student.courses.show', compact('course'));
+        return view('student.courses.show', compact('course', 'cloudFrontDomain'));
     }
 }

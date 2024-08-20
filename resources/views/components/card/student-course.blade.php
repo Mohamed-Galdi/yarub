@@ -2,7 +2,7 @@
 @props(['course'])
 
 <div
-    {{ $attributes->merge(['class' => 'w-full min-h-96 bg-gradient-to-tr from-indigo-800 to-indigo-400 rounded-xl shadow-lg p-4 space-y-4 overflow-hidden']) }}>
+    {{ $attributes->merge(['class' => 'w-full min-h-96 bg-gradient-to-tr from-indigo-800 to-indigo-400 rounded-xl shadow-lg p-4 space-y-4 overflow-hidden border-2 border-white']) }}>
     <div class="w-full h-44 rounded-xl overflow-hidden">
         <x-card.course-img title="'{{ $course->title }}'" />
     </div>
