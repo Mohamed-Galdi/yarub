@@ -21,9 +21,9 @@
         </div>
         <div class="h-12 w-[2px] bg-white rounded-md"></div>
         <div class=" flex flex-col justify-center items-center w-1/3">
-            <p class="text-yellow-300">تاريخ الإنضمام</p>
+            <p class="text-yellow-300 text-nowrap truncate">تاريخ الإنضمام</p>
             <div class="flex gap-2 items-center justify-center">
-                <p>{{ $course->pivot->created_at->diffForHumans() }}</p>
+                <p class="text-nowrap truncate">{{ $course->pivot->created_at->diffForHumans() }}</p>
             </div>
         </div>
 

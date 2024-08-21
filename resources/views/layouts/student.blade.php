@@ -59,7 +59,7 @@
 
 <body class="font-hacen antialiased">
 
-    <header class="flex flex-wrap lg:justify-start lg:flex-nowrap z-50 w-full bg-pr-600 h-16 ">
+    <header class="flex flex-wrap lg:justify-start lg:flex-nowrap w-full bg-pr-600 h-16 ">
         <nav dir="rtl"
             class="relative h-full max-w-[85rem] w-full lg:flex lg:items-center lg:justify-between lg:gap-3 mx-auto px-4 sm:px-6 lg:px-8 ">
             <!-- Logo w/ Collapse Button -->
@@ -95,7 +95,7 @@
                 class="hs-collapse hidden overflow-hidden transition-all duration-300 basis-full grow lg:block"
                 aria-labelledby="hs-base-header-collapse">
                 <div
-                    class="overflow-hidden overflow-y-auto  flex lg:flex-row flex-col  lg:h-16 justify-between lg:gap-0 gap-4 lg:rounded-none rounded-md lg:p-0 p-2 lg:bg-pr-600 bg-pr-300 items-stretch [&::-webkit-scrollbar]:w-2 [&::-webkit-scrollbar-thumb]:rounded-full [&::-webkit-scrollbar-track]:bg-gray-100 [&::-webkit-scrollbar-thumb]:bg-gray-300">
+                    class="overflow-hidden overflow-y-auto relative z-70  flex lg:flex-row flex-col  lg:h-16 justify-between lg:gap-0 gap-4 lg:rounded-none rounded-md lg:p-0 p-2 lg:bg-pr-600 bg-pr-300 items-stretch [&::-webkit-scrollbar]:w-2 [&::-webkit-scrollbar-thumb]:rounded-full [&::-webkit-scrollbar-track]:bg-gray-100 [&::-webkit-scrollbar-thumb]:bg-gray-300">
                     <div
                         class=" lg:py-0 h-full flex flex-col lg:flex-row lg:items-center lg:justify-end gap-0.5 lg:gap-1">
                         <x-btn.student-nav-item :route="'student.courses.index'" :item="'courses'" :title="'الدورات'">
