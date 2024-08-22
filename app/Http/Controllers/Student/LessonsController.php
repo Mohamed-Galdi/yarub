@@ -11,7 +11,7 @@ use RealRashid\SweetAlert\Facades\Alert;
 
 class LessonsController extends Controller
 {
-   
+    
     public function index()
     {
         $user = Auth::user();

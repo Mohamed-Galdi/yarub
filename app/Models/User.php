@@ -163,4 +163,13 @@ class User extends Authenticatable
 
         return $lessons;
     }
+
+    public function availableTests()
+    {
+        $courseTests = $this->courses()->with('tests')->get()->pluck('tests')->flatten();
+        $lessonTests = $this->lessons()->with('tests')->get()->pluck('tests')->flatten();
+
+        return $courseTests->merge($lessonTests)->unique('id');
+    }
+
 }

@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Student\CoursesController;
 use App\Http\Controllers\Student\LessonsController;
+use App\Http\Controllers\Student\TestsController;
 use Illuminate\Support\Facades\Route;
 
 
@@ -28,7 +29,8 @@ Route::middleware(['auth', 'verified', 'student'])->prefix('student-dashboard')-
         Route::post('/lessons/{lesson_id}/rating', [LessonsController::class, 'rating'])->name('student.lessons.rating');
 
     // /////////// Tests Routes ////////////
-    Route::get('/tests', function () { return view('student.tests.index');})->name('student.tests.index');
+    Route::get('/tests', [TestsController::class, 'index'])->name('student.tests.index');
+    Route::get('/tests/{test}', [TestsController::class, 'take'])->name('student.tests.take');
 
     // /////////// Certificates Routes ////////////
     Route::get('/certificates', function () { return view('student.certificates.index');})->name('student.certificates.index');
