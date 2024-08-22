@@ -1,7 +1,7 @@
 @extends('layouts.student')
 
 @section('content')
-    @if ($course->content->count() > 0)
+    @if ($lesson->content->count() > 0)
         <div class="area-container flex bg-pr-200 w-full min-h-screen">
             {{-- toggle sidebar --}}
             <button id="openButton" class="lg:hidden w-8 p-2   bg-gray-200 ">
@@ -11,24 +11,24 @@
             <div id="sidebar"
                 class=" z-10 translate-x-full hidden lg:block lg:relative absolute lg:translate-x-0 transision-all duration-300 ease-in-out lg:w-1/5 w-1/2 bg-pr-900 p-4 overflow-y-auto lg:h-[calc(100vh+6px)] h-screen">
                 <div class="flex justify-between items-center mt-10">
-                    <h2 class="text-xl font-bold mb-4 text-slate-200">محتويات الدورة</h2>
+                    <h2 class="text-xl font-bold mb-4 text-slate-200">محتويات الشرح</h2>
                     <div id="closeButton" class="text-sm text-slate-300 mb-4 cursor-pointer lg:hidden block">
                         <x-icons.x class="w-6 h-6" />
                     </div>
                 </div>
                 <button data-modal-target="review_modal" data-modal-toggle="review_modal"
-                    class="absolute flex justify-center items-center gap-2 w-full top-0 h-10 right-0 p-2 bg-slate-200 hover:bg-indigo-400 hover:font-bold transition-all duration-300 ease-in-out">
-                    <p>{{ $review ? 'تعديل التقييم' : 'تقييم الدورة' }}</p>
+                    class="absolute flex justify-center items-center gap-2 w-full top-0 h-10 right-0 p-2 bg-slate-200 hover:bg-teal-500 hover:font-bold transition-all duration-300 ease-in-out">
+                    <p>{{ $review ? 'تعديل التقييم' : 'تقييم الشرح' }}</p>
                     <x-icons.star class="w-6 h-6 text-warning-400" />
                 </button>
                 <ul>
-                    @foreach ($course->content as $index => $content)
+                    @foreach ($lesson->content as $index => $content)
                         <li class="mb-4   ">
                             <a href="#"
-                                class="content-link group  py-3 px-2 rounded-xl max-h-20 overflow-hidden flex items-center gap-2 transition-all duration-100 ease-in-out {{ $loop->first ? 'bg-indigo-500 text-slate-200' : 'bg-pr-200 text-slate-300' }}"
+                                class="content-link group   py-3 px-2 rounded-xl max-h-20 overflow-hidden flex items-center gap-2 transition-all duration-100 ease-in-out {{ $loop->first ? 'bg-teal-700 text-slate-200' : 'bg-pr-200 text-slate-300' }}"
                                 data-video="{{ $cloudFrontDomain . $content->url }}">
                                 <div
-                                    class="index-div lg:w-12 w-8 lg:h-12 h-8 aspect-square rounded-full  text-center border-2 border-slate-100 flex justify-center items-center group-hover:bg-indigo-600 {{ $loop->first ? 'bg-indigo-600 text-white' : ' bg-pr-300 text-gray-300' }}">
+                                    class="index-div lg:w-12 w-8  lg:h-12 h-8 aspect-square rounded-full  text-center border-2 border-slate-100 flex justify-center items-center group-hover:bg-teal-600 {{ $loop->first ? 'bg-teal-600 text-white' : ' bg-pr-300 text-gray-300' }}">
                                     <p class="inline-block align-middle lg:text-lg text-sm">{{ $index + 1 }}</p>
                                 </div>
                                 <div class="w-5/6 flex justify-start items-center">
@@ -52,7 +52,7 @@
 
                 <!-- Video -->
                 <video id="player" class="plyr-player hidden" controls width="100%" height="auto">
-                    <source src="{{ $cloudFrontDomain . $course->content->first()->url }}" type="video/mp4">
+                    <source src="{{ $cloudFrontDomain . $lesson->content->first()->url }}" type="video/mp4">
                 </video>
             </div>
 
@@ -60,12 +60,12 @@
     @else
         <div
             class="w-full min-h-[calc(100vh-6rem)]   bg-gradient-to-tr from-gray-400 to-slate-100 flex flex-col justify-center items-center pt-6">
-            <p class="lg:text-5xl text-3xl text-center text-slate-500"> لا يوجد محتوى لهذه الدورة بعد ! </p>
+            <p class="lg:text-5xl text-3xl text-center text-slate-500"> لا يوجد محتوى لهذه الشرح بعد ! </p>
             <img src="{{ asset('assets/images/empty.svg') }}" alt="صورة فارغة" class="lg:w-1/3 w-full" />
         </div>
     @endif
 
-    <!-- Course Review modal -->
+    <!-- Lesson  Review modal -->
     <div id="review_modal" tabindex="-1" aria-hidden="true"
         class="hidden overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 justify-center items-center w-full md:inset-0 max-h-full bg-gray-800/70">
         <div class="relative p-4 w-full max-w-md max-h-full">
@@ -74,7 +74,7 @@
                 <!-- Modal header -->
                 <div class="flex items-center justify-between p-4 md:p-5 border-b rounded-t ">
                     <h3 class="text-lg font-semibold text-gray-900 ">
-                        نشكركم على تقييم الدورة 🙏
+                        نشكركم على تقييم الشرح 🙏
                     </h3>
                     <button type="button"
                         class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ms-auto inline-flex justify-center items-center "
@@ -88,10 +88,10 @@
                     </button>
                 </div>
                 <!-- Modal body -->
-                <form action="{{ route('student.courses.rating', $course->id) }}" method="POST"
+                <form action="{{ route('student.lessons.rating', $lesson->id) }}" method="POST"
                     class="flex flex-col gap-4 p-4">
                     @csrf
-                    <input type="hidden" name="type" value="course" />
+                    <input type="hidden" name="type" value="lesson" />
                     <div class="w-full flex justify-center">
                         <x-form.rating-stars :current-val="$review ? $review->rating : 0" />
                     </div>
@@ -101,7 +101,7 @@
 
                     <button type="submit"
                         class="w-full text-white bg-warning-400 hover:bg-warning-500 p-2 rounded-lg mt-4 me-2 flex justify-center items-center gap-2">
-                        <p>{{ $review ? 'تعديل التقييم' : 'تقييم الدورة' }}</p>
+                        <p>{{ $review ? 'تعديل التقييم' : 'تقييم الشرح' }}</p>
                     </button>
                 </form>
             </div>
@@ -118,20 +118,23 @@
             const indexDivs = document.querySelectorAll('.index-div');
             const loader = document.getElementById('video-loader'); // Reference to the loader
 
+
             // Set the initial active state
-            contentLinks[0].classList.add('bg-indigo-500', 'text-slate-200', 'border-2', 'border-white');
-            indexDivs[0].classList.add('bg-indigo-600', 'text-white');
+            contentLinks[0].classList.add('bg-teal-700', 'text-slate-200', 'border-2',
+                'border-white');
+            indexDivs[0].classList.add('bg-teal-600', 'text-white');
 
             // Add hover effect to non-active links
             contentLinks.forEach(link => {
-                link.classList.add('hover:bg-indigo-400');
+                link.classList.add('hover:bg-teal-500');
             });
 
             contentLinks.forEach((link, index) => {
                 link.addEventListener('click', function(e) {
                     e.preventDefault();
 
-                    // Show loader when video source is changed
+
+                   // Show loader when video source is changed
                     loader.style.display = 'flex';
 
                     // Change video source
@@ -142,19 +145,19 @@
 
                     // Remove active state from all links and index divs
                     contentLinks.forEach((l, i) => {
-                        l.classList.remove('bg-indigo-500', 'text-slate-200', 'border-2',
-                            'border-white');
+                        l.classList.remove('bg-teal-700', 'text-slate-200',
+                            'border-2', 'border-white');
                         l.classList.add('bg-pr-200', 'text-slate-300',
-                            'hover:bg-indigo-400');
-                        indexDivs[i].classList.remove('bg-indigo-600', 'text-white');
+                            'hover:bg-teal-500');
+                        indexDivs[i].classList.remove('bg-teal-600', 'text-white');
                         indexDivs[i].classList.add('bg-pr-300', 'text-gray-300');
                     });
 
                     // Add active state to the clicked link and index div
-                    this.classList.add('bg-indigo-500', 'text-slate-200', 'border-2',
+                    this.classList.add('bg-teal-700', 'text-slate-200', 'border-2',
                         'border-white');
-                    this.classList.remove('bg-pr-200', 'text-slate-300', 'hover:bg-indigo-400');
-                    indexDivs[index].classList.add('bg-indigo-600', 'text-white');
+                    this.classList.remove('bg-pr-200', 'text-slate-300', 'hover:bg-teal-400');
+                    indexDivs[index].classList.add('bg-teal-600', 'text-white');
                     indexDivs[index].classList.remove('bg-pr-300', 'text-gray-300');
                 });
             });
@@ -166,9 +169,7 @@
         });
     </script>
 
-
     {{-- plyr --}}
-    
     <script>
         document.addEventListener('DOMContentLoaded', function() {
 
@@ -185,8 +186,6 @@
             });
         });
     </script>
-
-
 
     {{-- Toggle sidebar --}}
     <script>

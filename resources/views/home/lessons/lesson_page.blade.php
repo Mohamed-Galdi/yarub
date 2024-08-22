@@ -7,9 +7,11 @@
                 <p class="  text-slate-100 px-1 bg-pr-400 rounded-xl w-fit mt-2 text-base">{{ $lesson->type }}</p>
                 <h1 class="text-start lg:text-4xl md:text-5xl text-4xl ">{{ $lesson->title }}</h1>
                 <p class="text-start text-xl text-gray-400 ">{{ Str::words($lesson->description, 9) }}</p>
-                <div class="flex justify-center items-center gap-2 mt-4 bg-slate-200 rounded-xl px-4 py-2 w-fit">
-                    <p class="text-warning-500 text-3xl font-bold">{{ $lesson->price }} <span class="font-normal text-xl">
-                            ريال سعودي </span> </p>
+                <div class="flex lg:flex-row flex-col justify-center items-center gap-4 mt-4 w-full ">
+                    <p class="text-warning-500 text-2xl font-bold bg-slate-200 rounded-xl px-4 py-2 lg:w-1/2 w-full">{{ $lesson->monthly_price }} <span class="font-normal text-xl text-gray-400">
+                             ريال سعودي </span> <span class="text-sm text-gray-600 font-nitaqat">/ شهريا </span></p>
+                    <p class="text-warning-500 text-2xl font-bold bg-slate-200 rounded-xl px-4 py-2 lg:w-1/2 w-full">{{ $lesson->annual_price }} <span class="font-normal text-xl text-gray-400">
+                            ريال سعودي </span> <span class="text-sm text-gray-600 font-nitaqat">/ سنويا </span></p>
                 </div>
                 <button
                     class="bg-teal-500 w-full text-white border-2 border-gray-100 text-xl py-2 px-4 rounded-2xl flex gap-4 justify-center items-center 

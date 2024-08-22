@@ -53,8 +53,9 @@ class Lesson extends Model
 
     public function students()
     {
-        return $this->belongsToMany(User::class, 'student_lesson_sub')->withPivot(['cost', 'sub_plan', 'created_at'])
-            ->withTimestamps();
+        return $this->belongsToMany(User::class, 'student_lesson_sub')
+        ->withPivot(['cost', 'sub_plan', 'created_at'])
+        ->withTimestamps();
     }
 
     public function coupons(): BelongsToMany

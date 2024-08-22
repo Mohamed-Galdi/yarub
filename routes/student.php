@@ -1,37 +1,39 @@
 <?php
 
 use App\Http\Controllers\Student\CoursesController;
+use App\Http\Controllers\Student\LessonsController;
 use Illuminate\Support\Facades\Route;
 
 
 // ///////////// Student Routes //////////////
-Route::middleware(['auth', 'verified', 'student'])->group(function () {
+Route::middleware(['auth', 'verified', 'student'])->prefix('student-dashboard')->group(function () {
+
+    // redirect / to /courses
+    Route::get('/', [CoursesController::class, 'index'])->name('student.dashboard');
 
     // /////////// Account Routes ////////////
-    Route::get('/student-dashboard/account', function () { return view('student.account.index');})->name('student.account.index');
+    Route::get('/account', function () { return view('student.account.index');})->name('student.account.index');
 
     // /////////// Courses Routes ////////////
-    Route::get('/student-dashboard/courses', [CoursesController::class, 'index'])->name('student.courses.index');
-    Route::get('/student-dashboard/courses/{course}', [CoursesController::class, 'show'])->name('student.courses.show');
+    Route::get('/courses', [CoursesController::class, 'index'])->name('student.courses.index');
+    Route::get('/courses/{course}', [CoursesController::class, 'show'])->name('student.courses.show');
             // course rating
-    Route::post('/student-dashboard/courses/{course_id}/rating', [CoursesController::class, 'rating'])->name('student.courses.rating');
+        Route::post('/courses/{course_id}/rating', [CoursesController::class, 'rating'])->name('student.courses.rating');
 
 
-
-
-
-
-    
     // /////////// Lessons Routes ////////////
-    Route::get('/student-dashboard/lessons', function () { return view('student.lessons.index');})->name('student.lessons.index');
+    Route::get('/lessons', [LessonsController::class, 'index'])->name('student.lessons.index');
+    Route::get('/lessons/{lesson}', [LessonsController::class, 'show'])->name('student.lessons.show');
+        // lesson rating
+        Route::post('/lessons/{lesson_id}/rating', [LessonsController::class, 'rating'])->name('student.lessons.rating');
 
     // /////////// Tests Routes ////////////
-    Route::get('/student-dashboard/tests', function () { return view('student.tests.index');})->name('student.tests.index');
+    Route::get('/tests', function () { return view('student.tests.index');})->name('student.tests.index');
 
     // /////////// Certificates Routes ////////////
-    Route::get('/student-dashboard/certificates', function () { return view('student.certificates.index');})->name('student.certificates.index');
+    Route::get('/certificates', function () { return view('student.certificates.index');})->name('student.certificates.index');
 
     // /////////// Support Routes ////////////
-    Route::get('/student-dashboard/support', function () { return view('student.support.index');})->name('student.support.index');
+    Route::get('/support', function () { return view('student.support.index');})->name('student.support.index');
 
 });

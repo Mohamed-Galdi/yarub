@@ -60,6 +60,35 @@ class User extends Authenticatable
             ->withTimestamps();
     }
 
+    public function activeLessonsSub()
+    {
+        return $this->belongsToMany(Lesson::class, 'student_lesson_sub')
+            ->withPivot(['sub_plan', 'created_at', 'is_active'])
+            ->withTimestamps()
+            ->wherePivot('is_active', true)
+            ->where(function ($query) {
+                $query->where(function ($q) {
+                    $q->where('student_lesson_sub.sub_plan', 'annual')
+                        ->where('student_lesson_sub.created_at', '>', now()->subYear());
+                })->orWhere(function ($q) {
+                    $q->where('student_lesson_sub.sub_plan', 'monthly')
+                        ->where('student_lesson_sub.created_at', '>', now()->subMonth());
+                });
+            });
+    }
+    public function getLessonsSubRemainingDays($lesson)
+    {
+        $pivot = $this->lessons()->where('lesson_id', $lesson->id)->first()->pivot;
+        $startDate = Carbon::parse($pivot->created_at);
+        $endDate = $pivot->sub_plan === 'monthly' ? $startDate->addMonth() : $startDate->addYear();
+        $remainingDays = now()->diffInDays($endDate, false);
+
+        return [
+            'days' => max(0, $remainingDays),
+            'is_expiring_soon' => $remainingDays <= 5
+        ];
+    }
+
     public function payments()
     {
         return $this->hasMany(Payment::class);
@@ -90,13 +119,13 @@ class User extends Authenticatable
         return $this->hasMany(Conversation::class, 'student_id');
     }
 
-    
+
     public function activeCourses()
     {
         return $this->belongsToMany(Course::class, 'student_course_sub')->published()->where('is_active', true)->withPivot('created_at', 'cost');
     }
 
-    
+
     public function activeLessons()
     {
         return $this->belongsToMany(Lesson::class, 'student_lesson_sub')->published()->where('is_active', true)->withPivot('created_at', 'cost', 'sub_plan');
@@ -134,5 +163,4 @@ class User extends Authenticatable
 
         return $lessons;
     }
-    
 }

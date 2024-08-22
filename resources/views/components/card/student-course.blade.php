@@ -30,6 +30,6 @@
 
     </div>
     <div class="pt-1">
-        <x-btn.enrol class="" route="student.courses.show" id="{{ $course->id }}">متابعة الدورة</x-btn.enrol>
+        <x-btn.enrol class="" route="student.courses.show" id="{{ $course->id }}" type="course">متابعة الدورة</x-btn.enrol>
     </div>
 </div>
