@@ -3,6 +3,7 @@
 use App\Http\Controllers\Student\CertificatesController;
 use App\Http\Controllers\Student\CoursesController;
 use App\Http\Controllers\Student\LessonsController;
+use App\Http\Controllers\Student\ProfileController;
 use App\Http\Controllers\Student\TestsController;
 use Illuminate\Support\Facades\Route;
 
@@ -13,10 +14,6 @@ Route::middleware(['auth', 'verified', 'student'])->prefix('student-dashboard')-
     // redirect / to /courses
     Route::get('/', [CoursesController::class, 'index'])->name('student.dashboard');
 
-    // /////////// Account Routes ////////////
-    Route::get('/account', function () {
-        return view('student.account.index');
-    })->name('student.account.index');
 
     // /////////// Courses Routes ////////////
     Route::get('/courses', [CoursesController::class, 'index'])->name('student.courses.index');
@@ -39,6 +36,11 @@ Route::middleware(['auth', 'verified', 'student'])->prefix('student-dashboard')-
 
     // /////////// Certificates Routes ////////////
     Route::get('/certificates', [CertificatesController::class, 'index'])->name('student.certificates.index');
+
+    // /////////// Students Profile Routes ////////////
+    Route::get('/profile', [ProfileController::class, 'edit'])->name('student.account.index');
+    Route::put('/profile', [ProfileController::class, 'update'])->name('profile.update');
+    Route::put('/profile/password', [ProfileController::class, 'updatePassword'])->name('profile.update.password');
 
 
 
