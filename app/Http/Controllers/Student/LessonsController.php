@@ -21,6 +21,12 @@ class LessonsController extends Controller
 
     public function show(Lesson $lesson)
     {
+        $user = Auth::user();
+        // check if the lesson is in user lessons
+        if (!$user->lessons()->pluck('lesson_id')->contains($lesson->id)) {
+            Alert::warning(' انت لست مشتركا بعد في هذه الشرح');
+            return redirect()->route('student.lessons.index');
+        }
         $cloudFrontDomain = env('AWS_CLOUDFRONT_DOMAIN');
         $lesson->load('content');
         $review = Review::where('reviewable_id', $lesson->id)->where('user_id', Auth::user()->id)->first();

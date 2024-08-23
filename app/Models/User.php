@@ -166,8 +166,8 @@ class User extends Authenticatable
 
     public function availableTests()
     {
-        $courseTests = $this->courses()->with('tests')->get()->pluck('tests')->flatten();
-        $lessonTests = $this->lessons()->with('tests')->get()->pluck('tests')->flatten();
+        $courseTests = $this->courses()->with('tests', 'tests.course')->get()->pluck('tests')->flatten();
+        $lessonTests = $this->lessons()->with('tests', 'tests.course', 'tests.lesson')->get()->pluck('tests')->flatten();
 
         return $courseTests->merge($lessonTests)->unique('id');
     }

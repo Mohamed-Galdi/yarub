@@ -21,6 +21,13 @@ class CoursesController extends Controller
 
     public function show(Course $course)
     {
+        $user = Auth::user();
+        // check if the course is in user courses
+        if(!$user->courses()->pluck('course_id')->contains($course->id)){
+            Alert::warning(' انت لست مشتركا بعد في هذه الدورة');
+            return redirect()->route('student.courses.index');
+        }
+
         $cloudFrontDomain = env('AWS_CLOUDFRONT_DOMAIN');
         $course->load('content');
         $review = Review::where('reviewable_id', $course->id)->where('user_id', Auth::user()->id)->first();
