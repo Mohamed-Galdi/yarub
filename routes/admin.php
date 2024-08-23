@@ -82,11 +82,9 @@ Route::middleware(['auth', 'verified', 'admin'])->prefix('admin-dashboard')->gro
     // Certificates
     Route::get('/certificates', [CertificateController::class, 'index'])->name('admin.certificates');
     Route::get('/certificates/pdf', [CertificateController::class, 'pdf'])->name('admin.certificates.pdf');
-    Route::get('/certificates/view/{id}', [CertificateController::class, 'show'])->name('admin.certificates.view');
     Route::get('/certificates/create', [CertificateController::class, 'create'])->name('admin.certificates.create');
     Route::post('/certificates', [CertificateController::class, 'store'])->name('admin.certificates.store');
     Route::get('/certificates/get-student-content', [CertificateController::class, 'getStudentContent'])->name('admin.certificates.get-student-content');
-    Route::get('/certificates/download/{id}', [CertificateController::class, 'download'])->name('admin.certificates.download');
 
     // Support
     Route::get('/support', [ConversationController::class, 'index'])->name('admin.support');
@@ -124,5 +122,9 @@ Route::middleware(['auth', 'verified', 'admin'])->prefix('admin-dashboard')->gro
 
     Route::get('/payments', [PaymentsController::class, 'index'])->name('admin.payments');
 });
+
+// no need to authenticate to view or download certificates, used also by students and can be shared
+Route::get('/certificates/view/{id}', [CertificateController::class, 'show'])->name('admin.certificates.view');
+Route::get('/certificates/download/{id}', [CertificateController::class, 'download'])->name('admin.certificates.download');
 
 Route::post('/guest-messages', [GuestMessagesController::class, 'store'])->name('admin.guest_messages.store');

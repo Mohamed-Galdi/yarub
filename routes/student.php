@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Student\CertificatesController;
 use App\Http\Controllers\Student\CoursesController;
 use App\Http\Controllers\Student\LessonsController;
 use App\Http\Controllers\Student\TestsController;
@@ -36,26 +37,24 @@ Route::middleware(['auth', 'verified', 'student'])->prefix('student-dashboard')-
     Route::post('/tests/{test}/submit', [TestsController::class, 'submit'])->name('student.tests.submit');
     Route::get( '/tests/{test}/result', [TestsController::class, 'result'] )->name('student.tests.result');
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
     // /////////// Certificates Routes ////////////
-    Route::get('/certificates', function () {
-        return view('student.certificates.index');
-    })->name('student.certificates.index');
+    Route::get('/certificates', [CertificatesController::class, 'index'])->name('student.certificates.index');
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    
     // /////////// Support Routes ////////////
     Route::get('/support', function () {
         return view('student.support.index');
