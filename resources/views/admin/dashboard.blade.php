@@ -42,7 +42,7 @@
                     <div class="w-3/4  flex  justify-center items-center h-full ">
                         <div class="w-fit  flex flex-col justify-center items-center ">
                             <h1 class="lg:text-4xl text-2xl text-nowrap truncate text-blue-900">زوار المنصة</h1>
-                            <p class="text-gray-50 text-3xl">{{$visitors_count}}</p>
+                            <p class="text-gray-50 text-3xl">{{$allTimeVisitors}}</p>
                         </div>
                     </div>
 
@@ -195,16 +195,17 @@
 
         // ///////////////////////////////////////// Detail Charts //////////////////////////////////////////////////
         // ///////////////// Users and Students /////////////////
+        var visitorsAndRegistrationsChartData = @json($visitorsAndRegistrationsChartData);
         function createDetailUsersChart() {
             const options = {
                 series: [{
                     name: 'زوار المنصة',
                     type: 'column',
-                    data: [440, 505, 414, 671, 227, 413, 201],
+                    data: visitorsAndRegistrationsChartData.visitors,
                 }, {
                     name: 'المشتركين الجدد',
                     type: 'line',
-                    data: [23, 25, 20, 37, 18, 22, 17]
+                    data: visitorsAndRegistrationsChartData.registrations,
                 }],
                 chart: {
                     height: 400,
@@ -240,7 +241,7 @@
                     enabledOnSeries: [1]
                 },
                 // arabic weekdays days
-                labels: ['الاحد', 'الاثنين', 'الثلاثاء', 'الاربعاء', 'الخميس', 'الجمعة', 'السبت'],
+                labels: visitorsAndRegistrationsChartData.months,
                 grid: {
                     show: true,
                 },
@@ -261,15 +262,16 @@
         createDetailUsersChart();
 
         // ///////////////// Courses and Lessons /////////////////
+        var courseAndLessonChartData = @json($courseAndLessonChartData);
         function createDetailCoursesChart() {
             var options = {
                 series: [{
                         name: "الدورات",
-                        data: [28, 29, 33, 36, 32, 32, 33],
+                        data:  courseAndLessonChartData.courses,
                     },
                     {
                         name: "الشروحات",
-                        data: [12, 11, 14, 18, 17, 13, 13],
+                        data: courseAndLessonChartData.lessons,
                     }
                 ],
                 chart: {
@@ -323,11 +325,7 @@
                     size: 1
                 },
                 xaxis: {
-                    categories: ['01 يناير ', '02 فبراير ', '03 مارس ', '04 أبريل ', '05 مايو ',
-                        '06 يونيو ',
-                        '07 يوليو ', '08 أغسطس ', '09 سبتمبر ', '10 أكتوبر ', '11 نوفمبر ',
-                        '12 ديسمبر '
-                    ],
+                    categories: courseAndLessonChartData.months,
                     title: {
                         text: ' الشهر'
                     }
@@ -351,8 +349,9 @@
 
         // /////////////////////// Sales //////////////////////////
         function createDetailCoursesSalesChart() {
+            var coursesWithSubsCount = @json($coursesWithSubsCount);
             var options = {
-                series: [28, 12, 8, 5],
+                series: coursesWithSubsCount.subs_count,
                 chart: {
                     width: '100%',
                     height: '100%',
@@ -375,13 +374,7 @@
 
 
                 },
-                labels: [
-                    'مقدمة يَعرُب في التأسيس للقدرات',
-                    'التعريف بأقسام اختبار القدرات',
-                    'المفردة الشاذة',
-                    'الارتباط والاختلاف '
-
-                ],
+                labels: coursesWithSubsCount.course_title,
                 theme: {
                     monochrome: {
                         enabled: true,
@@ -420,8 +413,9 @@
         createDetailCoursesSalesChart();
 
         function createDetailLessonsSalesChart() {
+            var lessonsWithSubsCount = @json($lessonsWithSubsCount);
             var options = {
-                series: [12, 8, 2, 6],
+                series: lessonsWithSubsCount.subs_count,
                 chart: {
                     width: '100%',
                     height: '100%',
@@ -443,13 +437,7 @@
                     fontFamily: 'judur, Arial, sans-serif'
 
                 },
-                labels: [
-                    'الخيل والليل لامروء القيس',
-                    'التعريف بأقسام اختبار القدرات',
-                    'همزة الوصل',
-                    'التوابع'
-
-                ],
+                labels: lessonsWithSubsCount.lesson_title,
                 theme: {
                     monochrome: {
                         enabled: true,

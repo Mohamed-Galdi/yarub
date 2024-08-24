@@ -10,7 +10,7 @@ use Illuminate\Support\Facades\Route;
 
 
 // ///////////// Student Routes //////////////
-Route::middleware(['auth', 'verified', 'student'])->prefix('student-dashboard')->group(function () {
+Route::middleware(['auth', 'verified', 'student', 'log.visit'])->prefix('student-dashboard')->group(function () {
 
     // redirect / to /courses
     Route::get('/', [CoursesController::class, 'index'])->name('student.dashboard');

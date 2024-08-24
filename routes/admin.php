@@ -15,7 +15,7 @@ use App\Http\Controllers\Admin\TestAttemptController;
 use Illuminate\Support\Facades\Route;
 
 // ///////////// Admin Routes //////////////
-Route::middleware(['auth', 'verified', 'admin'])->prefix('admin-dashboard')->group(function () {
+Route::middleware(['auth', 'verified', 'admin', 'log.visit'])->prefix('admin-dashboard')->group(function () {
     // Dashboard
     Route::get('/', [AdminDashboardController::class, 'index'])->name('admin.dashboard');
 
