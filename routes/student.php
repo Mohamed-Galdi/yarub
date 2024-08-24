@@ -4,6 +4,7 @@ use App\Http\Controllers\Student\CertificatesController;
 use App\Http\Controllers\Student\CoursesController;
 use App\Http\Controllers\Student\LessonsController;
 use App\Http\Controllers\Student\ProfileController;
+use App\Http\Controllers\Student\SupportController;
 use App\Http\Controllers\Student\TestsController;
 use Illuminate\Support\Facades\Route;
 
@@ -42,23 +43,17 @@ Route::middleware(['auth', 'verified', 'student'])->prefix('student-dashboard')-
     Route::put('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::put('/profile/password', [ProfileController::class, 'updatePassword'])->name('profile.update.password');
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-    
     // /////////// Support Routes ////////////
-    Route::get('/support', function () {
-        return view('student.support.index');
-    })->name('student.support.index');
+    Route::get('/support',[ SupportController::class , 'index'])->name('student.support.index');
+    Route::get('/support/create', [SupportController::class, 'create'])->name('student.conversations.create');
+    Route::get('/support/{conversation}/reply', [SupportController::class, 'showReplyForm'])->name('student.conversations.reply');
+    Route::post('/support/{conversation}/reply', [SupportController::class, 'reply'])->name('student.conversations.send-reply');
+    Route::get('/support/conversations/create', [SupportController::class, 'create'])->name('student.conversations.create');
+    Route::post('/support/conversations', [SupportController::class, 'store'])->name('student.conversations.store');
+
+
+
+
+
+
 });

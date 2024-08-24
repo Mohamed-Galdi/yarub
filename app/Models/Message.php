@@ -19,6 +19,8 @@ class Message extends Model
 
             if ($message->sender === 'student') {
                 $conversation->incrementUnreadCount();
+            }elseif ($message->sender === 'admin') {
+                $conversation->incrementStudentUnreadCount();
             }
         });
     }

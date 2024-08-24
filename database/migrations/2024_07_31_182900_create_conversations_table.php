@@ -17,6 +17,7 @@ return new class extends Migration
             $table->string('subject');
             $table->enum('status', ['open', 'closed'])->default('open');
             $table->unsignedInteger('admin_unread_count')->default(0);
+            $table->unsignedInteger('student_unread_count')->default(0);
             $table->timestamp('last_message_at')->nullable();
             $table->timestamps();
         });

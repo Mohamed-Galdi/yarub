@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class Conversation extends Model
 {
-    protected $fillable = ['student_id', 'subject', 'status', 'admin_unread_count', 'last_message_at'];
+    protected $fillable = ['student_id', 'subject', 'status', 'admin_unread_count', 'student_unread_count', 'last_message_at'];
 
     protected $dates = ['last_message_at'];
 
@@ -29,6 +29,16 @@ class Conversation extends Model
     public function resetUnreadCount()
     {
         $this->update(['admin_unread_count' => 0]);
+    }
+
+    public function incrementStudentUnreadCount()
+    {
+        $this->increment('student_unread_count');
+    }
+
+    public function resetStudentUnreadCount()
+    {
+        $this->update(['student_unread_count' => 0]);
     }
     
     public function lastMessage()
