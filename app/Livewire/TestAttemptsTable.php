@@ -26,9 +26,8 @@ final class TestAttemptsTable extends PowerGridComponent
     public function setUp(): array
     {
         return [
-            Exportable::make('export')
-                ->striped()
-                ->type(Exportable::TYPE_XLS, Exportable::TYPE_CSV),
+            Exportable::make(fileName: 'لائحة إجتيازات الإختبارات')
+            ->type(Exportable::TYPE_XLS),
             Header::make()->showSearchInput(),
             Footer::make()
                 ->showPerPage()
@@ -83,7 +82,7 @@ final class TestAttemptsTable extends PowerGridComponent
                 ->field('attempt_at')
                 ->sortable(),
 
-            Column::action('الإجراءات')
+            Column::action('الإجراءات')->visibleInExport(visible: false)
         ];
     }
 

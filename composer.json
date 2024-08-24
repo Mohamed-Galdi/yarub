@@ -13,6 +13,7 @@
         "laravel/tinker": "^2.8",
         "league/flysystem-aws-s3-v3": "3.0",
         "livewire/livewire": "^3.5",
+        "openspout/openspout": "^4.24",
         "power-components/livewire-powergrid": "^5.9",
         "realrashid/sweet-alert": "^7.2",
         "wireui/wireui": "^2.0"

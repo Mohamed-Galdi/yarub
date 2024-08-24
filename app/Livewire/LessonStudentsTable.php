@@ -28,8 +28,7 @@ final class LessonStudentsTable extends PowerGridComponent
     {
 
         return [
-            Exportable::make('export')
-                ->type(Exportable::TYPE_XLS, Exportable::TYPE_CSV),
+            
             Header::make()->showSearchInput(),
             Footer::make()
                 ->showPerPage()

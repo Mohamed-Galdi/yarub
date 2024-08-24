@@ -34,6 +34,11 @@ class CartController extends Controller
             'plan' => 'monthly',
         ];
 
+        // check if the user is logged in and he is not a student
+        if (Auth::check() && Auth::user()->role == 'admin') {
+            return response()->json(['error' => 'لا يمكن الإضافة للسلة بحساب المشرف'], 401);
+        }
+
         $cart = $this->getCartItems();
 
         // Check if the item is already in the cart
