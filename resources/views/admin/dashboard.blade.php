@@ -233,7 +233,7 @@
                 },
                 title: {
                     align: 'center',
-                    text: 'الزوار و المشتركين اخر أسبوع'
+                    text: 'الزوار و المشتركين  '
                 },
                 colors: ['#43399f', '#92a3fe'],
                 dataLabels: {

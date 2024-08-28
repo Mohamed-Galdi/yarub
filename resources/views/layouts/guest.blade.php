@@ -14,11 +14,11 @@
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
     <!-- Moyasar Styles -->
-  <link rel="stylesheet" href="https://cdn.moyasar.com/mpf/1.14.0/moyasar.css" />
+    <link rel="stylesheet" href="https://cdn.moyasar.com/mpf/1.14.0/moyasar.css" />
 
-  <!-- Moyasar Scripts -->
-  <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?version=4.8.0&features=fetch"></script>
-  <script src="https://cdn.moyasar.com/mpf/1.14.0/moyasar.js"></script>
+    <!-- Moyasar Scripts -->
+    <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?version=4.8.0&features=fetch"></script>
+    <script src="https://cdn.moyasar.com/mpf/1.14.0/moyasar.js"></script>
 
 
 </head>
@@ -104,6 +104,11 @@
                         <x-btn.guest-nav-item :route="'lessons'" :title="'الشروحات'" />
                         <x-btn.guest-nav-item :route="'about'" :title="'من نحن'" />
                         <x-btn.guest-nav-item :route="'contact'" :title="'تواصل معنا'" />
+                        <li>
+                            <a href="http://arub.yarub.org:5000/" target="_blank"
+                                class="block py-2 px-3 md:p-0 text-gray-400 rounded hover:bg-gray-100 md:hover:bg-transparent md:hover:text-primary  ">عَرُوب</a>
+                            </a>
+                        </li>
                     </ul>
                 </div>
             </div>
@@ -144,6 +149,12 @@
                         <a href="{{ url('/contact') }}"
                             class="hover:underline md:me-1 {{ Request::is('contact') ? 'text-gray-100 ' : 'text-gray-400' }}">تواصل
                             معنا
+                        </a>
+                    </li>
+                    <li>
+                        <a href="http://arub.yarub.org:5000/" target="_blank"
+                            class="hover:underline md:me-1 {{ Request::is('contact') ? 'text-gray-100 ' : 'text-gray-400' }}">عَرُوب
+
                         </a>
                     </li>
 
@@ -196,7 +207,7 @@
         crossorigin="anonymous" referrerpolicy="no-referrer"></script>
     <script>
         // Add to Cart
-        $('.add-to-cart').click(function( event) {
+        $('.add-to-cart').click(function(event) {
             event.preventDefault();
             let itemId = $(this).data('item-id');
             let type = $(this).data('type');
@@ -306,7 +317,7 @@
     {{-- SweetAlert2 --}}
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
-    
+
 
 </body>
 

@@ -10,7 +10,8 @@ class PaymentsController extends Controller
 {
     public function index()
     {
-        $payments = Payment::with('user')->paginate(10);
+        // order from the latest to the oldest
+        $payments = Payment::with('user')->orderBy('created_at', 'desc')->paginate(10);
         return view('admin.payments.payments', compact('payments'));
     }
         
