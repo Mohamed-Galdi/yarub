@@ -10,7 +10,7 @@
             <x-btn.back route="admin.lessons" />
         </div>
         {{-- <x-form.errors :errors="$errors" /> --}}
-        <form id="lessonForm" action="{{ route('admin.lessons.update', $lesson->id) }}" method="POST" class="space-y-6">
+        <form id="lessonForm" action="{{ route('admin.lessons.update', $lesson->id) }}" method="POST" class="space-y-6" onsubmit="return false;">
             @csrf
             @method('PUT')
             <div class="form-group flex lg:flex-row flex-col justify-start items-start gap-4">
@@ -238,7 +238,7 @@
 </script>
 
 {{-- Update Ajax request script --}}
-<script>
+{{-- <script>
     document.addEventListener('DOMContentLoaded', function() {
         const form = document.getElementById('lessonForm');
         form.addEventListener('submit', function(e) {
@@ -320,7 +320,85 @@
             });
         });
     });
+</script> --}}
+
+{{-- /////////////////// --}}
+<script>
+    $(document).ready(function() {
+    $('#lessonForm').on('submit', function(e) {
+        e.preventDefault();
+
+        var form = this;
+        var formData = new FormData(form);
+
+        // Manually append file inputs
+        $('input[type="file"]').each(function() {
+            var files = $(this)[0].files;
+            var inputName = $(this).attr('name');
+            if (files.length > 0) {
+                formData.append(inputName, files[0]);
+            }
+        });
+
+        $.ajax({
+            url: '{{ route('admin.lessons.update', $lesson->id) }}',
+            type: 'POST',
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+            },
+            data: formData,
+            processData: false,
+            contentType: false,
+            beforeSend: function() {
+                $('#loader').show();
+                $('#submitBtn').prop('disabled', true);
+                $('#lessonForm').hide();
+            },
+            success: function(response) {
+                if (response.success) {
+                    Swal.fire({
+                        title: response.message,
+                        icon: 'success',
+                        timer: 1500,
+                        timerProgressBar: true,
+                        showConfirmButton: false,
+                    }).then(() => {
+                        window.location.href = response.redirect;
+                    });
+                } else {
+                    Swal.fire({
+                        title: response.message,
+                        icon: 'error',
+                        timer: 1500,
+                        timerProgressBar: true,
+                        showConfirmButton: false,
+                    });
+                    setTimeout(() => {
+                        window.location.href = response.redirect;
+                    }, 2000);
+                }
+            },
+            error: function(xhr) {
+                Swal.fire({
+                    title: 'حدث خطأ أثناء تحديث الدورة !',
+                    icon: 'error',
+                    timer: 3000,
+                    timerProgressBar: true,
+                    showConfirmButton: false,
+                }).then(() => {
+                    window.location.href = response.redirect;
+                });
+            },
+            complete: function() {
+                $('#loader').hide();
+                $('#submitBtn').prop('disabled', false);
+                $('#lessonForm').show();
+            }
+        });
+    });
+});
 </script>
+
 <script>
     const players = Plyr.setup('.plyr-player');
 </script>

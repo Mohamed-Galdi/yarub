@@ -9,7 +9,7 @@
             <x-btn.back route="admin.lessons" />
         </div>
         {{-- <x-form.errors :errors="$errors" /> --}}
-        <form id="lessonForm" action="{{ route('admin.lessons.store') }}" method="POST" class="space-y-6">
+        <form id="lessonForm" action="{{ route('admin.lessons.store') }}" method="POST" class="space-y-6" onsubmit="return false;">
             @csrf
             <div class="form-group w-full flex lg:flex-row flex-col gap-4 items-start justify-start">
                 <x-form.input-light name="title" label="العنوان" placeholder="مثال لعنوان: همزة الوصل" type="text"
@@ -75,8 +75,8 @@
                 <p>إضافة درس</p>
                 <x-icons.plus class="w-4 h-4 mr-2" />
             </button>
-            <button type="submit" class="w-full bg-green-500 my-4 p-3 rounded-lg text-white  hover:bg-green-700"
-                id="submit-form">إنشاء
+            <button type="button" class="w-full bg-green-500 my-4 p-3 rounded-lg text-white  hover:bg-green-700"
+                id="submitBtn">إنشاء
                 الشرح</button>
         </form>
         <div id="loader" style="display: none;"
@@ -189,7 +189,7 @@
             }
         });
     </script>
-    <script>
+    {{-- <script>
         $(document).ready(function() {
             $('#lessonForm').on('submit', function(e) {
                 e.preventDefault();
@@ -242,6 +242,72 @@
                         }).then(() => {
                             // Redirect after the Swal alert is closed
                             window.location.href = response.redirect;
+                        });
+                    },
+                    complete: function() {
+                        $('#loader').hide();
+                        $('#submitBtn').prop('disabled', false);
+                    }
+                });
+            });
+        });
+    </script> --}}
+    <script>
+        $(document).ready(function() {
+            $('#submitBtn').on('click', function(e) {
+                e.preventDefault();
+
+                var formData = new FormData($('#lessonForm')[0]);
+
+                $.ajax({
+                    url: '{{ route('admin.lessons.store') }}',
+                    type: 'POST',
+                    headers: {
+                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                    },
+                    data: formData,
+                    processData: false,
+                    contentType: false,
+                    beforeSend: function() {
+                        $('#loader').show();
+                        $('#submitBtn').prop('disabled', true);
+                        $('#lessonForm').hide();
+                    },
+                    success: function(response) {
+                        if (response.success) {
+                            Swal.fire({
+                                title: response.message,
+                                icon: 'success',
+                                timer: 1500,
+                                timerProgressBar: true,
+                                showConfirmButton: false,
+                            }).then(() => {
+                                // Redirect after the Swal alert is closed
+                                window.location.href = response.redirect;
+                            });
+                        } else {
+                            Swal.fire({
+                                title: response.message,
+                                icon: 'error',
+                                timer: 1500,
+                                timerProgressBar: true,
+                                showConfirmButton: false,
+                            }).then(() => {
+                                // Redirect after the Swal alert is closed
+                                window.location.href = response.redirect;
+                            });
+                        }
+                    },
+                    error: function(xhr, status, error) {
+                        console.error("AJAX Error:", status, error);
+                        console.log("Response Text:", xhr.responseText);
+                        Swal.fire({
+                            title: 'حدث خطأ أثناء تحديث الدورة !',
+                            text: 'Error: ' + error,
+                            icon: 'error',
+                            timer: 3000,
+                            timerProgressBar: true,
+                            showConfirmButton: false,
                         });
                     },
                     complete: function() {
