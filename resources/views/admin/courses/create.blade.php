@@ -9,11 +9,13 @@
             {{-- // back button --}}
             <x-btn.back route="admin.courses" />
         </div>
-        <form id="courseForm" action="{{ route('admin.courses.store') }}" method="POST" class="space-y-6">
+        <form id="courseForm" action="{{ route('admin.courses.store') }}" method="POST" class="space-y-6"
+            onsubmit="return false;">
             @csrf
             <div class="form-group w-full flex lg:flex-row flex-col gap-4 items-start justify-start">
-                <x-form.input-light name="title" label="العنوان" placeholder="مثال لعنوان: مقدمة يَعرُب في التأسيس للقدرات"
-                    type="text" required class="lg:w-1/2 w-full" id="title" required />
+                <x-form.input-light name="title" label="العنوان"
+                    placeholder="مثال لعنوان: مقدمة يَعرُب في التأسيس للقدرات" type="text" required
+                    class="lg:w-1/2 w-full" id="title" required />
                 <div class="lg:w-1/4 w-full">
                     <label for="type" class="text-gray-800 font-judur ms-3 mb-1 font-semibold">نوع الدورة</label>
                     <select name="type" id="type"
@@ -71,8 +73,8 @@
                 <p>إضافة درس</p>
                 <x-icons.plus class="w-4 h-4 mr-2" />
             </button>
-            <button type="submit" class="w-full bg-green-500 my-4 p-3 rounded-lg text-white  hover:bg-green-700"
-                id="submit-form">إنشاء
+            <button type="button" class="w-full bg-green-500 my-4 p-3 rounded-lg text-white  hover:bg-green-700"
+                id="submitBtn">إنشاء
                 الدورة</button>
         </form>
         <div id="loader" style="display: none;"
@@ -185,7 +187,7 @@
             }
         });
     </script>
-    <script>
+    {{-- <script>
         $(document).ready(function() {
             $('#courseForm').on('submit', function(e) {
                 e.preventDefault();
@@ -238,6 +240,72 @@
                         }).then(() => {
                             // Redirect after the Swal alert is closed
                             window.location.href = response.redirect;
+                        });
+                    },
+                    complete: function() {
+                        $('#loader').hide();
+                        $('#submitBtn').prop('disabled', false);
+                    }
+                });
+            });
+        });
+    </script> --}}
+    <script>
+        $(document).ready(function() {
+            $('#submitBtn').on('click', function(e) {
+                e.preventDefault();
+
+                var formData = new FormData($('#courseForm')[0]);
+
+                $.ajax({
+                    url: '{{ route('admin.courses.store') }}',
+                    type: 'POST',
+                    headers: {
+                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                    },
+                    data: formData,
+                    processData: false,
+                    contentType: false,
+                    beforeSend: function() {
+                        $('#loader').show();
+                        $('#submitBtn').prop('disabled', true);
+                        $('#courseForm').hide();
+                    },
+                    success: function(response) {
+                        if (response.success) {
+                            Swal.fire({
+                                title: response.message,
+                                icon: 'success',
+                                timer: 1500,
+                                timerProgressBar: true,
+                                showConfirmButton: false,
+                            }).then(() => {
+                                // Redirect after the Swal alert is closed
+                                window.location.href = response.redirect;
+                            });
+                        } else {
+                            Swal.fire({
+                                title: response.message,
+                                icon: 'error',
+                                timer: 1500,
+                                timerProgressBar: true,
+                                showConfirmButton: false,
+                            }).then(() => {
+                                // Redirect after the Swal alert is closed
+                                window.location.href = response.redirect;
+                            });
+                        }
+                    },
+                    error: function(xhr, status, error) {
+                        console.error("AJAX Error:", status, error);
+                        console.log("Response Text:", xhr.responseText);
+                        Swal.fire({
+                            title: 'حدث خطأ أثناء تحديث الدورة !',
+                            text: 'Error: ' + error,
+                            icon: 'error',
+                            timer: 3000,
+                            timerProgressBar: true,
+                            showConfirmButton: false,
                         });
                     },
                     complete: function() {
