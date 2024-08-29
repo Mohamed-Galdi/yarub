@@ -100,7 +100,7 @@ class CourseController extends Controller
     public function uploadVideo(Request $request)
     {
         $request->validate([
-            'video' => 'required|file|mimetypes:video/*|max:100000'
+            'video' => 'required|file|mimetypes:video/*'
         ]);
 
         $file = $request->file('video');
@@ -113,7 +113,7 @@ class CourseController extends Controller
     private function moveVideoToFinalLocation($tempPath, $courseId)
     {
         if (!Storage::disk('public')->exists($tempPath)) {
-            // throw new \Exception("Temporary file not found: {$tempPath}");
+            throw new \Exception("Temporary file not found: {$tempPath}");
             return null;
         }
 
