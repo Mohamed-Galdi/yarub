@@ -328,7 +328,7 @@
     $('#submitBtn').on('click', function(e) {
         e.preventDefault();
 
-        var form = $('#courseForm')[0];
+        var form = $('#lessonForm')[0];
         var formData = new FormData(form);
 
         // Manually append file inputs
@@ -341,7 +341,7 @@
         });
 
         $.ajax({
-            url: '{{ route('admin.courses.update', $course->id) }}',
+            url: '{{ route('admin.lessons.update', $lesson->id) }}',
             type: 'POST',
             headers: {
                 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
@@ -352,7 +352,7 @@
             beforeSend: function() {
                 $('#loader').show();
                 $('#submitBtn').prop('disabled', true);
-                $('#courseForm').hide();
+                $('#lessonForm').hide();
             },
             success: function(response) {
                 if (response.success) {
@@ -393,7 +393,7 @@
             complete: function() {
                 $('#loader').hide();
                 $('#submitBtn').prop('disabled', false);
-                $('#courseForm').show();
+                $('#lessonForm').show();
             }
         });
     });
