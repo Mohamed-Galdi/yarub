@@ -114,7 +114,7 @@
             <p>إضافة درس</p>
             <x-icons.plus class="w-4 h-4 mr-2" />
         </button>
-        <button type="submit"
+        <button type="button"
             class="w-full bg-blue-500 my-4 p-3 rounded-lg text-white  hover:bg-blue-700 flex gap-2 items-center justify-center"
             id="submitBtn">
             <p>حفظ التغييرات</p>
@@ -318,10 +318,10 @@
 {{-- /////////////////// --}}
 <script>
     $(document).ready(function() {
-    $('#courseForm').on('submit', function(e) {
+    $('#submitBtn').on('click', function(e) {
         e.preventDefault();
 
-        var form = this;
+        var form = $('#courseForm')[0];
         var formData = new FormData(form);
 
         // Manually append file inputs
@@ -371,15 +371,16 @@
                     }, 2000);
                 }
             },
-            error: function(xhr) {
+            error: function(xhr, status, error) {
+                console.error("AJAX Error:", status, error);
+                console.log("Response Text:", xhr.responseText);
                 Swal.fire({
                     title: 'حدث خطأ أثناء تحديث الدورة !',
+                    text: 'Error: ' + error,
                     icon: 'error',
                     timer: 3000,
                     timerProgressBar: true,
                     showConfirmButton: false,
-                }).then(() => {
-                    window.location.href = response.redirect;
                 });
             },
             complete: function() {

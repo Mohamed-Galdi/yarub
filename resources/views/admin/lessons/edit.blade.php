@@ -115,9 +115,9 @@
             <p>إضافة درس</p>
             <x-icons.plus class="w-4 h-4 mr-2" />
         </button>
-        <button type="submit"
+        <button type="button"
             class="w-full bg-blue-500 my-4 p-3 rounded-lg text-white  hover:bg-blue-700 flex gap-2 items-center justify-center"
-            id="submit-form">
+            id="submitBtn">
             <p>حفظ التغييرات</p>
             <x-icons.save class="w-6 h-6 mr-2" />
         </button>
@@ -325,10 +325,10 @@
 {{-- /////////////////// --}}
 <script>
     $(document).ready(function() {
-    $('#lessonForm').on('submit', function(e) {
+    $('#submitBtn').on('click', function(e) {
         e.preventDefault();
 
-        var form = this;
+        var form = $('#courseForm')[0];
         var formData = new FormData(form);
 
         // Manually append file inputs
@@ -341,7 +341,7 @@
         });
 
         $.ajax({
-            url: '{{ route('admin.lessons.update', $lesson->id) }}',
+            url: '{{ route('admin.courses.update', $course->id) }}',
             type: 'POST',
             headers: {
                 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
@@ -352,7 +352,7 @@
             beforeSend: function() {
                 $('#loader').show();
                 $('#submitBtn').prop('disabled', true);
-                $('#lessonForm').hide();
+                $('#courseForm').hide();
             },
             success: function(response) {
                 if (response.success) {
@@ -378,21 +378,22 @@
                     }, 2000);
                 }
             },
-            error: function(xhr) {
+            error: function(xhr, status, error) {
+                console.error("AJAX Error:", status, error);
+                console.log("Response Text:", xhr.responseText);
                 Swal.fire({
                     title: 'حدث خطأ أثناء تحديث الدورة !',
+                    text: 'Error: ' + error,
                     icon: 'error',
                     timer: 3000,
                     timerProgressBar: true,
                     showConfirmButton: false,
-                }).then(() => {
-                    window.location.href = response.redirect;
                 });
             },
             complete: function() {
                 $('#loader').hide();
                 $('#submitBtn').prop('disabled', false);
-                $('#lessonForm').show();
+                $('#courseForm').show();
             }
         });
     });
