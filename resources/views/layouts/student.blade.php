@@ -152,7 +152,7 @@
                         <x-btn.student-nav-item :route="'student.tests.index'" :item="'tests'" :title="'الإختبارات'">
                             <x-icons.test class="w-5 h-5 text-white" /> <!-- Replace with your actual icon component -->
                         </x-btn.student-nav-item>
-                        <x-btn.student-nav-item :route="'student.certificates.index'" :item="'certificates'" :title="'الشواهد'">
+                        <x-btn.student-nav-item :route="'student.certificates.index'" :item="'certificates'" :title="'الشهادات'">
                             <x-icons.certificate class="w-5 h-5 text-white" />
                             <!-- Replace with your actual icon component -->
                         </x-btn.student-nav-item>

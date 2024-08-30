@@ -24,10 +24,10 @@ Route::middleware(['guest', 'log.visit'])->group(function () {
     Route::post('login', [AuthenticatedSessionController::class, 'loginStudent'])
     ->name('student.login');
 
-    Route::get('admin-login', function () {return view('auth.admin-login');})
+    Route::get('yarub-moshref-center', function () {return view('auth.admin-login');})
     ->name('admin_login_page');
 
-    Route::post('admin-login', [AuthenticatedSessionController::class, 'loginAdmin'])
+    Route::post('yarub-moshref-center', [AuthenticatedSessionController::class, 'loginAdmin'])
     ->name('admin.login');
 
     Route::get('forgot-password', [PasswordResetLinkController::class, 'create'])

@@ -2,7 +2,7 @@
 @section('content')
     <div class="w-full min-h-[calc(100vh-6rem)] bg-gradient-to-t from-gray-200 to-slate-200 ">
         <div class="max-w-screen-xl mx-auto  p-4 space-y-8">
-            <h1 class="text-4xl mt-4 font-bold text-slate-600">الشواهد</h1>
+            <h1 class="text-4xl mt-4 font-bold text-slate-600">الشهادات</h1>
             <div class="relative overflow-x-auto shadow-md sm:rounded-lg w-full">
 
                 <table class="w-full text-left rtl:text-right text-gray-500">
@@ -28,11 +28,14 @@
                                 </td>
                                 <td class="px-6 py-4 w-2/6">
                                     <p class="text-nowrap truncate">
-                                       <span class="font-semibold text-black"> {{ $certificate->created_at->format('d/m/Y') }}</span> ({{ $certificate->created_at->diffForHumans() }})
+                                        <span class="font-semibold text-black">
+                                            {{ $certificate->created_at->format('d/m/Y') }}</span>
+                                        ({{ $certificate->created_at->diffForHumans() }})
                                     </p>
                                 </td>
                                 <td class="px-6 py-4 w-1/6">
-                                    <a href="{{route('admin.certificates.view', ['id' => $certificate->id])}}" target="_blank">
+                                    <a href="{{ route('admin.certificates.view', ['id' => $certificate->id]) }}"
+                                        target="_blank">
                                         <div
                                             class="flex items-center justify-center gap-3 py-1 px-2 me-1 rounded-lg bg-indigo-400 text-gray-100 border border-gray-100 hover:bg-indigo-500 hover:text-white transition-all duration-300 ease-in-out cursor-pointer">
                                             <p> عرض </p>
@@ -41,7 +44,8 @@
                                     </a>
                                 </td>
                                 <td class="px-6 py-4 w-1/6">
-                                    <a href="{{ route('admin.certificates.download', ['id' => $certificate->id])}}" target="_blank">
+                                    <a href="{{ route('admin.certificates.download', ['id' => $certificate->id]) }}"
+                                        target="_blank">
                                         <div
                                             class="flex items-center justify-center gap-3 py-1 px-2 me-1 rounded-lg bg-green-400 text-gray-100 border border-gray-100 hover:bg-green-500 hover:text-white transition-all duration-300 ease-in-out cursor-pointer">
                                             <p> تنزيل </p>
@@ -49,7 +53,7 @@
                                         </div>
                                     </a>
                                 </td>
-                                
+
                             </tr>
                         @empty
                             <tr>

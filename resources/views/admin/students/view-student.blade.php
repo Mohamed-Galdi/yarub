@@ -62,7 +62,7 @@
                 <div
                     class="w-[90%] p-3 rounded-lg h-20 bg-gradient-to-tr from-yellow-400 to-yellow-500 flex flex-col justify-center items-center">
                     <div class="flex justify-center items-center gap-3">
-                        <p class="text-xl text-white">الشواهد</p>
+                        <p class="text-xl text-white">الشهادات</p>
                         <x-icons.certificate class="w-5 h-5 text-white" />
                     </div>
                     <p class="text-3xl text-white">{{ $student->certificates()->count() }}</p>
@@ -100,7 +100,7 @@
                         ],
                         [
                             'id' => 'certificates',
-                            'label' => 'الشواهد',
+                            'label' => 'الشهادات',
                             'icon' => 'icons.certificate',
                             'count' => $student->certificates->count(),
                         ],
@@ -337,7 +337,8 @@
                                                     </td>
                                                     <td class="px-6 py-4">
                                                         <div class="flex items-center">
-                                                            <a href="{{ route('admin.certificates.view', ['id' => $certificate->id]) }}" target="_blank">
+                                                            <a href="{{ route('admin.certificates.view', ['id' => $certificate->id]) }}"
+                                                                target="_blank">
                                                                 <div
                                                                     class="flex items-center gap-3 py-1 px-2 me-1 rounded-lg bg-indigo-400 text-gray-100 border border-gray-100 hover:bg-indigo-500 hover:text-white transition-all duration-300 ease-in-out cursor-pointer">
                                                                     <p> عرض </p>

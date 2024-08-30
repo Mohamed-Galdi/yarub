@@ -13,7 +13,7 @@
                 class="lg:w-1/2 w-full flex px-8 py-3 justify-between items-center bg-gray-800 text-gray-200 text-2xl rounded-xl border border-indigo-500 ">
                 <div>
                     <x-icons.students class="w-8 h-8 text-gray-50" />
-                    <p>مجموع الطلاب</p>
+                    <p>مجموع المشتركين</p>
                 </div>
                 <div>
                     <p class="font-hacen text-3xl">{{ $course->students->count() }}</p>

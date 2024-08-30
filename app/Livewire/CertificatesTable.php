@@ -25,7 +25,7 @@ final class CertificatesTable extends PowerGridComponent
     {
 
         return [
-            Exportable::make(fileName: 'لائحة الشواهد')
+            Exportable::make(fileName: 'لائحة الشهادات')
                 ->type(Exportable::TYPE_XLS),
             Header::make()->showSearchInput(),
             Footer::make()

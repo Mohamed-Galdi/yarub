@@ -27,8 +27,8 @@ final class StudentsTable extends PowerGridComponent
         // $this->showCheckBox();
 
         return [
-            Exportable::make(fileName: 'لائحة الطلاب')
-            ->type(Exportable::TYPE_XLS), 
+            Exportable::make(fileName: 'لائحة المشتركين')
+                ->type(Exportable::TYPE_XLS),
             Header::make()->showSearchInput(),
             Footer::make()
                 ->showPerPage()
@@ -52,9 +52,9 @@ final class StudentsTable extends PowerGridComponent
             ->add('name')
             ->add('email')
             ->add('role')
-            ->add('avatar', fn ($item) => '<img class="w-8 h-8 shrink-0 grow-0 rounded-full" src="' . asset("{$item->avatar}") . '" alt="">')
-            ->add('created_at', fn ($item) => Carbon::parse($item->created_at->format('Y-m-d')))
-            ->add('created_at_formatted', fn ($item) => Carbon::parse($item->created_at)->diffForhumans());
+            ->add('avatar', fn($item) => '<img class="w-8 h-8 shrink-0 grow-0 rounded-full" src="' . asset("{$item->avatar}") . '" alt="">')
+            ->add('created_at', fn($item) => Carbon::parse($item->created_at->format('Y-m-d')))
+            ->add('created_at_formatted', fn($item) => Carbon::parse($item->created_at)->diffForhumans());
     }
 
     public function columns(): array
@@ -89,9 +89,7 @@ final class StudentsTable extends PowerGridComponent
     }
 
     #[\Livewire\Attributes\On('view')]
-    public function edit($rowId): void
-    {
-    }
+    public function edit($rowId): void {}
 
     public function actions(User $row): array
     {

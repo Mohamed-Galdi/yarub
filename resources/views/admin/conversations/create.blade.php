@@ -11,11 +11,11 @@
         <form action="{{ route('admin.conversations.store') }}" method="POST">
             @csrf
             <div class="mb-6">
-                <label for="" class="block text-lg font-medium text-gray-700 mb-2">اختر الطلاب</label>
+                <label for="" class="block text-lg font-medium text-gray-700 mb-2">اختر المشتركين</label>
                 <button id="dropdownSearchButton" data-dropdown-toggle="dropdownSearch"
                     class="flex justify-center items-center gap-2 w-full h-[3.1rem] rounded-md bg-slate-400 hover:bg-slate-500 transition-colors ease-in-out duration-200 text-white shadow-sm"
                     type="button">
-                    <p>تحديد الطلاب</p>
+                    <p>تحديد المشتركين</p>
                     <x-icons.arrow-down class="w-5 h-5 ml-2 text-gray-50" />
                 </button>
                 <!-- Dropdown menu -->
@@ -38,7 +38,7 @@
                                 <input id="checkbox-all" type="checkbox" value="all" name="students[]"
                                     class="w-4 h-4 text-indigo-600 bg-gray-100 rounded border-gray-300 focus:ring-indigo-500">
                                 <label for="checkbox-all" class="w-full ms-2 text-lg font-medium text-indigo-900  ">جميع
-                                    الطلاب</label>
+                                    المشتركين</label>
                             </div>
                         </li>
                         @foreach ($students as $student)
@@ -73,7 +73,8 @@
        transition-all duration-200 ease-in-out"
                     required></textarea>
             </div>
-            <button type="submit" class="w-full flex justify-center items-center gap-2 bg-blue-500 my-4 p-3 rounded-lg text-white  hover:scale-[0.99] hover:bg-blue-600 transition-all duration-200 ease-in-out">
+            <button type="submit"
+                class="w-full flex justify-center items-center gap-2 bg-blue-500 my-4 p-3 rounded-lg text-white  hover:scale-[0.99] hover:bg-blue-600 transition-all duration-200 ease-in-out">
                 <p>إرسال</p>
                 <x-icons.send class="w-5 h-5 ml-2 text-white" />
             </button>

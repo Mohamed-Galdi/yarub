@@ -25,7 +25,7 @@ final class DeletedStudentsTable extends PowerGridComponent
     public function setUp(): array
     {
         return [
-            Exportable::make(fileName: ' لائحة الطلاب المحذوفين')
+            Exportable::make(fileName: ' لائحة المشتركين المحذوفين')
                 ->type(Exportable::TYPE_XLS),
 
             Header::make()->showSearchInput(),
@@ -69,7 +69,7 @@ final class DeletedStudentsTable extends PowerGridComponent
             Column::make('البريد الإلكتروني', 'email')
                 ->sortable()
                 ->searchable(),
-            
+
             Column::make('تاريخ', 'created_at')->hidden()->visibleInExport(visible: true),
 
 

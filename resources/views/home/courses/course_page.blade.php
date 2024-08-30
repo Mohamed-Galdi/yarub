@@ -6,7 +6,7 @@
             <div class="lg:w-2/5 lg:order-1 w-full order-2   space-y-4 ">
                 <p class="  text-slate-100 px-1 bg-pr-400 rounded-xl w-fit mt-2 text-base">{{ $course->type }}</p>
                 <h1 class="text-start lg:text-4xl md:text-5xl text-4xl ">{{ $course->title }}</h1>
-                <p class="text-start text-xl text-gray-400 ">{{ Str::words($course->description, 9) }}</p>
+                <p class="text-start text-xl text-gray-400 line-clamp-3  ">{{ $course->description }}</p>
                 <div class="flex justify-center items-center gap-2 mt-4 bg-slate-200 rounded-xl px-4 py-2 w-fit">
                     <p class="text-warning-500 text-3xl font-bold">{{ $course->price }} <span class="font-normal text-xl">
                             ريال سعودي </span> </p>

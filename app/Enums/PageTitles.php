@@ -5,11 +5,11 @@ namespace App\Enums;
 enum PageTitles: string
 {
     case DASHBOARD = 'إحصائيات المنصة';
-    case STUDENTS = 'الطلاب';
+    case STUDENTS = 'المشتركين';
     case COURSES = 'الدورات';
     case LESSONS = 'الشروحات';
     case TESTS = 'الإختبارات';
-    case CERTIFICATES = 'الشواهد';
+    case CERTIFICATES = 'الشهادات';
     case PAYMENTS = 'المدفوعات';
     case SUPPORT = 'الدعم';
     case COUPONS = 'القسائم';

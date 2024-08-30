@@ -31,6 +31,10 @@
     <link rel="stylesheet" href="https://cdn.plyr.io/3.7.8/plyr.css" />
 
     <style>
+        /* Styles */
+        @stack('styles');
+
+
         /* Scrollbar */
         ::-webkit-scrollbar {
             width: 10px;
@@ -152,7 +156,7 @@
                 </x-btn.admin-dashboard-item>
                 {{-- ///////////////////////////////////// --}}
                 <x-btn.admin-dashboard-item route='admin.students' path='admin-dashboard/students*'>
-                    <p class="ml-3">الطلاب </p>
+                    <p class="ml-3">المشتركين </p>
                     <x-icons.students
                         class="w-6 h-6 {{ request()->is('admin-dashboard/students*') ? 'text-gray-200' : 'text-gray-800' }}" />
                 </x-btn.admin-dashboard-item>
@@ -176,7 +180,7 @@
                 </x-btn.admin-dashboard-item>
                 {{-- ///////////////////////////////////// --}}
                 <x-btn.admin-dashboard-item route='admin.certificates' path='admin-dashboard/certificates*'>
-                    <p class="ml-3"> الشواهد </p>
+                    <p class="ml-3"> الشهادات </p>
                     <x-icons.certificate
                         class="w-6 h-6 {{ request()->is('admin-dashboard/certificates*') ? 'text-gray-200' : ' text-gray-800' }}" />
                 </x-btn.admin-dashboard-item>
@@ -283,7 +287,7 @@
     @include('flatpickr::components.script')
     <script src="https://cdn.jsdelivr.net/npm/flowbite@2.4.1/dist/flowbite.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/puppeteer@22.14.0/lib/cjs/puppeteer/puppeteer.min.js"></script>
-    
+
 </body>
 @stack('scripts')
 

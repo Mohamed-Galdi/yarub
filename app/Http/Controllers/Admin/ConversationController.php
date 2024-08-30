@@ -14,8 +14,8 @@ class ConversationController extends Controller
     public function index()
     {
         $conversations = Conversation::with(['student', 'lastMessage'])
-        ->orderBy('last_message_at', 'desc')
-        ->paginate(10);
+            ->orderBy('last_message_at', 'desc')
+            ->paginate(10);
 
         return view('admin.conversations.conversations', compact('conversations'));
     }
@@ -71,7 +71,7 @@ class ConversationController extends Controller
         }
 
         $message = count($studentIds) > 1
-            ? 'تم إنشاء محادثات جديدة مع الطلاب المحددين بنجاح'
+            ? 'تم إنشاء محادثات جديدة مع المشتركين المحددين بنجاح'
             : 'تم إنشاء المحادثة الجديدة بنجاح';
 
         Alert::success($message);
@@ -94,5 +94,4 @@ class ConversationController extends Controller
             'content' => $message,
         ]);
     }
-    
 }
