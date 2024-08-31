@@ -17,6 +17,7 @@
         "openspout/openspout": "^4.24",
         "power-components/livewire-powergrid": "^5.9",
         "realrashid/sweet-alert": "^7.2",
+        "twilio/sdk": "^8.2",
         "wireui/wireui": "^2.0"
     },
     "require-dev": {

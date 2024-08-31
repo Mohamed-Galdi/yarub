@@ -27,6 +27,12 @@ Route::middleware(['guest', 'log.visit'])->group(function () {
     Route::get('yarub-moshref-center', function () {return view('auth.admin-login');})
     ->name('admin_login_page');
 
+    Route::get('yarub-moshref-center/otp', function () {return view('auth.admin-otp');})
+    ->name('admin_otp_page');
+
+    Route::post('yarub-moshref-center/otp', [AuthenticatedSessionController::class, 'verifyOTP'])
+    ->name('admin_otp');
+
     Route::post('yarub-moshref-center', [AuthenticatedSessionController::class, 'loginAdmin'])
     ->name('admin.login');
 
