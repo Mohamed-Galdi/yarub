@@ -15,6 +15,7 @@ enum PageTitles: string
     case COUPONS = 'القسائم';
     case GUEST_MESSAGES = 'رسائل الزوار';
     case PAGES = 'محتوى الواجهات';
+    case ACCOUNTS = 'الحسابات';
     case DEFAULT = 'لوحة التحكم';
 
     public static function getTitle(string $path): string
@@ -40,6 +41,8 @@ enum PageTitles: string
                 return self::GUEST_MESSAGES->value;
             case str_contains($path, 'admin-dashboard/pages'):
                 return self::PAGES->value;
+            case str_contains($path, 'admin-dashboard/account'):
+                return self::ACCOUNTS->value;
             case str_contains($path, 'admin-dashboard'):
                 return self::DASHBOARD->value;
 

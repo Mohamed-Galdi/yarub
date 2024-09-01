@@ -1,6 +1,7 @@
 @extends('layouts.admin')
 @section('content')
-    <h1 class="lg:text-4xl text-3xl text-nowrap truncate font-bold text-gradient-to-r  p-2 w-fit text-indigo-500 ">حسابات المشرفين</h1>
+    <h1 class="lg:text-4xl text-3xl text-nowrap truncate font-bold text-gradient-to-r  p-2 w-fit text-indigo-500 ">حسابات
+        المشرفين</h1>
     <div class="mt-6">
         <div class="p-2 ms-2 flex gap-2 items-center">
             <x-icons.star class="w-4 h-4 text-yellow-500" />
@@ -9,11 +10,23 @@
         <form action="{{ route('admin.account.update-main') }}" method="POST"
             class="w-full  rounded-2xl bg-white shadow-xl px-4 pb-6 pt-4 ">
             @csrf
-            <div class="grid lg:grid-cols-2 grid-cols-1 justify-start items-start py-2  gap-4 ">
+            <div class="grid lg:grid-cols-3 grid-cols-1 justify-start items-start py-2  gap-4 ">
                 <x-form.input-light type="text" name="name" label="الاسم" placeholder="الاسم" class="w-full"
                     value="{{ $superAdmin->name }}" />
                 <x-form.input-light type="text" name="email" label="البريد الإلكتروني" placeholder="البريد الإلكتروني"
                     class="w-full" value="{{ $superAdmin->email }}" />
+
+                <div class = "p-0 bg-transparent border-none relative ">
+                    <label for="phone_number" class="text-gray-800 font-judur ms-3 mb-1 font-semibold">رقم الهاتف
+                    </label>
+                    <input dir="ltr" type='text' name='phone_number' value='{{ $superAdmin->phone_number }}'
+                        class="light-input text-center bg-white px-4 py-3 outline-none text-gray-800 rounded-lg border-2 transition-colors duration-100 border-solid border-gray-300 focus:border-gray-900  focus:ring-0 w-full ">
+                    @error('phone_number')
+                        <div class="text-red-500 text-sm -bottom-5 right-4 absolute">{{ $message }}</div>
+                    @enderror
+                </div>
+
+
             </div>
             <button type="submit"
                 class="w-full text-center mt-3 text-white bg-indigo-400 hover:bg-indigo-500 rounded-2xl py-2 px-4 hover:font-bold transition-all duration-300 ease-in-out">تحديث
@@ -36,25 +49,39 @@
         </button>
         <div class="mt-8 space-y-6">
             @forelse($admins as $admin)
-                <form action="{{ route('admin.account.update-admin', $admin->id) }}" method="POST" class="w-full  rounded-2xl bg-slate-300 shadow-xl px-4 pb-6 pt-4 border-2 border-blue-500">
+                <form action="{{ route('admin.account.update-admin', $admin->id) }}" method="POST"
+                    class="w-full  rounded-2xl bg-slate-300 shadow-xl px-4 pb-6 pt-4 border-2 border-blue-500">
                     @csrf
                     @method('PUT')
                     <input type="hidden" name="admin_id" value="{{ $admin->id }}">
                     <div class="w-full flex justify-end items-center">
                         {{-- show button only for super admin --}}
-                        @if(auth()->user()->isSuperAdmin())
-                            <x-delete-confirmation url="{{ route('admin.account.delete-admin', $admin->id) }}" :params="['admin_id' => $admin->id]"
-                                elementName="المشرف" class="bg-red-400 text-white px-4 py-2 rounded-lg hover:bg-red-500">
+                        @if (auth()->user()->isSuperAdmin())
+                            <x-delete-confirmation url="{{ route('admin.account.delete-admin', $admin->id) }}"
+                                :params="['admin_id' => $admin->id]" elementName="المشرف"
+                                class="bg-red-400 text-white px-4 py-2 rounded-lg hover:bg-red-500">
                                 حذف المشرف
                             </x-delete-confirmation>
                         @endif
 
                     </div>
-                    <div class="grid lg:grid-cols-2 grid-cols-1 justify-start items-start py-2  gap-4 w-full">
-                        <x-form.input-light type="text" name="admin_name" label="الاسم" placeholder="الاسم" class="w-full"
-                            value="{{ $admin->name }}" />
+                    <div class="grid lg:grid-cols-3 grid-cols-1 justify-start items-start py-2  gap-4 w-full">
+                        <x-form.input-light type="text" name="admin_name" label="الاسم" placeholder="الاسم"
+                            class="w-full" value="{{ $admin->name }}" />
                         <x-form.input-light type="text" name="admin_email" label="البريد الإلكتروني"
                             placeholder="البريد الإلكتروني" class="w-full" value="{{ $admin->email }}" />
+
+                        <div class = "p-0 bg-transparent border-none relative ">
+                            <label for="admin_phone_number" class="text-gray-800 font-judur ms-3 mb-1 font-semibold">رقم
+                                الهاتف
+                            </label>
+                            <input dir="ltr" type='text' name='admin_phone_number'
+                                value='{{ $admin->phone_number }}'
+                                class="light-input text-center bg-white px-4 py-3 outline-none text-gray-800 rounded-lg border-2 transition-colors duration-100 border-solid border-gray-300 focus:border-gray-900  focus:ring-0 w-full ">
+                            @error('admin_phone_number')
+                                <div class="text-red-500 text-sm -bottom-5 right-4 absolute">{{ $message }}</div>
+                            @enderror
+                        </div>
                     </div>
                     <button type="submit"
                         class="w-full text-center mt-3 text-white bg-indigo-400 hover:bg-indigo-500 rounded-2xl py-2 px-4 hover:font-bold transition-all duration-300 ease-in-out">تحديث
@@ -142,10 +169,19 @@
                     @csrf
                     <x-form.input-light type="text" name="new_admin_name" label="" placeholder=" الاسم"
                         class="w-[90%]" value="{{ old('name') }}" />
-                    <x-form.input-light type="text" name="new_admin_email" label="" placeholder="البريد الإلكتروني"
-                        class="w-[90%]" value="{{ old('email') }}" />
-                    <x-form.input-light type="password" name="new_admin_password" label="" placeholder=" كلمة المرور "
-                        class="w-[90%]" value="{{ old('password') }}" />
+                    <x-form.input-light type="text" name="new_admin_email" label=""
+                        placeholder="البريد الإلكتروني" class="w-[90%]" value="{{ old('email') }}" />
+                    <div class = "p-0 bg-transparent border-none relative w-[90%] ">
+                        
+                        <input dir="ltr" type='text' name='new_admin_phone_number' value='{{ old('phone_number') }}' placeholder="رقم الهاتف"
+                          
+                            class="light-input text-center bg-white px-4 py-3 outline-none text-gray-800 rounded-lg border-2 transition-colors duration-100 border-solid border-gray-300 focus:border-gray-900  focus:ring-0 w-full ">
+                        @error('new_admin_phone_number')
+                            <div class="text-red-500 text-sm -bottom-5 right-4 absolute">{{ $message }}</div>
+                        @enderror
+                    </div>
+                    <x-form.input-light type="password" name="new_admin_password" label=""
+                        placeholder=" كلمة المرور " class="w-[90%]" value="{{ old('password') }}" />
 
 
                     <button type="submit"

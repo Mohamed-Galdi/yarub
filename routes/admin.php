@@ -1,5 +1,7 @@
 <?php
 
+use App\Http\Controllers\Admin\AccountsController;
+use App\Http\Controllers\Admin\AcountsController;
 use App\Http\Controllers\Admin\AdminDashboardController;
 use App\Http\Controllers\Admin\CouponController;
 use App\Http\Controllers\Admin\CourseController;
@@ -25,12 +27,12 @@ Route::middleware(['auth', 'verified', 'admin', 'log.visit'])->prefix('admin-das
     Route::post('/data-export', [ DataExportController::class, 'exportData' ])->name('admin.data-export');
 
     // Admin account
-    Route::get('/account', [AdminDashboardController::class, 'show'])->name('admin.account');
-    Route::post('/account', [AdminDashboardController::class, 'updateMain'])->name('admin.account.update-main');
-    Route::post('/account/update-main-password', [AdminDashboardController::class, 'updateMainPassword'])->name('admin.account.update-main-password');
-    Route::post('/account/create', [AdminDashboardController::class, 'createAdmin'])->name('admin.account.create');
-    Route::put('/account/update-admin/{admin_id}', [AdminDashboardController::class, 'updateAdmin'])->name('admin.account.update-admin');
-    Route::delete('/account/delete-admin/{admin_id}', [AdminDashboardController::class, 'deleteAdmin'])->name('admin.account.delete-admin');
+    Route::get('/account', [AccountsController::class, 'show'])->name('admin.account');
+    Route::post('/account', [AccountsController::class, 'updateMain'])->name('admin.account.update-main');
+    Route::post('/account/update-main-password', [AccountsController::class, 'updateMainPassword'])->name('admin.account.update-main-password');
+    Route::post('/account/create', [AccountsController::class, 'createAdmin'])->name('admin.account.create');
+    Route::put('/account/update-admin/{admin_id}', [AccountsController::class, 'updateAdmin'])->name('admin.account.update-admin');
+    Route::delete('/account/delete-admin/{admin_id}', [AccountsController::class, 'deleteAdmin'])->name('admin.account.delete-admin');
 
     // students
     Route::get('/students', [StudentController::class, 'index'])->name('admin.students');

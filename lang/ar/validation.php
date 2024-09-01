@@ -218,6 +218,9 @@ return [
         'admin_id'              => 'المشرف',
         'admin_name'            => 'الاسم',
         'admin_email'           => 'البريد الإلكتروني',
+        'file_name'             => 'اسم الملف',
+        'admin_phone_number'    => 'رقم الهاتف',
+        'phone_number'          => 'رقم الهاتف',
     ],
 
 ];

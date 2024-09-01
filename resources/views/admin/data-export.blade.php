@@ -38,7 +38,7 @@
             <x-form.input-light type="text" name="file_name" label="ضع إسم للملف " placeholder="مثال: مشتركين شهر أكتوبر"
                 :required="true" />
             <button type="submit"
-                class="w-full flex justify-center items-center gap-2   my-4 p-3 rounded-lg text-white bg-green-500 hover:bg-green-600 transition-all duration-200 ease-in-out ">
+                class="w-full flex justify-center items-center gap-2   my-7 p-3 rounded-lg text-white bg-green-500 hover:bg-green-600 transition-all duration-200 ease-in-out ">
                 <p>تحميل الملف</p>
                 <x-icons.file-download class="w-6 h-6 mr-2" />
             </button>
