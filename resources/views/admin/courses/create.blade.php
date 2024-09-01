@@ -260,6 +260,7 @@
                 $.ajax({
                     url: '{{ route('admin.courses.store') }}',
                     type: 'POST',
+                    timeout: 6000000,
                     headers: {
                         'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                     },

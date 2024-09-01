@@ -40,7 +40,8 @@ class CourseController extends Controller
      */
     public function store(Request $request)
     {
-        set_time_limit(3000);
+        set_time_limit(6000);
+
         $request->validate([
             'title' => 'required|string|max:255',
             'description' => 'required|string',
@@ -110,23 +111,55 @@ class CourseController extends Controller
         return response()->json(['path' => $path]);
     }
 
+    // private function moveVideoToFinalLocation($tempPath, $courseId)
+    // {
+    //     if (!Storage::disk('public')->exists($tempPath)) {
+    //         throw new \Exception("Temporary file not found: {$tempPath}");
+    //         return null;
+    //     }
+
+    //     $fileName = basename($tempPath);
+    //     $finalPath = "{$this->finalFolder}/course-{$courseId}_{$fileName}";
+
+    //     $fileContents = Storage::disk('public')->get($tempPath);
+
+    //     if (Storage::disk('s3')->put($finalPath, $fileContents)) {
+    //         return $finalPath;
+    //     } else {
+    //         throw new \Exception("Failed to upload file to S3: {$finalPath}");
+    //         return null;
+    //     }
+    // }
+
     private function moveVideoToFinalLocation($tempPath, $courseId)
     {
         if (!Storage::disk('public')->exists($tempPath)) {
             throw new \Exception("Temporary file not found: {$tempPath}");
-            return null;
         }
 
         $fileName = basename($tempPath);
         $finalPath = "{$this->finalFolder}/course-{$courseId}_{$fileName}";
 
-        $fileContents = Storage::disk('public')->get($tempPath);
+        $stream = Storage::disk('public')->readStream($tempPath);
 
-        if (Storage::disk('s3')->put($finalPath, $fileContents)) {
-            return $finalPath;
-        } else {
-            throw new \Exception("Failed to upload file to S3: {$finalPath}");
-            return null;
+        if ($stream === false) {
+            throw new \Exception("Failed to open stream for file: {$tempPath}");
+        }
+
+        try {
+            if (Storage::disk('s3')->writeStream($finalPath, $stream)) {
+                if (is_resource($stream)) {
+                    fclose($stream);
+                }
+                return $finalPath;
+            } else {
+                throw new \Exception("Failed to upload file to S3: {$finalPath}");
+            }
+        } catch (\Exception $e) {
+            if (is_resource($stream)) {
+                fclose($stream);
+            }
+            throw $e;
         }
     }
 
@@ -163,7 +196,7 @@ class CourseController extends Controller
      */
     public function update(Request $request, $id)
     {
-        set_time_limit(3000);
+        set_time_limit(6000);
 
         $request->validate([
             'title' => 'required|string|max:255',
