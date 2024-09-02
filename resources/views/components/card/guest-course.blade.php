@@ -6,7 +6,14 @@
      <div class="">
          <p class="text-white text-nowarp truncate">{{ $title }}</p>
          {{-- <p class="font-nitaqat font-bold text-sm truncate text-gray-200 ">{{ $description }}</p> --}}
-         <p class="  text-slate-800 px-1 bg-slate-100 rounded-xl w-fit mt-2 text-base">{{ $type }}</p>
+         @if ($contentType === 'live_session')
+             <div class="flex justify-start items-center gap-2 text-slate-100 px-1 py-[2px]  bg-red-500 rounded-xl w-fit mt-2 text-base">
+                <p>حصة مباشرة</p>
+                <x-icons.live class="w-5 h-5 ml-2" />
+             </div>
+         @else
+             <p class="  text-slate-800 px-1 bg-slate-100 rounded-xl w-fit mt-2 text-base">{{ $type }}</p>
+         @endif
 
      </div>
      <div class="flex w-full">

@@ -35,7 +35,7 @@
         <div id="coursesList" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-12 px-8 place-items-center">
             @forelse ($courses as $course)
                 <x-card.guest-course data-type="{{ $course->type }}" class="w-[22rem]" :id="$course->id" :title="$course->title"
-                    :description="$course->description" :price="$course->price" :type="$course->type" :averagerating="$course->reviews_avg_rating" :totalreviews="$course->reviews_count" />
+                    :description="$course->description" :price="$course->price" :type="$course->type" :averagerating="$course->reviews_avg_rating" :totalreviews="$course->reviews_count" :content_type="$course->content_type" />
             @empty
                 <div id="noResultsMessage" class="col-span-3 flex flex-col justify-center items-center w-full ">
                     <p class="text-2xl">لا توجد نتائج مطابقة حاليا</p>

@@ -10,6 +10,7 @@ use App\Http\Controllers\Admin\CertificateController;
 use App\Http\Controllers\Admin\ConversationController;
 use App\Http\Controllers\Admin\DataExportController;
 use App\Http\Controllers\Admin\GuestMessagesController;
+use App\Http\Controllers\Admin\LiveSessionController;
 use App\Http\Controllers\Admin\PagesController;
 use App\Http\Controllers\Admin\PaymentsController;
 use App\Http\Controllers\Admin\TestAttemptController;
@@ -64,6 +65,13 @@ Route::middleware(['auth', 'verified', 'admin', 'log.visit'])->prefix('admin-das
     Route::delete('/lessons/content/{id}', [LessonController::class, 'deleteContent'])->name('lessons.content.delete');
     // detach lesson from student
     Route::delete('/lessons/detach/{lesson_id}/{student_id}', [LessonController::class, 'detach'])->name('admin.lessons.detach');
+
+    // Live Sessions
+    Route::get('/courses/live-sessions/create', [LiveSessionController::class, 'create'])->name('admin.live-sessions.create');
+    Route::post('/courses/live-sessions', [LiveSessionController::class, 'store'])->name('admin.live-sessions.store');
+    Route::get('/courses/live-sessions/edit/{id}', [LiveSessionController::class, 'edit'])->name('admin.live-session.edit');
+    Route::put('/courses/live-sessions/{id}/course', [LiveSessionController::class, 'updateCourse'])->name('admin.live-session.updateCourse');
+    Route::put('/courses/live-sessions/{id}', [LiveSessionController::class, 'updateLiveSession'])->name('admin.live-session.updateLiveSession');
 
     //  upload video
     Route::post('/upload-video', [CourseController::class, 'uploadVideo'])->name('upload.video');

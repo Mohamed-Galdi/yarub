@@ -31,9 +31,35 @@
                 </div>
             </div>
         </div>
+        @if ($course->liveSession)
+            <div
+                class="my-4 w-full flex lg:flex-row flex-col justify-start items-center lg:gap-8 gap-3 px-2 py-4 border-slate-800 border-2 bg-green-800 text-white rounded-lg">
+                <p>رابط الإنضمام للبث</p>
+                <p onclick="coupyLink('{{ $course->liveSession->join_url }}')"
+                    class="p-2 rounded-lg bg-slate-50 text-slate-900 cursor-pointer hover:bg-slate-300 transition-all duration-200 ease-in-out">
+                    {{ $course->liveSession->join_url }}</p>
+                <div id="copied-popup"
+                    class=" left-1/2 -translate-x-1/2 -bottom-8 bg-green-500 text-white px-2 py-1 rounded text-sm hidden">
+                    تم النسخ!
+                </div>
+            </div>
+        @endif
         {{-- students table --}}
         <div class="mt-8">
             <livewire:course-students-table :courseId="$course->id" />
         </div>
     </div>
+    <script>
+        function coupyLink(link) {
+            navigator.clipboard.writeText(link).then(() => {
+                const popup = document.getElementById('copied-popup');
+                popup.classList.remove('hidden');
+                setTimeout(() => {
+                    popup.classList.add('hidden');
+                }, 2000);
+            }).catch(err => {
+                console.error('Failed to copy: ', err);
+            });
+        }
+    </script>
 @endsection

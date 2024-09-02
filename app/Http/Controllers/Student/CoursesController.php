@@ -14,7 +14,7 @@ class CoursesController extends Controller
     public function index()
     {
         $user = Auth::user();
-        $courses = $user->courses()->with('content')->withPivot('created_at')->get();
+        $courses = $user->courses()->with('content', 'liveSession')->withPivot('created_at')->get();
         // dd($courses);
         return view('student.courses.index', compact('courses'));
     }
@@ -23,7 +23,7 @@ class CoursesController extends Controller
     {
         $user = Auth::user();
         // check if the course is in user courses
-        if(!$user->courses()->pluck('course_id')->contains($course->id)){
+        if (!$user->courses()->pluck('course_id')->contains($course->id)) {
             Alert::warning(' انت لست مشتركا بعد في هذه الدورة');
             return redirect()->route('student.courses.index');
         }
@@ -33,6 +33,20 @@ class CoursesController extends Controller
         $review = Review::where('reviewable_id', $course->id)->where('user_id', Auth::user()->id)->first();
         // dd($review);
         return view('student.courses.show', compact('course', 'cloudFrontDomain', 'review'));
+    }
+
+    public function showLiveSession(Course $course)
+    {
+        $user = Auth::user();
+        // check if the course is in user courses
+        if (!$user->courses()->pluck('course_id')->contains($course->id)) {
+            Alert::warning(' انت لست مشتركا بعد في هذه الدورة');
+            return redirect()->route('student.courses.index');
+        }
+
+        $course->load('liveSession');
+        
+        return view('student.courses.showLiveSession', compact('course'));
     }
 
     public function rating(Request $request, $id)
@@ -61,5 +75,4 @@ class CoursesController extends Controller
         Alert::success('تم تقييم الدورة بنجاح');
         return redirect()->back();
     }
-
 }

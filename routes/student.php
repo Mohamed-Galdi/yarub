@@ -29,6 +29,9 @@ Route::middleware(['auth', 'verified', 'student', 'log.visit'])->prefix('student
     // lesson rating
     Route::post('/lessons/{lesson_id}/rating', [LessonsController::class, 'rating'])->name('student.lessons.rating');
 
+    // ////////// Live Session Routes //////////
+    Route::get('/Courses/live-session/{course}', [CoursesController::class, 'showLiveSession'])->name('student.courses.showLiveSession');
+
     // /////////// Tests Routes ////////////
     Route::get('/tests', [TestsController::class, 'index'])->name('student.tests.index');
     Route::get('/tests/{test}', [TestsController::class, 'take'])->name('student.tests.take');

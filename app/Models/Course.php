@@ -16,6 +16,7 @@ class Course extends Model
         'price',
         'type',
         'is_published',
+        'content_type',
     ];
 
     // always cast the price to int
@@ -26,6 +27,16 @@ class Course extends Model
     public function content()
     {
         return $this->hasMany(Content::class);
+    }
+
+    public function liveSession()
+    {
+        return $this->hasOne(LiveSession::class);
+    }
+
+    public function isLiveSession()
+    {
+        return $this->type === 'live_session';
     }
 
     public function reviews()

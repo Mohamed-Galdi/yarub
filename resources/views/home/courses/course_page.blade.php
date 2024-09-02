@@ -4,9 +4,32 @@
         {{-- Course --}}
         <div class=" flex lg:flex-row flex-col lg:justify-center lg:items-stretch gap-12 h-fit py-4">
             <div class="lg:w-2/5 lg:order-1 w-full order-2   space-y-4 ">
-                <p class="  text-slate-100 px-1 bg-pr-400 rounded-xl w-fit mt-2 text-base">{{ $course->type }}</p>
+
+                @if ($course->content_type === 'live_session')
+                    <div
+                        class="flex justify-start items-center gap-2 text-slate-100 px-1 py-[2px]  bg-red-500 rounded-xl w-fit mt-2 text-base">
+                        <p>حصة مباشرة</p>
+                        <x-icons.live class="w-5 h-5 ml-2" />
+                    </div>
+                @else
+                    <p class="  text-slate-100 px-1 bg-pr-400 rounded-xl w-fit mt-2 text-base">{{ $course->type }}</p>
+                @endif
                 <h1 class="text-start lg:text-4xl md:text-5xl text-4xl ">{{ $course->title }}</h1>
                 <p class="text-start text-xl text-gray-400 line-clamp-3  ">{{ $course->description }}</p>
+                @if ($course->content_type === 'live_session')
+                <div class="w-full flex md:flex-row flex-col justify-start items-center gap-4 mt-4">
+                    <div class="flex justify-start md:w-1/3 w-full items-center gap-2 bg-slate-800 text-slate-100 rounded-xl p-2">
+                        <p class="text-base text-slate-300">مدة البث: </p>
+                        <p>{{$course->liveSession->duration}} دقائق</p>
+                    </div>
+                    <div class="flex justify-start md:w-2/3 w-full items-center gap-2 bg-slate-800 text-slate-100 rounded-xl p-2">
+                        <p class="text-base text-slate-300">تاريخ البداء: </p>
+                        <p dir="ltr">{{Carbon\Carbon::parse($course->liveSession->start_time)->format('d-m-Y H:i')}}</p>
+                    </div>
+                    
+                </div>
+                    
+                @endif
                 <div class="flex justify-center items-center gap-2 mt-4 bg-slate-200 rounded-xl px-4 py-2 w-fit">
                     <p class="text-warning-500 text-3xl font-bold">{{ $course->price }} <span class="font-normal text-xl">
                             ريال سعودي </span> </p>
@@ -65,7 +88,7 @@
                 {{-- card --}}
                 @foreach ($suggestions as $suggestion)
                     <x-card.guest-course class="w-[22rem]" :id="$suggestion->id" :title="$suggestion->title" :description="$suggestion->description"
-                        :price="$suggestion->price" :type="$suggestion->type" :averagerating="$suggestion->reviews_avg_rating" :totalreviews="$suggestion->reviews_count" />
+                        :content_type="$suggestion->content_type" :price="$suggestion->price" :type="$suggestion->type" :averagerating="$suggestion->reviews_avg_rating" :totalreviews="$suggestion->reviews_count" />
                 @endforeach
             </div>
         </div>

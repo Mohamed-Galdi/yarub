@@ -105,7 +105,7 @@
                         {{-- <p>{{ $course->reviews_avg_rating }}</p>
                     <p>{{ $course->reviews_count }}</p> --}}
                         <x-card.guest-course class="w-[22rem]" :id="$course->id" :title="$course->title" :description="$course->description"
-                            :price="$course->price" :type="$course->type" :averagerating="$course->reviews_avg_rating" :totalreviews="$course->reviews_count" />
+                            :price="$course->price" :type="$course->type" :averagerating="$course->reviews_avg_rating" :totalreviews="$course->reviews_count" :content_type="$course->content_type" />
                     @endforeach
                 </div>
 

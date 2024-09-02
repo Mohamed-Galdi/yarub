@@ -17,6 +17,7 @@ return new class extends Migration
             $table->text('description');
             $table->decimal('price', 8, 2);
             $table->string('type')->nullable();
+            $table->enum('content_type', ['video', 'live_session'])->default('video');
             $table->boolean('is_published')->default(true);
             $table->timestamps();
         });
