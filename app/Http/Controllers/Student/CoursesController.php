@@ -5,9 +5,12 @@ namespace App\Http\Controllers\Student;
 use App\Http\Controllers\Controller;
 use App\Models\Course;
 use App\Models\Review;
+use Firebase\JWT\JWT;
+use Firebase\JWT\Key;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use RealRashid\SweetAlert\Facades\Alert;
+use Jubaer\Zoom\Facades\Zoom;
 
 class CoursesController extends Controller
 {
@@ -38,15 +41,78 @@ class CoursesController extends Controller
     public function showLiveSession(Course $course)
     {
         $user = Auth::user();
-        // check if the course is in user courses
         if (!$user->courses()->pluck('course_id')->contains($course->id)) {
             Alert::warning(' انت لست مشتركا بعد في هذه الدورة');
             return redirect()->route('student.courses.index');
         }
-
         $course->load('liveSession');
-        
-        return view('student.courses.showLiveSession', compact('course'));
+        // $meeting = Zoom::getMeeting($course->liveSession->zoom_meeting_id);
+
+        // // dd($meeting);
+
+        // $meetingData = [
+        //     'meetingNumber' => $meeting['data']['id'],
+        //     'status' => $meeting['data']['status'],
+        //     'password' => $meeting['data']['password'],
+        //     'userName' => $user->name,
+        //     'userEmail' => $user->email,
+        //     'joinUrl' => $meeting['data']['join_url'],
+        // ];
+        $meetingData = [
+            'meetingNumber' =>" 'data']['id']",
+            'status' => "4",
+            
+            'joinUrl' => "55",
+        ];
+
+        return view('student.courses.showLiveSession', compact('course' , 'meetingData'));
+    }
+
+    public function livePAge(Course $course)
+    {
+        $user = Auth::user();
+        if (!$user->courses()->pluck('course_id')->contains($course->id)) {
+            Alert::warning(' انت لست مشتركا بعد في هذه الدورة');
+            return redirect()->route('student.courses.index');
+        }
+        $course->load('liveSession');
+        $meeting = Zoom::getMeeting($course->liveSession->zoom_meeting_id);
+
+        // dd($meeting);
+
+        $meetingData = [
+            'meetingNumber' => $meeting['data']['id'],
+            'status' => $meeting['data']['status'],
+            'password' => $meeting['data']['password'],
+            'userName' => $user->name,
+            'userEmail' => $user->email,
+            'joinUrl' => $meeting['data']['join_url'],
+        ];
+
+        $signature = $this->generateSignature($meetingData['meetingNumber'], 0); // 0 for participant role
+
+        return view('student.courses.livePage', compact('course', 'meetingData', 'signature'));
+
+
+    }
+
+    private function generateSignature($meetingNumber, $role = 0)
+    {
+        $sdkKey = config('services.zoom.client_id');
+        $sdkSecret = config('services.zoom.client_secret');
+
+        $iat = time();
+        $exp = $iat + 60 * 60 * 2;
+
+        $payload = array(
+            "sdkKey" => $sdkKey,
+            "mn" => $meetingNumber,
+            "role" => $role,
+            "iat" => $iat,
+            "exp" => $exp
+        );
+
+        return JWT::encode($payload, $sdkSecret, 'HS256');
     }
 
     public function rating(Request $request, $id)

@@ -44,7 +44,7 @@
             <div class="flex justify-start gap-2 text-slate-100">
                 <p class="text-nowrap truncate" dir="ltr"> /
                     {{ Carbon\Carbon::parse($course->liveSession->start_time)->format('d-m-Y H:i') }}
-                <p class="text-nowrap truncate" dir="ltr">
+                <p class="text-nowrap truncate" dir="rtl">
                     {{ Carbon\Carbon::parse($course->liveSession->start_time)->diffForHumans() }}
                 </p>
 

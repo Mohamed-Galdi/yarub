@@ -31,6 +31,8 @@ Route::middleware(['auth', 'verified', 'student', 'log.visit'])->prefix('student
 
     // ////////// Live Session Routes //////////
     Route::get('/Courses/live-session/{course}', [CoursesController::class, 'showLiveSession'])->name('student.courses.showLiveSession');
+    Route::get('/Courses/live-session/{course}/join', [CoursesController::class, 'livePAge'])->name('student.courses.livePage');
+    
 
     // /////////// Tests Routes ////////////
     Route::get('/tests', [TestsController::class, 'index'])->name('student.tests.index');
