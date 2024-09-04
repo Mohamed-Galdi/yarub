@@ -8,8 +8,6 @@
                 <x-icons.live class="lg:w-10 w-5 lg:h-10 h-5 text-slate-700" />
                 <h2 class="lg:text-3xl text-lg text-slate-500"> : {{ $course->title }}</h2>
             </div>
-
-
             @if ($meetingData['status'] == 'waiting')
                 <div class="w-full text-xl flex md:flex-row flex-col justify-center items-center gap-4 mt-4">
                     <div

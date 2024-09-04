@@ -46,25 +46,18 @@ class CoursesController extends Controller
             return redirect()->route('student.courses.index');
         }
         $course->load('liveSession');
-        // $meeting = Zoom::getMeeting($course->liveSession->zoom_meeting_id);
+        $meeting = Zoom::getMeeting($course->liveSession->zoom_meeting_id);
 
         // // dd($meeting);
 
-        // $meetingData = [
-        //     'meetingNumber' => $meeting['data']['id'],
-        //     'status' => $meeting['data']['status'],
-        //     'password' => $meeting['data']['password'],
-        //     'userName' => $user->name,
-        //     'userEmail' => $user->email,
-        //     'joinUrl' => $meeting['data']['join_url'],
-        // ];
         $meetingData = [
-            'meetingNumber' =>" 'data']['id']",
-            'status' => "4",
-            
-            'joinUrl' => "55",
+            'meetingNumber' => $meeting['data']['id'],
+            'status' => $meeting['data']['status'],
+            'password' => $meeting['data']['password'],
+            'userName' => $user->name,
+            'userEmail' => $user->email,
+            'joinUrl' => $meeting['data']['join_url'],
         ];
-
         return view('student.courses.showLiveSession', compact('course' , 'meetingData'));
     }
 
