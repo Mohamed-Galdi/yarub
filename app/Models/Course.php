@@ -78,4 +78,9 @@ class Course extends Model
     {
         return $this->students()->where('user_id', $user->id)->exists();
     }
+
+    public function packages()
+    {
+        return $this->morphToMany(Package::class, 'packageable');
+    }
 }

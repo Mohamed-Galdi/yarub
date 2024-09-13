@@ -11,6 +11,7 @@ use App\Http\Controllers\Admin\ConversationController;
 use App\Http\Controllers\Admin\DataExportController;
 use App\Http\Controllers\Admin\GuestMessagesController;
 use App\Http\Controllers\Admin\LiveSessionController;
+use App\Http\Controllers\Admin\PackageController;
 use App\Http\Controllers\Admin\PagesController;
 use App\Http\Controllers\Admin\PaymentsController;
 use App\Http\Controllers\Admin\TestAttemptController;
@@ -65,6 +66,11 @@ Route::middleware(['auth', 'verified', 'admin', 'log.visit'])->prefix('admin-das
     Route::delete('/lessons/content/{id}', [LessonController::class, 'deleteContent'])->name('lessons.content.delete');
     // detach lesson from student
     Route::delete('/lessons/detach/{lesson_id}/{student_id}', [LessonController::class, 'detach'])->name('admin.lessons.detach');
+
+    // Packages
+    Route::get('/packages', [PackageController::class, 'index'])->name('admin.packages');
+    Route::get('/packages/create', [PackageController::class, 'create'])->name('admin.packages.create');
+    Route::post('/packages', [PackageController::class, 'store'])->name('admin.packages.store');
 
     // Live Sessions
     Route::get('/courses/live-sessions/create', [LiveSessionController::class, 'create'])->name('admin.live-sessions.create');

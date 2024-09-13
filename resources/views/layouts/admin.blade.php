@@ -173,6 +173,12 @@
                         class="w-6 h-6 {{ request()->is('admin-dashboard/lessons*') ? 'text-gray-200' : ' text-gray-800' }}" />
                 </x-btn.admin-dashboard-item>
                 {{-- ///////////////////////////////////// --}}
+                <x-btn.admin-dashboard-item route='admin.packages' path='admin-dashboard/packages*'>
+                    <p class="ml-3">الحقائب </p>
+                    <x-icons.package
+                        class="w-6 h-6 {{ request()->is('admin-dashboard/packages*') ? 'text-gray-200' : ' text-gray-800' }}" />
+                </x-btn.admin-dashboard-item>
+                {{-- ///////////////////////////////////// --}}
                 <x-btn.admin-dashboard-item route='admin.tests' path='admin-dashboard/test*'>
                     <p class="ml-3">الإختبارات </p>
                     <x-icons.test

@@ -8,6 +8,7 @@ enum PageTitles: string
     case STUDENTS = 'المشتركين';
     case COURSES = 'الدورات';
     case LESSONS = 'الشروحات';
+    case PACKAGES = 'الحقائب';
     case TESTS = 'الإختبارات';
     case CERTIFICATES = 'الشهادات';
     case PAYMENTS = 'المدفوعات';
@@ -26,6 +27,8 @@ enum PageTitles: string
                 return self::COURSES->value;
             case str_contains($path, 'admin-dashboard/lessons'):
                 return self::LESSONS->value;
+            case str_contains($path, 'admin-dashboard/packages'):
+                return self::PACKAGES->value;
             case str_contains($path, 'admin-dashboard/tests'):
                 return self::TESTS->value;
             case str_contains($path, 'admin-dashboard/certificates'):

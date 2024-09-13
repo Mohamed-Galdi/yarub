@@ -90,4 +90,9 @@ class Lesson extends Model
 
         return false;
     }
+
+    public function packages()
+    {
+        return $this->morphToMany(Package::class, 'packageable');
+    }
 }
