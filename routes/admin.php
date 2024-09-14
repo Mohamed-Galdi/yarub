@@ -71,6 +71,8 @@ Route::middleware(['auth', 'verified', 'admin', 'log.visit'])->prefix('admin-das
     Route::get('/packages', [PackageController::class, 'index'])->name('admin.packages');
     Route::get('/packages/create', [PackageController::class, 'create'])->name('admin.packages.create');
     Route::post('/packages', [PackageController::class, 'store'])->name('admin.packages.store');
+    Route::get('/packages/edit/{id}', [PackageController::class, 'edit'])->name('admin.packages.edit');
+    Route::put('/packages/{id}', [PackageController::class, 'update'])->name('admin.packages.update');
 
     // Live Sessions
     Route::get('/courses/live-sessions/create', [LiveSessionController::class, 'create'])->name('admin.live-sessions.create');

@@ -3,18 +3,23 @@
     <div class="">
         <x-errors :errors="$errors" />
         <div class="flex justify-between">
-            <h1 class="lg:text-4xl text-2xl text-nowrap truncate text-indigo-700 mb-4"> إنشاء حقيبة</h1>
+            <h1 class="lg:text-4xl text-2xl text-nowrap truncate text-indigo-700 mb-4"><span class="text-gray-500">تعديل
+                    حقيبة</span> : {{ Str::words($package->title, 8) }} </h1>
             </h1>
             {{-- // back button --}}
             <x-btn.back route="admin.packages" />
         </div>
-        <form id="courseForm" action="{{ route('admin.packages.store') }}" method="POST" class="space-y-6">
+        <form id="courseForm" action="{{ route('admin.packages.update', $package->id) }}" method="POST" class="space-y-6">
             @csrf
+            @method('PUT')
+              <x-form.toogle label="حالة النشر" name="is_active" value="{{ $package->is_active }}"
+                    class="lg:w-[10%] w-full lg:items-center items-start justify-start lg:order-3 order-1" />
             <ul class=" grid lg:grid-cols-3 grid-cols-1 gap-2">
                 <label for="type" class="text-gray-800 font-judur ms-3 font-semibold lg:col-span-3">نوع الحقيبة</label>
 
                 <li>
-                    <input type="radio" id="courses" name="type" value="courses" class="hidden peer" required />
+                    <input type="radio" id="courses" name="type" value="courses" class="hidden peer"
+                        {{ $package->type === 'courses' ? 'checked' : '' }} required />
                     <label for="courses"
                         class="inline-flex items-center  justify-between w-full p-3 text-gray-700 bg-gray-300 border-2 border-gray-700 rounded-lg cursor-pointer peer-checked:border-blue-600 peer-checked:text-slate-50 peer-checked:bg-indigo-500 hover:text-gray-600 hover:bg-gray-400 transition-all duration-300 ease-in-out">
                         <div class="block w-full text-center">
@@ -23,7 +28,8 @@
                     </label>
                 </li>
                 <li>
-                    <input type="radio" id="lessons" name="type" value="lessons" class="hidden peer" required />
+                    <input type="radio" id="lessons" name="type" value="lessons" class="hidden peer"
+                        {{ $package->type === 'lessons' ? 'checked' : '' }} required />
                     <label for="lessons"
                         class="inline-flex items-center  justify-between w-full p-3 text-gray-700 bg-gray-300 border-2 border-gray-700 rounded-lg cursor-pointer peer-checked:border-blue-600 peer-checked:text-slate-50 peer-checked:bg-indigo-500 hover:text-gray-600 hover:bg-gray-400 transition-all duration-300 ease-in-out">
                         <div class="block w-full text-center ">
@@ -34,7 +40,8 @@
                     </label>
                 </li>
                 <li>
-                    <input type="radio" id="mixed" name="type" value="mixed" class="hidden peer" required />
+                    <input type="radio" id="mixed" name="type" value="mixed" class="hidden peer"
+                        {{ $package->type === 'mixed' ? 'checked' : '' }} required />
                     <label for="mixed"
                         class="inline-flex items-center  justify-between w-full p-3 text-gray-700 bg-gray-300 border-2 border-gray-700 rounded-lg cursor-pointer peer-checked:border-blue-600 peer-checked:text-slate-50 peer-checked:bg-indigo-500 hover:text-gray-600 hover:bg-gray-400 transition-all duration-300 ease-in-out">
                         <div class="block w-full text-center ">
@@ -61,7 +68,8 @@
                                     <div class="flex items-center p-2 rounded hover:bg-gray-100 ">
                                         <input id="course-checkbox-{{ $course->id }}" type="checkbox" name="courses[]"
                                             value="{{ $course->id }}" data-price="{{ $course->price }}"
-                                            class="w-4 h-4 text-slate-600 bg-gray-100 focus:ring-0 focus:ring-transparent">
+                                            {{ $package->courses->contains($course->id) ? 'checked' : '' }}
+                                            class="w-4 h-4 text-slate-600 bg-gray-100 focus:ring-0 focus:ring-transparent ">
                                         <label for="course-checkbox-{{ $course->id }}"
                                             class="w-full text-slate-500 ms-4">{{ Str::words($course->title, 10) }}</label>
                                     </div>
@@ -88,6 +96,7 @@
                                         <input id="lesson-checkbox-{{ $lesson->id }}" type="checkbox" name="lessons[]"
                                             value="{{ $lesson->id }}" data-monthly-price="{{ $lesson->monthly_price }}"
                                             data-annual-price="{{ $lesson->annual_price }}"
+                                            {{ $package->lessons->contains($lesson->id) ? 'checked' : '' }}
                                             class="w-4 h-4 text-slate-600 bg-gray-100 focus:ring-0 focus:ring-transparent">
                                         <label for="lesson-checkbox-{{ $lesson->id }}"
                                             class="w-full text-slate-500 ms-4">{{ Str::words($lesson->title, 10) }}</label>
@@ -102,10 +111,10 @@
             {{-- ////////////////////////////////////////////////////////////////////////////////////////////////////////////// --}}
             <div class="form-group w-full flex lg:flex-row flex-col gap-4 items-start justify-start">
                 <x-form.input-light name="title" label="عنوان الحقيبة" placeholder="عنوان مناسب للحقيبة" type="text"
-                    required class=" w-full" id="title" required />
+                    required class=" w-full" id="title" value="{{ $package->title }}" required />
             </div>
             <div class="form-group">
-                <x-form.textarea-light name="description" label="وصف للحقيبة" placeholder="اكتب نص يصف محتويات الحقيبة"
+                <x-form.textarea-light name="description" label="وصف للحقيبة" placeholder=" {{ $package->description }}"
                     type="text" required class="w-full " />
             </div>
             <!-- New Price Section -->
@@ -114,7 +123,7 @@
                 <div id="coursePriceSection" class="hidden">
                     <div class="w-full flex gap-4 items-end justify-start">
                         <x-form.input-light name="price" id="coursePrice" label="سعر الحقيبة" placeholder=""
-                            type="number" value="0" required class=" w-1/4" required />
+                            type="number" value="{{ $package->price }}" required class=" w-1/4" required />
                         <div>
                             <p>قيمة الحقيبة الفعلية: </p>
                             <p id="totalValue" class="text-lg font-bold ">0 ريال</p>
@@ -126,13 +135,15 @@
                 <div id="lessonPriceSection" class="hidden">
                     <div class="w-full grid gap-4 grid-cols-2 lg:grid-cols-4 items-end justify-start">
                         <x-form.input-light name="monthly_price" id="monthlyPrice" label=" سعر الإشتراك الشهري    "
-                            placeholder="" type="number" required class=" w-full"  value="0" required />
+                            placeholder="" type="number" required class=" w-full" value="{{ $package->monthly_price }}"
+                            required />
                         <div class="w-full">
                             <p>قيمة الحقيبة الفعلية: </p>
                             <p id="totalMonthlyValue" class="text-lg font-bold ">0 ريال</p>
                         </div>
                         <x-form.input-light name="annual_price" id="annualPrice" label=" سعر الإشتراك السنوي    "
-                            placeholder="" type="number" required class=" w-full" value="0" required />
+                            placeholder="" type="number" required class=" w-full" value="{{ $package->annual_price }}"
+                            required />
                         <div class="w-full">
                             <p>قيمة الحقيبة الفعلية: </p>
                             <p id="totalAnnualValue" class="text-lg font-bold ">0 ريال</p>
@@ -141,7 +152,8 @@
                 </div>
             </div>
 
-            <button type="submit" class="w-full bg-green-500 my-4 p-3 rounded-lg text-white  hover:bg-green-700">إنشاء الحقيبة</button>
+            <button type="submit" class="w-full bg-green-500 my-4 p-3 rounded-lg text-white  hover:bg-green-700"> تحديث
+                الحقيبة</button>
         </form>
 
     </div>
@@ -242,6 +254,7 @@
 
             // Initial update
             updateDropdowns();
+            calculateTotalValue();
         });
     </script>
 @endsection()

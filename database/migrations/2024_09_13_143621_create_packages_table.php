@@ -15,7 +15,7 @@ return new class extends Migration
             $table->id();
             $table->enum('type', ['courses', 'lessons', 'mixed']);
             $table->string('title');
-            $table->string('description');
+            $table->text('description');
             $table->string('price')->nullable();
             $table->string('monthly_price')->nullable();
             $table->string('annual_price')->nullable();
