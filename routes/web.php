@@ -4,6 +4,7 @@ use App\Http\Controllers\CartController;
 use App\Http\Controllers\CoursesPageController;
 use App\Http\Controllers\HomePagesController;
 use App\Http\Controllers\LessonsPageController;
+use App\Http\Controllers\PackagesController;
 use App\Http\Controllers\SubController;
 use Illuminate\Support\Facades\Route;
 
@@ -31,7 +32,11 @@ Route::middleware(['log.visit'])->group(function () {
 
     // Lessons Routes
     Route::get('/lessons', [LessonsPageController::class, 'lessonsPage'])->name('lessons');
-    Route::get('/lessons/{lesson}', [LessonsPageController::class, 'coursePage'])->name('lesson');
+    Route::get('/lessons/{lesson}', [LessonsPageController::class, 'lessonPage'])->name('lesson');
+
+    // Packages Routes
+    Route::get('/packages', [PackagesController::class, 'packagesPage'])->name('packages');
+    Route::get('/packages/{package}', [PackagesController::class, 'packagePage'])->name('package');
 
     // ///////////// Cart Routes //////////////
     Route::get('/cart', [CartController::class, 'index'])->name('cart.index');

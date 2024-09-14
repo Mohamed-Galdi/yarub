@@ -47,7 +47,7 @@ class LessonsPageController extends Controller
         return view('home.lessons.lessons_list', compact('lessons', 'search', 'availableTypes', 'selectedType'));
     }
 
-    public function coursePage($lesson)
+    public function lessonPage($lesson)
     {
         $lesson = Lesson::with('reviews', 'reviews.user')->find($lesson);
 

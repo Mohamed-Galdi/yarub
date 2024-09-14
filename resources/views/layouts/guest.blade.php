@@ -102,8 +102,10 @@
                         <x-btn.guest-nav-item :route="'home'" :title="'الرئيسية'" />
                         <x-btn.guest-nav-item :route="'courses'" :title="'الدورات'" />
                         <x-btn.guest-nav-item :route="'lessons'" :title="'الشروحات'" />
+                        <x-btn.guest-nav-item :route="'packages'" :title="'الحقائب '" />
                         <x-btn.guest-nav-item :route="'about'" :title="'من نحن'" />
                         <x-btn.guest-nav-item :route="'contact'" :title="'تواصل معنا'" />
+
                         <li>
                             <a href="http://arub.yarub.org:5000/" target="_blank"
                                 class="block py-2 px-3 md:p-0 text-gray-400 rounded hover:bg-gray-100 md:hover:bg-transparent md:hover:text-primary  ">عَرُوب</a>

@@ -80,7 +80,7 @@ class PackageController extends Controller
 
     public function edit($id)
     {
-        $package = Package::find($id)->with('courses', 'lessons')->first();
+        $package = Package::with('courses', 'lessons')->findOrFail($id);
         $courses = Course::where('is_published', true)->get();
         $lessons = Lesson::where('is_published', true)->get();
         return view('admin.packages.edit', compact('package', 'courses', 'lessons'));
