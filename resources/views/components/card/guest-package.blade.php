@@ -10,11 +10,11 @@
 
      </div>
      <div class="flex gap-3 justify-between items-start">
-         <div class="w-1/2 text-center bg-slate-300 text-slate-800 rounded-lg">
+         <div class="w-1/2 text-center bg-red-200 text-slate-800 rounded-lg">
              <p>عدد الدورات</p>
              <p>{{ $coursesCount }}</p>
          </div>
-         <div class="w-1/2 text-center bg-slate-300 text-slate-800 rounded-lg">
+         <div class="w-1/2 text-center bg-red-200 text-slate-800 rounded-lg">
              <p>عدد الشروحات</p>
              <p>{{ $lessonsCount }}</p>
          </div>
@@ -46,9 +46,10 @@
              <button
                  class="bg-red-500 w-full text-white border-2 border-gray-100 text-xl py-2 px-4 rounded-2xl flex gap-4 justify-center items-center 
             hover:border-gray-800 hover:bg-gray-100 hover:text-pr-500 hover:border group transition-all duration-300 ease-in-out add-to-cart "
-                 data-item-id="{{ $id }}" data-type="lesson" data-title="{{ $title }}"
-                 data-description="{{ $description }}" data-annual-price="{{ $annualPrice }}"
-                 data-monthly-price="{{ $monthlyPrice }}">
+                 data-item-id="{{ $id }}" data-type="package" data-title="{{ $title }}"
+                 data-description="{{ $description }}" data-price="{{ $price }}"
+                 data-annual-price="{{ $annualPrice }}"
+                 data-monthly-price="{{ $monthlyPrice }}"">
                  <p> أضف الى السلة</p>
 
                  <x-icons.cart class="w-6 h-6" />

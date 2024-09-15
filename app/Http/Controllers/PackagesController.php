@@ -42,7 +42,27 @@ class PackagesController extends Controller
 
     public function packagePage($package)
     {
-        $package = Package::with('courses', 'lessons')->find($package);
-        return view('home.packages.package_page', compact('package'));
+        $package = Package::with([
+            'courses' => function ($query) {
+                $query->withCount('reviews')
+                ->withAvg('reviews', 'rating');
+            },
+            'lessons' => function ($query) {
+                $query->withCount('reviews')
+                ->withAvg('reviews', 'rating');
+            }
+        ])->find($package);
+
+        $courses = $package->courses->map(function ($course) {
+            $course->reviews_avg_rating = $course->reviews_avg_rating ? round($course->reviews_avg_rating, 1) : null;
+            return $course;
+        });
+
+        $lessons = $package->lessons->map(function ($lesson) {
+            $lesson->reviews_avg_rating = $lesson->reviews_avg_rating ? round($lesson->reviews_avg_rating, 1) : null;
+            return $lesson;
+        });
+
+        return view('home.packages.package_page', compact('package', 'courses', 'lessons'));
     }
 }

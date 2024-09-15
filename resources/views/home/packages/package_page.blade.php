@@ -17,11 +17,11 @@
                 <h1 class="text-start lg:text-4xl md:text-5xl text-4xl ">{{ $package->title }}</h1>
                 <p class="text-start text-xl text-gray-400 line-clamp-3 ">{{ $package->description }}</p>
                 <div class="flex gap-3 justify-between items-start">
-                    <div class="w-1/2 text-center bg-slate-300 text-slate-800 rounded-lg">
+                    <div class="w-1/2 text-center bg-red-200 text-slate-800 rounded-lg">
                         <p>عدد الدورات</p>
                         <p>{{ $package->courses()->count() }}</p>
                     </div>
-                    <div class="w-1/2 text-center bg-slate-300 text-slate-800 rounded-lg">
+                    <div class="w-1/2 text-center bg-red-200 text-slate-800 rounded-lg">
                         <p>عدد الشروحات</p>
                         <p>{{ $package->lessons()->count() }}</p>
                     </div>
@@ -52,7 +52,8 @@
                     class="bg-red-500 w-full text-white border-2 border-gray-100 text-xl py-2 px-4 rounded-2xl flex gap-4 justify-center items-center 
               hover:text-warning-300  group transition-all duration-300 ease-in-out add-to-cart"
                     data-item-id="{{ $package->id }}" data-type="package" data-title="{{ $package->title }}"
-                    data-description="{{ $package->description }}" data-price="{{ $package->price }}">
+                    data-description="{{ $package->description }}" data-price="{{ $package->price }}"
+                    data-annual-price="{{ $package->annual_price }}" data-monthly-price="{{ $package->monthly_price }}">
                     <p> أضف الى السلة</p>
                     <x-icons.cart class="w-6 h-6" />
                 </button>
@@ -65,19 +66,28 @@
                 </div>
             </div>
         </div>
-        <h2>محتويات الحقيبة</h2>
-        <div id="coursesList" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-12 px-8 place-items-center">
-            @forelse ($package->courses as $course)
-                <x-card.guest-course data-type="{{ $course->type }}" class="w-[22rem]" :id="$course->id" :title="$course->title"
-                    :description="$course->description" :price="$course->price" :type="$course->type" :averagerating="$course->reviews_avg_rating" :totalreviews="$course->reviews_count"
-                    :content_type="$course->content_type" />
-            @empty
-                <div id="noResultsMessage" class="col-span-3 flex flex-col justify-center items-center w-full ">
-                    <p class="text-2xl">لا توجد نتائج مطابقة حاليا</p>
-                    <img class="w-72" src="{{ asset('assets/images/empty.svg') }}" alt="صورة فارغة" />
+        <div class="px-2">
+            <h2 class="text-3xl mb-1">محتويات الحقيبة</h2>
+            <div class="h-full w-full rounded-md bg-gradient-to-r p-1  to-indigo-500 via-red-500 from-teal-500 ">
+                <div class="flex h-full w-full items-center justify-center bg-slate-50 back p-6">
+                    <div id="coursesList"
+                        class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-12 px-8 place-items-center">
+                        @foreach ($courses as $course)
+                            <x-card.package-course data-type="{{ $course->type }}" class="w-[22rem]" :id="$course->id"
+                                :title="$course->title" :description="$course->description" :price="$course->price" :type="$course->type" :averagerating="$course->reviews_avg_rating"
+                                :totalreviews="$course->reviews_count" :content_type="$course->content_type" />
+                        @endforeach
+                        @foreach ($lessons as $lesson)
+                            <x-card.package-lesson class="w-[22rem] " data-type="{{ $lesson->type }}" :id="$lesson->id"
+                                :title="$lesson->title" :description="$lesson->description" :monthly-price="$lesson->monthly_price" :annual-price="$lesson->annual_price"
+                                :type="$lesson->type" :averagerating="$lesson->reviews_avg_rating" :totalreviews="$lesson->reviews_count" />
+                        @endforeach
+                    </div>
                 </div>
-            @endforelse
+            </div>
         </div>
+
+
 
 
 

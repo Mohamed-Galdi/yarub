@@ -55,7 +55,7 @@
                     </div>
                 </div>
             @empty
-                <p class="mt-2 font-sec text-lg">لا يوجد تقييمات حتى الآن لهذه الرحلة </p>
+                <p class="mt-2 font-sec text-lg">لا يوجد تقييمات حتى الآن لهذه الدورة </p>
             @endforelse
 
         </div>

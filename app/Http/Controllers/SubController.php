@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Coupon;
 use App\Models\CourseSubscription;
 use App\Models\LessonSubscription;
+use App\Models\Package;
 use App\Models\Payment;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -55,34 +56,111 @@ class SubController extends Controller
             $payment->save();
 
             if ($paymentStatus == 'paid' && $paymentMessage == 'APPROVED') {
+                // foreach ($cart as $item) {
+                //     if ($item['type'] == 'course') {
+                //         $courseSub = new CourseSubscription();
+                //         $courseSub->user_id = Auth::id();
+                //         $courseSub->course_id = $item['id'];
+                //         $courseSub->is_active = true;
+                //         $courseSub->payment_id = $payment->id;
+                //         if ($coupon) {
+                //             $courseSub->cost = $item['cost'];
+                //         } else {
+                //             $courseSub->cost = $item['price'];
+                //         }
+                //         $courseSub->save();
+                //     } else {
+                //         $lessonSub = new LessonSubscription();
+                //         $lessonSub->user_id = Auth::id();
+                //         $lessonSub->lesson_id = $item['id'];
+                //         $lessonSub->sub_plan = $item['plan'];
+                //         $lessonSub->is_active = true;
+                //         $lessonSub->payment_id = $payment->id;
+                //         if ($coupon) {
+                //             $lessonSub->cost = $item['cost'];
+                //         } else {
+                //             $lessonSub->cost = $item['plan'] === 'monthly' ? $item['monthly_price'] : $item['annual_price'];
+                //         }
+                //         $lessonSub->save();
+                //     }
+                // }
+
                 foreach ($cart as $item) {
                     if ($item['type'] == 'course') {
-                        $courseSub = new CourseSubscription();
-                        $courseSub->user_id = Auth::id();
-                        $courseSub->course_id = $item['id'];
-                        $courseSub->is_active = true;
-                        $courseSub->payment_id = $payment->id;
-                        if ($coupon) {
-                            $courseSub->cost = $item['cost'];
-                        } else {
-                            $courseSub->cost = $item['price'];
+                        // Check if an active subscription already exists
+                        $existingSubscription = CourseSubscription::where('user_id', Auth::id())
+                            ->where('course_id', $item['id'])
+                            ->where('is_active', true)
+                            ->first();
+
+                        if (!$existingSubscription) {
+                            $courseSub = new CourseSubscription();
+                            $courseSub->user_id = Auth::id();
+                            $courseSub->course_id = $item['id'];
+                            $courseSub->is_active = true;
+                            $courseSub->payment_id = $payment->id;
+                            $courseSub->cost = $coupon ? $item['cost'] : $item['price'];
+                            $courseSub->save();
                         }
-                        $courseSub->save();
-                    } else {
-                        $lessonSub = new LessonSubscription();
-                        $lessonSub->user_id = Auth::id();
-                        $lessonSub->lesson_id = $item['id'];
-                        $lessonSub->sub_plan = $item['plan'];
-                        $lessonSub->is_active = true;
-                        $lessonSub->payment_id = $payment->id;
-                        if ($coupon) {
-                            $lessonSub->cost = $item['cost'];
-                        } else {
-                            $lessonSub->cost = $item['plan'] === 'monthly' ? $item['monthly_price'] : $item['annual_price'];
+                    } elseif ($item['type'] == 'lesson') {
+                        // Check if an active subscription already exists
+                        $existingSubscription = LessonSubscription::where('user_id', Auth::id())
+                            ->where('lesson_id', $item['id'])
+                            ->where('is_active', true)
+                            ->first();
+
+                        if (!$existingSubscription) {
+                            $lessonSub = new LessonSubscription();
+                            $lessonSub->user_id = Auth::id();
+                            $lessonSub->lesson_id = $item['id'];
+                            $lessonSub->sub_plan = $item['plan'];
+                            $lessonSub->is_active = true;
+                            $lessonSub->payment_id = $payment->id;
+                            $lessonSub->cost = $coupon ? $item['cost'] : ($item['plan'] === 'monthly' ? $item['monthly_price'] : $item['annual_price']);
+                            $lessonSub->save();
                         }
-                        $lessonSub->save();
+                    } elseif ($item['type'] == 'package') {
+                        $package = Package::with(['courses', 'lessons'])->find($item['id']);
+
+                        foreach ($package->courses as $course) {
+                            // Check if an active subscription already exists
+                            $existingSubscription = CourseSubscription::where('user_id', Auth::id())
+                                ->where('course_id', $course->id)
+                                ->where('is_active', true)
+                                ->first();
+
+                            if (!$existingSubscription) {
+                                $courseSub = new CourseSubscription();
+                                $courseSub->user_id = Auth::id();
+                                $courseSub->course_id = $course->id;
+                                $courseSub->is_active = true;
+                                $courseSub->payment_id = $payment->id;
+                                $courseSub->cost = 0; // Set cost to 0 for package items
+                                $courseSub->save();
+                            }
+                        }
+
+                        foreach ($package->lessons as $lesson) {
+                            // Check if an active subscription already exists
+                            $existingSubscription = LessonSubscription::where('user_id', Auth::id())
+                                ->where('lesson_id', $lesson->id)
+                                ->where('is_active', true)
+                                ->first();
+
+                            if (!$existingSubscription) {
+                                $lessonSub = new LessonSubscription();
+                                $lessonSub->user_id = Auth::id();
+                                $lessonSub->lesson_id = $lesson->id;
+                                $lessonSub->sub_plan = $item['plan'];
+                                $lessonSub->is_active = true;
+                                $lessonSub->payment_id = $payment->id;
+                                $lessonSub->cost = 0; // Set cost to 0 for package items
+                                $lessonSub->save();
+                            }
+                        }
                     }
                 }
+
                 // increase the coupon value usage count
                 if ($coupon) {
                     $cpn = Coupon::where('code', $coupon['code'])->first();

@@ -34,6 +34,10 @@ class CoursesPageController extends Controller
             return $course;
         });
 
+        // When you use withAvg(), Laravel automatically adds a new attribute to your query results.
+        // The naming convention for this attribute is: {relation}_avg_{column}
+        // So in this case, it becomes reviews_avg_rating
+
         // Get all unique types from the filtered courses
         $availableTypes = Course::where('is_published', true)
             ->when($search, function ($query) use ($search) {

@@ -219,6 +219,7 @@
             let monthlyPrice = $(this).data('monthly-price');
             let annualPrice = $(this).data('annual-price');
 
+
             $.ajax({
                 url: '{{ route('cart.add') }}',
                 type: 'POST',

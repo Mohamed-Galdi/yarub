@@ -94,18 +94,38 @@
                                     الشروحات</p>
                             </button>
                         </a>
+                        <a href="{{ route('packages') }}">
+                            <button class="bg-red-500 hover:bg-red-600 text-white  py-1 px-2 rounded">
+                                <p class="ml-2 lg:text-xl text-base text-nowrap truncate lg:w-32 w-24 text-center">صفحة
+                                    الحقائب</p>
+                            </button>
+                        </a>
                     </div>
                     <div class="w-full h-full flex flex-col justify-start items-start gap-4 mt-4 ">
                         @forelse ($cart as $item)
+                            @php
+                                $colorClasses = match ($item['type']) {
+                                    'course' => 'from-indigo-800 to-indigo-400',
+                                    'lesson' => 'from-teal-800 to-teal-400',
+                                    'package' => 'from-red-800 to-red-400',
+                                    default => 'from-gray-800 to-gray-400',
+                                };
+                                $typeLabel = match ($item['type']) {
+                                    'course' => 'دورة',
+                                    'lesson' => 'شرح',
+                                    'package' => 'حقيبة',
+                                    default => 'غير معروف',
+                                };
+                            @endphp
                             <div
-                                class="relative bg-gradient-to-tr min-h-32  rounded-lg shadow-lg p-4 w-full flex md:flex-row flex-col justify-between md:items-center overflow-hidden {{ $item['type'] == 'course' ? 'from-indigo-800 to-indigo-400' : 'from-teal-800 to-teal-400' }}">
+                                class="relative bg-gradient-to-tr min-h-32  rounded-lg shadow-lg p-4 w-full flex md:flex-row flex-col justify-between md:items-center overflow-hidden {{ $colorClasses }}">
                                 <div class="flex flex-col justify-start items-start w-3/4">
                                     <div class="w-full flex items-start gap-2">
                                         <h2 class="text-xl mb-2 text-slate-100 text-nowrap truncate items-end">
                                             {{ $item['title'] }}
                                         </h2>
                                         <p class="  text-slate-800 px-1 bg-slate-100 rounded-xl w-fit h-fit text-base">
-                                            {{ $item['type'] == 'course' ? 'دورة' : 'شرح' }}</p>
+                                            {{ $typeLabel }}</p>
                                     </div>
                                     <p class="text-gray-300 text-sm font-judur text-nowrap truncate w-full ">
                                         {{ $item['description'] }}
@@ -120,7 +140,7 @@
                                             class="text-slate-500 text-2xl p-2 bg-warning-200 rounded-xl text-nowrap truncate">
                                             {{ $item['price'] }}
                                             ر.س</p>
-                                    @else
+                                    @elseif($item['type'] == 'lesson')
                                         <p
                                             class="text-slate-500 text-2xl p-2 bg-warning-200 rounded-xl text-nowrap truncate">
                                             {{ $item['plan'] == 'annual' ? $item['annual_price'] : $item['monthly_price'] }}
@@ -133,6 +153,27 @@
                                             <option value="annual" {{ $item['plan'] == 'annual' ? 'selected' : '' }}>سنويا
                                             </option>
                                         </select>
+                                    @elseif($item['type'] == 'package')
+                                        @if ($item['price'])
+                                            <p
+                                                class="text-slate-500 text-2xl p-2 bg-warning-200 rounded-xl text-nowrap truncate">
+                                                {{ $item['price'] }}
+                                                ر.س</p>
+                                        @else
+                                            <p
+                                                class="text-slate-500 text-2xl p-2 bg-warning-200 rounded-xl text-nowrap truncate">
+                                                {{ $item['plan'] == 'annual' ? $item['annual_price'] : $item['monthly_price'] }}
+                                                ر.س</p>
+                                            <select
+                                                class="plan-selector block w-20 h-[2.5rem] rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
+                                                data-item-id="{{ $item['id'] }}" data-type="{{ $item['type'] }}">
+                                                <option value="monthly" {{ $item['plan'] == 'monthly' ? 'selected' : '' }}>
+                                                    شهريا</option>
+                                                <option value="annual" {{ $item['plan'] == 'annual' ? 'selected' : '' }}>
+                                                    سنويا
+                                                </option>
+                                            </select>
+                                        @endif
                                     @endif
                                 </div>
                                 <div class="absolute top-3 left-3 group">

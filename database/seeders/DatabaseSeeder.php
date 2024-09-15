@@ -19,7 +19,7 @@ class DatabaseSeeder extends Seeder
         $this->call([
             Demo::class, Students::class, Courses::class, Lessons::class, CourseTests::class, TestAttempt::class, CouponSeeder::class, CertificateSeeder::class,
             MessageSeeder::class, GuestMessagesSeeder::class, HomePageSeeder::class, HomePageReviewsSeeder::class, FAQseeder::class, AboutPageSeeder::class, PartnersPageSeeder::class, ContactPageSeeder::class, ReviewSeeder::class,
-            SubscriptionSeeder::class, ContentVideoSeeder::class,
+            SubscriptionSeeder::class, ContentVideoSeeder::class, PackageSeeder::class
         ]);
 
     }

@@ -136,7 +136,7 @@ class CartController extends Controller
         return collect($cart)->sum(function ($item) {
             if ($item['type'] === 'course') {
                 return $item['price'];
-            } elseif ($item['type'] === 'lesson') {
+            } elseif ($item['type'] === 'lesson' || $item['type'] === 'package') {
                 if ($item['plan'] === 'monthly') {
                     return $item['monthly_price'];
                 } else {
