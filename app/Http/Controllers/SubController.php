@@ -2,26 +2,29 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Coupon;
+use App\Models\Payment;
 use App\Models\CourseSubscription;
 use App\Models\LessonSubscription;
-use App\Models\Payment;
+use App\Models\Coupon;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use RealRashid\SweetAlert\Facades\Alert;
-
 
 class SubController extends Controller
 {
     public function subscribe(Request $request)
     {
+        if ($request->status !== 'paid') {
+            $message = $request->message;
+            return view('home.failed-payment', ['message' => $message]);
+        }
+
         // Validate input
         $validatedData = $request->validate([
             'id' => 'required|string',
             'status' => 'required|string',
-            'amount' => 'numeric',
             'message' => 'required|string',
         ]);
 
@@ -32,11 +35,16 @@ class SubController extends Controller
 
         $paymentId = $validatedData['id'];
         $paymentStatus = $validatedData['status'];
-        $paymentAmount = $validatedData['amount'];
         $paymentMessage = $validatedData['message'];
+
+        // Get cart data from session
         $cart = session('cart', []);
         $coupon = session('coupon');
         $discount = session('discount', 0);
+
+        // Calculate amount from cart since it's not in the response anymore
+        $calculatedTotal = $this->calculateTotalFromCart($cart);
+        $paymentAmount = ($calculatedTotal - $discount) * 100; // Convert to cents/fils
 
         DB::beginTransaction();
 
@@ -107,6 +115,18 @@ class SubController extends Controller
             Alert::error('حدث خطأ أثناء معالجة الدفع', $e->getMessage());
             return redirect()->route('cart.index');
         }
+    }
+
+    private function calculateTotalFromCart($cart)
+    {
+        return collect($cart)->sum(function ($item) {
+            if ($item['type'] === 'course') {
+                return $item['price'];
+            } elseif ($item['type'] === 'lesson') {
+                return $item['plan'] === 'monthly' ? $item['monthly_price'] : $item['annual_price'];
+            }
+            return 0;
+        });
     }
 
     private function getErrorMessage($message)
