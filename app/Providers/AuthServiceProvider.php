@@ -13,7 +13,11 @@ class AuthServiceProvider extends ServiceProvider
      * @var array<class-string, class-string>
      */
     protected $policies = [
-        //
+        \App\Models\QudratCategory::class => \App\Policies\QudratContentPolicy::class,
+        \App\Models\QudratPassage::class => \App\Policies\QudratContentPolicy::class,
+        \App\Models\QudratQuestion::class => \App\Policies\QudratContentPolicy::class,
+        \App\Models\QudratOption::class => \App\Policies\QudratContentPolicy::class,
+        \App\Models\QudratPracticeSession::class => \App\Policies\QudratPracticeSessionPolicy::class,
     ];
 
     /**

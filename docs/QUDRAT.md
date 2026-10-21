@@ -2,7 +2,7 @@
 
 Add verbal aptitude practice to the existing Yarub application. Students practice six question categories; admins review, edit and publish the content.
 
-**Current status: Phase 1 is complete. No Qudrat feature code or database tables have been implemented. Phase 2 is next.**
+**Current status: Phases 1 and 2 are complete. Database/import foundations are implemented and development drafts are imported. Phase 3 (admin screens) is next; student practice is not built yet.**
 
 This is the single Qudrat requirements and roadmap document. Content lives in `qudrat_content/` at the repository root. Follow `AGENTS.md` for project conventions and environment safety.
 
@@ -13,8 +13,8 @@ Implement one phase at a time, only when requested. At the end of each phase, up
 | Phase | Deliverable | Status |
 | --- | --- | --- |
 | 1. Inspect and plan | Inspect Yarub, validate JSON, choose integration approach | Complete — discovery only |
-| 2. Database and import | Create Qudrat storage and safely import development drafts | Not started — next |
-| 3. Admin management | Review, edit, preview and publish content locally | Not started |
+| 2. Database and import | Create Qudrat storage and safely import development drafts | Complete — verified on isolated native MySQL |
+| 3. Admin management | Review, edit, preview and publish content locally | Not started — next |
 | 4. Student practice | Practice sessions, hints, grading, resume and progress | Not started |
 | 5. Verification and release preparation | Verify the complete feature and document rollout | Not started |
 
@@ -29,7 +29,7 @@ Completed on 2026-10-21 against checkout `799df14`:
 
 **Result:** a verified content inventory and implementation plan. No feature was built, Laravel was not booted, and no database or production system was accessed.
 
-### Phase 2 — Database and development import (next)
+### Phase 2 — Database and development import (complete)
 
 **Build:**
 
@@ -42,6 +42,44 @@ Completed on 2026-10-21 against checkout `799df14`:
 **Done when:** the development database contains 6 categories, 1,200 questions, 4,800 options and 40 passages; a second import creates no duplicates; invalid input causes no partial writes; admin edits survive reruns; all content remains draft and existing records/progress are preserved.
 
 **Start with:** `Read docs/QUDRAT.md and implement Phase 2 only. Update this document with results and verified local commands.`
+
+**Delivered on 2026-10-21:** seven Qudrat tables/models, user relationships, admin-content and owned-session policies, a standalone content validator, and the guarded `qudrat:import` command. No student/admin Qudrat routes or screens were added in this phase. Session content snapshots and submitted answers are protected against normal model edits; database constraints bind answers to their session owner and question, and passages to the question's category.
+
+The development import contains **6 categories, 1,200 questions, 4,800 options and 40 passages**, all draft, with zero invalid reading links. The second import reported all records unchanged, with no new records. Focused tests cover source updates, stable option identity, publication/history preservation, admin-edited questions/options/categories/passages, explicit overwrites, missing-source retention, malformed input before writes, rollback, database constraints, ownership and environment guards. Content validation remains fixed to this complete six-file input bundle; incomplete bundles are rejected without deleting existing records.
+
+**Verification:** PHP 8.3.11 and MySQL 8.0.43; Composer lockfile platform requirements passed; changed PHP files passed syntax checks; new PHP files passed Pint; the Qudrat suite passed 28 tests and 109 assertions. Exact local commands are below. The full legacy suite and asset build were not run: existing Breeze drift is unrelated and this phase adds no frontend assets.
+
+**Resolved setup incident:** an initial positional-argument bug in the new PowerShell helper invoked the existing profile's `migrate` shortcut (`php artisan migrate:fresh --seed`) against the normal Artisan connection. The owner confirmed that connection held disposable local/demo data. Parameter binding is now explicit, the helper validates the PHP executable, and the isolated PHP entry point rejects reset/demo-seed commands. Subsequent import/test work used the dedicated databases below. No real environment file was read or edited, and no deployment was performed.
+
+### Verified native commands for Phase 2
+
+The owner uses native PHP plus `npm run dev`, not Docker. `tools/qudrat-local.ps1` provides a separate native MySQL instance solely for Qudrat development/testing; it does not replace the normal serve/Vite workflow. It uses installed binaries, never downloads/upgrades dependencies, and stores its configuration/databases/cache under ignored `storage/app/qudrat-local/`.
+
+Default binaries on this machine: PHP at `$env:USERPROFILE/.config/herd/bin/php83/php.exe`, MySQL at `C:/Program Files/MySQL/MySQL Server 8.0/bin`. Override the named `-Php` and `-MySqlBin` arguments if needed. The helper creates its own datadir and refuses an already occupied port; it does not reuse an existing MySQL server. The databases are `yarub_qudrat_dev_local` and `yarub_qudrat_test_local` on `127.0.0.1:33317`. Its restricted local account can access only these two databases.
+
+Run from the repository root in PowerShell:
+
+```powershell
+# Start the separate local instance (do not repeat while it is already running).
+./tools/qudrat-local.ps1 start
+
+# Only the existing users prerequisite and the new Qudrat migration.
+./tools/qudrat-local.ps1 artisan migrate --path=database/migrations/2014_10_12_000000_create_users_table.php --path=database/migrations/2026_10_21_000001_create_qudrat_tables.php
+
+./tools/qudrat-local.ps1 artisan qudrat:import --dry-run
+./tools/qudrat-local.ps1 artisan qudrat:import
+./tools/qudrat-local.ps1 artisan qudrat:import  # rerun: unchanged, no duplicates
+
+# Only after reviewing a named conflict; can repeat --overwrite-id for other named IDs.
+./tools/qudrat-local.ps1 artisan qudrat:import --overwrite-id=verbal_analogies_001
+
+./tools/qudrat-local.ps1 test
+./tools/qudrat-local.ps1 stop
+```
+
+The PHP entry point is `tools/qudrat-local.php`; it loads only its own ignored configuration and caches, checks the development import guard, and permits imports/migrations only. The test suite uses `phpunit.qudrat.xml` and `Tests\QudratTestCase`: it overrides environment/cache paths, verifies the dedicated test database before migrations, and rolls back each test. Do not substitute the project's default `php artisan test` while its database isolation remains unresolved.
+
+For an independently configured isolated native environment, the standard `php artisan qudrat:import` command is also available. Mutating imports require local/development/testing mode, `QUDRAT_ALLOW_DEVELOPMENT_IMPORT=true`, and loopback MySQL with a `yarub_qudrat_dev_*` or `yarub_qudrat_test_*` database name. This opt-in is not permission to use live credentials/data. Dry-run validates files without database queries. Exit codes: 0 success, 1 invalid input/environment/runtime failure, 2 committed non-conflicting records with conflicts skipped and reported. `Conflicting` counts describe skipped records/dependencies; they are not additional imported records.
 
 ### Phase 3 — Admin management and content review
 
@@ -163,7 +201,7 @@ Validate every input file before writes. Use stable IDs for transactional upsert
 
 Track the last imported checksum/version for category metadata, passages and question-plus-options content. Compare current records with that baseline to detect admin edits, including when the incoming file is unchanged. Skip/report conflicts by default; allow only deliberate overwrite of named IDs. Report dependent passage conflicts, recheck under locks, and roll back unexpected failures. Publication/archive state and historical snapshots are outside source updates.
 
-Proposed commands (not implemented yet):
+Implemented command syntax (run through the isolated helper above until a separate environment is verified):
 
 ```text
 php artisan qudrat:import --path=qudrat_content --dry-run
@@ -199,9 +237,9 @@ Progress = distinct submitted questions in the current published bank / publishe
 | Item | Resolve by |
 | --- | --- |
 | Who can use Qudrat: every logged-in student or a specific existing purchase? No Qudrat entitlement exists; course/lesson rules cannot simply be copied. | Before Phase 4 access is enabled |
-| Local runtime: no project Dockerfile/Compose/runbook was found. Sail being installed does not prove a configured container workflow. Confirm real services/commands or agree isolated native setup. | Before Phase 2 database work |
-| PHP/MySQL compatibility: local PHP was observed as 8.4.5, but locked OpenSpout excludes 8.4. Verify the full lockfile on a compatible runtime; do not incidentally upgrade dependencies. | Before running Laravel/dependencies |
-| Test isolation: current `phpunit.xml` does not isolate the database; feature tests use `RefreshDatabase`. Set explicit disposable DB/non-live services, avoid stale cached configuration, and verify the target before tests. | Before database tests |
+| Local runtime: owner confirmed native PHP/Vite, no Docker. Dedicated native MySQL and helper commands are now verified above. Minimum full-app browsing fixtures remain a Phase 3 task. | Phase 2 setup resolved |
+| PHP/MySQL compatibility: default PHP remains 8.4.5, which locked OpenSpout excludes. The helper uses verified PHP 8.3.11 with required extensions; Composer platform checks pass. Dedicated MySQL is 8.0.43. | Phase 2 resolved; keep using the compatible executable |
+| Test isolation: default `phpunit.xml` still does not isolate the database. Use the dedicated Qudrat configuration/test base and helper; do not run the legacy feature suite against an unspecified connection. | Qudrat isolation implemented; default suite unchanged |
 | Source review: educational correctness and passage paragraph structure need owner review. | Before Phase 3 publication |
 
 Use `.env.example` as the starting point; do not reuse real credentials. Existing demo seeding is broad, and even page views may write visitor records. Establish minimum local fixtures deliberately. Add plain validator unit tests and focused import/admin/ownership/practice/grading/progress/history feature tests as each phase is built; test concurrency and constraints on isolated MySQL. Keep exact verified commands and phase results in this document as work progresses.

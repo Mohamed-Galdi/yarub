@@ -172,4 +172,14 @@ class User extends Authenticatable
         return $courseTests->merge($lessonTests)->unique('id');
     }
 
+    public function qudratSessions()
+    {
+        return $this->hasMany(QudratPracticeSession::class);
+    }
+
+    public function qudratAnswers()
+    {
+        return $this->hasMany(QudratSessionAnswer::class);
+    }
+
 }
