@@ -20,6 +20,21 @@ Route::middleware(['auth', 'verified', 'admin', 'log.visit'])->prefix('admin-das
     // Dashboard
     Route::get('/', [AdminDashboardController::class, 'index'])->name('admin.dashboard');
 
+    Route::prefix('qudrat')->name('admin.qudrat.')->group(function () {
+        Route::get('/', [\App\Http\Controllers\Admin\Qudrat\CategoryController::class, 'index'])->name('index');
+        Route::patch('/categories/{category}', [\App\Http\Controllers\Admin\Qudrat\CategoryController::class, 'update'])->name('categories.update');
+        Route::get('/questions', [\App\Http\Controllers\Admin\Qudrat\QuestionController::class, 'index'])->name('questions.index');
+        Route::get('/questions/create', [\App\Http\Controllers\Admin\Qudrat\QuestionController::class, 'create'])->name('questions.create');
+        Route::post('/questions', [\App\Http\Controllers\Admin\Qudrat\QuestionController::class, 'store'])->name('questions.store');
+        Route::get('/questions/{question}/edit', [\App\Http\Controllers\Admin\Qudrat\QuestionController::class, 'edit'])->name('questions.edit');
+        Route::put('/questions/{question}', [\App\Http\Controllers\Admin\Qudrat\QuestionController::class, 'update'])->name('questions.update');
+        Route::get('/questions/{question}/preview', [\App\Http\Controllers\Admin\Qudrat\QuestionController::class, 'preview'])->name('questions.preview');
+        Route::patch('/questions/{question}/archive', [\App\Http\Controllers\Admin\Qudrat\QuestionController::class, 'archive'])->name('questions.archive');
+        Route::get('/passages', [\App\Http\Controllers\Admin\Qudrat\PassageController::class, 'index'])->name('passages.index');
+        Route::get('/passages/{passage}/edit', [\App\Http\Controllers\Admin\Qudrat\PassageController::class, 'edit'])->name('passages.edit');
+        Route::put('/passages/{passage}', [\App\Http\Controllers\Admin\Qudrat\PassageController::class, 'update'])->name('passages.update');
+    });
+
     // Data Export
     Route::get('/data-export', [ DataExportController::class, 'index' ])->name('admin.data-export-page');
     Route::post('/data-export', [ DataExportController::class, 'exportData' ])->name('admin.data-export');

@@ -6,6 +6,8 @@ use Illuminate\Database\Eloquent\Model;
 
 class QudratCategory extends Model
 {
+    protected $attributes = ['is_published' => true];
+
     protected $fillable = [
         'slug', 'title', 'sort_order', 'is_published', 'import_checksum', 'import_version',
     ];

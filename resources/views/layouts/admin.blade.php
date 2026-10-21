@@ -10,14 +10,21 @@
     <link rel="icon" type="image/x-icon" href="/assets/favicon.ico">
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <!-- Scripts -->
-    @vite(['resources/css/app.css', 'resources/js/app.js'])
+    @if(request()->routeIs('admin.qudrat.*'))
+        @vite(['resources/css/app.css', 'resources/js/qudrat-admin.js'])
+        @livewireStyles
+    @else
+        @vite(['resources/css/app.css', 'resources/js/app.js'])
+    @endif
     @include('flatpickr::components.style')
     <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
 
     <!-- Alpine Plugins -->
+    @unless(request()->routeIs('admin.qudrat.*'))
     <script defer src="https://cdn.jsdelivr.net/npm/@alpinejs/focus@3.x.x/dist/cdn.min.js"></script>
     <!-- Alpine Core -->
     <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+    @endunless
 
     {{-- SweetAlert2 --}}
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
@@ -178,6 +185,10 @@
                     <x-icons.test
                         class="w-6 h-6 {{ request()->is('admin-dashboard/tests*') ? 'text-gray-200' : ' text-gray-800' }}" />
                 </x-btn.admin-dashboard-item>
+                <x-btn.admin-dashboard-item route='admin.qudrat.index' path='admin-dashboard/qudrat*'>
+                    <p class="ml-3">القدرات</p>
+                    <x-icons.square-check class="w-6 h-6" />
+                </x-btn.admin-dashboard-item>
                 {{-- ///////////////////////////////////// --}}
                 <x-btn.admin-dashboard-item route='admin.certificates' path='admin-dashboard/certificates*'>
                     <p class="ml-3"> الشهادات </p>
@@ -285,8 +296,12 @@
     </script>
     @include('sweetalert::alert')
     @include('flatpickr::components.script')
+    @if(request()->routeIs('admin.qudrat.*'))
+        @livewireScriptConfig
+    @else
     <script src="https://cdn.jsdelivr.net/npm/flowbite@2.4.1/dist/flowbite.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/puppeteer@22.14.0/lib/cjs/puppeteer/puppeteer.min.js"></script>
+    @endif
 
 </body>
 @stack('scripts')

@@ -15,7 +15,7 @@ class ImportQudratContent extends Command
         {--dry-run : Validate content without connecting to the database}
         {--overwrite-id=* : Explicit external question/passage key or category slug to overwrite}';
 
-    protected $description = 'Validate Qudrat content and explicitly import drafts into an isolated development database';
+    protected $description = 'Validate Qudrat content and import automatically published content into an isolated development database';
 
     public function handle(ContentValidator $validator, ContentImporter $importer): int
     {

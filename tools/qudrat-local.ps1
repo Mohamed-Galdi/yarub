@@ -1,7 +1,7 @@
 [CmdletBinding(PositionalBinding = $false)]
 param(
     [Parameter(Position = 0)]
-    [ValidateSet('start', 'stop', 'artisan', 'test')]
+    [ValidateSet('start', 'stop', 'artisan', 'test', 'serve', 'build')]
     [string]$Action = 'start',
     [Parameter(Position = 1, ValueFromRemainingArguments = $true)]
     [string[]]$CommandArguments,
@@ -78,7 +78,14 @@ if ($Action -eq 'start') {
         foreach ($entry in $values.GetEnumerator()) { $lines += "$($entry.Key)=$($entry.Value)" }
         [System.IO.File]::WriteAllLines($environmentFile, $lines)
     }
-    Write-Output "Dedicated native MySQL ready on 127.0.0.1:$port. Configuration: storage/app/qudrat-local/.env"
+    $testEnvironmentFile = Join-Path $runtimePath '.env.testing'
+    if (!(Test-Path -LiteralPath $testEnvironmentFile)) {
+        $testLines = Get-Content -LiteralPath $environmentFile
+        $testLines = $testLines | Where-Object { $_ -notmatch '^(DB_|QUDRAT_EXISTING_LOCAL_DATABASE=|DATABASE_URL=)' }
+        $testLines += @('DB_CONNECTION=mysql', 'DB_HOST=127.0.0.1', 'DB_PORT=33317', 'DB_DATABASE=yarub_qudrat_test_local', 'DB_USERNAME=qudrat_local', 'DB_PASSWORD=qudrat-local-only', 'DB_SOCKET=', 'DATABASE_URL=', 'QUDRAT_EXISTING_LOCAL_DATABASE=')
+        [System.IO.File]::WriteAllLines($testEnvironmentFile, $testLines)
+    }
+    Write-Output "Dedicated native test MySQL ready on 127.0.0.1:$port. Review configuration: storage/app/qudrat-local/.env; test configuration: .env.testing"
 } elseif ($Action -eq 'stop') {
     if (!(Test-Path -LiteralPath (Join-Path $runtimePath 'mysql.pid'))) { throw 'No dedicated MySQL PID file.' }
     $serverId = [int](Get-Content -LiteralPath (Join-Path $runtimePath 'mysql.pid'))
@@ -92,7 +99,11 @@ if ($Action -eq 'start') {
     if (!(Test-Path -LiteralPath $iniPath)) { throw 'Run tools/qudrat-local.ps1 start first.' }
     Push-Location $projectPath
     try {
-        if ($Action -eq 'test') {
+        if ($Action -eq 'serve') {
+            & $Php -c $iniPath -S 127.0.0.1:8017 -t public tools/qudrat-router.php
+        } elseif ($Action -eq 'build') {
+            & node tools/qudrat-build.mjs
+        } elseif ($Action -eq 'test') {
             & $Php -c $iniPath vendor/phpunit/phpunit/phpunit -c phpunit.qudrat.xml @CommandArguments
         } else {
             & $Php -c $iniPath tools/qudrat-local.php @CommandArguments

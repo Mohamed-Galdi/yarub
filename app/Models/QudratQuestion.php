@@ -6,6 +6,8 @@ use Illuminate\Database\Eloquent\Model;
 
 class QudratQuestion extends Model
 {
+    protected $attributes = ['is_published' => true];
+
     protected $fillable = [
         'external_key', 'category_id', 'passage_id', 'prompt', 'hint', 'explanation', 'sort_order', 'correct_option_key', 'is_published', 'archived_at', 'import_checksum', 'import_version',
     ];

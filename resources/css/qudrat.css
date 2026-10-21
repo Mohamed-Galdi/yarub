@@ -1,0 +1,65 @@
+[data-qudrat-admin] { --qudrat-accent: #292a65; color: #1e293b; font-size: 1rem; line-height: 1.7; max-width: 80rem; margin-inline: auto; }
+[data-qudrat-admin] *, .qudrat-player * { box-sizing: border-box; }
+[data-qudrat-admin] a { text-underline-offset: .2em; }
+[data-qudrat-admin] a:hover { text-decoration: underline; }
+[data-qudrat-admin] :focus-visible { outline: 2px solid #292a65; outline-offset: 3px; }
+[data-qudrat-admin] ::selection { background: #dfe0f0; color: #292a65; }
+.qudrat-tabs { display: flex; gap: 1.5rem; flex-wrap: wrap; border-bottom: 1px solid #cbd5e1; margin-bottom: 1.75rem; }
+.qudrat-tabs a { padding: .65rem 0; color: #475569; }
+.qudrat-tabs [aria-current] { color: #292a65; border-bottom: 2px solid #292a65; }
+.qudrat-heading { display: flex; align-items: flex-start; justify-content: space-between; gap: 1rem; flex-wrap: wrap; margin-bottom: 1.5rem; }
+.qudrat-heading h2 { font-size: 1.6rem; line-height: 1.4; font-weight: 600; color: #292a65; margin: 0 0 .5rem; }
+.qudrat-heading p, .qudrat-note { color: #475569; font-size: .95rem; }
+.qudrat-button { display: inline-flex; justify-content: center; align-items: center; min-height: 2.6rem; padding: .5rem 1rem; gap: .4rem; background: #292a65; color: white; border: 1px solid #292a65; border-radius: .5rem; cursor: pointer; text-decoration: none; font-size: 1rem; }
+[data-qudrat-admin] .qudrat-button:hover { background: #212251; color: white; text-decoration: none; }
+.qudrat-secondary { background: white; color: #292a65; border-color: #a5aec0; }
+[data-qudrat-admin] .qudrat-secondary:hover { background: #e8e9f2; color: #292a65; }
+.qudrat-button:disabled { opacity: .5; cursor: not-allowed; }
+.qudrat-notice, .qudrat-errors { padding: 1rem; background: #e8e9f2; border-radius: .5rem; margin-bottom: 1.25rem; color: #292a65; }
+.qudrat-errors { color: #991b1b; background: #fef2f2; }
+.qudrat-errors ul { padding-inline-start: 1.5rem; list-style: disc; }
+.qudrat-category-list, .qudrat-passage-list { border-top: 1px solid #cbd5e1; margin-top: 1.5rem; }
+.qudrat-category, .qudrat-passage-list article { display: flex; justify-content: space-between; align-items: flex-start; gap: 2rem; padding-block: 1.5rem; border-bottom: 1px solid #cbd5e1; }
+.qudrat-category h3, .qudrat-passage-list h3 { font-size: 1.2rem; color: #292a65; margin-bottom: .6rem; }
+.qudrat-category-settings { min-width: 11rem; max-width: 22rem; }
+[data-qudrat-admin] summary { cursor: pointer; color: #292a65; padding-block: .4rem; }
+.qudrat-counts { display: flex; flex-wrap: wrap; gap: 1.5rem; margin-block: .75rem; }
+.qudrat-counts div { display: flex; gap: .5rem; align-items: baseline; }
+.qudrat-counts dt { color: #475569; font-size: .9rem; }
+.qudrat-counts dd { font-variant-numeric: tabular-nums; font-size: 1.15rem; }
+.qudrat-form { display: grid; gap: 1.25rem; }
+.qudrat-editor { background: white; border: 1px solid #d5dbe4; border-radius: .75rem; padding: 1.5rem; }
+.qudrat-form label { display: block; }
+.qudrat-form input:not([type=radio]):not([type=checkbox]):not([type=hidden]), .qudrat-form textarea, .qudrat-form select { display: block; width: 100%; margin-top: .4rem; border: 1px solid #94a3b8; border-radius: .4rem; padding: .65rem .8rem; color: #1e293b; background: #fff; font: inherit; }
+.qudrat-form textarea { resize: vertical; min-height: 6rem; line-height: 1.9; }
+.qudrat-form .qudrat-check { display: flex; align-items: center; flex-wrap: wrap; gap: .6rem; }
+.qudrat-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 1.25rem; }
+.qudrat-option-edit { display: flex; align-items: center; gap: .8rem; margin-top: .65rem; }
+.qudrat-form .qudrat-radio { display: flex; align-items: center; gap: .5rem; flex-shrink: 0; }
+.qudrat-option-text { flex: 1; min-width: 0; }
+.qudrat-actions, .qudrat-management { display: flex; gap: 1rem; flex-wrap: wrap; align-items: center; }
+.qudrat-management { margin-top: 1.5rem; padding-top: 1.25rem; border-top: 1px solid #cbd5e1; }
+.qudrat-table { overflow-x: auto; background: white; padding: 1rem; border-radius: .75rem; border: 1px solid #d5dbe4; }
+.qudrat-table td { white-space: normal; min-width: 5rem; }
+.qudrat-table th[colspan="999"] { text-align: right; padding-inline: 1rem; white-space: normal; }
+.qudrat-table-link { display: inline-block; color: #292a65; padding: .3rem .5rem; text-decoration: underline; }
+.qudrat-prose { white-space: pre-wrap; overflow-wrap: anywhere; line-height: 1.9; }
+.qudrat-player { border: 1px solid #d5dbe4; border-radius: .75rem; background: white; padding: 1.5rem; color: #1e293b; }
+.qudrat-reading { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 2rem; }
+.qudrat-passage h3 { margin-bottom: .8rem; color: #292a65; }
+.qudrat-prompt { font-size: 1.25rem; line-height: 1.9; white-space: pre-wrap; overflow-wrap: anywhere; margin: .75rem 0 1.5rem; }
+.qudrat-analogy { font-size: 1.65rem; unicode-bidi: plaintext; }
+.qudrat-options { display: grid; gap: .75rem; min-width: 0; }
+.qudrat-choice { display: flex; align-items: baseline; gap: .75rem; border: 1px solid #a5aec0; padding: .8rem; border-radius: .5rem; cursor: pointer; }
+.qudrat-choice:hover, .qudrat-choice:has(input:checked) { background: #f0f0f8; border-color: #292a65; }
+.qudrat-choice-label { color: #292a65; flex-shrink: 0; }
+.qudrat-preview-notes { margin-top: 1.5rem; }
+.qudrat-preview-notes details { border-bottom: 1px solid #cbd5e1; padding-block: .75rem; }
+.qudrat-feedback { padding-block: .75rem; }
+.qudrat-section-title { font-size: 1.2rem; color: #292a65; margin: 2rem 0 1rem; }
+.qudrat-linked-questions li { display: flex; gap: 1rem; justify-content: space-between; padding-block: 1rem; border-bottom: 1px solid #cbd5e1; }
+.qudrat-linked-questions li div { display: flex; gap: .8rem; flex-shrink: 0; color: #292a65; }
+.qudrat-pagination { margin-top: 1.5rem; }
+.qudrat-empty { padding-block: 2rem; color: #475569; }
+@media (max-width: 900px) { .qudrat-reading, .qudrat-grid { grid-template-columns: 1fr; } }
+@media (max-width: 639px) { .qudrat-category, .qudrat-passage-list article, .qudrat-linked-questions li { flex-direction: column; gap: .75rem; } .qudrat-editor, .qudrat-player { padding: 1rem; } .qudrat-category-settings { width: 100%; max-width: none; } .qudrat-counts { gap: 1rem; } }

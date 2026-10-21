@@ -31,16 +31,16 @@ class ImportTest extends QudratTestCase
         return app(ContentImporter::class)->import($content ?? $this->content(), $overwrite);
     }
 
-    public function test_full_draft_import_and_repeat_preserve_ids_and_timestamps(): void
+    public function test_full_published_import_and_repeat_preserve_ids_and_timestamps(): void
     {
         $report = $this->import();
         foreach (['categories' => 6, 'passages' => 40, 'questions' => 1200, 'options' => 4800] as $entity => $count) {
             $this->assertSame($count, $report['counts'][$entity]['created']);
             $this->assertSame($count, DB::table('qudrat_'.$entity)->count());
         }
-        $this->assertSame(0, QudratCategory::where('is_published', true)->count());
-        $this->assertSame(0, QudratQuestion::where('is_published', true)->count());
-        $this->assertSame(0, QudratQuestion::published()->count());
+        $this->assertSame(6, QudratCategory::where('is_published', true)->count());
+        $this->assertSame(1200, QudratQuestion::where('is_published', true)->count());
+        $this->assertSame(1200, QudratQuestion::published()->count());
         $before = QudratOption::orderBy('id')->get()->toArray();
         $questionTimes = QudratQuestion::pluck('updated_at', 'id')->all();
         $rerun = $this->import();
@@ -58,7 +58,7 @@ class ImportTest extends QudratTestCase
         $content = $this->content();
         $this->import($content);
         $question = QudratQuestion::with('options')->first();
-        $question->update(['is_published' => true, 'archived_at' => now()]);
+        $question->update(['is_published' => false, 'archived_at' => now()]);
         $optionId = $question->options[0]->id;
         $user = User::create(['name' => 'Local student', 'email' => 'qudrat@example.invalid', 'password' => 'not-live', 'role' => 'student']);
         $session = $user->qudratSessions()->create(['category_id' => $question->category_id, 'started_at' => now()]);
@@ -73,7 +73,7 @@ class ImportTest extends QudratTestCase
         $this->assertSame(1, $report['counts']['questions']['updated']);
         $this->assertSame(1, $report['counts']['options']['updated']);
         $this->assertSame($optionId, $question->options()->where('local_key', 'a')->value('id'));
-        $this->assertTrue($question->fresh()->is_published);
+        $this->assertFalse($question->fresh()->is_published);
         $this->assertNotNull($question->fresh()->archived_at);
         $this->assertEquals($snapshot, $item->fresh()->content_snapshot);
         $this->assertSame('b', $item->fresh()->draft_option_key);
@@ -246,6 +246,36 @@ class ImportTest extends QudratTestCase
         }
         $this->expectException(QueryException::class);
         $question->delete();
+    }
+
+    public function test_existing_yarub_requires_explicit_local_opt_in_and_is_never_allowed_in_testing(): void
+    {
+        config(['database.connections.qudrat_existing' => array_merge(config('database.connections.mysql'), [
+            'host' => '127.0.0.1', 'port' => 3306, 'database' => 'yarub',
+        ]), 'database.default' => 'qudrat_existing', 'qudrat.existing_local_database' => 'yarub']);
+        try {
+            app()->instance('env', 'local');
+            app(ImportEnvironment::class)->assertSafe();
+            $this->assertTrue(true);
+            config(['qudrat.existing_local_database' => null]);
+            try {
+                app(ImportEnvironment::class)->assertSafe();
+                $this->fail('Existing database accepted without explicit opt-in.');
+            } catch (\RuntimeException $exception) {
+                $this->assertStringContainsString('loopback', $exception->getMessage());
+            }
+            config(['qudrat.existing_local_database' => 'yarub']);
+            app()->instance('env', 'testing');
+            try {
+                app(ImportEnvironment::class)->assertSafe();
+                $this->fail('Existing database accepted in testing.');
+            } catch (\RuntimeException $exception) {
+                $this->assertStringContainsString('loopback', $exception->getMessage());
+            }
+        } finally {
+            app()->instance('env', 'testing');
+            config(['database.default' => 'mysql', 'qudrat.existing_local_database' => null]);
+        }
     }
 
     public function test_remote_database_config_is_refused_before_opening_a_connection(): void

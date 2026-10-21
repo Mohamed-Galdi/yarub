@@ -14,9 +14,10 @@ abstract class QudratTestCase extends TestCase
         if (! is_file($runtime.'/.env')) {
             throw new \RuntimeException('Run tools/qudrat-local.ps1 start before Qudrat database tests.');
         }
-        $values = \Dotenv\Dotenv::createArrayBacked($runtime)->load();
+        // Keep tests on their dedicated connection even when the review server uses the owner's local DB.
+        $values = \Dotenv\Dotenv::createArrayBacked($runtime, '.env.testing')->load();
         $values = array_merge($values, [
-            'APP_ENV' => 'testing', 'DB_DATABASE' => 'yarub_qudrat_test_local',
+            'APP_ENV' => 'testing', 'DB_DATABASE' => 'yarub_qudrat_test_local', 'QUDRAT_EXISTING_LOCAL_DATABASE' => '',
             'APP_CONFIG_CACHE' => 'storage/app/qudrat-local/unused-test-config.php',
             'APP_SERVICES_CACHE' => 'storage/app/qudrat-local/services.php', 'APP_PACKAGES_CACHE' => 'storage/app/qudrat-local/packages.php',
         ]);
@@ -42,6 +43,7 @@ abstract class QudratTestCase extends TestCase
         $this->artisan('migrate', ['--path' => [
             'database/migrations/2014_10_12_000000_create_users_table.php',
             'database/migrations/2026_10_21_000001_create_qudrat_tables.php',
+            'database/migrations/2026_10_21_000002_publish_qudrat_content_by_default.php',
         ], '--force' => true])->assertExitCode(0);
         DB::beginTransaction();
     }
