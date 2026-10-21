@@ -5,6 +5,7 @@ Existing production Arabic learning platform. ARRIB is a separate project for th
 - [Coding guidance and local command status](AGENTS.md)
 - [Project architecture, user journeys and open questions](docs/PROJECT_OVERVIEW.md)
 - [Manual deployment and unverified operational steps](docs/DEPLOYMENT.md)
+- [Qudrat requirements and implementation roadmap](docs/QUDRAT.md)
 
 The Laravel scaffold README below is retained as framework background; it is not a YARUB setup or deployment runbook.
 
