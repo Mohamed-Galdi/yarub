@@ -105,7 +105,7 @@
                         <x-btn.guest-nav-item :route="'about'" :title="'من نحن'" />
                         <x-btn.guest-nav-item :route="'contact'" :title="'تواصل معنا'" />
                         <li>
-                            <a href="http://arub.yarub.org:5000/" target="_blank"
+                            <a href="https://arub.yarub.org/" target="_blank"
                                 class="block py-2 px-3 md:p-0 text-gray-400 rounded hover:bg-gray-100 md:hover:bg-transparent md:hover:text-primary  ">عَرُوب</a>
                             </a>
                         </li>
@@ -152,7 +152,7 @@
                         </a>
                     </li>
                     <li>
-                        <a href="http://arub.yarub.org:5000/" target="_blank"
+                        <a href="https://arub.yarub.org/" target="_blank"
                             class="hover:underline md:me-1 {{ Request::is('contact') ? 'text-gray-100 ' : 'text-gray-400' }}">عَرُوب
 
                         </a>

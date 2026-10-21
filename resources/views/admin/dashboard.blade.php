@@ -20,7 +20,7 @@
                     </div>
                     <div class="w-3/4  flex  justify-center items-center h-full ">
                         <div class="w-fit  flex flex-col justify-center items-center ">
-                            <h1 class="lg:text-4xl text-2xl text-nowrap truncate text-green-900">المشرفين</h1>
+                            <h1 class="lg:text-4xl text-2xl text-nowrap truncate text-green-900">المشتركين</h1>
                             <p class="text-gray-50 text-3xl">{{ $students_count }}</p>
                         </div>
                     </div>

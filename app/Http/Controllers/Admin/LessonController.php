@@ -101,7 +101,7 @@ class LessonController extends Controller
     public function uploadVideo(Request $request)
     {
         $request->validate([
-            'video' => 'required|file|mimetypes:video/*|max:100000'
+            'video' => 'required|file|mimetypes:video/*|max:2097152'
         ]);
 
         $file = $request->file('video');
@@ -121,13 +121,22 @@ class LessonController extends Controller
         $fileName = basename($tempPath);
         $finalPath = "{$this->finalFolder}/lesson-{$lessonId}_{$fileName}";
 
-        $fileContents = Storage::disk('public')->get($tempPath);
+        $stream = Storage::disk('public')->readStream($tempPath);
 
-        if (Storage::disk('s3')->put($finalPath, $fileContents)) {
+        if ($stream === false) {
+            throw new \Exception("Failed to open stream for file: {$tempPath}");
+        }
+
+        if (Storage::disk('s3')->writeStream($finalPath, $stream)) {
+            if (is_resource($stream)) {
+                fclose($stream);
+            }
             return $finalPath;
         } else {
+            if (is_resource($stream)) {
+                fclose($stream);
+            }
             throw new \Exception("Failed to upload file to S3: {$finalPath}");
-            return null;
         }
     }
 
