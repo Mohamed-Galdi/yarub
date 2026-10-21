@@ -1,3 +1,13 @@
+# YARUB
+
+Existing production Arabic learning platform. ARRIB is a separate project for the same client.
+
+- [Coding guidance and local command status](AGENTS.md)
+- [Project architecture, user journeys and open questions](docs/PROJECT_OVERVIEW.md)
+- [Manual deployment and unverified operational steps](docs/DEPLOYMENT.md)
+
+The Laravel scaffold README below is retained as framework background; it is not a YARUB setup or deployment runbook.
+
 <p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
 
 <p align="center">
