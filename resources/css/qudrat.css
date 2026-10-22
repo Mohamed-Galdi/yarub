@@ -64,7 +64,7 @@
 @media (max-width: 900px) { .qudrat-reading, .qudrat-grid { grid-template-columns: 1fr; } }
 @media (max-width: 639px) { .qudrat-category, .qudrat-passage-list article, .qudrat-linked-questions li { flex-direction: column; gap: .75rem; } .qudrat-editor, .qudrat-player { padding: 1rem; } .qudrat-category-settings { width: 100%; max-width: none; } .qudrat-counts { gap: 1rem; } }
 
-[data-qudrat-student] { max-width: 80rem; margin-inline: auto; padding: 2.5rem 1.5rem 4rem; color: #1e293b; line-height: 1.8; min-height: 65vh; }
+[data-qudrat-student] { max-width: 80rem; margin-inline: auto; padding: 1.5rem 1.5rem 3rem; color: #1e293b; line-height: 1.8; min-height: 65vh; }
 [data-qudrat-student] * { box-sizing: border-box; }
 [data-qudrat-student] h1 { font-size: 1.8rem; font-weight: 600; color: #292a65; line-height: 1.5; margin-bottom: .5rem; }
 [data-qudrat-student] :focus-visible { outline: 2px solid #292a65; outline-offset: 3px; }
@@ -72,11 +72,24 @@
 [data-qudrat-student] a { text-underline-offset: .2em; }
 [data-qudrat-student] .qudrat-button:hover { background: #212251; color: white; }
 [data-qudrat-student] .qudrat-secondary:hover { background: #e8e9f2; color: #292a65; }
-.qudrat-student-categories { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); column-gap: 3rem; margin-top: 1.5rem; }
-.qudrat-student-category { padding-block: 1.5rem; border-top: 1px solid #cbd5e1; min-width: 0; }
-.qudrat-student-category h2 { font-size: 1.3rem; color: #292a65; font-weight: 600; margin-bottom: .4rem; }
-.qudrat-student-category > p { color: #475569; }
-.qudrat-student-category .qudrat-actions { margin-top: 1.2rem; }
+[data-qudrat-student] .qudrat-heading { margin-bottom: 1rem; }
+.qudrat-student-categories { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 1.25rem; margin-top: 1rem; }
+.qudrat-student-category { display: flex; flex-direction: column; padding: 1.5rem; border: 1px solid #d5dbe4; border-radius: .875rem; min-width: 0; background: #fff; transition: border-color 180ms ease-out; }
+.qudrat-student-category:hover, .qudrat-student-category:focus-within { border-color: #7778a3; }
+.qudrat-card-title { display: flex; align-items: center; gap: .75rem; margin-bottom: .75rem; }
+.qudrat-category-icon { flex-shrink: 0; color: #555678; }
+.qudrat-student-category h2 { font-size: 1.25rem; line-height: 1.6; color: #292a65; font-weight: 600; }
+.qudrat-category-description { color: #475569; min-height: 3.6em; }
+.qudrat-bank { margin-block: 1rem .5rem; color: #475569; }
+.qudrat-bank strong { color: #292a65; font-size: 1.25rem; font-variant-numeric: tabular-nums; }
+.qudrat-student-category .qudrat-counts { font-size: .875rem; gap: .5rem 1rem; margin-block: .5rem; }
+.qudrat-student-category .qudrat-counts dd { font-size: 1rem; }
+.qudrat-student-category > label { font-size: .875rem; color: #475569; }
+.qudrat-card-footer { margin-top: auto; padding-top: 1rem; border-top: 1px solid #e2e8f0; }
+.qudrat-session-badge { display: inline-block; color: #292a65; background: #eeeef7; border-radius: .375rem; padding: .2rem .6rem; font-size: .875rem; }
+.qudrat-session-note { color: #475569; font-size: .875rem; margin-top: .5rem; }
+.qudrat-student-category .qudrat-actions { margin-top: .75rem; gap: .5rem; }
+.qudrat-student-category .qudrat-actions > *, .qudrat-student-category .qudrat-actions .qudrat-button { width: 100%; }
 [data-qudrat-student] progress { display: block; width: 100%; height: .55rem; border: 0; border-radius: .25rem; background: #e2e8f0; accent-color: #292a65; margin-block: .6rem 1rem; overflow: hidden; }
 [data-qudrat-student] progress::-webkit-progress-bar { background: #e2e8f0; }
 [data-qudrat-student] progress::-webkit-progress-value { background: #292a65; }
@@ -87,7 +100,12 @@
 .qudrat-result-feedback h2 { font-weight: 600; font-size: 1.2rem; }
 .qudrat-correct { background: #ecfdf5; color: #065f46; }
 .qudrat-incorrect { background: #fff7ed; color: #9a3412; }
-.qudrat-hint { margin-top: 1.5rem; }
+.qudrat-hint-control { display: flex; align-items: center; flex-wrap: wrap; gap: .5rem .75rem; margin-block: -0.5rem 1rem; }
+.qudrat-hint-button { color: #292a65; background: #f4f4fa; border: 1px solid #b9bad0; border-radius: .5rem; min-height: 2.75rem; padding: .5rem .875rem; cursor: pointer; }
+.qudrat-hint-button:hover { background: #e8e9f2; }
+.qudrat-hint-button:disabled { opacity: .5; cursor: progress; }
+.qudrat-hint { width: 100%; padding: 1rem; background: #f4f4fa; color: #37385f; border: 1px dashed #9293b2; border-radius: .75rem; scroll-margin-block: 1.5rem; }
+.qudrat-hint .qudrat-note { color: #555678; margin-top: .5rem; }
 .qudrat-hint h2 { font-weight: 600; margin-bottom: .5rem; }
 .qudrat-result-counts { gap: 1.5rem 2rem; margin-block: 1.5rem 2rem; }
 .qudrat-result-counts div { display: block; }
@@ -97,3 +115,37 @@
 .qudrat-metrics-note { margin-top: 1.5rem; }
 @media (min-width: 1024px) { [data-student-navigation] a[aria-current] { width: auto; min-width: 7rem; } }
 @media (max-width: 639px) { [data-qudrat-student] { padding: 1.5rem 1rem 3rem; } .qudrat-student-categories { grid-template-columns: 1fr; } [data-qudrat-student] h1 { font-size: 1.5rem; } .qudrat-practice-actions > .qudrat-note { flex-basis: 100%; } }
+
+/* Keep the answer workspace together, including in long reading sessions. */
+[data-qudrat-practice] { max-width: 72rem; }
+[data-qudrat-practice] .qudrat-player:not(.qudrat-reading) { max-width: 52rem; margin-inline: auto; }
+[data-qudrat-practice] .qudrat-question, [data-qudrat-practice] .qudrat-passage { min-width: 0; }
+[data-qudrat-practice] .qudrat-prompt { margin-block: .5rem 1.25rem; }
+[data-qudrat-student] .qudrat-button { min-height: 2.75rem; }
+[data-qudrat-student] .qudrat-button:active { background: #191a43; }
+[data-qudrat-student] .qudrat-secondary:active { background: #dfe0f0; }
+[data-qudrat-practice] .qudrat-choice { align-items: center; flex-wrap: wrap; min-height: 3.25rem; transition: background-color 180ms ease-out, border-color 180ms ease-out; }
+[data-qudrat-practice] .qudrat-choice input { flex-shrink: 0; accent-color: #292a65; }
+[data-qudrat-practice] .qudrat-choice .qudrat-prose { flex: 1; min-width: 0; }
+[data-qudrat-practice] .qudrat-choice:has(input:disabled) { cursor: default; }
+[data-qudrat-practice] .qudrat-choice:has(input:disabled):hover { background: white; border-color: #a5aec0; }
+[data-qudrat-practice] .qudrat-choice.qudrat-choice-correct, [data-qudrat-practice] .qudrat-choice.qudrat-choice-correct:has(input:disabled):hover { background: #ecfdf5; border-color: #27815f; color: #065f46; }
+[data-qudrat-practice] .qudrat-choice.qudrat-choice-incorrect, [data-qudrat-practice] .qudrat-choice.qudrat-choice-incorrect:has(input:disabled):hover { background: #fff7ed; border-color: #b75a29; color: #9a3412; }
+.qudrat-choice-state { flex-basis: 100%; padding-inline-start: 2.5rem; font-size: .875rem; font-weight: 600; }
+[data-qudrat-practice] .qudrat-result-feedback { margin-block: 1rem 0; padding: 1rem 1.25rem; scroll-margin-block: 1.5rem; overflow-wrap: anywhere; }
+[data-qudrat-practice] .qudrat-feedback { padding-bottom: 0; }
+[data-qudrat-practice] .qudrat-feedback > .qudrat-prose { margin-top: .5rem; max-width: 70ch; }
+[data-qudrat-practice] .qudrat-practice-actions { margin-block: 1rem .5rem; }
+[data-qudrat-practice] [aria-busy=true] { cursor: progress; }
+@media (max-width: 1100px) { .qudrat-student-categories { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+@media (max-width: 639px) {
+    [data-qudrat-student] { padding-top: 1rem; }
+    .qudrat-student-categories { grid-template-columns: 1fr; gap: 1rem; }
+    .qudrat-student-category { padding: 1.25rem; }
+    .qudrat-category-description { min-height: 0; }
+    .qudrat-student-category .qudrat-actions { flex-direction: column; align-items: stretch; }
+    [data-qudrat-practice] .qudrat-practice-actions > .qudrat-button { width: 100%; }
+    [data-qudrat-practice] .qudrat-result-feedback { padding: 1rem; }
+    [data-qudrat-practice] .qudrat-reading { gap: 1.25rem; }
+}
+@media (prefers-reduced-motion: reduce) { .qudrat-student-category, [data-qudrat-practice] .qudrat-choice { transition: none; } }
