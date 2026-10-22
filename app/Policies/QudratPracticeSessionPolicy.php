@@ -17,10 +17,10 @@ class QudratPracticeSessionPolicy
         return $this->view($user, $session) && $session->status === 'active';
     }
 
-    // Creation/access entitlement will be decided before Phase 4 exposes student routes.
+    // Owner decision: Qudrat is available to every authenticated student.
     public function create(User $user): bool
     {
-        return false;
+        return $user->role === 'student';
     }
 
     public function delete(User $user, QudratPracticeSession $session): bool

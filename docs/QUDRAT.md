@@ -2,7 +2,7 @@
 
 Add verbal aptitude practice to the existing Yarub application. Students practice six question categories; admins review and edit content that publishes automatically.
 
-**Current status: Phases 1–3 are complete. Content publishes automatically when created or imported; edits take effect when saved. Admins can review, edit, preview and archive content. There are no draft states or manual publication controls. Phase 4 (student practice) is next.**
+**Current status: Phases 1–5 are complete locally, including verification and a proposed release/recovery plan. Every logged-in student can practice all six categories; admins manage automatically published content. Production deployment/import has not been performed. Production release still requires the prerequisites listed in Phase 5.**
 
 This is the single Qudrat requirements and roadmap document. Content lives in `qudrat_content/` at the repository root. Follow `AGENTS.md` for project conventions and environment safety.
 
@@ -15,8 +15,8 @@ Implement one phase at a time, only when requested. At the end of each phase, up
 | 1. Inspect and plan | Inspect Yarub, validate JSON, choose integration approach | Complete — discovery only |
 | 2. Database and import | Create Qudrat storage and safely import development content | Complete — verified on isolated native MySQL |
 | 3. Admin management | Review, edit and preview automatically published content locally | Complete — verified locally |
-| 4. Student practice | Practice sessions, hints, grading, resume and progress | Not started — next |
-| 5. Verification and release preparation | Verify the complete feature and document rollout | Not started |
+| 4. Student practice | Practice sessions, hints, grading, resume and progress | Complete — verified locally |
+| 5. Verification and release preparation | Verify the complete feature and document rollout | Complete locally — production prerequisites remain |
 
 ### Phase 1 — Inspect and plan (complete)
 
@@ -130,11 +130,11 @@ Use the dedicated native instance from Phase 2. If it is already running on port
 
 The review server uses PHP 8.3 at **http://127.0.0.1:8017**. Sign in at `/yarub-moshref-center`, then open `/admin-dashboard/qudrat`. Use an existing admin account from `yarub`; the earlier dedicated-database review credentials do not apply. The router uses its own non-live integration configuration, session files and caches while sharing your local `yarub` database. It does not load the project `.env`. Stop the review server with Ctrl+C in its terminal. `./tools/qudrat-local.ps1 stop` stops only the dedicated MySQL instance; its imported data persists.
 
-Content workflow: create a complete question → save to publish immediately. Imports also publish new content automatically. Questions require a prompt, four choices, one correct answer, hint and explanation. Saved edits take effect immediately. Archive hides a question; restore republishes it after checking completeness. Attempted questions/options and historical snapshots are retained. Existing unarchived content is published by the additive migration `2026_10_21_000002_publish_qudrat_content_by_default.php`, verified on the isolated development database. Owner-requested automatic publication replaces the earlier draft/review gate. Phase 4 will add the student entry/player and enforce the access decision below; those student routes do not exist yet.
+Content workflow: create a complete question → save to publish immediately. Imports also publish new content automatically. Questions require a prompt, four choices, one correct answer, hint and explanation. Saved edits take effect immediately. Archive hides a question; restore republishes it after checking completeness. Attempted questions/options and historical snapshots are retained. Existing unarchived content is published by the additive migration `2026_10_21_000002_publish_qudrat_content_by_default.php`, verified on the isolated development database. Owner-requested automatic publication replaces the earlier draft/review gate. Phase 4 adds the student entry/player for every logged-in student; no purchase or subscription is required.
 
-### Phase 4 — Student practice and progress
+### Phase 4 — Student practice and progress (complete)
 
-**Before enabling access:** resolve who is entitled to Qudrat. Existing course/lesson billing rules do not establish a Qudrat access rule.
+**Access decision (owner confirmed):** every logged-in student can use Qudrat. It is independent of existing course/lesson purchases and subscriptions.
 
 **Build:**
 
@@ -148,7 +148,22 @@ Content workflow: create a complete question → save to publish immediately. Im
 
 **Start with:** `Read docs/QUDRAT.md and implement Phase 4 only. Update its status after verification.`
 
-### Phase 5 — Verify and prepare release
+**Delivered on 2026-10-21:** `/student-dashboard/qudrat` is linked in student navigation. All six categories show descriptions, available-question counts, distinct-question progress, first-attempt accuracy, start/review actions and resume links. Ordinary authenticated students have access; guests and admins cannot practice as students. Existing payment, subscription and exam flows remain unchanged.
+
+`Practice` owns transactionally locked starts, persisted choices/hints, snapshot grading, explicit next/completion and archive closure. `Progress` computes metrics only over the current available bank using each question's earliest answer. Student responses use an explicit allowlist: answer keys, hints, explanations and private snapshots stay off the page until the relevant hint/submission. Concurrent starts and grading serialize on the student row, and answers have a unique session-item constraint. Requests from stale tabs cannot advance a different question.
+
+Sessions prefer up to 10 unseen questions, with stable source order and immutable snapshots. Reading keeps full passage groups in passage order, including partially seen groups and the last group in full; actual session length is shown. New practice resumes any active session in that category. Review is explicit: non-reading review prefers least-recently practised questions; reading review preserves source passage order. Unseen practice at exhaustion offers review rather than looping automatically. A session closes if any unsubmitted content becomes unavailable; submitted answers remain in its results and unanswered content stays private. Completed results retain their original content even after admin edits.
+
+The shared Blade player uses native radios, keyboard focus, RTL text and preserved passage whitespace. Choices save automatically with a visible save/error status; a non-JavaScript save action is available. Hints persist without a scoring penalty. After **تحقق**, choices lock and feedback explains the correct answer; **التالي** advances, and the last question opens results. Results show correct/incorrect/answered counts, accuracy, hint usage and a **مراجعة الأخطاء** filter, including the original reading passage.
+
+**Verified:** 51 Qudrat tests, 347 assertions on the separate disposable MySQL test database. Thirteen practice tests cover all six types, privacy, role/ownership checks, resume, hint/choice persistence, grading once, stale requests, reading groups, snapshots, archive closure, metrics, empty/exhausted banks and two parallel PHP processes starting/grading against MySQL. Browser verification used the existing demo student in local `yarub`: keyboard selection, autosave/refresh, hints, a completed 10-question practice, results/mistake review, updated progress and reading practice. Layout checks covered 1440px desktop, 390px mobile, 597px panel and 1270px user width. Independent UI review returned **ship**, with no material fixes; the existing broken avatar image is outside this change. The detector returned no findings. PHP formatting/syntax, diff checks and the isolated Vite build passed; existing Browserslist/safelist warnings remain.
+
+No schema migration, reset, demo seeding or production operation was needed. Browser practice added history only for the existing local demo student; automated tests used `yarub_qudrat_test_local`. Review screenshots remain ignored local artifacts. Phase 5 verification and the proposed release/recovery plan are recorded below; the import command still rejects production.
+
+To review: sign in as an existing local student and open `/student-dashboard/qudrat` using your normal native PHP/Vite workflow or the review server at `http://127.0.0.1:8017`. Run `./tools/qudrat-local.ps1 test` for isolated verification and `./tools/qudrat-local.ps1 build` for the verified asset build.
+
+
+### Phase 5 — Verify and prepare release (complete locally)
 
 **Complete:**
 
@@ -161,6 +176,35 @@ Content workflow: create a complete question → save to publish immediately. Im
 **Done when:** acceptance checks pass, the owner can review the feature locally, and release/recovery instructions are concrete. If required checks are blocked, document the blocker and leave the phase incomplete.
 
 **Start with:** `Read docs/QUDRAT.md and complete Phase 5 only. Do not deploy or seed production.`
+
+**Verified on 2026-10-22:** 54 Qudrat tests and 465 assertions passed on PHP 8.3.11 and isolated MySQL. The suite includes actual six-file content in every student player; answer/hint privacy; selection JSON allowlists; full reading groups; import reruns after practice without changing answers or snapshots; MySQL constraints and parallel starts/submissions; archive closure, ownership and first-attempt metrics. The new release tests exercise the existing student courses, lessons, tests, certificates and profile pages, plus admin dashboard, courses, lessons and Qudrat pages. Unsubscribed course/lesson access still redirects appropriately. These tests use their own fixtures with mail faked and stray HTTP requests blocked. Historical tables were migrated only on `yarub_qudrat_test_local`, with no broad demo seeding.
+
+Content dry-run and the Vite build passed. The build still reports existing Browserslist/safelist warnings; dependencies were not changed. Browser verification covered real supplied content in all six categories at 1440px and 390px, native keyboard selection, autosave and refresh. Every page had four options and no horizontal overflow. Earlier Phase 4 checks cover hints, grading, next, completion/results, mistake review and the 597px/1270px layouts. The earlier independent UI review remains applicable because Phase 5 changes no application UI. Screenshots and the browser report are under ignored `storage/app/qudrat-local/review-phase5/`.
+
+**Recovery rehearsal:** a new single-transaction SQL backup of local `127.0.0.1:3306/yarub` was restored into a newly created `yarub_qudrat_test_restore_*` database on the separate port 33317 instance. All **37 table checksums matched**, including Qudrat sessions, immutable snapshots and answers. No existing database was overwritten or dropped. The dump and `phase5-restore-report.json` remain under ignored `storage/app/qudrat-local/backups/`; the restore database is retained for inspection. This proves local backup/restore compatibility, not that a production backup location, account or restore procedure has been verified.
+
+**Verification limits:** the default Breeze/legacy suite was not run against the normal connection; it still has stale route expectations and unsafe database defaults. The targeted regression tests above cover the actual dashboard routes instead. No live payment, mail, S3 upload/delete or production request was made. Educational correctness and source paragraph fidelity still require owner review. The only new Phase 5 code is focused verification tests; the importer still rejects production.
+
+#### Proposed production release — separate authorization required
+
+This is a reviewed sequence to finalize with the actual server facts in [DEPLOYMENT.md](DEPLOYMENT.md), not a script to execute blindly. Do not change `APP_ENV` to bypass the import guard, run demo seeders, reset tables, or roll back Qudrat migrations containing history.
+
+1. **Resolve release prerequisites before pulling feature code:** confirm compatible production PHP/extensions and MySQL; inspect the deployed migration history and checkout; choose where matching Vite assets are built/published; confirm current route/view/config/OPcache handling and an approved way to suspend access while schema/assets/content are incomplete. Record a restorable pre-release database backup and the previous deploy commit/assets. Do not enable route/config caching merely for this feature: existing route-name duplication and direct `env()` integration reads need separate verification.
+2. **Approve a controlled production import path as a separate code change.** `php artisan qudrat:import` currently refuses production, even with the local opt-ins. Proposed requirements: production-only opt-in, explicit expected database identity and reviewed source-bundle digest, interactive confirmation (or an explicitly authorized noninteractive flag), validation before writes, transactional stable upserts, default conflict skipping, unchanged archive/history protection, and safe repeat/recovery tests. Keep this guard change reviewed and tested before the deployment window. Its CLI flags do not exist yet; do not substitute a direct SQL fill or a temporary environment change. This is the outstanding implementation prerequisite for production content rollout.
+3. **For an explicitly authorized release**, verify the exact approved commit and clean server checkout, then use the established command from `/var/www/yarub`: `sudo -u www-data git pull --ff-only origin main`. Stop on divergence. Install only locked dependencies if required and publish assets matching that commit using the confirmed process. `public/build` is ignored, so a pull alone does not supply the new Qudrat JS/CSS entries.
+4. **Apply only missing Qudrat migrations after backup and runtime checks.** Candidate commands for the approved runtime/user are `php artisan migrate --path=database/migrations/2026_10_21_000001_create_qudrat_tables.php --force`, then `php artisan migrate --path=database/migrations/2026_10_21_000002_publish_qudrat_content_by_default.php --force`. Check migration history and actual tables first; stop if existing schema and history disagree. The first creates seven tables; the second changes publication defaults and publishes existing unarchived Qudrat content. MySQL DDL is not an all-or-nothing recovery mechanism. Do not edit applied migrations or run an unrelated migration batch as a shortcut.
+5. **Validate and import the approved content through the future approved production path.** Validation-only command: `php artisan qudrat:import --dry-run` (no DB queries). Mutating import remains blocked until step 2 is implemented. Expect 6 categories, 1,200 source questions, 4,800 options and 40 passages on an empty Qudrat bank; new content is immediately published. Rerun should report unchanged records, with no duplicates. Preserve additional admin-created content and history. Conflicts require review of named identities; never blanket-overwrite them to make totals match.
+6. **Refresh only confirmed caches/processes, then perform planned smoke checks** with approved admin/student accounts: admin list/edit/preview; student entry, start/resume, hint, answer/next/results; a reading group; mobile assets; guest/other-student denial; existing course/lesson/exam access. Grading smoke tests intentionally append practice history. Confirm logs, matching asset manifest, source inventory and import report. Do not make a live purchase or send mail to verify unrelated integrations.
+
+#### Recovery decisions
+
+- **Before successful import:** stop on validation/conflict/schema/runtime failure. Import validation runs before writes and unexpected importer exceptions roll back its data transaction; a migration may already have created tables or changed defaults. Keep those additive tables and investigate. Never use `migrate:fresh`, `refresh`, table drops or migration rollback to recover an import.
+- **Application/asset failure:** suspend Qudrat access through the approved release mechanism, keep the database and practice history, and deploy the agreed known-good code plus matching assets using the established workflow. No forced Git reset or guessed service/cache sequence is prescribed. A normal forward Git revert can be prepared and reviewed separately.
+- **Incorrect content:** use the admin editor or archive affected questions; review named importer conflicts individually. Existing snapshots/answers preserve what students saw. Do not delete attempts, change historical answer keys or republish archived content through a maintenance rerun.
+- **Database damage:** stop further writes and preserve a fresh incident snapshot. Restore the pre-release backup into a **new recovery database first**, verify schema, counts and Qudrat snapshot/answer relationships, then reconcile any purchases, subscriptions, messages and practice records written since that backup before an explicitly approved cutover. Restoring an old whole-database backup over a live database would lose unrelated newer data and is not an automatic rollback step.
+
+**Phase 5 result:** local acceptance and release/recovery preparation are complete. Production is intentionally not marked deployment-ready until step 1's server facts and step 2's guarded importer are resolved, reviewed and explicitly authorized. Neither deployment nor production content loading is part of this phase.
+
 
 ## Content: what is ready
 
@@ -200,7 +244,7 @@ Verified stack: Laravel 10.48.22, Livewire 3.5.2, PowerGrid 5.9.0, Vite 5.4.10, 
 - Keep existing `Test`, `Question` and `TestAttempt` unchanged. They are tied to courses/lessons, whole-test submissions and one-attempt behavior; they lack Qudrat's passages, hints, resumable sessions and historical snapshots.
 - MySQL is the configured default; existing dashboard SQL uses MySQL functions. Actual server/version/schema remain unverified.
 
-### Proposed tables
+### Implemented tables
 
 Use new `App\Models\Qudrat*` models and additive migrations. Foreign keys, indexes and uniqueness must be checked against the actual isolated MySQL version.
 
@@ -216,7 +260,7 @@ Use new `App\Models\Qudrat*` models and additive migrations. Foreign keys, index
 
 Store one canonical correct key (`a`–`d`) per question and atomically validate exactly four keyed options. Same-category passages are required for reading and unavailable for other types. Every question save requires nonempty prompt, choices, hint and explanation. Category and question must both be published, and the question unarchived, for student availability. Restrict destructive deletion of referenced content/history; use archive. Keep prose in text columns and snapshots in private JSON.
 
-### Proposed code and routes
+### Code and routes
 
 Keep responsibilities small: controllers under `app/Http/Controllers/{Admin,Student}/Qudrat/`; validation/import/practice/progress services under `app/Services/Qudrat/`; Qudrat policies registered in `AuthServiceProvider`; `app/Livewire/QudratQuestionsTable.php`; separate admin/student response allowlists; and `app/Console/Commands/ImportQudratContent.php`.
 
@@ -250,11 +294,11 @@ Keep validation-only mode free of writes and content mutations restricted to ver
 ### Student behavior and history
 
 1. Prefer unseen questions in sessions of up to 10. Resume unfinished practice; new/review practice is explicit. At exhaustion offer review instead of an endless retry loop.
-2. For reading, select consecutive whole passage groups in source order until roughly 10 questions, including the last group in full. Show actual length. Proposed partial-seen rule: include the entire published group and treat earlier attempted questions as repeats.
+2. For reading, select consecutive whole passage groups in source order until roughly 10 questions, including the last group in full. Show actual length. Partial-seen rule: include the entire published group and treat earlier attempted questions as repeats.
 3. Save selections as drafts, not attempts. Provide **تلميح** only when requested and record use server-side. Enable **تحقق** after a choice; grade on the server, lock the response, then show correct/incorrect feedback, the correct choice and explanation. Advance only with **التالي**.
 4. Persist order, draft choices, hints and submissions across refresh/resume. Pin private snapshots of prompts, options, correct keys, feedback and passages when creating the session. Admin edits must not rewrite current exercises or historical results.
 5. Authorize ownership and current item/state on every request. Validate choice membership. Use consistent row locks and unique answer-per-item constraints so concurrent starts/submissions cannot duplicate sessions or grading. Serialize first submissions per user and identify the earliest submitted answer deterministically.
-6. Recheck publication on every student read/action. Proposed default: safely close affected active sessions on archive, notify the student, preserve submitted history and hide newly restricted unsubmitted content. Completed owned results may retain their historical snapshots.
+6. Recheck publication on every student read/action. Safely close affected active sessions on archive, notify the student, preserve submitted history and hide newly restricted unsubmitted content. Completed owned results may retain their historical snapshots.
 7. Results show score, correct/incorrect counts, hint usage, **مراجعة الأخطاء**, **تدريب جديد** and return navigation. Wrong-answer review includes the original reading passage. Unanswered questions are not silently submitted or marked wrong.
 
 Progress = distinct submitted questions in the current published bank / published questions. First-attempt accuracy = correct first submissions / questions with first submissions in that bank. Retries never rewrite first attempts. Session scores use only that session's submitted answers; hints are marked but carry no penalty. Handle zero counts and empty categories explicitly.
@@ -272,7 +316,7 @@ Progress = distinct submitted questions in the current published bank / publishe
 
 | Item | Resolve by |
 | --- | --- |
-| Who can use Qudrat: every logged-in student or a specific existing purchase? No Qudrat entitlement exists; course/lesson rules cannot simply be copied. | Before Phase 4 access is enabled |
+| Who can use Qudrat: every logged-in student, independent of purchases/subscriptions. | Resolved by owner for Phase 4 |
 | Local runtime: owner confirmed native PHP/Vite, no Docker. Dedicated native MySQL, isolated browser review, and minimum local login/dashboard fixtures are verified above. | Resolved for Phases 2–3 |
 | PHP/MySQL compatibility: default PHP remains 8.4.5, which locked OpenSpout excludes. The helper uses verified PHP 8.3.11 with required extensions; Composer platform checks pass. Dedicated MySQL is 8.0.43. | Phase 2 resolved; keep using the compatible executable |
 | Test isolation: default `phpunit.xml` still does not isolate the database. Use the dedicated Qudrat configuration/test base and helper; do not run the legacy feature suite against an unspecified connection. | Qudrat isolation implemented; default suite unchanged |

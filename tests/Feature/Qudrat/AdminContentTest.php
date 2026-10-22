@@ -73,7 +73,7 @@ class AdminContentTest extends QudratTestCase
         }
         $this->put(route('admin.qudrat.questions.update', $question), $this->payload(['prompt' => 'tampered']))->assertRedirect(route('home'));
         $this->assertSame('مفتاح : باب', $question->fresh()->prompt);
-        $this->get('/student-dashboard/qudrat')->assertNotFound();
+        $this->get('/student-dashboard/qudrat')->assertOk();
     }
 
     public function test_incomplete_questions_cannot_be_saved_as_drafts(): void

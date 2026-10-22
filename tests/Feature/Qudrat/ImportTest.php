@@ -293,7 +293,7 @@ class ImportTest extends QudratTestCase
         }
     }
 
-    public function test_content_and_session_policies_do_not_grant_student_entitlement(): void
+    public function test_content_policies_and_owner_scoped_sessions_allow_student_practice(): void
     {
         $student = new User(['role' => 'student']);
         $student->id = 10;
@@ -309,7 +309,7 @@ class ImportTest extends QudratTestCase
         $this->assertTrue(Gate::forUser($student)->allows('view', $session));
         $this->assertFalse(Gate::forUser($other)->allows('view', $session));
         $this->assertFalse(Gate::forUser($admin)->allows('view', $session));
-        $this->assertFalse(Gate::forUser($student)->allows('create', QudratPracticeSession::class));
+        $this->assertTrue(Gate::forUser($student)->allows('create', QudratPracticeSession::class));
         $this->assertArrayNotHasKey('correct_option_key', (new QudratQuestion(['correct_option_key' => 'a']))->toArray());
         $this->assertArrayNotHasKey('content_snapshot', (new QudratSessionQuestion(['content_snapshot' => ['answer' => 'a']]))->toArray());
     }

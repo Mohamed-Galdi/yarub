@@ -9,7 +9,7 @@
     <title>منصة يعرب التعليمية</title>
     <link rel="icon" type="image/x-icon" href="/assets/favicon.ico">
     <!-- Scripts -->
-    @vite(['resources/css/app.css', 'resources/js/app.js'])
+    @vite(['resources/css/app.css', request()->routeIs('student.qudrat.*') ? 'resources/js/qudrat-student.js' : 'resources/js/app.js'])
     {{-- csrf token --}}
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
@@ -102,7 +102,7 @@
 
 <body class="font-hacen antialiased">
 
-    <header class="flex flex-wrap lg:justify-start lg:flex-nowrap w-full bg-pr-600 h-16 ">
+    <header data-student-navigation class="flex flex-wrap lg:justify-start lg:flex-nowrap w-full bg-pr-600 h-16 ">
         <nav dir="rtl"
             class="relative h-full max-w-[85rem] w-full lg:flex lg:items-center lg:justify-between lg:gap-3 mx-auto px-4 sm:px-6 lg:px-8 ">
             <!-- Logo w/ Collapse Button -->
@@ -155,6 +155,9 @@
                         <x-btn.student-nav-item :route="'student.certificates.index'" :item="'certificates'" :title="'الشهادات'">
                             <x-icons.certificate class="w-5 h-5 text-white" />
                             <!-- Replace with your actual icon component -->
+                        </x-btn.student-nav-item>
+                        <x-btn.student-nav-item :route="'student.qudrat.index'" :item="'qudrat'" :title="'القدرات'">
+                            <x-icons.square-check class="w-5 h-5 text-white" />
                         </x-btn.student-nav-item>
                     </div>
                     <div class="my-auto">
@@ -244,7 +247,7 @@
         integrity="sha512-v2CJ7UaYy4JwqLDIrZUI/4hqeoQieOmAZNXBeQyjo21dadnwR+8ZaIJVT8EE2iyI61OV8e6M8PP2/4hpQINQ/g=="
         crossorigin="anonymous" referrerpolicy="no-referrer"></script>
     {{-- Alpine JS --}}
-    <script src="//unpkg.com/alpinejs" defer></script>
+    @unless(request()->routeIs('student.qudrat.*'))<script src="//unpkg.com/alpinejs" defer></script>@endunless
     {{-- SweetAlert2 --}}
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 </body>
