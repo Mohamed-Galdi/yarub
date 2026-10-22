@@ -5,4 +5,6 @@ return [
     'allow_development_import' => (bool) env('QUDRAT_ALLOW_DEVELOPMENT_IMPORT', false),
     // Explicit owner-approved existing local database; never accepted in testing or production.
     'existing_local_database' => env('QUDRAT_EXISTING_LOCAL_DATABASE'),
+    // Independent production opt-in. The command also requires target, digest and confirmation.
+    'allow_production_import' => (bool) env('QUDRAT_ALLOW_PRODUCTION_IMPORT', false),
 ];

@@ -2,7 +2,7 @@
 
 Add verbal aptitude practice to the existing Yarub application. Students practice six question categories; admins review and edit content that publishes automatically.
 
-**Current status: Phases 1–5 are complete locally, including verification and a proposed release/recovery plan. Every logged-in student can practice all six categories; admins manage automatically published content. Production deployment/import has not been performed. Production release still requires the prerequisites listed in Phase 5.**
+**Current status: Phases 1–5 are complete locally, including verification and a proposed release/recovery plan. Every logged-in student can practice all six categories; admins manage automatically published content. Guarded production import is implemented and tested locally; production deployment/import has not been performed. Production release still requires the server checks listed in Phase 5.**
 
 This is the single Qudrat requirements and roadmap document. Content lives in `qudrat_content/` at the repository root. Follow `AGENTS.md` for project conventions and environment safety.
 
@@ -158,7 +158,7 @@ The shared Blade player uses native radios, keyboard focus, RTL text and preserv
 
 **Verified:** 51 Qudrat tests, 347 assertions on the separate disposable MySQL test database. Thirteen practice tests cover all six types, privacy, role/ownership checks, resume, hint/choice persistence, grading once, stale requests, reading groups, snapshots, archive closure, metrics, empty/exhausted banks and two parallel PHP processes starting/grading against MySQL. Browser verification used the existing demo student in local `yarub`: keyboard selection, autosave/refresh, hints, a completed 10-question practice, results/mistake review, updated progress and reading practice. Layout checks covered 1440px desktop, 390px mobile, 597px panel and 1270px user width. Independent UI review returned **ship**, with no material fixes; the existing broken avatar image is outside this change. The detector returned no findings. PHP formatting/syntax, diff checks and the isolated Vite build passed; existing Browserslist/safelist warnings remain.
 
-No schema migration, reset, demo seeding or production operation was needed. Browser practice added history only for the existing local demo student; automated tests used `yarub_qudrat_test_local`. Review screenshots remain ignored local artifacts. Phase 5 verification and the proposed release/recovery plan are recorded below; the import command still rejects production.
+No schema migration, reset, demo seeding or production operation was needed. Browser practice added history only for the existing local demo student; automated tests used `yarub_qudrat_test_local`. Review screenshots remain ignored local artifacts. Phase 5 verification and the proposed release/recovery plan are recorded below; the import command rejects production unless the explicit guarded mode below is authorized.
 
 To review: sign in as an existing local student and open `/student-dashboard/qudrat` using your normal native PHP/Vite workflow or the review server at `http://127.0.0.1:8017`. Run `./tools/qudrat-local.ps1 test` for isolated verification and `./tools/qudrat-local.ps1 build` for the verified asset build.
 
@@ -183,18 +183,55 @@ Content dry-run and the Vite build passed. The build still reports existing Brow
 
 **Recovery rehearsal:** a new single-transaction SQL backup of local `127.0.0.1:3306/yarub` was restored into a newly created `yarub_qudrat_test_restore_*` database on the separate port 33317 instance. All **37 table checksums matched**, including Qudrat sessions, immutable snapshots and answers. No existing database was overwritten or dropped. The dump and `phase5-restore-report.json` remain under ignored `storage/app/qudrat-local/backups/`; the restore database is retained for inspection. This proves local backup/restore compatibility, not that a production backup location, account or restore procedure has been verified.
 
-**Verification limits:** the default Breeze/legacy suite was not run against the normal connection; it still has stale route expectations and unsafe database defaults. The targeted regression tests above cover the actual dashboard routes instead. No live payment, mail, S3 upload/delete or production request was made. Educational correctness and source paragraph fidelity still require owner review. The only new Phase 5 code is focused verification tests; the importer still rejects production.
+**Verification limits:** the default Breeze/legacy suite was not run against the normal connection; it still has stale route expectations and unsafe database defaults. The targeted regression tests above cover the actual dashboard routes instead. No live payment, mail, S3 upload/delete or production request was made. Educational correctness and source paragraph fidelity still require owner review. The only new Phase 5 code is focused verification tests; the guarded production mode was added afterward as the separate owner-requested change below.
 
 #### Proposed production release — separate authorization required
 
 This is a reviewed sequence to finalize with the actual server facts in [DEPLOYMENT.md](DEPLOYMENT.md), not a script to execute blindly. Do not change `APP_ENV` to bypass the import guard, run demo seeders, reset tables, or roll back Qudrat migrations containing history.
 
 1. **Resolve release prerequisites before pulling feature code:** confirm compatible production PHP/extensions and MySQL; inspect the deployed migration history and checkout; choose where matching Vite assets are built/published; confirm current route/view/config/OPcache handling and an approved way to suspend access while schema/assets/content are incomplete. Record a restorable pre-release database backup and the previous deploy commit/assets. Do not enable route/config caching merely for this feature: existing route-name duplication and direct `env()` integration reads need separate verification.
-2. **Approve a controlled production import path as a separate code change.** `php artisan qudrat:import` currently refuses production, even with the local opt-ins. Proposed requirements: production-only opt-in, explicit expected database identity and reviewed source-bundle digest, interactive confirmation (or an explicitly authorized noninteractive flag), validation before writes, transactional stable upserts, default conflict skipping, unchanged archive/history protection, and safe repeat/recovery tests. Keep this guard change reviewed and tested before the deployment window. Its CLI flags do not exist yet; do not substitute a direct SQL fill or a temporary environment change. This is the outstanding implementation prerequisite for production content rollout.
+2. **Use the guarded production import below.** The owner-requested production path is now implemented. It requires production console mode, a separate opt-in, the exact configured/selected database, a reviewed validated-content digest, and confirmation or explicit noninteractive approval. Production mode rejects targeted overwrite flags and keeps archive/history protection. Review this code and its tests before the deployment window; do not substitute direct SQL or change `APP_ENV`.
 3. **For an explicitly authorized release**, verify the exact approved commit and clean server checkout, then use the established command from `/var/www/yarub`: `sudo -u www-data git pull --ff-only origin main`. Stop on divergence. Install only locked dependencies if required and publish assets matching that commit using the confirmed process. `public/build` is ignored, so a pull alone does not supply the new Qudrat JS/CSS entries.
 4. **Apply only missing Qudrat migrations after backup and runtime checks.** Candidate commands for the approved runtime/user are `php artisan migrate --path=database/migrations/2026_10_21_000001_create_qudrat_tables.php --force`, then `php artisan migrate --path=database/migrations/2026_10_21_000002_publish_qudrat_content_by_default.php --force`. Check migration history and actual tables first; stop if existing schema and history disagree. The first creates seven tables; the second changes publication defaults and publishes existing unarchived Qudrat content. MySQL DDL is not an all-or-nothing recovery mechanism. Do not edit applied migrations or run an unrelated migration batch as a shortcut.
-5. **Validate and import the approved content through the future approved production path.** Validation-only command: `php artisan qudrat:import --dry-run` (no DB queries). Mutating import remains blocked until step 2 is implemented. Expect 6 categories, 1,200 source questions, 4,800 options and 40 passages on an empty Qudrat bank; new content is immediately published. Rerun should report unchanged records, with no duplicates. Preserve additional admin-created content and history. Conflicts require review of named identities; never blanket-overwrite them to make totals match.
+5. **Validate and import through the guarded production path below.** Validation-only command: `php artisan qudrat:import --dry-run` (no DB queries). Compare its digest with the locally reviewed digest before authorizing a write. Expect 6 categories, 1,200 source questions, 4,800 options and 40 passages on an empty Qudrat bank; new content is immediately published. Rerun should report unchanged records, with no duplicates. Preserve additional admin-created content and history. Conflicts return exit code 2 with non-conflicting records committed; resolve named conflicts in the admin editor instead of overwriting them.
 6. **Refresh only confirmed caches/processes, then perform planned smoke checks** with approved admin/student accounts: admin list/edit/preview; student entry, start/resume, hint, answer/next/results; a reading group; mobile assets; guest/other-student denial; existing course/lesson/exam access. Grading smoke tests intentionally append practice history. Confirm logs, matching asset manifest, source inventory and import report. Do not make a live purchase or send mail to verify unrelated integrations.
+
+#### Guarded production import (implemented 2026-10-22)
+
+The production mode uses the same validated transactional importer as development. It does not delete content, reset progress or modify historical snapshots/answers. New content publishes automatically. Default conflict detection preserves admin edits; production mode rejects `--overwrite-id` entirely. The approval is scoped to the one call and cannot enable later importer calls implicitly.
+
+All of these must pass before content writes:
+
+- `APP_ENV=production`, console execution, and explicit `--production`.
+- Separate `QUDRAT_ALLOW_PRODUCTION_IMPORT=true` opt-in, either configured or supplied to that process only. The process-only form below works with cached Laravel configuration, without changing `.env` or refreshing caches.
+- `--database` exactly matches the active configured database and a server `SELECT DATABASE()` check. One explicit MySQL connection is required; connection URLs, sockets and read/write overrides are rejected. Host/port/database are shown before confirmation; passwords are never printed.
+- `--sha256` matches the validated in-memory content that will be imported. Validation occurs before connection/confirmation; the same in-memory content is revalidated and its digest rechecked inside the importer. File whitespace does not affect the digest.
+- Interactive confirmation defaults to **no**. `--force` is required for an explicitly approved noninteractive import; it skips only the question, not any other guard. Noninteractive calls without it fail before opening the database connection.
+
+Current locally reviewed validated-content digest for the supplied six files:
+
+```text
+53630957f5c66ad73874feb7adad614cdd536f016a3ae049b5f91cbeac8446da
+```
+
+After the approved code is committed/pushed and deployed, the backup and Qudrat migrations are complete, and matching assets are published, run from `/var/www/yarub`:
+
+```sh
+sudo -u www-data php artisan qudrat:import --dry-run
+
+# Replace YOUR_PRODUCTION_DATABASE with the actual production DB_DATABASE.
+# Compare the dry-run digest to the reviewed value above before proceeding.
+sudo -u www-data env QUDRAT_ALLOW_PRODUCTION_IMPORT=true \
+  php artisan qudrat:import --production \
+  --database=YOUR_PRODUCTION_DATABASE \
+  --sha256=53630957f5c66ad73874feb7adad614cdd536f016a3ae049b5f91cbeac8446da
+```
+
+Read the displayed target and answer **yes** only for the intended database/content. The one-process opt-in ends automatically when the command exits. For an explicitly approved automation, add `--force --no-interaction`; manual SSH use should keep the confirmation. The dry-run needs no production opt-in and must not be combined with mutating authorization flags.
+
+Exit codes remain: **0** success; **1** validation, authorization, cancellation or runtime failure; **2** committed non-conflicting records with conflicts skipped/reported. Unexpected importer errors roll back its data transaction. Save the report, verify inventory and repeat the same approved command to confirm idempotency. If files change, review them locally and obtain a new digest; do not copy an unexpected server digest blindly.
+
+**Verification:** the full suite passed **63 tests and 529 assertions**, including nine production-import tests. Production behavior is simulated only against `yarub_qudrat_test_local`, with explicit test-DB identity assertions. Tests cover missing opt-in/flags, wrong digest/target, wrong environment, web context, URL/socket/read-write overrides, the actual selected schema, no-query dry-run/cancellation, interactive confirmation, process-only opt-in with cached configuration, forced noninteractive import, admin conflicts, archive/history preservation, stable option identities, rollback and approval isolation. No production connection was made. The existing no-flag production refusal remains in place.
 
 #### Recovery decisions
 
@@ -203,7 +240,7 @@ This is a reviewed sequence to finalize with the actual server facts in [DEPLOYM
 - **Incorrect content:** use the admin editor or archive affected questions; review named importer conflicts individually. Existing snapshots/answers preserve what students saw. Do not delete attempts, change historical answer keys or republish archived content through a maintenance rerun.
 - **Database damage:** stop further writes and preserve a fresh incident snapshot. Restore the pre-release backup into a **new recovery database first**, verify schema, counts and Qudrat snapshot/answer relationships, then reconcile any purchases, subscriptions, messages and practice records written since that backup before an explicitly approved cutover. Restoring an old whole-database backup over a live database would lose unrelated newer data and is not an automatic rollback step.
 
-**Phase 5 result:** local acceptance and release/recovery preparation are complete. Production is intentionally not marked deployment-ready until step 1's server facts and step 2's guarded importer are resolved, reviewed and explicitly authorized. Neither deployment nor production content loading is part of this phase.
+**Phase 5 result:** local acceptance and release/recovery preparation are complete. The guarded importer is now implemented, but deployment remains conditional on step 1's server facts, backup and explicit release authorization. Neither deployment nor production content loading is part of this phase.
 
 
 ## Content: what is ready

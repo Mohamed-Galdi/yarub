@@ -16,6 +16,11 @@ class ContentValidator
         '06_association_and_difference.json' => ['association_and_difference', 'الارتباط والاختلاف'],
     ];
 
+    public function digest(array $validatedContent): string
+    {
+        return hash('sha256', json_encode($validatedContent, JSON_UNESCAPED_UNICODE | JSON_THROW_ON_ERROR));
+    }
+
     public function validateDirectory(string $directory): array
     {
         $files = glob(rtrim($directory, '/\\').'/*.json') ?: [];

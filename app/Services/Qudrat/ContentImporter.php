@@ -13,9 +13,12 @@ class ContentImporter
 {
     public function __construct(private ContentValidator $validator, private ImportEnvironment $environment) {}
 
-    public function import(array $content, array $overwriteIds = []): array
+    public function import(array $content, array $overwriteIds = [], ?ProductionImportApproval $approval = null): array
     {
         $content = $this->validator->validate($content);
+        if ($approval !== null && $overwriteIds !== []) {
+            throw new InvalidArgumentException('Production import cannot overwrite admin edits; resolve conflicts individually in the admin editor.');
+        }
         $known = [];
         foreach ($content as $category) {
             $known[] = $category['category'];
@@ -26,8 +29,9 @@ class ContentImporter
                 throw new InvalidArgumentException('Unknown targeted overwrite identity: '.$key);
             }
         }
-        $this->environment->assertSafe();
-        $version = 'v1:'.hash('sha256', json_encode($content, JSON_UNESCAPED_UNICODE | JSON_THROW_ON_ERROR));
+        $digest = $this->validator->digest($content);
+        $this->environment->assertSafe($approval, $digest);
+        $version = 'v1:'.$digest;
 
         return DB::transaction(function () use ($content, $overwriteIds, $version) {
             $report = ['counts' => [], 'conflicts' => []];
