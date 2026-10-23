@@ -1,0 +1,93 @@
+{
+  "schema_version": "1.0.0",
+  "section": {
+    "slug": "arabic-skills",
+    "title": "مهارات اللغة العربية",
+    "language": "ar"
+  },
+  "content_status": {
+    "provided_bank_count": 5,
+    "question_count": 1500,
+    "model_count": 50,
+    "note": "Five source documents were supplied. This sixth JSON is the section catalog, not a sixth question bank."
+  },
+  "defaults": {
+    "practice_session_question_count": 10,
+    "model_question_count": 30,
+    "points_per_question": 2,
+    "matching_points_per_correct_match": 1,
+    "negative_marking": false
+  },
+  "banks": [
+    {
+      "id": "nasaq",
+      "title": "نَسَق",
+      "subtitle": "النحو وبناء الجملة",
+      "order": 1,
+      "file": "01_nasaq.json",
+      "question_count": 300,
+      "model_count": 10,
+      "question_type_counts": {
+        "multiple_choice": 120,
+        "true_false": 90,
+        "matching": 90
+      }
+    },
+    {
+      "id": "rasm",
+      "title": "رَسْم",
+      "subtitle": "الإملاء والتحرير الكتابي",
+      "order": 2,
+      "file": "02_rasm.json",
+      "question_count": 300,
+      "model_count": 10,
+      "question_type_counts": {
+        "multiple_choice": 120,
+        "true_false": 90,
+        "matching": 90
+      }
+    },
+    {
+      "id": "bayan",
+      "title": "بَيان",
+      "subtitle": "البلاغة وتذوق النصوص",
+      "order": 3,
+      "file": "03_bayan.json",
+      "question_count": 300,
+      "model_count": 10,
+      "question_type_counts": {
+        "multiple_choice": 120,
+        "true_false": 90,
+        "matching": 90
+      }
+    },
+    {
+      "id": "midad",
+      "title": "مِداد",
+      "subtitle": "الكتابة الأدبية",
+      "order": 4,
+      "file": "04_midad.json",
+      "question_count": 300,
+      "model_count": 10,
+      "question_type_counts": {
+        "multiple_choice": 120,
+        "true_false": 90,
+        "matching": 90
+      }
+    },
+    {
+      "id": "burhan",
+      "title": "بُرهان",
+      "subtitle": "الكتابة العلمية",
+      "order": 5,
+      "file": "05_burhan.json",
+      "question_count": 300,
+      "model_count": 10,
+      "question_type_counts": {
+        "multiple_choice": 120,
+        "true_false": 90,
+        "matching": 90
+      }
+    }
+  ]
+}
