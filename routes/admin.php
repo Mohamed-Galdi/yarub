@@ -20,6 +20,24 @@ Route::middleware(['auth', 'verified', 'admin', 'log.visit'])->prefix('admin-das
     // Dashboard
     Route::get('/', [AdminDashboardController::class, 'index'])->name('admin.dashboard');
 
+    Route::prefix('arabic-skills')->name('admin.arabic-skills.')->group(function () {
+        $content = \App\Http\Controllers\Admin\ArabicSkills\ContentController::class;
+        $questions = \App\Http\Controllers\Admin\ArabicSkills\QuestionController::class;
+        $sessions = \App\Http\Controllers\Admin\ArabicSkills\SessionController::class;
+        Route::get('/', [$content, 'index'])->name('index');
+        Route::patch('/banks/{bank}', [$content, 'updateBank'])->name('banks.update');
+        Route::patch('/models/{model}', [$content, 'updateModel'])->name('models.update');
+        Route::get('/questions', [$questions, 'index'])->name('questions.index');
+        Route::get('/questions/create', [$questions, 'create'])->name('questions.create');
+        Route::post('/questions', [$questions, 'store'])->name('questions.store');
+        Route::get('/questions/{question}/edit', [$questions, 'edit'])->name('questions.edit');
+        Route::put('/questions/{question}', [$questions, 'update'])->name('questions.update');
+        Route::get('/questions/{question}/preview', [$questions, 'preview'])->name('questions.preview');
+        Route::patch('/questions/{question}/archive', [$questions, 'archive'])->name('questions.archive');
+        Route::get('/sessions', [$sessions, 'index'])->name('sessions.index');
+        Route::get('/sessions/{session}', [$sessions, 'show'])->name('sessions.show');
+    });
+
     Route::prefix('qudrat')->name('admin.qudrat.')->group(function () {
         Route::get('/', [\App\Http\Controllers\Admin\Qudrat\CategoryController::class, 'index'])->name('index');
         Route::patch('/categories/{category}', [\App\Http\Controllers\Admin\Qudrat\CategoryController::class, 'update'])->name('categories.update');

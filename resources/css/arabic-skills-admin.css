@@ -1,0 +1,23 @@
+[data-arabic-admin] { min-width: 0; }
+[data-arabic-admin] h3, [data-arabic-admin] h4 { color: #292a65; font-weight: 600; }
+[data-arabic-admin] h3 { font-size: 1.2rem; }
+.arabic-admin-bank { border-bottom: 1px solid #cbd5e1; padding-block: 1.5rem; }
+.arabic-admin-bank:first-of-type { padding-top: 0; }
+.arabic-admin-bank details { margin-top: .75rem; }
+.arabic-admin-filters { grid-template-columns: repeat(3, minmax(0, 1fr)); align-items: end; margin-bottom: 1.5rem; }
+.arabic-admin-row, .arabic-admin-model { display: flex; justify-content: space-between; align-items: start; gap: 1.5rem; border-top: 1px solid #cbd5e1; padding-block: 1.25rem; }
+.arabic-admin-row > div:first-child { min-width: 0; flex: 1; }
+.arabic-admin-row .qudrat-actions { flex-shrink: 0; }
+.arabic-admin-model form { width: min(100%, 24rem); }
+.arabic-admin-total { margin-block: 1rem; }
+.arabic-admin-type { display: flex; flex-wrap: wrap; gap: 1rem; align-items: end; margin-bottom: 1.5rem; }
+.arabic-admin-match { margin-top: 1rem; }
+[data-arabic-admin] input, [data-arabic-admin] textarea { caret-color: #292a65; }
+[data-arabic-admin] .qudrat-button { min-height: 2.75rem; }
+@media (max-width: 850px) { .arabic-admin-filters { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+@media (max-width: 639px) {
+    .arabic-admin-filters, [data-arabic-admin] .qudrat-grid { grid-template-columns: minmax(0, 1fr); }
+    .arabic-admin-model, .arabic-admin-row { flex-direction: column; gap: .75rem; }
+    [data-arabic-admin] .qudrat-editor { padding: 1rem; }
+    [data-arabic-admin] .qudrat-option-edit { flex-wrap: wrap; }
+}

@@ -10,6 +10,7 @@ enum PageTitles: string
     case LESSONS = 'الشروحات';
     case TESTS = 'الإختبارات';
     case QUDRAT = 'القدرات';
+    case ARABIC_SKILLS = 'مهارات اللغة العربية';
     case CERTIFICATES = 'الشهادات';
     case PAYMENTS = 'المدفوعات';
     case SUPPORT = 'الدعم';
@@ -21,6 +22,8 @@ enum PageTitles: string
     public static function getTitle(string $path): string
     {
         switch (true) {
+            case str_contains($path, 'admin-dashboard/arabic-skills'):
+                return self::ARABIC_SKILLS->value;
             case str_contains($path, 'admin-dashboard/qudrat'):
                 return self::QUDRAT->value;
             case str_contains($path, 'admin-dashboard/students'):

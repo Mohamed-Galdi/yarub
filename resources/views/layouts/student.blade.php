@@ -9,7 +9,7 @@
     <title>منصة يعرب التعليمية</title>
     <link rel="icon" type="image/x-icon" href="/assets/favicon.ico">
     <!-- Scripts -->
-    @vite(['resources/css/app.css', request()->routeIs('student.qudrat.*') ? 'resources/js/qudrat-student.js' : 'resources/js/app.js'])
+    @vite(['resources/css/app.css', request()->routeIs('student.arabic-skills.*') ? 'resources/js/arabic-skills-student.js' : (request()->routeIs('student.qudrat.*') ? 'resources/js/qudrat-student.js' : 'resources/js/app.js')])
     {{-- csrf token --}}
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
@@ -102,17 +102,17 @@
 
 <body class="font-hacen antialiased">
 
-    <header data-student-navigation class="flex flex-wrap lg:justify-start lg:flex-nowrap w-full bg-pr-600 h-16 ">
+    <header data-student-navigation class="flex flex-wrap xl:justify-start xl:flex-nowrap w-full bg-pr-600 h-16 ">
         <nav dir="rtl"
-            class="relative h-full max-w-[85rem] w-full lg:flex lg:items-center lg:justify-between lg:gap-3 mx-auto px-4 sm:px-6 lg:px-8 ">
+            class="relative h-full max-w-[85rem] w-full xl:flex xl:items-center xl:justify-between xl:gap-3 mx-auto px-4 sm:px-6 xl:px-8 ">
             <!-- Logo w/ Collapse Button -->
             <div class="flex items-center justify-between h-full my-auto">
                 <!-- Collapse Button -->
-                <div class="lg:hidden">
+                <div class="xl:hidden">
                     <button type="button"
                         class="hs-collapse-toggle relative size-9 flex justify-center items-center text-sm font-semibold rounded-lg border border-white/50 text-white hover:bg-white/10 focus:outline-none focus:bg-white/10 disabled:opacity-50 disabled:pointer-events-none"
                         id="hs-base-header-collapse" aria-expanded="false" aria-controls="hs-base-header"
-                        aria-label="Toggle navigation" data-hs-collapse="#hs-base-header">
+                        aria-label="القائمة الرئيسية" data-hs-collapse="#hs-base-header">
                         <svg class="hs-collapse-open:hidden size-4" xmlns="http://www.w3.org/2000/svg" width="24"
                             height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
                             stroke-linecap="round" stroke-linejoin="round">
@@ -126,7 +126,7 @@
                             <path d="M18 6 6 18" />
                             <path d="m6 6 12 12" />
                         </svg>
-                        <span class="sr-only">Toggle navigation</span>
+                        <span class="sr-only">القائمة الرئيسية</span>
                     </button>
                 </div>
                 <!-- End Collapse Button -->
@@ -135,12 +135,12 @@
 
             <!-- Collapse -->
             <div id="hs-base-header"
-                class="hs-collapse hidden overflow-hidden transition-all duration-300 basis-full grow lg:block"
+                class="hs-collapse hidden overflow-hidden transition-all duration-300 basis-full grow xl:block"
                 aria-labelledby="hs-base-header-collapse">
                 <div
-                    class="overflow-hidden overflow-y-auto relative z-70  flex lg:flex-row flex-col  lg:h-16 justify-between lg:gap-0 gap-4 lg:rounded-none rounded-md lg:p-0 p-2 lg:bg-pr-600 bg-pr-300 items-stretch [&::-webkit-scrollbar]:w-2 [&::-webkit-scrollbar-thumb]:rounded-full [&::-webkit-scrollbar-track]:bg-gray-100 [&::-webkit-scrollbar-thumb]:bg-gray-300">
+                    class="overflow-hidden overflow-y-auto relative z-70  flex xl:flex-row flex-col  xl:h-16 justify-between xl:gap-0 gap-4 xl:rounded-none rounded-md xl:p-0 p-2 xl:bg-pr-600 bg-pr-300 items-stretch [&::-webkit-scrollbar]:w-2 [&::-webkit-scrollbar-thumb]:rounded-full [&::-webkit-scrollbar-track]:bg-gray-100 [&::-webkit-scrollbar-thumb]:bg-gray-300">
                     <div
-                        class=" lg:py-0 h-full flex flex-col lg:flex-row lg:items-center lg:justify-end gap-0.5 lg:gap-1">
+                        class=" xl:py-0 h-full flex flex-col xl:flex-row xl:items-center xl:justify-end gap-0.5 xl:gap-1">
                         <x-btn.student-nav-item :route="'student.courses.index'" :item="'courses'" :title="'الدورات'">
                             <x-icons.course class="w-5 h-5 text-white" />
                             <!-- Replace with your actual icon component -->
@@ -159,6 +159,9 @@
                         <x-btn.student-nav-item :route="'student.qudrat.index'" :item="'qudrat'" :title="'القدرات'">
                             <x-icons.square-check class="w-5 h-5 text-white" />
                         </x-btn.student-nav-item>
+                        <x-btn.student-nav-item :route="'student.arabic-skills.index'" :item="'arabic-skills'" :title="'مهارات اللغة العربية'">
+                            <x-icons.text class="w-5 h-5 text-white" />
+                        </x-btn.student-nav-item>
                     </div>
                     <div class="my-auto">
                         <a href="{{ route('student.account.index') }}"
@@ -172,13 +175,13 @@
                     </div>
 
                     <div
-                        class="flex px-2 items-center lg:w-fit lg:mb-0 mb-4 lg:mt-0 mt-2 w-full justify-center gap-2 lg:gap-4 me-8">
-                        <a href="{{ route('student.support.index') }}"
+                        class="flex px-2 items-center xl:w-fit xl:mb-0 mb-4 xl:mt-0 mt-2 w-full justify-center gap-2 xl:gap-4 me-8">
+                        <a aria-label="الدعم" href="{{ route('student.support.index') }}"
                             class="hover:-translate-y-1 hover:scale-[1.2]  group transition-all duration-300 ease-in-out ">
                             <x-icons.email
                                 class="w-6 h-6 text-white group-hover:text-indigo-400 transition-all duration-300 ease-in-out border-b-2 border-white group-hover:pb-2 pb-1" />
                         </a>
-                        <a href="{{ route('home') }}"
+                        <a aria-label="الرئيسية" href="{{ route('home') }}"
                             class="hover:-translate-y-1 hover:scale-[1.2]  group transition-all duration-300 ease-in-out ">
                             <x-icons.home
                                 class="w-6 h-6 text-white group-hover:text-indigo-400 transition-all duration-300 ease-in-out border-b-2 border-white group-hover:pb-2 pb-1 " />
@@ -186,7 +189,7 @@
                         <form method="POST" action="{{ route('logout') }}"
                             class="hover:-translate-y-1 hover:scale-[1.2] group transition-all duration-300 ease-in-out mt-[0.4rem]">
                             @csrf
-                            <button type="submit">
+                            <button type="submit" aria-label="تسجيل الخروج">
                                 <x-icons.logout
                                     class="w-6 h-6 text-white group-hover:text-indigo-400 transition-all duration-300 ease-in-out border-b-2 border-white group-hover:pb-2 pb-1 scale-x-[-1]" />
                             </button>
@@ -247,7 +250,7 @@
         integrity="sha512-v2CJ7UaYy4JwqLDIrZUI/4hqeoQieOmAZNXBeQyjo21dadnwR+8ZaIJVT8EE2iyI61OV8e6M8PP2/4hpQINQ/g=="
         crossorigin="anonymous" referrerpolicy="no-referrer"></script>
     {{-- Alpine JS --}}
-    @unless(request()->routeIs('student.qudrat.*'))<script src="//unpkg.com/alpinejs" defer></script>@endunless
+    @unless(request()->routeIs('student.qudrat.*', 'student.arabic-skills.*'))<script src="//unpkg.com/alpinejs" defer></script>@endunless
     {{-- SweetAlert2 --}}
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 </body>

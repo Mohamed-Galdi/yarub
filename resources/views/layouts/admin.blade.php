@@ -10,7 +10,7 @@
     <link rel="icon" type="image/x-icon" href="/assets/favicon.ico">
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <!-- Scripts -->
-    @if(request()->routeIs('admin.qudrat.*'))
+    @if(request()->routeIs('admin.qudrat.*', 'admin.arabic-skills.*'))
         @vite(['resources/css/app.css', 'resources/js/qudrat-admin.js'])
         @livewireStyles
     @else
@@ -20,7 +20,7 @@
     <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
 
     <!-- Alpine Plugins -->
-    @unless(request()->routeIs('admin.qudrat.*'))
+    @unless(request()->routeIs('admin.qudrat.*', 'admin.arabic-skills.*'))
     <script defer src="https://cdn.jsdelivr.net/npm/@alpinejs/focus@3.x.x/dist/cdn.min.js"></script>
     <!-- Alpine Core -->
     <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
@@ -189,6 +189,10 @@
                     <p class="ml-3">القدرات</p>
                     <x-icons.square-check class="w-6 h-6" />
                 </x-btn.admin-dashboard-item>
+                <x-btn.admin-dashboard-item route='admin.arabic-skills.index' path='admin-dashboard/arabic-skills*'>
+                    <p class="ml-3">مهارات اللغة العربية</p>
+                    <x-icons.square-check class="w-6 h-6" />
+                </x-btn.admin-dashboard-item>
                 {{-- ///////////////////////////////////// --}}
                 <x-btn.admin-dashboard-item route='admin.certificates' path='admin-dashboard/certificates*'>
                     <p class="ml-3"> الشهادات </p>
@@ -296,7 +300,7 @@
     </script>
     @include('sweetalert::alert')
     @include('flatpickr::components.script')
-    @if(request()->routeIs('admin.qudrat.*'))
+    @if(request()->routeIs('admin.qudrat.*', 'admin.arabic-skills.*'))
         @livewireScriptConfig
     @else
     <script src="https://cdn.jsdelivr.net/npm/flowbite@2.4.1/dist/flowbite.min.js"></script>

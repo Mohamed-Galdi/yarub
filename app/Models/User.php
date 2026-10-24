@@ -177,6 +177,11 @@ class User extends Authenticatable
         return $this->hasMany(QudratPracticeSession::class);
     }
 
+    public function arabicSkillSessions()
+    {
+        return $this->hasMany(ArabicSkillSession::class);
+    }
+
     public function qudratAnswers()
     {
         return $this->hasMany(QudratSessionAnswer::class);

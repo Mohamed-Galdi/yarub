@@ -27,6 +27,18 @@ Route::middleware(['auth', 'verified', 'student', 'log.visit'])->prefix('student
     });
 
 
+    Route::prefix('arabic-skills')->name('student.arabic-skills.')->controller(\App\Http\Controllers\Student\ArabicSkills\PracticeController::class)->group(function () {
+        Route::get('/', 'index')->name('index');
+        Route::post('/banks/{bank}/sessions', 'start')->name('start');
+        Route::get('/sessions/{session}', 'show')->name('show');
+        Route::post('/sessions/{session}/items/{item}/answer', 'answer')->whereNumber('item')->name('answer');
+        Route::post('/sessions/{session}/items/{item}/next', 'next')->whereNumber('item')->name('next');
+        Route::post('/sessions/{session}/items/{item}/hint', 'hint')->whereNumber('item')->name('hint');
+        Route::post('/sessions/{session}/abandon', 'abandon')->name('abandon');
+        Route::get('/sessions/{session}/results', 'results')->name('results');
+        Route::get('/banks/{bank}', 'bank')->name('bank');
+    });
+
     // /////////// Courses Routes ////////////
     Route::get('/courses', [CoursesController::class, 'index'])->name('student.courses.index');
     Route::get('/courses/{course}', [CoursesController::class, 'show'])->name('student.courses.show');
