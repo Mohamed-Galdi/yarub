@@ -112,35 +112,16 @@
             </div>
 
         </div>
-        {{-- /////////////////////////////// Our Best Lessons section /////////////////////////////// --}}
-        <div class="py-16 px-8 md:px-4 lg:px-0">
-            <div class="mx-auto max-w-screen-xl">
-                <div class="flex justify-between items-end ">
-                    <div>
-                        <h2 class="text-primary md:text-5xl text-2xl mb-2 font">أبرز الشروحات</h2>
-                        <p class="text-gray-500 font-judur text-sm ms-2">الشروحات الاكثر تداولا في المنصة</p>
-                    </div>
-                    <div class="">
-                        <a href="{{ route('lessons') }}">
-                            <x-btn.scale-dark class="md:h-12 h-8 text-sm md:text-lg  md:w-40 w-32 ">إكتشف المزيد
-                                ...</x-btn.scale-dark>
-                        </a>
-                    </div>
-
+        <section class="learning-discovery" dir="rtl" aria-labelledby="learning-discovery-heading">
+            <div class="learning-container">
+                <h2 id="learning-discovery-heading">تدريبك يبدأ من حسابك.</h2>
+                <p>اكتشف القدرات اللفظية ومهارات اللغة العربية. سجّل الدخول بحساب الطالب لتبدأ، دون شراء دورة أو اشتراك في الشروحات.</p>
+                <div class="learning-discovery-links">
+                    <a href="{{ route('qudrat') }}"><h3>القدرات اللفظية</h3><p>ستة أقسام لفهم العلاقات والسياق والنصوص، مع أسئلة قصيرة وشرح للإجابات.</p><span>استكشف القدرات وجرّب مثالًا ←</span></a>
+                    <a href="{{ route('arabic-skills') }}"><h3>مهارات اللغة العربية</h3><p>خمسة بنوك للنحو والإملاء والبلاغة والكتابة، مع تدريب سريع ونماذج كاملة.</p><span>استكشف المهارات وجرّب مثالًا ←</span></a>
                 </div>
-                <div class="mt-8 flex md:flex-row flex-col justify-between items-center gap-4 ">
-                    {{-- card --}}
-                    @foreach ($lessons as $lesson)
-                        <x-card.guest-lesson class="w-[22rem]" :id="$lesson->id" :title="$lesson->title" :description="$lesson->description"
-                            :monthly-price="$lesson->monthly_price" :annual-price="$lesson->annual_price" :type="$lesson->type" :averagerating="$lesson->reviews_avg_rating"
-                            :totalreviews="$lesson->reviews_count" />
-                    @endforeach
-
-                </div>
-
             </div>
-
-        </div>
+        </section>
         {{-- /////////////////////////////// Why Choose us section /////////////////////////////// --}}
         <div class="pt-16 px-8 md:px-4 lg:px-0">
             <div class="mx-auto max-w-screen-xl  relative">

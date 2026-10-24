@@ -4,6 +4,7 @@ use App\Http\Controllers\CartController;
 use App\Http\Controllers\CoursesPageController;
 use App\Http\Controllers\HomePagesController;
 use App\Http\Controllers\LessonsPageController;
+use App\Http\Controllers\LearningFeaturesController;
 use App\Http\Controllers\SubController;
 use Illuminate\Support\Facades\Route;
 
@@ -30,8 +31,10 @@ Route::middleware(['log.visit'])->group(function () {
     Route::get('/courses/{course}', [CoursesPageController::class, 'coursePage'])->name('course');
 
     // Lessons Routes
-    Route::get('/lessons', [LessonsPageController::class, 'lessonsPage'])->name('lessons');
+    Route::redirect('/lessons', '/qudrat', 301)->name('lessons');
     Route::get('/lessons/{lesson}', [LessonsPageController::class, 'coursePage'])->name('lesson');
+    Route::get('/qudrat', [LearningFeaturesController::class, 'qudrat'])->name('qudrat');
+    Route::get('/arabic-skills', [LearningFeaturesController::class, 'arabicSkills'])->name('arabic-skills');
 
     // ///////////// Cart Routes //////////////
     Route::get('/cart', [CartController::class, 'index'])->name('cart.index');

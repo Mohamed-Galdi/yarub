@@ -88,10 +88,10 @@
                                     الدورات</p>
                             </button>
                         </a>
-                        <a href="{{ route('lessons') }}">
+                        <a href="{{ route('qudrat') }}">
                             <button class="bg-teal-500 hover:bg-teal-700 text-white  py-1 px-2 rounded">
                                 <p class="ml-2 lg:text-xl text-base text-nowrap truncate lg:w-32 w-24 text-center">صفحة
-                                    الشروحات</p>
+                                    القدرات</p>
                             </button>
                         </a>
                     </div>

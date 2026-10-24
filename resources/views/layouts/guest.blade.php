@@ -6,19 +6,22 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
-    <title>منصة يعرب التعليمية</title>
+    <title>@yield('title', 'منصة يعرب التعليمية')</title>
+    @hasSection('description')<meta name="description" content="@yield('description')">@endif
     <link rel="icon" type="image/x-icon" href="/assets/favicon.ico">
     <!-- Scripts -->
-    @vite(['resources/css/app.css', 'resources/js/app.js'])
+    @vite(['resources/css/app.css', request()->routeIs('qudrat', 'arabic-skills') ? 'resources/js/learning-public.js' : 'resources/js/app.js'])
     {{-- csrf token --}}
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
+    @unless(request()->routeIs('qudrat', 'arabic-skills'))
     <!-- Moyasar Styles -->
     <link rel="stylesheet" href="https://cdn.moyasar.com/mpf/1.14.0/moyasar.css" />
 
     <!-- Moyasar Scripts -->
     <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?version=4.8.0&features=fetch"></script>
     <script src="https://cdn.moyasar.com/mpf/1.14.0/moyasar.js"></script>
+    @endunless
 
 
 </head>
@@ -32,37 +35,26 @@
                 <a href="/" class="flex items-center space-x-3 ">
                     <img src="{{ asset('assets/logos/logo_dark.png') }}" class="w-24" alt="منصة يعرب">
                 </a>
-                <div class="flex md:order-2 space-x-0 md:space-x-2 items-center gap-3  ">
+                <div class="flex xl:order-2 space-x-0 xl:space-x-2 items-center gap-3  ">
 
                     @auth
                         @if (Auth::user()->role === 'student')
-                            <a href="{{ route('student.courses.index') }}">
-                                <x-btn.slide-dark
-                                    class="text-base px-4 text-nowrap truncate w-full flex gap-2 items-end justify-center">
-                                    <p class="align-text-bottom">حسابي </p>
+                            <a href="{{ route('student.courses.index') }}" class="guest-account-link guest-account-solid">
+                                    <span>حسابي</span>
                                     <x-icons.user class="w-5 h-5"></x-icons.user>
-                                </x-btn.slide-dark>
                             </a>
                         @elseif(Auth::user()->role === 'admin')
-                            <a href="{{ route('admin.dashboard') }}">
-                                <x-btn.slide-dark
-                                    class="text-base px-4 text-nowrap truncate w-full flex gap-2 items-end justify-center">
-                                    <p class="align-text-bottom">المشرف </p>
+                            <a href="{{ route('admin.dashboard') }}" class="guest-account-link guest-account-solid">
+                                    <span>المشرف</span>
                                     <x-icons.admin class="w-5 h-5"></x-icons.admin>
-                                </x-btn.slide-dark>
                             </a>
                         @endif
                     @endauth
 
 
                     @guest
-                        <a href="/register">
-                            <x-btn.slide-dark class="text-sm md:px-4 px-2 text-nowrap truncate ">انشئ
-                                حسابك</x-btn.slide-dark>
-                        </a>
-                        <a href="/login">
-                            <x-btn.slide-light class="text-sm md:px-8 p-4  "> دخول</x-btn.slide-light>
-                        </a>
+                        <a href="{{ route('register') }}" class="guest-account-link guest-account-solid">أنشئ حسابك</a>
+                        <a href="{{ route('login') }}" class="guest-account-link">دخول</a>
                     @endguest
 
 
@@ -76,7 +68,7 @@
                                 0</div>
                         </div> --}}
                         <div class="w-8 h-8 relative cursor-pointer">
-                            <a href="{{ route('cart.index') }}">
+                            <a href="{{ route('cart.index') }}" aria-label="سلة المشتريات">
                                 <x-icons.cart class="text-sm text-pr-500 w-full h-full "></x-icons.cart>
                                 <div
                                     class="text-white bg-pr-500 rounded-full absolute top-0 right-0 w-4 h-4 flex justify-center items-center cart-count">
@@ -87,8 +79,8 @@
                     @endif
 
                     <button data-collapse-toggle="navbar-sticky" type="button"
-                        class="inline-flex items-center p-2 w-10 h-10 justify-center text-sm text-gray-100 bg-primary rounded-lg md:hidden hover:bg-gray-200 hover:text-pr-500 focus:outline-none focus:ring-2 focus:ring-gray-200 "
-                        aria-controls="navbar-sticky" aria-expanded="false">
+                        class="inline-flex items-center p-2 w-10 h-10 justify-center text-sm text-gray-100 bg-primary rounded-lg xl:hidden hover:bg-gray-200 hover:text-pr-500 focus:outline-none focus:ring-2 focus:ring-gray-200 "
+                        aria-controls="navbar-sticky" aria-expanded="false" aria-label="القائمة الرئيسية">
                         <svg class="w-5 h-5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none"
                             viewBox="0 0 17 14">
                             <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -96,18 +88,18 @@
                         </svg>
                     </button>
                 </div>
-                <div class="items-center justify-between hidden w-full md:flex md:w-auto md:order-1" id="navbar-sticky">
+                <div class="items-center justify-between hidden w-full xl:flex xl:w-auto xl:order-1" id="navbar-sticky">
                     <ul
-                        class="flex flex-col p-4 md:p-0 mt-4 font-medium border border-gray-100 rounded-lg bg-gray-50 md:space-x-8 rtl:space-x-reverse md:flex-row md:mt-0 md:border-0 md:bg-white ">
+                        class="flex flex-col p-4 xl:p-0 mt-4 font-medium border border-gray-100 rounded-lg bg-gray-50 xl:space-x-8 rtl:space-x-reverse xl:flex-row xl:mt-0 xl:border-0 xl:bg-white ">
                         <x-btn.guest-nav-item :route="'home'" :title="'الرئيسية'" />
                         <x-btn.guest-nav-item :route="'courses'" :title="'الدورات'" />
-                        <x-btn.guest-nav-item :route="'lessons'" :title="'الشروحات'" />
+                        <x-btn.guest-nav-item :route="'qudrat'" :title="'القدرات'" />
+                        <x-btn.guest-nav-item :route="'arabic-skills'" :title="'مهارات العربية'" />
                         <x-btn.guest-nav-item :route="'about'" :title="'من نحن'" />
                         <x-btn.guest-nav-item :route="'contact'" :title="'تواصل معنا'" />
                         <li>
                             <a href="https://arub.yarub.org/" target="_blank"
-                                class="block py-2 px-3 md:p-0 text-gray-400 rounded hover:bg-gray-100 md:hover:bg-transparent md:hover:text-primary  ">عَرُوب</a>
-                            </a>
+                                class="block py-2 px-3 xl:p-0 text-slate-600 rounded hover:bg-gray-100 xl:hover:bg-transparent xl:hover:text-primary  ">عَرُوب</a>
                         </li>
                     </ul>
                 </div>
@@ -124,7 +116,7 @@
         <div class="mx-auto max-w-screen-xl flex md:flex-row flex-col justify-around items-center p-3 ">
             <div class="flex flex-col md:items-start items-center gap-2 py-2 md:order-1 order-1">
                 <p>روابط سريعة: </p>
-                <ul class="flex text-sm gap-2">
+                <ul class="flex flex-wrap justify-center text-sm gap-2">
                     <li><a href="{{ url('/') }}"
                             class="hover:underline md:me-1 {{ Request::is('/') ? 'text-gray-100 ' : 'text-gray-400' }}">الرئيسية
                         </a>
@@ -135,9 +127,10 @@
                         </a>
                     </li>
                     <li>
-                        <a href="{{ url('/lessons') }}"
-                            class="hover:underline md:me-1 {{ Request::is('lessons') ? 'text-gray-100 ' : 'text-gray-400' }}">الشروحات
-                        </a>
+                        <a href="{{ route('qudrat') }}" class="hover:underline md:me-1 {{ request()->routeIs('qudrat') ? 'text-gray-100' : 'text-gray-400' }}">القدرات</a>
+                    </li>
+                    <li>
+                        <a href="{{ route('arabic-skills') }}" class="hover:underline md:me-1 {{ request()->routeIs('arabic-skills') ? 'text-gray-100' : 'text-gray-400' }}">مهارات العربية</a>
                     </li>
                     <li>
                         <a href="{{ url('/about') }}"
@@ -313,7 +306,7 @@
         }
     </script>
     {{-- Alpine JS --}}
-    <script src="//unpkg.com/alpinejs" defer></script>
+    @unless(request()->routeIs('qudrat', 'arabic-skills'))<script src="//unpkg.com/alpinejs" defer></script>@endunless
     {{-- SweetAlert2 --}}
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 

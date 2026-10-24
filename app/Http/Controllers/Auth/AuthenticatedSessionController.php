@@ -49,6 +49,11 @@ class AuthenticatedSessionController extends Controller
             return redirect()->route('cart.index');
         }
 
+        $featureDestinations = [route('student.qudrat.index'), route('student.arabic-skills.index')];
+        if (in_array($request->session()->get('url.intended'), $featureDestinations, true)) {
+            return redirect()->intended(route('student.courses.index'));
+        }
+
         return redirect()->route('student.courses.index');
     }
 

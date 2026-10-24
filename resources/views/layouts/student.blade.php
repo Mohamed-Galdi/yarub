@@ -228,8 +228,13 @@
                         </a>
                     </li>
                     <li>
-                        <a href="{{ route('lessons') }}" class="hover:underline">
-                            الشروحات
+                        <a href="{{ route('qudrat') }}" class="hover:underline">
+                            القدرات
+                        </a>
+                    </li>
+                    <li>
+                        <a href="{{ route('arabic-skills') }}" class="hover:underline">
+                            مهارات اللغة العربية
                         </a>
                     </li>
                     <li>

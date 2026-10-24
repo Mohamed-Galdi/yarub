@@ -8,7 +8,6 @@ use App\Models\Course;
 use App\Models\FAQ;
 use App\Models\HomePage;
 use App\Models\HomePageReview;
-use App\Models\Lesson;
 use App\Models\Partners;
 use Illuminate\Http\Request;
 
@@ -25,13 +24,7 @@ class HomePagesController extends Controller
             ->withAvg('reviews', 'rating')
             ->take(3)
             ->get();
-        // first 3 lessons with reviews count and average rating
-        $lessons = Lesson::where('is_published', true)
-            ->withCount('reviews')
-            ->withAvg('reviews', 'rating')
-            ->take(3)
-            ->get();
-        return view('home.home', compact('courses', 'lessons', 'homePage', 'reviews'));
+        return view('home.home', compact('courses', 'homePage', 'reviews'));
     }
 
     public function aboutPage()
