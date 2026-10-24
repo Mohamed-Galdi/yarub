@@ -1,46 +1,196 @@
-# YARUB manual deployment
+# YARUB deployment runbook
 
-## Confirmed setup
+Use this guide for every manual deployment. Updated 2026-10-24 using the owner's recorded server commands, repository source, and the earlier “Plan Qudrat Phase 1” chat. No production operation was performed to prepare this guide.
 
-Confirmed by the project owner, not by server access during this inspection:
+## Recorded server setup
 
-- Existing production Laravel application at `/var/www/yarub`, owned by `www-data`.
-- Production changes synchronized into GitHub and local `main` at `a0efd0b`.
-- Deployment is manual; no CI/CD.
-- From `/var/www/yarub`, the established update command is:
+| Item | Value |
+| --- | --- |
+| Host checkout | `/var/www/yarub` |
+| Branch / remote | `main` / `origin` |
+| Application owner | `www-data` |
+| PHP container | `yarub-php` |
+| Container working directory | `/var/www/yarub` |
+| Artisan execution user | `www-data` |
+| Database target | `db:3306/yarubapp` |
+| Node/npm | On the host; Node 22 was used for the earlier build |
+| Writable npm cache | `/var/cache/yarub-npm` |
 
-```sh
-sudo -u www-data git pull --ff-only origin main
+Run Git and npm on the **host**, and Artisan in the **PHP container**. Reconfirm these values if infrastructure changes. Keep production credentials outside Git and this document.
+
+## 1. Decide which steps apply
+
+Review every commit between the deployed version and the release, and run relevant checks locally or in staging.
+
+| Change | Deployment work |
+| --- | --- |
+| Documentation only | Pull only. |
+| PHP code | Pull; use the existing OPcache refresh procedure if needed. |
+| Routes | Clear route cache after prerequisites are ready. |
+| Blade views | Clear compiled views; build if Tailwind classes changed. |
+| JS, CSS, Tailwind, Vite | Build assets; `public/build` is ignored, so pulling alone does not publish them. |
+| npm lockfile or missing Node dependencies | Run `npm ci`, then build. |
+| Composer lockfile/configuration | Review PHP/extensions, hooks and the actual Composer installation procedure before release. Install dependencies before dependent migrations/builds. |
+| New migrations | Backup, inspect history, apply only reviewed missing migrations. |
+| Initial question banks or reviewed source content update | Run the relevant guarded importer after its migrations. Ordinary code/UI changes do not need imports. |
+| Environment/configuration | Provision securely and follow the established config-cache policy. |
+| Docker configuration/image | Review the actual infrastructure procedure; ordinary code changes do not imply an image rebuild. |
+
+Before schema/content changes, retain a restorable database backup and the previous code/assets. Use the established maintenance procedure while schema, assets or content are incomplete. Production backup/restore and maintenance commands have not yet been recorded here; resolve them before a release that needs them.
+
+Run commands separately and stop on failure. Do not continue after an unsuccessful pull, install, migration, validation or build.
+
+## 2. Inspect and pull
+
+After SSH:
+
+```bash
+cd /var/www/yarub
+sudo -u www-data git status --short
+sudo -u www-data git branch --show-current
+sudo -u www-data git log -1 --oneline
+sudo -u www-data git fetch origin
+sudo -u www-data git diff --stat HEAD..origin/main
 ```
 
-Do not replace fast-forward-only pulls with forced resets/merges. Stop and investigate divergence or conflicting server changes. This document authorizes no deployment; no server command was run for its preparation.
+Confirm `main`, inspect the release diff and investigate unexpected server changes. Preserve uploads, runtime data and `.env`/`.env.save`.
 
-## Release checklist
+```bash
+sudo -u www-data git pull --ff-only origin main
+sudo -u www-data git log -1 --oneline
+```
 
-Before an authorized release, review the exact diff/target commit and affected journeys; check the server checkout for local changes and confirm the current branch. Preserve runtime data, uploads and `.env`/`.env.save` outside Git. Verify a restorable backup and recovery plan before schema/data changes. Run relevant checks in an isolated local/staging environment and agree the conditional steps below before pulling code that depends on them.
+Stop on divergence or conflicts; do not substitute forced resets or unreviewed merges.
 
-Only the pull above is an established production command. The following table is a decision checklist, **not an executable production runbook**. Candidate commands are unverified and must be checked for the actual runtime, execution user, paths, order and side effects.
+## 3. Install dependencies only when needed
 
-| Change | Deployment work to determine | Unverified candidates / caveats |
+For a changed npm lockfile or missing dependencies, run on the host:
+
+```bash
+sudo -u www-data npm ci --cache=/var/cache/yarub-npm --include=dev
+```
+
+Development dependencies are required for building. The dedicated cache avoids the earlier `/var/www/.npm` permission failure. If this directory is missing, an operator with permission can recreate just the cache:
+
+```bash
+install -d -o www-data -g www-data -m 0750 /var/cache/yarub-npm
+```
+
+Do not run dependency upgrades, `npm audit fix`, or `composer update` during routine deployment. A production Composer executable/install command has not yet been verified; establish it in the actual PHP runtime if Composer dependencies change. Vite also requires existing Composer vendor assets.
+
+## 4. Apply reviewed missing migrations
+
+Skip when there are no new migrations. First inspect history:
+
+```bash
+docker exec --user www-data --workdir /var/www/yarub yarub-php \
+  php artisan migrate:status
+```
+
+Replace the placeholder below with each exact reviewed pending migration filename:
+
+```bash
+docker exec --user www-data --workdir /var/www/yarub yarub-php \
+  php artisan migrate --path=database/migrations/REVIEWED_MIGRATION.php --force
+```
+
+Do not execute the placeholder literally. Current feature migrations:
+
+| Feature | Migration path |
+| --- | --- |
+| Qudrat tables | `database/migrations/2026_10_21_000001_create_qudrat_tables.php` |
+| Qudrat automatic publication | `database/migrations/2026_10_21_000002_publish_qudrat_content_by_default.php` |
+| Arabic Skills tables | `database/migrations/2026_10_23_000001_create_arabic_skill_tables.php` |
+
+Both Qudrat migrations succeeded in the earlier recorded deployment. Check current history rather than assuming another environment has them. Stop if existing tables disagree with migration history. Editing applied migrations does not apply those edits on production.
+
+Avoid unrelated migration batches. Never use `migrate:fresh`, `migrate:refresh`, demo seeders or automatic rollback for deployment. MySQL schema changes are not an all-or-nothing recovery mechanism.
+
+## 5. Import content only when needed
+
+Import for initial feature setup or an explicitly reviewed source-content update, not after every pull. Run only the relevant validation:
+
+```bash
+docker exec --user www-data --workdir /var/www/yarub yarub-php \
+  php artisan qudrat:import --dry-run
+
+docker exec --user www-data --workdir /var/www/yarub yarub-php \
+  php artisan arabic-skills:import --dry-run
+```
+
+Dry-runs do not connect to the database. Compare the digest with the locally reviewed package:
+
+| Package | Original inventory | Reviewed SHA-256 as of 2026-10-24 |
 | --- | --- | --- |
-| Documentation only | Pull approved commit; no app-specific step indicated by source. | No migration/build/cache action justified solely by docs. |
-| PHP controllers/models/middleware | Pull; determine opcode/process refresh needs and any related caches. | PHP-FPM/web-server service names, OPcache policy and reload commands unknown. Do not assume restarts are required. |
-| Routes | Determine whether route cache is enabled and refresh it if needed. | `php artisan route:clear` / `route:cache`; current duplicate route names and missing controller action need checking before caching. |
-| Blade templates/components | Determine compiled-view handling; include asset build if Tailwind classes changed. | `php artisan view:clear` / `view:cache`; no confirmed production cache policy. |
-| JS/CSS, Tailwind classes/config, npm lock | Build and publish matching Vite assets; confirm whether built on server or elsewhere. | `npm ci`, `npm run build` are candidates for an authorized future release, not run here. `public/build` is ignored, so pulling alone does not ship a rebuilt bundle. Build needs Composer vendor assets too. |
-| Composer manifest/lock | Install locked dependencies using the confirmed compatible PHP/extensions and review hooks. | `composer install --no-dev --prefer-dist --optimize-autoloader` is a candidate only. Never substitute `composer update`. Hooks run package discovery; update hooks publish assets. |
-| Configuration/environment | Owner provisions secrets outside Git; determine cache strategy and direct `env()` dependencies first. | `php artisan config:clear` / `config:cache`; CloudFront domain is read with `env()` in controllers, which needs review before enabling config caching. Never regenerate production `APP_KEY` as a routine deployment step. |
-| New/changed migration | Review compatibility, backup/recovery, DB state and sequencing before release. Existing migration edits may not run on an already migrated DB. | `php artisan migrate --force` is an unverified candidate, not a default step. No migrations/seeds were run. Do not use `migrate:fresh`, `refresh`, demo seeders or automatic rollback as deployment procedures. |
-| Storage/upload paths | Verify existing public link, persistent files, S3 configuration and least-required write permissions. | `php artisan storage:link` only if verified necessary. No recursive ownership/permission changes are prescribed. Video writes/deletes may hit S3; use test storage before release. |
-| Queued work | Establish whether any workers actually run and how managed. | `php artisan queue:restart` is conditional/unverified; source has no custom queued jobs and example uses sync. Do not create workers as a routine step. |
-| Scheduler | Establish server cron/timers and whether new tasks need setup. | No active application schedule found. Do not add cron based on framework defaults. |
+| `qudrat_content/` | 6 categories, 1,200 questions, 4,800 options, 40 passages | `53630957f5c66ad73874feb7adad614cdd536f016a3ae049b5f91cbeac8446da` |
+| `arabic_skills_content/` | 5 banks, 50 models, 1,500 questions, 3,000 points | `bd92f3d973ac169cfb04d28a162cee238d7b9d7c5f89b89b7e017bd40b4b6b33` |
 
-After release, check the target commit and the affected public/student/admin flows, assets and logs without exposing secrets. Page requests can write visitor records; uploads, messages, tests and payments have additional side effects. Use planned test accounts/data and provider test mode for transactional checks; do not trigger a live purchase or broadcast message casually.
+These describe the original packages, not live administrator-managed totals. If source files change, review and validate them locally and update the approved digest. Do not approve unexpected server content simply by copying its digest.
 
-If verification fails, stop further changes and use the agreed recovery plan. A Git code reversal alone does not restore database changes, uploaded/deleted objects, payments or cached state. There is no verified rollback command sequence yet.
+For the matching reviewed Qudrat package:
 
-## Details still requiring confirmation
+```bash
+docker exec -it \
+  --user www-data \
+  --workdir /var/www/yarub \
+  --env QUDRAT_ALLOW_PRODUCTION_IMPORT=true \
+  yarub-php php artisan qudrat:import \
+  --production --database=yarubapp \
+  --sha256=53630957f5c66ad73874feb7adad614cdd536f016a3ae049b5f91cbeac8446da
+```
 
-Production PHP/Composer/Node versions and extensions; web server and document root; database engine/version and migration history; asset build/publish location; environment provisioning; cache/OPcache policy; writable paths/public storage link; backup locations and tested restores; worker/cron/process-manager setup; service reload procedure; staging availability and post-release checks. Do not infer these from local tools or `.env.example`.
+For the matching reviewed Arabic Skills package:
 
-See [project overview](PROJECT_OVERVIEW.md) for integration variables and known source inconsistencies, and [AGENTS.md](../AGENTS.md) for coding and local test safeguards.
+```bash
+docker exec -it \
+  --user www-data \
+  --workdir /var/www/yarub \
+  --env ARABIC_SKILLS_ALLOW_PRODUCTION_IMPORT=true \
+  yarub-php php artisan arabic-skills:import \
+  --production --database=yarubapp \
+  --sha256=bd92f3d973ac169cfb04d28a162cee238d7b9d7c5f89b89b7e017bd40b4b6b33
+```
+
+Confirm the intended target `db:3306/yarubapp`, then answer **yes**. Use the actual reviewed database name if infrastructure changed. Keep `APP_ENV=production`; the process-only opt-in works with cached config and should not be added permanently to `.env`.
+
+Both importers preserve administrator edits, additions, archives and learner history/snapshots, and reject production overwrite flags. Exit code **0** means success; **1** means validation, authorization, cancellation or runtime failure; **2** means non-conflicting records committed while conflicts were skipped. Save and inspect the report, and resolve conflicts deliberately. Repeat the same approved import to verify unchanged records without duplicates. For separately approved automation only, `--force --no-interaction` replaces the prompt while retaining the other guards.
+
+## 6. Build assets when needed
+
+After required dependency installation, run on the host:
+
+```bash
+sudo -u www-data npm --cache=/var/cache/yarub-npm run build
+```
+
+Require a successful build and matching Vite manifest/assets. Do not use `npm run dev` in production. Existing Browserslist and Tailwind safelist notices were non-blocking in earlier builds; actual errors must be resolved.
+
+## 7. Refresh affected caches
+
+For route changes:
+
+```bash
+docker exec --user www-data --workdir /var/www/yarub yarub-php \
+  php artisan route:clear
+```
+
+For Blade changes:
+
+```bash
+docker exec --user www-data --workdir /var/www/yarub yarub-php \
+  php artisan view:clear
+```
+
+Do not introduce `route:cache` or `config:cache` routinely: known duplicate route names and direct `env()` integration reads require separate verification. Follow the established configuration-cache policy for environment changes. Follow the existing OPcache refresh procedure if PHP retains old code; service/container restart commands have not yet been verified here. Avoid blanket cache clearing and container restarts for every release.
+
+## 8. Verify and record
+
+- Confirm the deployed commit and successful build/migration/import reports.
+- Check affected public, student and admin journeys with planned test accounts, including mobile layouts and asset loading.
+- For training changes, check banks, starting/resuming practice, feedback and results. For discovery changes, check `/qudrat`, `/arabic-skills`, their previews/login destinations and the `/lessons` redirect.
+- Inspect relevant logs without sharing secrets. Avoid live purchases, broadcasts or uploads as casual checks.
+- Reopen access after required checks pass; record the commit, commands, reports and follow-up work.
+
+If verification fails, stop and use the agreed recovery plan. A Git reversal alone does not restore database changes, uploads, payments or cached state. Record backup locations/tested production restores, maintenance handling, OPcache refresh, service management, Composer runtime and worker/scheduler procedures when confirmed. Do not invent rollback, restart, storage-link or permission-reset commands.
+
+See [project overview](PROJECT_OVERVIEW.md), [Qudrat](QUDRAT.md), [Arabic Skills](ARABIC_SKILLS.md), and [repository safeguards](../AGENTS.md).
