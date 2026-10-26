@@ -2,139 +2,102 @@
 
 namespace App\Livewire;
 
+use App\Exports\StudentsListExport;
 use App\Models\User;
-use Illuminate\Support\Carbon;
-use Illuminate\Database\Eloquent\Builder;
-use PowerComponents\LivewirePowerGrid\Button;
-use PowerComponents\LivewirePowerGrid\Column;
-use PowerComponents\LivewirePowerGrid\Exportable;
-use PowerComponents\LivewirePowerGrid\Facades\Filter;
-use PowerComponents\LivewirePowerGrid\Footer;
-use PowerComponents\LivewirePowerGrid\Header;
-use PowerComponents\LivewirePowerGrid\PowerGrid;
-use PowerComponents\LivewirePowerGrid\PowerGridFields;
-use PowerComponents\LivewirePowerGrid\PowerGridComponent;
-use PowerComponents\LivewirePowerGrid\Traits\WithExport;
-use Illuminate\Support\Facades\Blade;
+use App\Services\Admin\Tracking\StudentTracking;
+use App\Services\Admin\Tracking\UsersListState;
+use Illuminate\Support\Facades\Gate;
+use Illuminate\Support\Facades\Log;
+use Livewire\Attributes\On;
+use Livewire\Attributes\Url;
+use Livewire\Component;
+use Livewire\WithPagination;
+use Maatwebsite\Excel\Facades\Excel;
 
-
-final class StudentsTable extends PowerGridComponent
+final class StudentsTable extends Component
 {
-    use WithExport;
+    use WithPagination;
 
-    public function setUp(): array
+    #[Url(except: '')]
+    public string $search = '';
+
+    #[Url(except: 'active')]
+    public string $status = 'active';
+
+    #[Url(except: 'all')]
+    public string $participation = 'all';
+
+    #[Url(except: 'joined')]
+    public string $sort = 'joined';
+
+    #[Url(except: 'desc')]
+    public string $direction = 'desc';
+
+    #[Url(as: 'per_page', except: 20)]
+    public int $perPage = 20;
+
+    public function boot(): void
     {
-        // $this->showCheckBox();
-
-        return [
-            Exportable::make(fileName: 'لائحة المشتركين')
-                ->type(Exportable::TYPE_XLS),
-            Header::make()->showSearchInput(),
-            Footer::make()
-                ->showPerPage()
-                ->showRecordCount(),
-        ];
+        Gate::authorize('view-student-tracking');
     }
 
-    public function datasource(): Builder
+    public function updated($property): void
     {
-        return User::query()->where('role', '=', 'student');
+        if (in_array($property, ['search', 'status', 'participation', 'sort', 'direction', 'perPage'], true)) {
+            $this->resetPage();
+        }
     }
 
-    public function relationSearch(): array
+    public function resetFilters(): void
     {
-        return [];
+        $this->reset('search', 'status', 'participation', 'sort', 'direction', 'perPage');
+        $this->resetPage();
     }
 
-    public function fields(): PowerGridFields
+    public function sortBy(string $column): void
     {
-        return PowerGrid::fields()
-            ->add('name')
-            ->add('email')
-            ->add('role')
-            ->add('avatar', fn($item) => '<img class="w-8 h-8 shrink-0 grow-0 rounded-full" src="' . asset("{$item->avatar}") . '" alt="">')
-            ->add('created_at', fn($item) => Carbon::parse($item->created_at->format('Y-m-d')))
-            ->add('created_at_formatted', fn($item) => Carbon::parse($item->created_at)->diffForhumans());
+        abort_unless(in_array($column, ['joined', 'last_practice', 'qudrat_coverage', 'arabic_skills_coverage'], true), 422);
+        $this->direction = $this->sort === $column && $this->direction === 'desc' ? 'asc' : 'desc';
+        $this->sort = $column;
+        $this->resetPage();
     }
 
-    public function columns(): array
+    #[On('student-account-updated')]
+    public function refreshRows(): void {}
+
+    public function state(): array
     {
-        return [
-
-            Column::make('الصورة', 'avatar')->visibleInExport(visible: false),
-
-            Column::make('الإسم', 'name')
-                ->sortable()
-                ->searchable(),
-
-            Column::make('البريد الإلكتروني', 'email')
-                ->sortable()
-                ->searchable(),
-
-            Column::make('تاريخ', 'created_at')->hidden()->visibleInExport(visible: true),
-
-
-            Column::add()
-                ->title('تاريخ الإضافة')
-                ->field('created_at_formatted')
-                ->sortable()->visibleInExport(visible: false),
-
-            Column::action('الإجراءات')->visibleInExport(visible: false),
-        ];
+        return UsersListState::normalize(['search' => $this->search, 'status' => $this->status,
+            'participation' => $this->participation, 'sort' => $this->sort, 'direction' => $this->direction,
+            'per_page' => $this->perPage, 'page' => $this->getPage()]);
     }
 
-    public function filters(): array
+    public function exportToXLS()
     {
-        return [];
+        Gate::authorize('view-student-tracking');
+
+        return Excel::download(new StudentsListExport($this->state()), 'لائحة المشتركين.xlsx');
     }
 
-    #[\Livewire\Attributes\On('view')]
-    public function edit($rowId): void {}
-
-    public function actions(User $row): array
+    public function render()
     {
-        return [
-            Button::add('view')
-                ->render(function ($row) {
-                    $url = route('admin.view_student', ['id' => $row->id]);
-                    return Blade::render(<<<HTML
-                    <a href="{$url}"  > 
-                        <div  class="flex items-center gap-3 py-1 px-2 me-1 rounded-lg bg-indigo-400 text-gray-100 border border-gray-100 hover:bg-indigo-500 hover:text-white transition-all duration-300 ease-in-out cursor-pointer">
-                            <p> عرض الطالب</p>
-                            <x-icons.user class="w-4 h-4" />
-                        </div>
-                    </a>
-                    
-                HTML);
-                })
-                ->route('admin.view_student', ['id' => $row->id]),
+        $state = $this->state();
+        $students = null;
+        $loadError = false;
+        $blockedCount = 0;
+        try {
+            $students = app(StudentTracking::class)->directory($state);
+            if ($students->isEmpty() && $this->getPage() > $students->lastPage()) {
+                $this->setPage($students->lastPage());
+                $state = $this->state();
+                $students = app(StudentTracking::class)->directory($state);
+            }
+            $blockedCount = User::onlyTrashed()->where('role', 'student')->count();
+        } catch (\Illuminate\Database\QueryException $exception) {
+            Log::warning('Admin users directory query failed.', ['exception' => $exception]);
+            $loadError = true;
+        }
 
-            Button::add('remove')
-                ->render(function ($row) {
-                    $url = route('admin.students.delete', ['student_id' =>  $row->id]);
-                    return Blade::render(<<<HTML
-                    <x-delete-confirmation 
-                        url="{$url}"
-                        elementName="طالب" 
-                        class="flex items-center gap-3 py-1 px-2 me-1 rounded-lg bg-red-400 text-white border border-red-500 hover:bg-red-500 transition-all duration-300 ease-in-out"
-                    >
-                        <p> حظر الطالب</p>
-                        <x-icons.remove-user class="w-5 h-5" />
-                    </x-delete-confirmation>
-                HTML);
-                }),
-        ];
+        return view('livewire.students-table', compact('students', 'loadError', 'blockedCount', 'state'));
     }
-
-    /*
-    public function actionRules($row): array
-    {
-       return [
-            // Hide button edit for ID 1
-            Rule::button('edit')
-                ->when(fn($row) => $row->id === 1)
-                ->hide(),
-        ];
-    }
-    */
 }

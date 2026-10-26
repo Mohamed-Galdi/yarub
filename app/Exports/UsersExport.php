@@ -44,7 +44,7 @@ class UsersExport implements FromCollection, WithStyles, ShouldAutoSize, WithEve
             $user->name,
             $user->email,
             $user->phone ?? 'لا يوجد',
-            $user->deleted_at == null ? 'محضور' : 'فعال ',
+            $user->deleted_at == null ? 'فعال' : 'محظور',
             $user->created_at->toDateTimeString()
         ];
     }

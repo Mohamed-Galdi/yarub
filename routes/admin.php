@@ -66,6 +66,13 @@ Route::middleware(['auth', 'verified', 'admin', 'log.visit'])->prefix('admin-das
     Route::delete('/account/delete-admin/{admin_id}', [AdminDashboardController::class, 'deleteAdmin'])->name('admin.account.delete-admin');
 
     // students
+    // Read-only tracking foundation; the Users pages consume these in later phases.
+    Route::prefix('students')->name('admin.students.tracking.')->controller(\App\Http\Controllers\Admin\StudentTrackingController::class)->group(function () {
+        Route::get('/tracking', 'index')->name('index');
+        Route::get('/{student}/tracking', 'show')->whereNumber('student')->name('show');
+        Route::get('/{student}/tracking/{program}', 'program')->whereNumber('student')->whereIn('program', ['qudrat', 'arabic_skills'])->name('program');
+        Route::get('/{student}/tracking/{program}/sessions/{session}', 'review')->whereNumber('student')->whereNumber('session')->whereIn('program', ['qudrat', 'arabic_skills'])->name('review');
+    });
     Route::get('/students', [StudentController::class, 'index'])->name('admin.students');
     Route::get('/students/view/{id}', [StudentController::class, 'show'])->name('admin.view_student');
     Route::delete('/students/delete/{student_id}', [StudentController::class, 'destroy'])->name('admin.students.delete');

@@ -1,3 +1,4 @@
+@php($usersRuntime = request()->routeIs('admin.students', 'admin.students.deleted', 'admin.view_student', 'admin.students.tracking.review'))
 <!DOCTYPE html>
 <html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
 
@@ -10,7 +11,10 @@
     <link rel="icon" type="image/x-icon" href="/assets/favicon.ico">
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <!-- Scripts -->
-    @if(request()->routeIs('admin.qudrat.*', 'admin.arabic-skills.*'))
+    @if($usersRuntime)
+        @vite(['resources/css/app.css', 'resources/css/admin-users.css', 'resources/js/users-admin.js'])
+        @livewireStyles
+    @elseif(request()->routeIs('admin.qudrat.*', 'admin.arabic-skills.*'))
         @vite(['resources/css/app.css', 'resources/js/qudrat-admin.js'])
         @livewireStyles
     @else
@@ -20,7 +24,7 @@
     <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
 
     <!-- Alpine Plugins -->
-    @unless(request()->routeIs('admin.qudrat.*', 'admin.arabic-skills.*'))
+    @unless($usersRuntime || request()->routeIs('admin.qudrat.*', 'admin.arabic-skills.*'))
     <script defer src="https://cdn.jsdelivr.net/npm/@alpinejs/focus@3.x.x/dist/cdn.min.js"></script>
     <!-- Alpine Core -->
     <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
@@ -125,16 +129,16 @@
 <body dir="rtl" class="bg-gray-100 font-hacen">
 
     {{-- ////////////////// sidebar mobile toggle button ////////////////// --}}
-    <button id="openButton"
-        class="absolute sm:hidden p-2 rounded-bl-lg  bg-gray-200 text-pr-500 hover:bg-pr-800 focus:outline-none order-1">
+    <button id="openButton" @if($usersRuntime) aria-label="فتح قائمة الإدارة" aria-controls="sidebar" aria-expanded="false" @endif
+        class="absolute {{ $usersRuntime ? 'md:hidden' : 'sm:hidden' }} p-2 rounded-bl-lg bg-gray-200 text-pr-500 hover:bg-pr-800 order-1">
         <x-icons.bars class="w-6 h-6" />
     </button>
 
 
     <aside id="sidebar"
-        class="fixed z-[999999] top-0 right-0 h-full w-60 bg-indigo-800 transition-transform translate-x-full sm:translate-x-0 sm:block  ">
-        <button id="closeButton"
-            class="sm:hidden p-2 rounded-bl-lg bg-gray-100 text-pr-500 hover:bg-gray-400 focus:outline-none order-1">
+        class="fixed z-[999999] top-0 right-0 h-full w-60 bg-indigo-800 transition-transform translate-x-full {{ $usersRuntime ? 'md:translate-x-0 md:block' : 'sm:translate-x-0 sm:block' }}">
+        <button id="closeButton" @if($usersRuntime) aria-label="إغلاق قائمة الإدارة" @endif
+            class="{{ $usersRuntime ? 'md:hidden' : 'sm:hidden' }} p-2 rounded-bl-lg bg-gray-100 text-pr-500 hover:bg-gray-400 order-1">
             <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"
                 xmlns="http://www.w3.org/2000/svg">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7"></path>
@@ -250,18 +254,20 @@
 
     </aside>
 
-    <main
+    <main @hasSection('compact-admin') data-users-shell @endif
         class="bg-indigo-800 md:w-[calc(100%-15rem)] w-full min-h-screen md:ms-[15rem] ms-0 flex flex-col justify-center items-center  overflow-hidden">
         {{-- //////////////////// Title //////////////////// --}}
+        @unless($__env->hasSection('compact-admin'))
         <div class="w-full space-y-1 font-judur pt-3 mb-4 ps-16">
             <h1 class="text-4xl font-bold text-gradient-to-r  p-2 w-fit text-gray-100 ">
                 {{ \App\Enums\PageTitles::getTitle(request()->path()) }}
             </h1>
 
         </div>
+        @endunless
 
-        <div class="w-full h-full bg-indigo-800  overflow-hidden rounded-tr-[3rem] ">
-            <div class="w-full h-full px-8 py-12 bg-gray-100 min-h-screen">
+        <div class="{{ $__env->hasSection('compact-admin') ? 'w-full h-full' : 'w-full h-full bg-indigo-800 overflow-hidden rounded-tr-[3rem]' }}">
+            <div class="{{ $__env->hasSection('compact-admin') ? 'users-shell-content w-full bg-gray-100 min-h-screen' : 'w-full h-full px-8 py-12 bg-gray-100 min-h-screen' }}">
                 @yield('content')
             </div>
         </div>
@@ -274,33 +280,47 @@
             const openButton = document.getElementById('openButton');
             const closeButton = document.getElementById('closeButton');
             const sidebar = document.getElementById('sidebar');
+            const sidebarBreakpoint = {{ $usersRuntime ? 768 : 640 }};
+            function syncUsersSidebar() {
+                @if($usersRuntime)
+                const closed = window.innerWidth < sidebarBreakpoint && sidebar.classList.contains('translate-x-full');
+                sidebar.inert = closed;
+                openButton.setAttribute('aria-expanded', String(!closed));
+                @endif
+            }
 
             closeButton.addEventListener('click', function() {
                 sidebar.classList.toggle('translate-x-full');
+                syncUsersSidebar();
+                @if($usersRuntime) openButton.focus(); @endif
             });
             openButton.addEventListener('click', function() {
                 sidebar.classList.toggle('translate-x-full');
+                syncUsersSidebar();
+                @if($usersRuntime) closeButton.focus(); @endif
             });
 
             window.addEventListener('resize', function() {
-                if (window.innerWidth >= 640) { // sm breakpoint in Tailwind
+                if (window.innerWidth >= sidebarBreakpoint) {
                     sidebar.classList.remove('translate-x-full');
                 } else {
                     sidebar.classList.add('translate-x-full');
                 }
+                syncUsersSidebar();
             });
 
             // Ensure sidebar visibility is correct on page load
-            if (window.innerWidth >= 640) {
+            if (window.innerWidth >= sidebarBreakpoint) {
                 sidebar.classList.remove('translate-x-full');
             } else {
                 sidebar.classList.add('translate-x-full');
             }
+            syncUsersSidebar();
         });
     </script>
     @include('sweetalert::alert')
     @include('flatpickr::components.script')
-    @if(request()->routeIs('admin.qudrat.*', 'admin.arabic-skills.*'))
+    @if($usersRuntime || request()->routeIs('admin.qudrat.*', 'admin.arabic-skills.*'))
         @livewireScriptConfig
     @else
     <script src="https://cdn.jsdelivr.net/npm/flowbite@2.4.1/dist/flowbite.min.js"></script>

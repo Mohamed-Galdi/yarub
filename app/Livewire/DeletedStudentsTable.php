@@ -22,6 +22,11 @@ final class DeletedStudentsTable extends PowerGridComponent
 {
     use WithExport;
 
+    public function boot(): void
+    {
+        \Illuminate\Support\Facades\Gate::authorize('view-student-tracking');
+    }
+
     public function setUp(): array
     {
         return [
@@ -37,7 +42,9 @@ final class DeletedStudentsTable extends PowerGridComponent
 
     public function datasource(): Builder
     {
-        return User::onlyTrashed();
+        \Illuminate\Support\Facades\Gate::authorize('view-student-tracking');
+
+        return User::onlyTrashed()->where('role', 'student');
     }
 
     public function relationSearch(): array

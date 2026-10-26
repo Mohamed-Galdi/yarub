@@ -7,6 +7,16 @@ use App\Models\User;
 
 class QudratPracticeSessionPolicy
 {
+    public function viewAny(User $user): bool
+    {
+        return $user->role === 'admin';
+    }
+
+    public function review(User $user, QudratPracticeSession $session): bool
+    {
+        return $user->role === 'admin';
+    }
+
     public function view(User $user, QudratPracticeSession $session): bool
     {
         return $user->role === 'student' && $user->id === $session->user_id;

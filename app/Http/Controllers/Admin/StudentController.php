@@ -4,6 +4,9 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\User;
+use App\Services\Admin\Tracking\StudentDetail;
+use App\Services\Admin\Tracking\StudentDetailState;
+use App\Services\Admin\Tracking\UsersListState;
 use Illuminate\Http\Request;
 
 class StudentController extends Controller
@@ -13,8 +16,9 @@ class StudentController extends Controller
      */
     public function index()
     {
-        $trashedCount = User::onlyTrashed()->count();
-        return view('admin.students.students', compact('trashedCount'));
+        $this->authorize('view-student-tracking');
+
+        return view('admin.students.students');
     }
 
     /**
@@ -36,11 +40,14 @@ class StudentController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(string $id)
+    public function show(Request $request, string $id, StudentDetail $detail)
     {
-        $student = User::with('certificates', 'certificates.course', 'certificates.lesson', 'test_attempts')->find($id);
-        
-        return view('admin.students.view-student', compact('student'));
+        $this->authorize('view-student-tracking');
+        $request->validate(['list' => 'sometimes|array', 'detail' => 'sometimes|array']);
+        $list = UsersListState::normalize($request->input('list', []));
+        $state = StudentDetailState::normalize($request->query());
+
+        return view('admin.students.view-student', $detail->page((int) $id, $state, $list));
     }
 
     /**
@@ -62,24 +69,43 @@ class StudentController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id)
+    public function destroy(Request $request, string $id)
     {
-        $student = User::find($id);
-        $student->delete();
-        return redirect()->route('admin.students');
+        $this->authorize('view-student-tracking');
+        $request->validate(['list' => 'sometimes|array', 'detail' => 'sometimes|array']);
+        $state = UsersListState::normalize($request->input('list', []));
+        $detailState = $request->has('detail') ? StudentDetailState::normalize($request->input('detail')) : null;
+        $student = User::withTrashed()->where('role', 'student')->findOrFail($id);
+        if (!$student->trashed()) {
+            $student->delete();
+        }
+
+        return $request->expectsJson() ? response()->json(['updated' => true]) : ($detailState === null
+            ? redirect()->route('admin.students', $state)
+            : redirect()->route('admin.view_student', ['id' => $id] + $detailState + ['list' => $state]));
         
     }
 
-    public function deleted()
+    public function deleted(Request $request)
     {
-        $students = User::onlyTrashed()->get();
-        return view('admin.students.deleted', compact('students'));
+        $this->authorize('view-student-tracking');
+
+        return redirect()->route('admin.students', array_replace(UsersListState::normalize($request->query()), ['status' => 'blocked', 'page' => 1]));
     }
 
-    public function restore(string $id)
+    public function restore(Request $request, string $id)
     {
-        $student = User::onlyTrashed()->find($id);
-        $student->restore();
-        return redirect()->route('admin.students.deleted');
+        $this->authorize('view-student-tracking');
+        $request->validate(['list' => 'sometimes|array', 'detail' => 'sometimes|array']);
+        $state = UsersListState::normalize($request->input('list', ['status' => 'blocked']));
+        $detailState = $request->has('detail') ? StudentDetailState::normalize($request->input('detail')) : null;
+        $student = User::withTrashed()->where('role', 'student')->findOrFail($id);
+        if ($student->trashed()) {
+            $student->restore();
+        }
+
+        return $request->expectsJson() ? response()->json(['updated' => true]) : ($detailState === null
+            ? redirect()->route('admin.students', $state)
+            : redirect()->route('admin.view_student', ['id' => $id] + $detailState + ['list' => $state]));
     }
 }

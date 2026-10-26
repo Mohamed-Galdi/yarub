@@ -29,6 +29,6 @@ class AuthServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-        //
+        \Illuminate\Support\Facades\Gate::define('view-student-tracking', fn (\App\Models\User $user) => $user->role === 'admin');
     }
 }
