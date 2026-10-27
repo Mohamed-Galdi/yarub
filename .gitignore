@@ -20,3 +20,4 @@ yarn-error.log
 /.env
 /.env.save
 /storage/app/qudrat-local/
+/vids/

@@ -9,7 +9,9 @@
     <title>منصة يعرب التعليمية</title>
     <link rel="icon" type="image/x-icon" href="/assets/favicon.ico">
     <!-- Scripts -->
-    @vite(['resources/css/app.css', request()->routeIs('student.arabic-skills.*') ? 'resources/js/arabic-skills-student.js' : (request()->routeIs('student.qudrat.*') ? 'resources/js/qudrat-student.js' : 'resources/js/app.js')])
+    @vite(['resources/css/app.css', request()->routeIs('student.videos.*') ? 'resources/js/videos-student.js' : (request()->routeIs('student.arabic-skills.*') ? 'resources/js/arabic-skills-student.js' : (request()->routeIs('student.qudrat.*') ? 'resources/js/qudrat-student.js' : 'resources/js/app.js'))])
+    @if(request()->routeIs('student.videos.*')) @vite('resources/css/videos-student.css') @endif
+    @if(request()->routeIs('student.videos.*')) @vite('resources/js/videos-player.js') @endif
     {{-- csrf token --}}
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
@@ -162,6 +164,9 @@
                         <x-btn.student-nav-item :route="'student.arabic-skills.index'" :item="'arabic-skills'" :title="'مهارات اللغة العربية'">
                             <x-icons.text class="w-5 h-5 text-white" />
                         </x-btn.student-nav-item>
+                        <x-btn.student-nav-item :route="'student.videos.index'" :item="'videos'" :title="'الفيديوهات'">
+                            <svg class="w-5 h-5 text-white" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><rect x="3" y="4" width="18" height="16" rx="2"/><path d="m10 8 6 4-6 4Z"/></svg>
+                        </x-btn.student-nav-item>
                     </div>
                     <div class="my-auto">
                         <a href="{{ route('student.account.index') }}"
@@ -255,7 +260,7 @@
         integrity="sha512-v2CJ7UaYy4JwqLDIrZUI/4hqeoQieOmAZNXBeQyjo21dadnwR+8ZaIJVT8EE2iyI61OV8e6M8PP2/4hpQINQ/g=="
         crossorigin="anonymous" referrerpolicy="no-referrer"></script>
     {{-- Alpine JS --}}
-    @unless(request()->routeIs('student.qudrat.*', 'student.arabic-skills.*'))<script src="//unpkg.com/alpinejs" defer></script>@endunless
+    @unless(request()->routeIs('student.qudrat.*', 'student.arabic-skills.*', 'student.videos.*'))<script src="//unpkg.com/alpinejs" defer></script>@endunless
     {{-- SweetAlert2 --}}
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 </body>

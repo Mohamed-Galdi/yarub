@@ -53,6 +53,11 @@ class AuthenticatedSessionController extends Controller
         if (in_array($request->session()->get('url.intended'), $featureDestinations, true)) {
             return redirect()->intended(route('student.courses.index'));
         }
+        if ($destination = \App\Services\VideoLibrary\LoginDestination::from($request->session()->get('url.intended'))) {
+            $request->session()->forget('url.intended');
+
+            return redirect()->to($destination);
+        }
 
         return redirect()->route('student.courses.index');
     }

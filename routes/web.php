@@ -56,3 +56,5 @@ require __DIR__ . '/student.php';
 
 // Auth Routes
 require __DIR__ . '/auth.php';
+
+require __DIR__ . '/videos.php';

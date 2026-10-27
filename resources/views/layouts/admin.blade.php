@@ -1,4 +1,6 @@
 @php($usersRuntime = request()->routeIs('admin.students', 'admin.students.deleted', 'admin.view_student', 'admin.students.tracking.review'))
+@php($videoRuntime = request()->routeIs('admin.videos.*'))
+@php($navigationRuntime = $usersRuntime || $videoRuntime)
 <!DOCTYPE html>
 <html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
 
@@ -11,7 +13,9 @@
     <link rel="icon" type="image/x-icon" href="/assets/favicon.ico">
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <!-- Scripts -->
-    @if($usersRuntime)
+    @if($videoRuntime)
+        @vite(['resources/css/app.css', 'resources/css/videos-admin.css', 'resources/js/videos-admin.js'])
+    @elseif($usersRuntime)
         @vite(['resources/css/app.css', 'resources/css/admin-users.css', 'resources/js/users-admin.js'])
         @livewireStyles
     @elseif(request()->routeIs('admin.qudrat.*', 'admin.arabic-skills.*'))
@@ -24,7 +28,7 @@
     <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
 
     <!-- Alpine Plugins -->
-    @unless($usersRuntime || request()->routeIs('admin.qudrat.*', 'admin.arabic-skills.*'))
+    @unless($usersRuntime || $videoRuntime || request()->routeIs('admin.qudrat.*', 'admin.arabic-skills.*'))
     <script defer src="https://cdn.jsdelivr.net/npm/@alpinejs/focus@3.x.x/dist/cdn.min.js"></script>
     <!-- Alpine Core -->
     <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
@@ -129,16 +133,16 @@
 <body dir="rtl" class="bg-gray-100 font-hacen">
 
     {{-- ////////////////// sidebar mobile toggle button ////////////////// --}}
-    <button id="openButton" @if($usersRuntime) aria-label="فتح قائمة الإدارة" aria-controls="sidebar" aria-expanded="false" @endif
-        class="absolute {{ $usersRuntime ? 'md:hidden' : 'sm:hidden' }} p-2 rounded-bl-lg bg-gray-200 text-pr-500 hover:bg-pr-800 order-1">
+    <button id="openButton" @if($navigationRuntime) aria-label="فتح قائمة الإدارة" aria-controls="sidebar" aria-expanded="false" @endif
+        class="absolute {{ $navigationRuntime ? 'md:hidden' : 'sm:hidden' }} p-2 rounded-bl-lg bg-gray-200 text-pr-500 hover:bg-pr-800 order-1">
         <x-icons.bars class="w-6 h-6" />
     </button>
 
 
     <aside id="sidebar"
-        class="fixed z-[999999] top-0 right-0 h-full w-60 bg-indigo-800 transition-transform translate-x-full {{ $usersRuntime ? 'md:translate-x-0 md:block' : 'sm:translate-x-0 sm:block' }}">
-        <button id="closeButton" @if($usersRuntime) aria-label="إغلاق قائمة الإدارة" @endif
-            class="{{ $usersRuntime ? 'md:hidden' : 'sm:hidden' }} p-2 rounded-bl-lg bg-gray-100 text-pr-500 hover:bg-gray-400 order-1">
+        class="fixed z-[999999] top-0 right-0 h-full w-60 bg-indigo-800 transition-transform translate-x-full {{ $navigationRuntime ? 'md:translate-x-0 md:block' : 'sm:translate-x-0 sm:block' }}">
+        <button id="closeButton" @if($navigationRuntime) aria-label="إغلاق قائمة الإدارة" @endif
+            class="{{ $navigationRuntime ? 'md:hidden' : 'sm:hidden' }} p-2 rounded-bl-lg bg-gray-100 text-pr-500 hover:bg-gray-400 order-1">
             <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"
                 xmlns="http://www.w3.org/2000/svg">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7"></path>
@@ -196,6 +200,10 @@
                 <x-btn.admin-dashboard-item route='admin.arabic-skills.index' path='admin-dashboard/arabic-skills*'>
                     <p class="ml-3">مهارات اللغة العربية</p>
                     <x-icons.square-check class="w-6 h-6" />
+                </x-btn.admin-dashboard-item>
+                <x-btn.admin-dashboard-item route='admin.videos.index' path='admin-dashboard/videos*'>
+                    <p class="ml-3">الفيديوهات</p>
+                    <svg class="w-6 h-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><rect x="5" y="2" width="14" height="20" rx="2"/><path d="m10 9 5 3-5 3z"/></svg>
                 </x-btn.admin-dashboard-item>
                 {{-- ///////////////////////////////////// --}}
                 <x-btn.admin-dashboard-item route='admin.certificates' path='admin-dashboard/certificates*'>
@@ -280,9 +288,9 @@
             const openButton = document.getElementById('openButton');
             const closeButton = document.getElementById('closeButton');
             const sidebar = document.getElementById('sidebar');
-            const sidebarBreakpoint = {{ $usersRuntime ? 768 : 640 }};
+            const sidebarBreakpoint = {{ $navigationRuntime ? 768 : 640 }};
             function syncUsersSidebar() {
-                @if($usersRuntime)
+                @if($navigationRuntime)
                 const closed = window.innerWidth < sidebarBreakpoint && sidebar.classList.contains('translate-x-full');
                 sidebar.inert = closed;
                 openButton.setAttribute('aria-expanded', String(!closed));
@@ -292,12 +300,12 @@
             closeButton.addEventListener('click', function() {
                 sidebar.classList.toggle('translate-x-full');
                 syncUsersSidebar();
-                @if($usersRuntime) openButton.focus(); @endif
+                @if($navigationRuntime) openButton.focus(); @endif
             });
             openButton.addEventListener('click', function() {
                 sidebar.classList.toggle('translate-x-full');
                 syncUsersSidebar();
-                @if($usersRuntime) closeButton.focus(); @endif
+                @if($navigationRuntime) closeButton.focus(); @endif
             });
 
             window.addEventListener('resize', function() {
@@ -320,7 +328,8 @@
     </script>
     @include('sweetalert::alert')
     @include('flatpickr::components.script')
-    @if($usersRuntime || request()->routeIs('admin.qudrat.*', 'admin.arabic-skills.*'))
+    @if($videoRuntime)
+    @elseif($usersRuntime || request()->routeIs('admin.qudrat.*', 'admin.arabic-skills.*'))
         @livewireScriptConfig
     @else
     <script src="https://cdn.jsdelivr.net/npm/flowbite@2.4.1/dist/flowbite.min.js"></script>

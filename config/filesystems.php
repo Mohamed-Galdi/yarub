@@ -30,6 +30,13 @@ return [
 
     'disks' => [
 
+        'video_library' => [
+            'driver' => 'local',
+            'root' => storage_path('app/video-library'),
+            'visibility' => 'private',
+            'throw' => true,
+        ],
+
         'local' => [
             'driver' => 'local',
             'root' => storage_path('app'),

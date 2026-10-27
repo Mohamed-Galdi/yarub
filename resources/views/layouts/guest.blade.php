@@ -10,11 +10,12 @@
     @hasSection('description')<meta name="description" content="@yield('description')">@endif
     <link rel="icon" type="image/x-icon" href="/assets/favicon.ico">
     <!-- Scripts -->
-    @vite(['resources/css/app.css', request()->routeIs('qudrat', 'arabic-skills') ? 'resources/js/learning-public.js' : 'resources/js/app.js'])
+    @vite(['resources/css/app.css', request()->routeIs('videos') ? 'resources/js/videos-public.js' : (request()->routeIs('qudrat', 'arabic-skills') ? 'resources/js/learning-public.js' : 'resources/js/app.js')])
+    @if(request()->routeIs('videos')) @vite('resources/css/videos-public.css') @endif
     {{-- csrf token --}}
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
-    @unless(request()->routeIs('qudrat', 'arabic-skills'))
+    @unless(request()->routeIs('qudrat', 'arabic-skills', 'videos'))
     <!-- Moyasar Styles -->
     <link rel="stylesheet" href="https://cdn.moyasar.com/mpf/1.14.0/moyasar.css" />
 
@@ -95,6 +96,7 @@
                         <x-btn.guest-nav-item :route="'courses'" :title="'الدورات'" />
                         <x-btn.guest-nav-item :route="'qudrat'" :title="'القدرات'" />
                         <x-btn.guest-nav-item :route="'arabic-skills'" :title="'مهارات العربية'" />
+                        <x-btn.guest-nav-item :route="'videos'" :title="'الفيديوهات'" />
                         <x-btn.guest-nav-item :route="'about'" :title="'من نحن'" />
                         <x-btn.guest-nav-item :route="'contact'" :title="'تواصل معنا'" />
                         <li>
@@ -306,7 +308,7 @@
         }
     </script>
     {{-- Alpine JS --}}
-    @unless(request()->routeIs('qudrat', 'arabic-skills'))<script src="//unpkg.com/alpinejs" defer></script>@endunless
+    @unless(request()->routeIs('qudrat', 'arabic-skills', 'videos'))<script src="//unpkg.com/alpinejs" defer></script>@endunless
     {{-- SweetAlert2 --}}
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 

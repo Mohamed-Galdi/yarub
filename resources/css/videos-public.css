@@ -1,0 +1,22 @@
+.video-showcase { max-width: 80rem; margin-inline: auto; display: grid; grid-template-columns: minmax(0, 1.2fr) minmax(0, 1fr); align-items: center; gap: 4rem; padding: 3rem 2rem 4rem; color: #1e293b; min-height: 65vh; }
+.video-showcase * { box-sizing: border-box; }
+.video-showcase [hidden] { display: none !important; }
+.video-showcase :focus-visible { outline: 2px solid #292a65; outline-offset: 4px; }
+.video-showcase ::selection { background: #dfe0f0; color: #292a65; }
+.video-showcase h1 { color: #292a65; font-size: 3rem; line-height: 1.5; font-weight: 600; margin-bottom: 1.25rem; }
+.video-showcase-copy > p { font-size: 1.15rem; line-height: 1.9; max-width: 48ch; color: #475569; }
+.vs-cta { display: inline-block; background: #292a65; color: white; font-size: 1.05rem; line-height: 1.7; border-radius: .5rem; padding: .8rem 1.2rem; margin-top: 1.5rem; text-align: center; }
+.vs-cta:hover { background: #212251; }
+.vs-cta:active { background: #191a3e; }
+.vs-register { display: block; width: fit-content; color: #292a65; text-decoration: underline; text-underline-offset: .25em; margin-top: 1rem; font-size: 1rem; }
+.video-showcase-copy > .vs-note { font-size: 1rem; margin-top: 1rem; }
+.vs-example { margin: 0; justify-self: center; max-width: 100%; width: min(23rem, 42dvh); }
+.vs-screen { aspect-ratio: 9 / 16; background: #e8e9f2; border-radius: .75rem; overflow: hidden; }
+.vs-screen video { display: block; width: 100%; height: 100%; object-fit: cover; }
+.vs-screen video:fullscreen { object-fit: contain; background: #10101c; }
+.vs-example figcaption { font-size: 1rem; line-height: 1.8; margin-top: .8rem; color: #292a65; overflow-wrap: anywhere; }
+.vs-example [role="alert"] { padding: 1rem; background: #fef2f2; color: #991b1b; font-size: 1rem; margin-top: .75rem; border-radius: .5rem; }
+.vs-example [role="alert"] a { text-decoration: underline; text-underline-offset: .25em; }
+.vs-example [role="status"] { font-size: 1rem; color: #475569; }
+.video-showcase-empty { grid-template-columns: 1fr; max-width: 58rem; }
+@media (max-width: 760px) { .video-showcase { grid-template-columns: 1fr; gap: 2rem; padding: 2rem 1rem 3rem; } .video-showcase h1 { font-size: 2rem; } .vs-example { width: min(22rem, 100%); } }

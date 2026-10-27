@@ -101,6 +101,13 @@ Do not execute the placeholder literally. Current feature migrations:
 | Qudrat tables | `database/migrations/2026_10_21_000001_create_qudrat_tables.php` |
 | Qudrat automatic publication | `database/migrations/2026_10_21_000002_publish_qudrat_content_by_default.php` |
 | Arabic Skills tables | `database/migrations/2026_10_23_000001_create_arabic_skill_tables.php` |
+| Video library foundation | `database/migrations/2026_10_26_000001_create_library_videos_tables.php` |
+| Video media lifecycle | `database/migrations/2026_10_26_000002_add_video_media_lifecycle.php` |
+| Video seed import identities | `database/migrations/2026_10_27_000001_create_video_seed_imports_table.php` |
+
+Before deploying video media endpoints, complete the private storage, media-tool, upload-limit and cleanup prerequisites in [VIDEO_LIBRARY_MEDIA.md](VIDEO_LIBRARY_MEDIA.md), then follow the [Phase 6 release and recovery handoff](VIDEO_LIBRARY_RELEASE.md) and [QA evidence](VIDEO_LIBRARY_QA.md). These migrations were verified only on isolated development MySQL; no video deployment has been performed.
+
+For the supplied paired video/thumbnail collection, use the [private archive transfer and idempotent import procedure](VIDEO_LIBRARY_IMPORT.md). Importing media is a separate explicit release step, not part of ordinary migrations or seeding.
 
 Both Qudrat migrations succeeded in the earlier recorded deployment. Check current history rather than assuming another environment has them. Stop if existing tables disagree with migration history. Editing applied migrations does not apply those edits on production.
 

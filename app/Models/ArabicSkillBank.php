@@ -22,6 +22,11 @@ class ArabicSkillBank extends Model
         return $this->hasMany(ArabicSkillModel::class, 'bank_id')->orderBy('sort_order');
     }
 
+    public function libraryVideos()
+    {
+        return $this->hasMany(LibraryVideo::class);
+    }
+
     public function questions()
     {
         return $this->hasMany(ArabicSkillQuestion::class, 'bank_id');

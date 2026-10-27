@@ -21,6 +21,11 @@ class QudratCategory extends Model
         return $this->hasMany(QudratPassage::class, 'category_id');
     }
 
+    public function libraryVideos()
+    {
+        return $this->hasMany(LibraryVideo::class);
+    }
+
     public function questions()
     {
         return $this->hasMany(QudratQuestion::class, 'category_id');
