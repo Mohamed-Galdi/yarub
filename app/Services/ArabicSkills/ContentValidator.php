@@ -104,6 +104,7 @@ class ContentValidator
                 $this->require(($question['id'] ?? null) === $key && ! isset($identities[$key]) && ($question['number'] ?? null) === $index + 1 && ($question['model_number'] ?? null) === intdiv($index, 30) + 1 && ($question['context_group_number'] ?? null) === intdiv($index, 10) + 1, $key.': invalid identity, membership or context group.');
                 $identities[$key] = true;
                 $this->validateQuestion($question, $key);
+                $this->require($question['max_score'] === 2 && count($question['options']) === ($question['type'] === 'multiple_choice' ? 3 : 2), $key.': invalid original question shape.');
                 $counts[$question['type']]++;
             }
             $this->require($counts === self::TYPES, $slug.': invalid question type counts.');
@@ -116,7 +117,33 @@ class ContentValidator
             }
         }
 
+        foreach ($banks as $bank) {
+            $supplement = $bank['supplemental_questions'] ?? [];
+            $this->require(is_array($supplement) && array_is_list($supplement), 'Invalid supplemental questions.');
+            foreach ($supplement as $question) {
+                $key = $question['id'] ?? '';
+                $this->require(is_string($key) && preg_match('/^supp_'.$bank['bank']['id'].'_[a-z0-9_]+$/D', $key) === 1 && ! isset($identities[$key]), 'Invalid supplemental identity.');
+                $identities[$key] = true;
+                $this->validateQuestion($question, $key);
+            }
+        }
+
         return $content;
+    }
+
+    public function withSupplement(array $content, string $file): array
+    {
+        $supplement = $this->read($file);
+        $this->require(($supplement['schema_version'] ?? null) === '1.0.0' && in_array($supplement['bank_id'] ?? null, self::BANKS, true), 'Invalid supplement metadata.');
+        $this->require(is_array($supplement['questions'] ?? null) && array_is_list($supplement['questions']) && $supplement['questions'] !== [], 'Supplement requires questions.');
+        foreach ($content['banks'] as &$bank) {
+            if ($bank['bank']['id'] === $supplement['bank_id']) {
+                $bank['supplemental_questions'] = array_merge($bank['supplemental_questions'] ?? [], $supplement['questions']);
+            }
+        }
+        unset($bank);
+
+        return $this->validate($content);
     }
 
     // Shared structured-content contract; admin additions are not subject to source count/number limits.
@@ -127,9 +154,12 @@ class ContentValidator
         }
         $this->require(array_key_exists('hint', $question) && ($question['hint'] === null || (is_string($question['hint']) && trim($question['hint']) !== '')), $key.': invalid hint.');
         $type = $question['type'] ?? null;
-        $this->require(is_string($type) && isset(self::TYPES[$type]) && ($question['max_score'] ?? null) === 2, $key.': invalid type/maximum score.');
+        $this->require(is_string($type) && isset(self::TYPES[$type]), $key.': invalid type.');
         $options = $question['options'] ?? null;
-        $ids = $type === 'multiple_choice' ? ['a', 'b', 'c'] : ($type === 'true_false' ? ['true', 'false'] : ['a', 'b']);
+        $count = is_array($options) ? count($options) : 0;
+        $this->require(in_array($count, $type === 'multiple_choice' ? [3, 4] : ($type === 'matching' ? [2, 4] : [2]), true), $key.': invalid option count.');
+        $ids = $type === 'true_false' ? ['true', 'false'] : array_slice(['a', 'b', 'c', 'd'], 0, $count);
+        $this->require(($question['max_score'] ?? null) === ($type === 'matching' ? $count : 2), $key.': invalid maximum score.');
         $this->require(is_array($options) && array_is_list($options) && count($options) === count($ids), $key.': invalid options.');
         foreach ($options as $index => $option) {
             $this->require(is_array($option) && ($option['id'] ?? null) === $ids[$index], $key.': invalid option identity/order.');
@@ -147,14 +177,14 @@ class ContentValidator
 
             return;
         }
-        $this->require(count($items) === 2 && array_keys($answer) === ['matches'] && is_array($answer['matches']) && array_is_list($answer['matches']) && count($answer['matches']) === 2 && ($question['scoring'] ?? null) === ['mode' => 'per_match', 'points_per_correct_match' => 1], $key.': invalid matching structure/scoring.');
+        $this->require(count($items) === $count && array_keys($answer) === ['matches'] && is_array($answer['matches']) && array_is_list($answer['matches']) && count($answer['matches']) === $count && ($question['scoring'] ?? null) === ['mode' => 'per_match', 'points_per_correct_match' => 1], $key.': invalid matching structure/scoring.');
         foreach ($items as $index => $item) {
             $this->require(is_array($item) && ($item['id'] ?? null) === 'item_'.($index + 1), $key.': invalid matching item.');
             $this->text($item['text'] ?? null, $key.'.matching_item.text');
         }
         $seen = [];
         foreach ($answer['matches'] as $match) {
-            $this->require(is_array($match) && count($match) === 2 && in_array($match['item_id'] ?? null, ['item_1', 'item_2'], true) && in_array($match['option_id'] ?? null, $ids, true) && ! isset($seen[$match['item_id']]), $key.': invalid or duplicate matching mapping.');
+            $this->require(is_array($match) && count($match) === 2 && in_array($match['item_id'] ?? null, array_column($items, 'id'), true) && in_array($match['option_id'] ?? null, $ids, true) && ! isset($seen[$match['item_id']]), $key.': invalid or duplicate matching mapping.');
             $seen[$match['item_id']] = true;
         }
     }

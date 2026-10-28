@@ -1,5 +1,38 @@
 # Arabic Skills (مهارات اللغة العربية)
 
+## Supplemental content: coffee filtration (2026-10-28)
+
+`arabic_skills_content/supplements/burhan_coffee_filtration.json` contains the supplied **تقويم تكويني: وصف تجربة ترشيح القهوة** for بُرهان: five four-option multiple-choice questions, two true/false questions and one four-link matching question. Each prompt includes the complete passage and activity title; answers and explanations remain private until submission. The eight questions are added to the bank's random practice pool, outside the original thirty-question models. This is not a separate eight-question session mode.
+
+The original five-bank package remains unchanged. Opt into this supplement with `--supplement=arabic_skills_content/supplements/burhan_coffee_filtration.json` on `arabic-skills:import`; use `--dry-run` first in an isolated environment. The existing environment guards, production target/digest approval, conflict protection and idempotent source IDs apply to supplemental questions too. A production dry-run digest must include the supplement and the production import must use the same option. This change does not deploy or import into production.
+
+After import, بُرهان has 308 questions and the section has 1,508. Multiple-choice and true/false questions retain two points each. The new matching question awards one point per correct link, for four points; this activity adds 18 available points. Quick practice still selects ten questions and calculates its available score from their actual maxima. Existing matching questions keep two links and two points. The admin editor preserves all four options/links when editing supplemental content. Reimporting without the supplement retains previously imported supplemental records and reports them as omissions.
+
+**Local import verified (2026-10-28):** used the guarded `tools/arabic-skills-local.php` wrapper on the existing loopback `yarub` database. First import: eight questions created, 1,500 unchanged, five banks and fifty models unchanged, no conflicts. Second import: 1,508 questions unchanged. Read-only verification compared all eight saved prompts, options, links, answers, explanations and scores against the supplement and confirmed they are active in the active بُرهان bank. Local bank ID is `5`: student path `/student-dashboard/arabic-skills/banks/5`; admin filter `/admin-dashboard/arabic-skills/questions?bank_id=5&q=supp_burhan_coffee_filtration_`. IDs can differ on other databases.
+
+**Server procedure for this supplement:** first release the PHP/Blade changes and supplement JSON through the normal reviewed deployment in `docs/DEPLOYMENT.md`, with a restorable database backup. These changes are still local until released. No new migration, seeder, dependency installation or asset build is required by this supplement. Using the recorded Docker setup, run from the server host:
+
+```bash
+docker exec --user www-data --workdir /var/www/yarub yarub-php \
+  php artisan arabic-skills:import \
+  --supplement=arabic_skills_content/supplements/burhan_coffee_filtration.json --dry-run
+```
+
+Require the reviewed combined-package digest `579818986ce246095940d34720ebccda8f85fd7fa13ba6a488fbc4369dbfd0b4`. This differs from the original package digest in the deployment runbook because it includes the supplement. If it differs, stop and review the package rather than approving the server's different digest. Then:
+
+```bash
+docker exec -it --user www-data --workdir /var/www/yarub \
+  --env ARABIC_SKILLS_ALLOW_PRODUCTION_IMPORT=true \
+  yarub-php php artisan arabic-skills:import \
+  --supplement=arabic_skills_content/supplements/burhan_coffee_filtration.json \
+  --production --database=yarubapp \
+  --sha256=579818986ce246095940d34720ebccda8f85fd7fa13ba6a488fbc4369dbfd0b4
+
+docker exec --user www-data --workdir /var/www/yarub yarub-php php artisan view:clear
+```
+
+Confirm the expected `db:3306/yarubapp` target and answer yes to the importer prompt. Inspect the report; exit code 2 means conflicts were skipped and requires review. Existing administrator additions may make live totals larger than the source-package counts. Repeating the same approved import is safe and should report unchanged questions. Keep the supplement flag on both validation and import. The admin question search `q=supp_burhan_coffee_filtration_` finds these eight records without assuming a bank database ID. Students access them through بُرهان quick practice; there is no dedicated eight-question session route. No production operation was performed during the local import.
+
 Build a new authenticated student section in the existing Yarub application named **مهارات اللغة العربية**, with an admin area for managing its content and reviewing student activity. Follow the current successful **القدرات / Qudurat** experience for navigation, practice sessions, feedback, results, and visual design. Use **Impeccable** throughout implementation. The existing Qudurat design is the visual reference and should remain stable.
 
 This is the implementation specification and roadmap. **All five phases are complete locally (2026-10-23): storage/import, content loading into the existing development database, the session engine, the student interface, the admin interface, and final verification/polish. Production deployment/import remains a separate release action.** The JSON is the initial import content package. First inspect the actual repository and current Qudurat implementation; follow its Laravel conventions, frontend stack, authentication, roles, route organization, and component system. Do not introduce a new framework or assume a separate application is needed.

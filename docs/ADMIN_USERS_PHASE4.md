@@ -1,5 +1,11 @@
 # Student detail and tracking — Phase 4
 
+### Student directory Excel export (2026-10-28)
+
+The existing export button now includes 27 Arabic columns. The first three columns remain name, email and registration date. Added fields cover student ID, active/blocked status, email verification, last recorded practice activity, published course/lesson enrollment counts, test-attempt count and certificate count. For both القدرات and مهارات اللغة العربية, it exports participation, current available questions, unique answered questions, coverage percentage, first-attempt accuracy percentage, completed sessions, all recorded submissions including repeats, and last practice activity.
+
+Progress uses the same `StudentTracking`/`ProgramMetrics` definitions as the directory and detail pages. Coverage excludes unavailable content; repeat answers do not inflate unique coverage. Unknown accuracy or unavailable coverage displays `غير متاح`. Enrollment counts follow the existing student-detail relationships; lesson counts do not certify an unexpired subscription. Last practice means recorded answers/completions, not last login. Filters, sorting, all matching pages, student-only scope and admin authorization are preserved. Aggregate enrollment counts are fetched in the export query without per-row relationship queries. Numeric values remain numeric (including zero); user text remains literal to prevent spreadsheet formulas. The RTL sheet has bold headings, filters and frozen headings/identity columns.
+
 Completed 2026-10-25. Individual student tracking remains entirely inside **Users**. No production access, deployment, application-schema migration, or student-facing change occurred. Phase 5 has not begun.
 
 ## What changed

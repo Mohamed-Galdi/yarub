@@ -7,6 +7,11 @@ use App\Exports\UsersExport;
 use App\Http\Middleware\LogVisit;
 use App\Livewire\StudentsTable;
 use App\Models\User;
+use App\Models\ArabicSkillBank;
+use App\Models\ArabicSkillQuestion;
+use App\Models\ArabicSkillSession;
+use App\Services\ArabicSkills\ContentValidator;
+use Illuminate\Support\Facades\DB;
 use App\Services\Admin\Tracking\StudentTracking;
 use Livewire\Livewire;
 use Maatwebsite\Excel\Facades\Excel;
@@ -94,6 +99,9 @@ class UsersListTest extends AdminTrackingTestCase
         $path = tempnam(sys_get_temp_dir(), 'users-export-');
         try {
             file_put_contents($path, $raw);
+            // Read the exported file with the normal binder, as Excel would; the
+            // export's literal-text binder must not rebind numeric XML on read.
+            \PhpOffice\PhpSpreadsheet\Cell\Cell::setValueBinder(new \PhpOffice\PhpSpreadsheet\Cell\DefaultValueBinder);
             $book = IOFactory::load($path);
             $sheet = $book->getActiveSheet();
             $this->assertSame(['الإسم', 'البريد الإلكتروني', 'تاريخ التسجيل'], $sheet->rangeToArray('A1:C1')[0]);
@@ -101,6 +109,14 @@ class UsersListTest extends AdminTrackingTestCase
             $this->assertSame('s', $sheet->getCell('A2')->getDataType());
             $this->assertTrue($sheet->getRightToLeft());
             $this->assertSame(2, $sheet->getHighestRow());
+            $this->assertSame('AA', $sheet->getHighestColumn());
+            $this->assertSame('D2', $sheet->getFreezePane());
+            $this->assertSame('A1:AA2', $sheet->getAutoFilter()->getRange());
+            $this->assertSame('فعال', $sheet->getCell('E2')->getValue());
+            $this->assertSame('لم يبدأ', $sheet->getCell('L2')->getValue());
+            $this->assertSame('غير متاح', $sheet->getCell('O2')->getValue());
+            $this->assertEquals(0, $sheet->getCell('N2')->getValue());
+            $this->assertSame('n', $sheet->getCell('N2')->getDataType());
         } finally {
             unlink($path);
         }
@@ -109,6 +125,48 @@ class UsersListTest extends AdminTrackingTestCase
         $this->assertSame('محظور', (new UsersExport('2020-01-01', '2030-01-01'))->map($this->student->fresh())[4]);
         $this->assertSame(0, (new StudentsListExport(['search' => 'users-list-student']))->query()->count());
         $this->assertSame(1, (new StudentsListExport(['search' => 'users-list-student', 'status' => 'blocked']))->query()->count());
+    }
+
+    public function test_export_progress_uses_unique_coverage_first_accuracy_and_all_recorded_activity_without_per_row_queries(): void
+    {
+        $bank = ArabicSkillBank::create(['slug' => 'export-fixture', 'title' => 'تجربة التصدير', 'subtitle' => 'اختبار', 'sort_order' => 1, 'source_metadata' => []]);
+        $source = app(ContentValidator::class)->validateDirectory(base_path('arabic_skills_content'))['banks'][0]['questions'][0];
+        $data = array_intersect_key($source, array_flip(['skill', 'type', 'prompt', 'options', 'matching_items', 'answer', 'explanation', 'hint', 'scoring', 'max_score']));
+        $question = ArabicSkillQuestion::create($data + ['bank_id' => $bank->id]);
+        ArabicSkillQuestion::create($data + ['bank_id' => $bank->id]);
+        foreach (['incorrect', 'correct'] as $index => $result) {
+            $date = '2026-10-'.(20 + $index).' 10:00:00';
+            $session = ArabicSkillSession::create(['user_id' => $this->student->id, 'bank_id' => $bank->id, 'mode' => 'practice',
+                'status' => $index ? 'completed' : 'abandoned', 'selected_question_count' => 1, 'available_points' => 2,
+                'earned_points' => $index ? 2 : 0, 'started_at' => $date, 'completed_at' => $index ? $date : null]);
+            $session->items()->create(['bank_id' => $bank->id, 'question_id' => $question->id, 'position' => 1, 'content_snapshot' => $data,
+                'response' => ['option_id' => $index ? $data['answer']['option_id'] : 'b'], 'earned_points' => $index ? 2 : 0, 'result' => $result, 'submitted_at' => $date]);
+        }
+        $this->student->forceFill(['email_verified_at' => now()])->save();
+        $this->student->delete();
+        $export = new StudentsListExport(['search' => $this->student->email, 'status' => 'blocked']);
+        $row = $export->query()->firstOrFail();
+        DB::enableQueryLog();
+        DB::flushQueryLog();
+        try {
+            $values = array_combine($export->headings(), $export->map($row));
+            $this->assertSame([], DB::getQueryLog());
+        } finally {
+            DB::disableQueryLog();
+        }
+        $this->assertSame('محظور', $values['حالة الحساب']);
+        $this->assertSame('مؤكد', $values['تأكيد البريد الإلكتروني']);
+        $this->assertSame('بدأ', $values['مهارات اللغة العربية - المشاركة']);
+        $this->assertSame(2, $values['مهارات اللغة العربية - الأسئلة المتاحة']);
+        $this->assertSame(1, $values['مهارات اللغة العربية - الأسئلة المجاب عنها دون تكرار']);
+        $this->assertSame(50.0, $values['مهارات اللغة العربية - تغطية الأسئلة (%)']);
+        $this->assertSame(0.0, $values['مهارات اللغة العربية - دقة المحاولة الأولى (%)']);
+        $this->assertSame(1, $values['مهارات اللغة العربية - التدريبات المكتملة']);
+        $this->assertSame(2, $values['مهارات اللغة العربية - الإجابات المسلّمة مع التكرار']);
+        $this->assertSame('2026-10-21 10:00:00', $values['آخر نشاط تدريبي']);
+        $this->assertSame('2026-10-21 10:00:00', $values['مهارات اللغة العربية - آخر نشاط']);
+        $this->assertSame('لم يبدأ', $values['القدرات - المشاركة']);
+        $this->assertSame('غير متاح', $values['القدرات - دقة المحاولة الأولى (%)']);
     }
 
     public function test_missing_and_broken_avatar_markup_keeps_escaped_initials_and_action_confirmation_names(): void

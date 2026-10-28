@@ -40,13 +40,17 @@ class QuestionEditor
         ];
         $type = $input['type'] ?? '';
         $ids = $type === 'multiple_choice' ? ['a', 'b', 'c'] : ($type === 'matching' ? ['a', 'b'] : ['true', 'false']);
+        if ($existing && $existing->type === $type) {
+            $ids = array_column($existing->options, 'id');
+        }
+        $itemIds = $existing && $existing->type === 'matching' ? array_column($existing->matching_items, 'id') : ['item_1', 'item_2'];
         if ($type !== 'true_false') {
             foreach ($ids as $id) {
                 $rules['options.'.$id] = ['required', 'string', 'max:20000'];
             }
         }
         if ($type === 'matching') {
-            foreach (['item_1', 'item_2'] as $id) {
+            foreach ($itemIds as $id) {
                 $rules['items.'.$id] = ['required', 'string', 'max:20000'];
                 $rules['matches.'.$id] = ['required', 'string', Rule::in($ids)];
             }
@@ -59,7 +63,7 @@ class QuestionEditor
             'options.*' => 'نص الخيار', 'items.*' => 'عبارة المطابقة', 'matches.*' => 'المطابقة الصحيحة',
         ])->validate();
 
-        return DB::transaction(function () use ($data, $existing, $ids, $type) {
+        return DB::transaction(function () use ($data, $existing, $ids, $type, $itemIds) {
             ArabicSkillBank::whereKey($data['bank_id'])->lockForUpdate()->firstOrFail();
             $question = $existing ? ArabicSkillQuestion::whereKey($existing->id)->lockForUpdate()->firstOrFail() : new ArabicSkillQuestion;
             if ($existing) {
@@ -68,7 +72,7 @@ class QuestionEditor
                     throw ValidationException::withMessages(['bank_id' => 'لا يمكن تغيير بنك السؤال الأصلي.']);
                 }
             }
-            $labels = ['a' => 'أ', 'b' => 'ب', 'c' => 'ج', 'true' => 'صح', 'false' => 'خطأ'];
+            $labels = ['a' => 'أ', 'b' => 'ب', 'c' => 'ج', 'd' => 'د', 'true' => 'صح', 'false' => 'خطأ'];
             $options = [];
             foreach ($ids as $id) {
                 $old = collect($question->options ?? [])->firstWhere('id', $id);
@@ -76,7 +80,7 @@ class QuestionEditor
             }
             $items = $matches = [];
             if ($type === 'matching') {
-                foreach (['item_1', 'item_2'] as $id) {
+                foreach ($itemIds as $id) {
                     $items[] = ['id' => $id, 'text' => $data['items'][$id]];
                     $matches[] = ['item_id' => $id, 'option_id' => $data['matches'][$id]];
                 }
@@ -86,7 +90,7 @@ class QuestionEditor
                 'prompt' => $data['prompt'], 'explanation' => $data['explanation'], 'hint' => $data['hint'] ?? null,
                 'options' => $options, 'matching_items' => $items,
                 'answer' => $type === 'matching' ? ['matches' => $matches] : ['option_id' => $data['correct']],
-                'scoring' => $type === 'matching' ? ['mode' => 'per_match', 'points_per_correct_match' => 1] : ['mode' => 'all_or_nothing'], 'max_score' => 2,
+                'scoring' => $type === 'matching' ? ['mode' => 'per_match', 'points_per_correct_match' => 1] : ['mode' => 'all_or_nothing'], 'max_score' => $type === 'matching' ? count($itemIds) : 2,
             ])->save();
 
             // Keep the import baseline and existing activation state; snapshots are never edited.

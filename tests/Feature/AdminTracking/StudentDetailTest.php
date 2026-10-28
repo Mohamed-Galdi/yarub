@@ -3,6 +3,7 @@
 namespace Tests\Feature\AdminTracking;
 
 use App\Http\Middleware\LogVisit;
+use App\Exports\StudentsListExport;
 use App\Models\ArabicSkillBank;
 use App\Models\ArabicSkillQuestion;
 use App\Models\Certificate;
@@ -87,6 +88,11 @@ class StudentDetailTest extends AdminTrackingTestCase
 
     public function test_overview_preserves_legacy_counts_without_loading_unselected_records(): void
     {
+        $export = new StudentsListExport(['search' => $this->student->email]);
+        $values = array_combine($export->headings(), $export->map($export->query()->firstOrFail()));
+        foreach (['الدورات المنشورة المشترك بها', 'الشروح المنشورة المشترك بها', 'محاولات الاختبارات', 'الشهادات'] as $heading) {
+            $this->assertSame(1, $values[$heading]);
+        }
         $response = $this->get($this->url())->assertOk()->assertSee('نظرة عامة')->assertSee('القدرات')->assertSee('مهارات اللغة العربية')->assertSee('الشهادات')->assertSee('غير متاح')->assertDontSee('دورة محفوظة');
         $model = $response->viewData('student');
         $this->assertSame(1, $model->active_courses_count);

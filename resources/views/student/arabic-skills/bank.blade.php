@@ -4,7 +4,7 @@
 <section data-qudrat-student data-arabic-root>
     @include('student.arabic-skills._header', ['heading' => $bank['title'], 'description' => $bank['subtitle']])
     <div class="arabic-bank-summary">
-        <div><h2>تدريب سريع</h2><p>10 أسئلة · 20 درجة</p></div>
+        <div><h2>تدريب سريع</h2><p>10 أسئلة · تُحسب الدرجة بحسب الأسئلة المختارة</p></div>
         @include('student.arabic-skills._start', ['resume' => collect($entry['active_sessions'])->firstWhere('mode', 'practice'), 'available' => $entry['can_start_practice'], 'bankActive' => $bank['is_active'], 'bankId' => $bank['id'], 'contextLabel' => $bank['title']])
     </div>
     <p class="qudrat-note">أجبت عن {{ $entry['attempted'] }} من {{ $entry['total'] }} سؤالًا متاحًا · {{ $entry['completed_sessions'] }} تدريب مكتمل</p>

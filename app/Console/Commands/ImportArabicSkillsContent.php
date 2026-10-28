@@ -14,6 +14,7 @@ class ImportArabicSkillsContent extends Command
 {
     protected $signature = 'arabic-skills:import
         {--path=arabic_skills_content : Directory containing the catalog and five bank files}
+        {--supplement= : Optional supplemental question JSON file}
         {--dry-run : Validate content without connecting to the database}
         {--overwrite-id=* : Development only: explicit external identity to overwrite}
         {--production : Explicitly request guarded production import}
@@ -31,8 +32,16 @@ class ImportArabicSkillsContent extends Command
                 $path = base_path($path);
             }
             $content = $validator->validateDirectory($path);
+            if ($supplement = $this->option('supplement')) {
+                $file = realpath($supplement) ?: base_path($supplement);
+                $content = $validator->withSupplement($content, $file);
+            }
             $digest = $validator->digest($content);
             $this->info('Valid: 5 banks, 50 models, 1,500 questions, 3,000 points.');
+            $supplemental = array_merge(...array_map(fn ($bank) => $bank['supplemental_questions'] ?? [], $content['banks']));
+            if ($supplemental !== []) {
+                $this->info('Additional bank questions: '.count($supplemental).', points: '.array_sum(array_column($supplemental, 'max_score')).'. Original models unchanged.');
+            }
             $this->line('Content SHA-256: '.$digest);
             if ($this->option('dry-run')) {
                 if ($this->option('overwrite-id') || $this->option('production') || $this->option('database') !== null

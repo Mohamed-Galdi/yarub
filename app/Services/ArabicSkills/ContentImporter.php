@@ -22,7 +22,7 @@ class ContentImporter
         $keys = [];
         foreach ($content['banks'] as $bank) {
             $keys[] = $bank['bank']['id'];
-            $keys = array_merge($keys, array_column($bank['models'], 'id'), array_column($bank['questions'], 'id'));
+            $keys = array_merge($keys, array_column($bank['models'], 'id'), array_column($bank['questions'], 'id'), array_column($bank['supplemental_questions'] ?? [], 'id'));
         }
         foreach ($overwriteIds as $key) {
             if (! in_array($key, $keys, true)) {
@@ -64,19 +64,20 @@ class ContentImporter
                         $models[$modelSource['number']] = $model->id;
                     }
                 }
-                foreach ($source['questions'] as $q) {
+                foreach (array_merge($source['questions'], $source['supplemental_questions'] ?? []) as $q) {
                     $key = $q['id'];
-                    if ($blocked || ! isset($models[$q['model_number']])) {
+                    $supplemental = str_starts_with($key, 'supp_');
+                    if ($blocked || (! $supplemental && ! isset($models[$q['model_number']]))) {
                         $this->skip($report, 'questions', $key, 'Bank/model has an unresolved conflict.');
 
                         continue;
                     }
                     $record = ArabicSkillQuestion::where('source_id', $key)->lockForUpdate()->first() ?? new ArabicSkillQuestion;
                     $data = [
-                        'source_id' => $key, 'bank_id' => $bank->id, 'model_id' => $models[$q['model_number']],
-                        'number' => $q['number'], 'context_group_number' => $q['context_group_number'],
+                        'source_id' => $key, 'bank_id' => $bank->id, 'model_id' => $supplemental ? null : $models[$q['model_number']],
+                        'number' => $supplemental ? null : $q['number'], 'context_group_number' => $supplemental ? null : $q['context_group_number'],
                     ];
-                    if ($record->exists && ($record->bank_id !== $bank->id || $record->model_id !== $data['model_id'] || $record->number !== $q['number'] || $record->context_group_number !== $q['context_group_number'])) {
+                    if ($record->exists && ($record->bank_id !== $bank->id || $record->model_id !== $data['model_id'] || $record->number !== $data['number'] || $record->context_group_number !== $data['context_group_number'])) {
                         $this->skip($report, 'questions', $key, 'Source question identity/membership cannot change.');
 
                         continue;
@@ -98,7 +99,7 @@ class ContentImporter
                 $included = match ($class) {
                     ArabicSkillBank::class => array_column(array_column($content['banks'], 'bank'), 'id'),
                     ArabicSkillModel::class => array_merge(...array_map(fn ($b) => array_column($b['models'], 'id'), $content['banks'])),
-                    default => array_merge(...array_map(fn ($b) => array_column($b['questions'], 'id'), $content['banks'])),
+                    default => array_merge(...array_map(fn ($b) => array_column(array_merge($b['questions'], $b['supplemental_questions'] ?? []), 'id'), $content['banks'])),
                 };
                 foreach ($class::whereNotNull('import_checksum')->whereNotIn($field, $included)->pluck($field) as $key) {
                     $report['omissions'][] = $key;

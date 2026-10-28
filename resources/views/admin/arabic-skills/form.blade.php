@@ -5,6 +5,8 @@
     $optionTexts = collect($question->options ?? [])->pluck('text', 'id');
     $itemTexts = collect($question->matching_items ?? [])->pluck('text', 'id');
     $matches = collect($question->answer['matches'] ?? [])->pluck('option_id', 'item_id');
+    $optionLabels = $question->exists ? collect($question->options)->pluck('label', 'id')->all() : ($type === 'true_false' ? ['true' => 'صح', 'false' => 'خطأ'] : ($type === 'matching' ? ['a' => 'أ', 'b' => 'ب'] : ['a' => 'أ', 'b' => 'ب', 'c' => 'ج']));
+    $itemLabels = array_slice(['item_1' => 'الأولى', 'item_2' => 'الثانية', 'item_3' => 'الثالثة', 'item_4' => 'الرابعة'], 0, $question->exists && $type === 'matching' ? count($question->matching_items) : 2);
 @endphp
 <section data-qudrat-admin data-arabic-admin dir="rtl">
     @include('admin.arabic-skills._nav')
@@ -17,10 +19,10 @@
         <input type="hidden" name="revision" value="{{ old('revision', $revision) }}"><input type="hidden" name="type" value="{{ $type }}">
         <div class="qudrat-grid"><label>البنك<select name="bank_id" required @disabled($question->exists)>@foreach($banks as $bank)<option value="{{ $bank->id }}" @selected((string)old('bank_id', $question->bank_id) === (string)$bank->id)>{{ $bank->title }}</option>@endforeach</select></label><label>المهارة<input name="skill" value="{{ old('skill', $question->skill) }}" maxlength="255" required></label></div>
         @if($question->exists)<input type="hidden" name="bank_id" value="{{ $question->bank_id }}">@endif
-        <p class="qudrat-note">{{ $types[$type] }} · نقطتان للسؤال@if($type === 'matching')، نقطة لكل مطابقة صحيحة. يمكن اختيار الإجابة نفسها للعبارتين.@endif</p>
+        <p class="qudrat-note">{{ $types[$type] }} · {{ ($question->max_score ?? 2) === 4 ? 'أربع درجات' : 'نقطتان' }} للسؤال@if($type === 'matching')، نقطة لكل مطابقة صحيحة. يمكن تكرار اختيار الإجابة نفسها.@endif</p>
         <label>نص السؤال<textarea name="prompt" rows="5" maxlength="20000" required>{{ old('prompt', $question->prompt) }}</textarea></label>
         <fieldset><legend>الخيارات والإجابة الصحيحة</legend>
-            @foreach($type === 'true_false' ? ['true' => 'صح', 'false' => 'خطأ'] : ($type === 'matching' ? ['a' => 'أ', 'b' => 'ب'] : ['a' => 'أ', 'b' => 'ب', 'c' => 'ج']) as $id => $label)
+            @foreach($optionLabels as $id => $label)
                 <div class="qudrat-option-edit">
                     @if($type !== 'matching')<label class="qudrat-radio"><input type="radio" name="correct" value="{{ $id }}" @checked(old('correct', $question->answer['option_id'] ?? '') === $id) required><span>{{ $label }}{{ $type !== 'true_false' ? ' — الصحيح' : '' }}</span></label>@endif
                     @if($type !== 'true_false')<label class="qudrat-option-text">نص الخيار {{ $label }}<textarea rows="2" name="options[{{ $id }}]" maxlength="20000" required>{{ old('options.'.$id, $optionTexts[$id] ?? '') }}</textarea></label>@endif
@@ -28,9 +30,9 @@
             @endforeach
         </fieldset>
         @if($type === 'matching')
-            <fieldset><legend>عبارتا المطابقة</legend>
-                @foreach(['item_1' => 'الأولى', 'item_2' => 'الثانية'] as $id => $label)
-                    <div class="qudrat-grid arabic-admin-match"><label>العبارة {{ $label }}<textarea name="items[{{ $id }}]" maxlength="20000" required>{{ old('items.'.$id, $itemTexts[$id] ?? '') }}</textarea></label><label>الإجابة الصحيحة للعبارة {{ $label }}<select name="matches[{{ $id }}]" required><option value="">اختر الإجابة</option>@foreach(['a' => 'الخيار أ', 'b' => 'الخيار ب'] as $value => $text)<option value="{{ $value }}" @selected(old('matches.'.$id, $matches[$id] ?? '') === $value)>{{ $text }}</option>@endforeach</select></label></div>
+            <fieldset><legend>عبارات المطابقة</legend>
+                @foreach($itemLabels as $id => $label)
+                    <div class="qudrat-grid arabic-admin-match"><label>العبارة {{ $label }}<textarea name="items[{{ $id }}]" maxlength="20000" required>{{ old('items.'.$id, $itemTexts[$id] ?? '') }}</textarea></label><label>الإجابة الصحيحة للعبارة {{ $label }}<select name="matches[{{ $id }}]" required><option value="">اختر الإجابة</option>@foreach($optionLabels as $value => $text)<option value="{{ $value }}" @selected(old('matches.'.$id, $matches[$id] ?? '') === $value)>الخيار {{ $text }}</option>@endforeach</select></label></div>
                 @endforeach
             </fieldset>
         @endif
