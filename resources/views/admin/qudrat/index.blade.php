@@ -5,12 +5,13 @@
     <div class="qudrat-heading"><div><h2>مراجعة محتوى القدرات</h2><p>تُنشر الأسئلة تلقائيًا عند إضافتها. يمكنك تحريرها أو أرشفتها من بنك الأسئلة.</p></div>
         <a class="qudrat-button" href="{{ route('admin.qudrat.questions.index') }}">مراجعة الأسئلة</a>
     </div>
-    <div class="qudrat-category-list">
+    <div class="training-type-grid">
     @forelse($categories as $category)
-        <article class="qudrat-category">
-            <div><h3><a href="{{ route('admin.qudrat.questions.index', ['category_id' => $category->id]) }}">{{ $category->title }}</a></h3>
-                <dl class="qudrat-counts"><div><dt>الإجمالي</dt><dd>{{ $category->total_count }}</dd></div><div><dt>منشور</dt><dd>{{ $category->published_count }}</dd></div><div><dt>مؤرشف</dt><dd>{{ $category->archived_count }}</dd></div></dl>
-            </div>
+        <article class="training-type-card">
+            <div class="training-type-heading"><x-qudrat.category-icon :type="$category->slug" /><span class="training-type-status">{{ $category->is_published ? 'متاح' : 'متوقف' }}</span></div>
+            <h3>{{ $category->title }}</h3>
+            <dl class="training-type-counts"><div><dt>الأسئلة</dt><dd>{{ $category->total_count }}</dd></div><div><dt>منشور</dt><dd>{{ $category->published_count }}</dd></div><div><dt>مؤرشف</dt><dd>{{ $category->archived_count }}</dd></div></dl>
+            <div class="training-type-actions"><a class="qudrat-button" href="{{ route('admin.qudrat.questions.index', ['category_id' => $category->id]) }}" aria-label="عرض الأسئلة — {{ $category->title }}">عرض الأسئلة</a><a class="practice-set-review" href="{{ route('admin.qudrat.questions.create', ['category_id' => $category->id]) }}" aria-label="إضافة سؤال — {{ $category->title }}">إضافة سؤال</a></div>
             <details class="qudrat-category-settings"><summary>إعدادات القسم</summary>
                 <form action="{{ route('admin.qudrat.categories.update', $category) }}" method="POST" class="qudrat-form">
                     @csrf @method('PATCH')

@@ -17,6 +17,7 @@ Route::middleware(['auth', 'verified', 'student', 'log.visit'])->prefix('student
 
     Route::prefix('qudrat')->name('student.qudrat.')->controller(\App\Http\Controllers\Student\Qudrat\PracticeController::class)->group(function () {
         Route::get('/', 'index')->name('index');
+        Route::get('/categories/{category}', 'category')->name('category');
         Route::post('/categories/{category}/sessions', 'start')->name('start');
         Route::get('/sessions/{session}', 'show')->name('show');
         Route::patch('/sessions/{session}/items/{item}/selection', 'selection')->whereNumber('item')->name('selection');

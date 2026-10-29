@@ -67,6 +67,21 @@ class TrackingTest extends AdminTrackingTestCase
         return $this->tracking->summary($this->student->id)['programs'][$program];
     }
 
+    public function test_selected_set_titles_are_preserved_in_both_program_histories_and_reviews(): void
+    {
+        $this->qudratQuestion();
+        $this->arabicPool();
+        $qudratSet = app(\App\Services\Qudrat\PracticeSets::class)->definitions($this->category)->first();
+        $arabicSet = app(\App\Services\ArabicSkills\PracticeSets::class)->definitions($this->bank)->first();
+        $qudrat = app(QudratPractice::class)->start($this->student, $this->category, 'practice', $qudratSet['key']);
+        $arabic = app(ArabicPractice::class)->start($this->student, $this->bank, 'practice', null, $arabicSet['key']);
+        $records = app(SessionRecords::class);
+        foreach (['qudrat' => $qudrat, 'arabic_skills' => $arabic] as $program => $session) {
+            $this->assertSame($session->practice_set_title, $records->history($this->student->id, $program)->first()['practice_set_title']);
+            $this->assertSame($session->practice_set_title, $records->review($this->student->id, $program, $session->id)['session']['practice_set_title']);
+        }
+    }
+
     public function test_empty_opened_and_draft_sessions_do_not_count_as_participation(): void
     {
         $this->assertNull($this->summary('qudrat')['coverage']);

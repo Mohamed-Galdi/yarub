@@ -16,14 +16,14 @@ class Practice
 {
     public function __construct(private Grader $grader, private Attempts $attempts) {}
 
-    public function start(User $user, ArabicSkillBank $bank, string $mode = 'practice', ?ArabicSkillModel $model = null): ArabicSkillSession
+    public function start(User $user, ArabicSkillBank $bank, string $mode = 'practice', ?ArabicSkillModel $model = null, ?string $setKey = null): ArabicSkillSession
     {
         Gate::forUser($user)->authorize('create', ArabicSkillSession::class);
-        if (! in_array($mode, ['practice', 'model'], true) || ($mode === 'model') !== ($model !== null)) {
+        if (! in_array($mode, ['practice', 'model'], true) || ($mode === 'model') !== ($model !== null) || ($setKey !== null && $mode !== 'practice')) {
             throw ValidationException::withMessages(['mode' => 'اختر تدريبًا سريعًا أو نموذجًا محددًا.']);
         }
 
-        return DB::transaction(function () use ($user, $bank, $mode, $model) {
+        return DB::transaction(function () use ($user, $bank, $mode, $model, $setKey) {
             // All mutations lock the owner first, serializing starts/answers across browser tabs.
             User::whereKey($user->id)->lockForUpdate()->firstOrFail();
             $bank = ArabicSkillBank::whereKey($bank->id)->lockForUpdate()->firstOrFail();
@@ -31,7 +31,7 @@ class Practice
                 $model = ArabicSkillModel::whereKey($model->id)->where('bank_id', $bank->id)->lockForUpdate()->firstOrFail();
             }
             $active = $user->arabicSkillSessions()->where('bank_id', $bank->id)->where('mode', $mode)
-                ->where('model_id', $model?->id)->where('status', 'active')->lockForUpdate()->first();
+                ->where('model_id', $model?->id)->where('practice_set_key', $setKey)->where('status', 'active')->lockForUpdate()->first();
             if ($active) {
                 return $active;
             }
@@ -39,7 +39,16 @@ class Practice
                 throw ValidationException::withMessages(['practice' => 'هذا البنك غير متاح لبدء تدريب جديد حاليًا.']);
             }
             $query = ArabicSkillQuestion::where('bank_id', $bank->id)->where('is_active', true);
-            if ($model) {
+            $set = null;
+            if ($setKey !== null) {
+                $set = app(PracticeSets::class)->definitions($bank)->firstWhere('key', $setKey);
+                abort_unless($set, 404);
+                $records = $query->whereIn('id', $set['question_ids'])->lockForUpdate()->get()->keyBy('id');
+                $questions = collect($set['question_ids'])->map(fn ($id) => $records->get($id))->filter();
+                if ($questions->isEmpty()) {
+                    throw ValidationException::withMessages(['practice' => 'لا توجد أسئلة منشورة في هذه المجموعة حاليًا.']);
+                }
+            } elseif ($model) {
                 $questions = $query->where('model_id', $model->id)->orderBy('number')->orderBy('id')->lockForUpdate()->get();
                 if ($questions->count() !== 30) {
                     throw ValidationException::withMessages(['practice' => 'النموذج غير متاح: يجب توفر أسئلته الثلاثين كاملة.']);
@@ -58,12 +67,14 @@ class Practice
                 $questions = $questions->take(10);
             }
             $session = ArabicSkillSession::create(['user_id' => $user->id, 'bank_id' => $bank->id, 'model_id' => $model?->id,
-                'mode' => $mode, 'status' => 'active', 'current_position' => 1, 'started_at' => now(),
+                'mode' => $mode, 'practice_set_key' => $setKey, 'practice_set_title' => $set['title'] ?? null,
+                'status' => 'active', 'current_position' => 1, 'started_at' => now(),
                 'selected_question_count' => $questions->count(), 'available_points' => $questions->sum('max_score'), 'earned_points' => 0]);
             foreach ($questions->values() as $index => $question) {
                 $snapshot = $question->only(['source_id', 'content_revision', 'skill', 'type', 'prompt', 'options', 'matching_items', 'answer', 'explanation', 'hint', 'scoring', 'max_score']);
                 $snapshot['bank'] = ['slug' => $bank->slug, 'title' => $bank->title, 'subtitle' => $bank->subtitle];
                 $snapshot['model_title'] = $model?->title;
+                $snapshot['practice_set_title'] = $set['title'] ?? null;
                 $session->items()->create(['bank_id' => $bank->id, 'question_id' => $question->id, 'position' => $index + 1, 'content_snapshot' => $snapshot]);
             }
 
@@ -178,6 +189,7 @@ class Practice
     public function summary(ArabicSkillSession $session): array
     {
         return ['id' => $session->id, 'bank_id' => $session->bank_id, 'model_id' => $session->model_id, 'mode' => $session->mode,
+            'practice_set_key' => $session->practice_set_key, 'practice_set_title' => $session->practice_set_title,
             'status' => $session->status, 'position' => $session->current_position, 'question_count' => $session->selected_question_count,
             'available_points' => $session->available_points, 'earned_points' => $session->earned_points,
             'percentage' => $session->available_points ? $session->earned_points / $session->available_points * 100 : 0,
@@ -201,7 +213,7 @@ class Practice
     {
         $snapshot = $item->content_snapshot;
 
-        return array_intersect_key($snapshot, array_flip(['skill', 'type', 'prompt', 'options', 'matching_items', 'max_score', 'bank', 'model_title']))
+        return array_intersect_key($snapshot, array_flip(['skill', 'type', 'prompt', 'options', 'matching_items', 'max_score', 'bank', 'model_title', 'practice_set_title']))
             + ['has_hint' => $snapshot['hint'] !== null];
     }
 

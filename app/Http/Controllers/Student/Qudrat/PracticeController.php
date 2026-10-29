@@ -20,10 +20,20 @@ class PracticeController extends Controller
 
     public function start(Request $request, QudratCategory $category, Practice $practice)
     {
-        $data = $request->validate(['mode' => ['required', 'in:practice,review']]);
-        $session = $practice->start($request->user(), $category, $data['mode']);
+        $data = $request->validate(['mode' => ['required', 'in:practice,review'], 'set_key' => ['nullable', 'string', 'max:100']]);
+        $session = $practice->start($request->user(), $category, $data['mode'], $data['set_key'] ?? null);
 
         return redirect()->route('student.qudrat.show', $session);
+    }
+
+    public function category(Request $request, QudratCategory $category, Progress $progress)
+    {
+        $this->authorize('create', QudratPracticeSession::class);
+        abort_unless($category->is_published, 404);
+
+        return view('student.qudrat.category', ['category' => $category, 'sets' => $progress->sets($request->user(), $category),
+            'legacySessions' => $request->user()->qudratSessions()->where('category_id', $category->id)
+                ->whereNull('practice_set_key')->where('status', 'active')->get()]);
     }
 
     public function show(Request $request, QudratPracticeSession $session, Practice $practice)

@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class ArabicSkillSession extends Model
 {
-    protected $fillable = ['user_id', 'bank_id', 'model_id', 'mode', 'status', 'current_position', 'selected_question_count', 'available_points', 'earned_points', 'started_at', 'completed_at', 'abandoned_at'];
+    protected $fillable = ['user_id', 'bank_id', 'model_id', 'mode', 'status', 'current_position', 'selected_question_count', 'available_points', 'earned_points', 'started_at', 'completed_at', 'abandoned_at', 'practice_set_key', 'practice_set_title'];
 
     protected $casts = ['started_at' => 'datetime', 'completed_at' => 'datetime', 'abandoned_at' => 'datetime'];
 

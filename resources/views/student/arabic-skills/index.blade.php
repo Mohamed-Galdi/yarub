@@ -6,7 +6,6 @@
         @foreach($banks as $entry)
             @php
                 $bank = $entry['bank'];
-                $resume = collect($entry['active_sessions'])->firstWhere('mode', 'practice');
                 $icon = ['nasaq' => 'sentence_completion', 'rasm' => 'contextual_errors', 'bayan' => 'reading_comprehension', 'midad' => 'verbal_analogies', 'burhan' => 'association_and_difference'][$bank['slug']] ?? 'reading_comprehension';
             @endphp
             <article class="qudrat-student-category">
@@ -19,8 +18,8 @@
                 <div class="qudrat-card-footer">
                     <span class="qudrat-session-badge">10 أسئلة في التدريب</span>
                     <div class="qudrat-actions">
-                        @include('student.arabic-skills._start', ['resume' => $resume, 'available' => $entry['can_start_practice'], 'bankActive' => $bank['is_active'], 'bankId' => $bank['id'], 'contextLabel' => $bank['title']])
-                        <a class="arabic-secondary-link" aria-label="النماذج وسجل التدريب — {{ $bank['title'] }}" href="{{ route('student.arabic-skills.bank', $bank['id']) }}">النماذج وسجل التدريب</a>
+                        <a class="qudrat-button" aria-label="اختيار مجموعة — {{ $bank['title'] }}" href="{{ route('student.arabic-skills.bank', $bank['id']) }}">اختيار مجموعة</a>
+                        @unless($bank['is_active'])<p class="qudrat-note">البنك متوقف للتدريبات الجديدة.</p>@endunless
                     </div>
                 </div>
             </article>

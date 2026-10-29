@@ -74,7 +74,7 @@ function initializePractice() {
             const target = document.getElementById(targetId);
             target.focus({preventScroll: true});
             const bounds = target.getBoundingClientRect();
-            if (bounds.top < 24 || bounds.bottom > window.innerHeight - 24) {
+            if (!target.classList.contains('session-feedback-toast') && (bounds.top < 24 || bounds.bottom > window.innerHeight - 24)) {
                 target.scrollIntoView({block: 'start', behavior: 'instant'});
             }
         } catch {

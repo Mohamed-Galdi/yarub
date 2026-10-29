@@ -10,11 +10,21 @@
 .arabic-history { font-variant-numeric: tabular-nums; }
 .arabic-workspace { max-width: 52rem; margin-inline: auto; }
 .arabic-prompt { font-size: 1.25rem; line-height: 2; font-weight: 600; color: #1e293b; margin-block: .75rem 1.25rem; }
+.arabic-reading-context { margin-block: 1.5rem 2rem; padding-bottom: 1.5rem; border-bottom: 1px solid #d5dbe4; }
+.arabic-reading-title { color: #292a65; font-size: 1.15rem; line-height: 1.7; font-weight: 600; margin-bottom: .25rem; }
+.arabic-reading-instruction { color: #475569; font-size: 1rem; margin-block: 1.5rem .75rem; }
+[data-arabic-root] .arabic-reading-passage { color: #334155; font-size: 1.0625rem; font-weight: 400; line-height: 2.1; max-width: 70ch; }
+.arabic-reading-context + .arabic-answer-area .arabic-prompt { color: #292a65; margin-top: 0; }
 .arabic-choices { display: grid; gap: .75rem; }
+.arabic-choices[data-question-type=true_false] { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+.arabic-choice-text { min-width: 0; flex: 1; }
+.arabic-choice-state { display: block; font-size: .875rem; font-weight: 600; margin-top: .25rem; }
 [data-arabic-root] .qudrat-choice { align-items: center; min-height: 3.25rem; margin: 0; }
 [data-arabic-root] .qudrat-choice input { accent-color: var(--arabic-accent); color: var(--arabic-accent); flex-shrink: 0; }
 [data-arabic-root] .qudrat-choice:has(input:checked) { border-color: var(--arabic-accent); background: #eeeef7; }
 [data-arabic-root] .qudrat-choice:has(input:disabled) { cursor: default; }
+[data-arabic-root] .qudrat-choice.arabic-choice-correct, [data-arabic-root] .qudrat-choice.arabic-choice-correct:has(input:disabled) { background: #ecfdf5; border-color: #27815f; color: #065f46; }
+[data-arabic-root] .qudrat-choice.arabic-choice-incorrect, [data-arabic-root] .qudrat-choice.arabic-choice-incorrect:has(input:disabled) { background: #fff7ed; border-color: #b75a29; color: #9a3412; }
 [data-arabic-root] .qudrat-prose { overflow-wrap: anywhere; line-height: 1.95; }
 .arabic-matching-options { display: grid; gap: .6rem; padding: 1rem; background: #f8fafc; border-radius: .75rem; margin-block: .75rem 1.25rem; }
 .arabic-matching-options li { display: flex; gap: .75rem; }
@@ -35,6 +45,21 @@
 .arabic-abandon summary { cursor: pointer; text-decoration: underline; text-underline-offset: .2em; }
 .arabic-abandon form { margin-top: .75rem; }
 [data-arabic-root] [aria-busy=true] { cursor: progress; }
+[data-arabic-practice] .arabic-prompt { font-size: 1.5rem; line-height: 1.65; margin-block: .5rem 1rem; }
+[data-arabic-practice] .arabic-reading-passage { font-size: 1.25rem; line-height: 1.85; color: #1e293b; max-width: none; }
+[data-arabic-practice] .arabic-reading-context { margin: 0 0 1rem; padding: 0; border: 0; }
+[data-arabic-practice] .arabic-reading-title { font-size: 1.125rem; line-height: 1.5; margin: 0; }
+[data-arabic-practice] .arabic-choices { gap: .5rem; }
+[data-arabic-practice] .qudrat-choice { font-size: 1.25rem; padding: .6rem .75rem; }
+[data-arabic-practice] .qudrat-choice .qudrat-prose { line-height: 1.55; }
+[data-arabic-practice] .arabic-matching-items, [data-arabic-practice] .arabic-matching-options { font-size: 1.25rem; }
+[data-arabic-practice] .arabic-matching-item select { font-size: 1.125rem; }
+[data-arabic-practice] .arabic-abandon { margin-top: 1.25rem; }
+@media (min-width: 1024px) {
+    [data-arabic-practice] .arabic-workspace:has(.arabic-reading-context) { max-width: 72rem; }
+    .arabic-question-practice:has(.arabic-reading-context) { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 2rem; align-items: start; }
+    [data-arabic-practice] form:has(.arabic-reading-context) > .qudrat-practice-actions { width: calc((100% - 2rem) / 2); margin-inline-start: auto; }
+}
 @media (max-width: 639px) {
     .arabic-models { grid-template-columns: 1fr; }
     .arabic-history-row { flex-wrap: wrap; }
@@ -43,5 +68,9 @@
     .arabic-matching-item select { max-width: none; }
     .arabic-bank-summary { flex-wrap: wrap; }
     .arabic-prompt { font-size: 1.125rem; }
+    .arabic-reading-context { margin-block: 1rem 1.5rem; }
+    [data-arabic-root] .arabic-reading-passage { font-size: 1rem; }
+    [data-arabic-practice] .arabic-reading-passage { font-size: 1.25rem; }
+    [data-arabic-practice] .arabic-prompt { font-size: 1.375rem; line-height: 1.6; }
     [data-arabic-practice] .qudrat-practice-actions .qudrat-button { width: 100%; }
 }

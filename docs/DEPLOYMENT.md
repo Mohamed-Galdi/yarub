@@ -104,6 +104,8 @@ Do not execute the placeholder literally. Current feature migrations:
 | Video library foundation | `database/migrations/2026_10_26_000001_create_library_videos_tables.php` |
 | Video media lifecycle | `database/migrations/2026_10_26_000002_add_video_media_lifecycle.php` |
 | Video seed import identities | `database/migrations/2026_10_27_000001_create_video_seed_imports_table.php` |
+| Qudrat practice set identity | `database/migrations/2026_10_29_000001_add_set_identity_to_qudrat_sessions.php` |
+| Arabic Skills practice set identity | `database/migrations/2026_10_29_000002_add_set_identity_to_arabic_skill_sessions.php` |
 
 Before deploying video media endpoints, complete the private storage, media-tool, upload-limit and cleanup prerequisites in [VIDEO_LIBRARY_MEDIA.md](VIDEO_LIBRARY_MEDIA.md), then follow the [Phase 6 release and recovery handoff](VIDEO_LIBRARY_RELEASE.md) and [QA evidence](VIDEO_LIBRARY_QA.md). These migrations were verified only on isolated development MySQL; no video deployment has been performed.
 

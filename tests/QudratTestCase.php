@@ -44,6 +44,7 @@ abstract class QudratTestCase extends TestCase
             'database/migrations/2014_10_12_000000_create_users_table.php',
             'database/migrations/2026_10_21_000001_create_qudrat_tables.php',
             'database/migrations/2026_10_21_000002_publish_qudrat_content_by_default.php',
+            'database/migrations/2026_10_29_000001_add_set_identity_to_qudrat_sessions.php',
         ], '--force' => true])->assertExitCode(0);
         DB::beginTransaction();
     }

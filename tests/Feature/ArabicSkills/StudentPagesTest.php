@@ -31,7 +31,7 @@ class StudentPagesTest extends ArabicSkillsTestCase
         return app(Practice::class)->start($this->student, $bank, 'model', $bank->models()->firstOrFail());
     }
 
-    public function test_stopped_banks_keep_owned_attempts_and_history_discoverable_without_new_starts(): void
+    public function test_stopped_banks_keep_owned_attempts_accessible_without_new_starts(): void
     {
         $session = $this->modelSession();
         $bank = $session->bank()->firstOrFail();
@@ -39,7 +39,8 @@ class StudentPagesTest extends ArabicSkillsTestCase
         $other = User::create(['name' => 'No attempts', 'email' => 'no-attempts@example.invalid', 'password' => 'local', 'role' => 'student']);
         $this->actingAs($other)->get(route('student.arabic-skills.index'))->assertOk()->assertSee('لا توجد بنوك متاحة');
         $this->actingAs($this->student)->get(route('student.arabic-skills.index'))->assertOk()->assertSee($bank->title)->assertDontSee('لا توجد بنوك متاحة');
-        $this->get(route('student.arabic-skills.bank', $bank))->assertOk()->assertSee(route('student.arabic-skills.show', $session), false);
+        $this->get(route('student.arabic-skills.bank', $bank))->assertOk()->assertSee('مجموعات التدريب')->assertDontSee('سجل التدريب');
+        $this->get(route('student.arabic-skills.show', $session))->assertOk();
         $this->post(route('student.arabic-skills.start', $bank), ['mode' => 'model', 'model_id' => $session->model_id])->assertRedirect(route('student.arabic-skills.show', $session));
         $this->postJson(route('student.arabic-skills.start', $bank), ['mode' => 'practice'])->assertUnprocessable();
         $practice = app(Practice::class);
@@ -48,7 +49,7 @@ class StudentPagesTest extends ArabicSkillsTestCase
             $practice->next($this->student, $session, $item->id);
         }
         $this->get(route('student.arabic-skills.index'))->assertOk()->assertSee($bank->title)->assertSee('البنك متوقف للتدريبات الجديدة.')->assertDontSee('يلزم توفر عشرة');
-        $this->get(route('student.arabic-skills.bank', $bank))->assertOk()->assertSee(route('student.arabic-skills.results', $session), false);
+        $this->get(route('student.arabic-skills.bank', $bank))->assertOk()->assertSee('مجموعات التدريب')->assertDontSee('النماذج الكاملة');
         $this->get(route('student.arabic-skills.results', $session))->assertOk()->assertSee('60 / 60');
         $this->postJson(route('student.arabic-skills.start', $bank), ['mode' => 'model', 'model_id' => $session->model_id])->assertUnprocessable();
         $this->assertSame(1, ArabicSkillSession::count());
@@ -60,8 +61,10 @@ class StudentPagesTest extends ArabicSkillsTestCase
         $this->actingAs($this->student)->get(route('student.arabic-skills.index'))->assertOk()
             ->assertSee('مهارات اللغة العربية')->assertSee('نَسَق')->assertSee('رَسْم')->assertSee('بَيان')->assertSee('مِداد')->assertSee('بُرهان')
             ->assertSee('10 أسئلة في التدريب')->assertSee('300');
-        $this->get(route('student.arabic-skills.bank', ArabicSkillBank::firstOrFail()))->assertOk()
-            ->assertSee('النموذج 10')->assertSee('سجل التدريب')->assertSee('لم تبدأ تدريبًا');
+        foreach (ArabicSkillBank::all() as $bank) {
+            $this->get(route('student.arabic-skills.bank', $bank))->assertOk()
+                ->assertSee('مجموعات التدريب')->assertSee('المجموعة 30')->assertDontSee('النموذج 10')->assertDontSee('سجل التدريب')->assertDontSee('النماذج الكاملة');
+        }
         $this->assertSame(0, ArabicSkillSession::count());
     }
 
@@ -75,7 +78,7 @@ class StudentPagesTest extends ArabicSkillsTestCase
             $response = $this->get(route('student.arabic-skills.show', $session))->assertOk()->assertSee(e($snapshot['prompt']), false)
                 ->assertDontSee(e($snapshot['explanation']), false)->assertDontSee('إظهار تلميح')->assertDontSee('content_snapshot');
             if ($snapshot['type'] === 'matching') {
-                $response->assertSee('اختر المطابقة لكل عبارة')->assertSee('response[matches][0][option_id]', false)->assertSee('response[matches][1][option_id]', false);
+                $response->assertSee('اختر المطابقة')->assertSee('response[matches][0][option_id]', false)->assertSee('response[matches][1][option_id]', false);
             } elseif ($snapshot['type'] === 'true_false') {
                 $response->assertSee('value="true"', false)->assertSee('value="false"', false);
             } else {
@@ -134,9 +137,9 @@ class StudentPagesTest extends ArabicSkillsTestCase
         $item = $session->items()->firstOrFail();
         $this->postJson(route('student.arabic-skills.hint', [$session, $item->id]))->assertUnprocessable();
         $this->post(route('student.arabic-skills.abandon', $session))->assertRedirect(route('student.arabic-skills.bank', $session->bank_id));
-        $this->get(route('student.arabic-skills.bank', $session->bank_id))->assertOk()->assertSee('غير مكتمل');
+        $this->get(route('student.arabic-skills.bank', $session->bank_id))->assertOk()->assertSee('مجموعات التدريب')->assertDontSee('سجل التدريب');
         $item->question()->firstOrFail()->update(['is_active' => false]);
-        $this->get(route('student.arabic-skills.bank', $session->bank_id))->assertSee('النموذج غير متاح');
+        $this->get(route('student.arabic-skills.bank', $session->bank_id))->assertSee('9 من 10');
         $this->post(route('student.arabic-skills.start', $session->bank_id), ['mode' => 'model', 'model_id' => $session->model_id])->assertSessionHasErrors('practice');
     }
 

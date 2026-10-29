@@ -60,6 +60,83 @@
 .qudrat-linked-questions li { display: flex; gap: 1rem; justify-content: space-between; padding-block: 1rem; border-bottom: 1px solid #cbd5e1; }
 .qudrat-linked-questions li div { display: flex; gap: .8rem; flex-shrink: 0; color: #292a65; }
 .qudrat-pagination { margin-top: 1.5rem; }
+
+/* Training catalogs share the existing Yarub type and colour system. */
+.training-type-grid, .practice-set-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 1.25rem; align-items: start; }
+.training-type-card, .practice-set-card { min-width: 0; border: 1px solid #cbd5e1; border-radius: .875rem; background: #fff; padding: 1.5rem; overflow-wrap: anywhere; }
+.training-type-heading, .practice-set-top { display: flex; justify-content: space-between; align-items: center; gap: .75rem; }
+.training-type-heading .qudrat-category-icon { width: 3rem; height: 3rem; }
+.training-type-status, .practice-set-status { color: #292a65; background: #eeeef7; border-radius: .375rem; padding: .25rem .65rem; font-size: .875rem; }
+.training-type-card h3 { color: #292a65; font-size: 1.35rem; font-weight: 600; margin-block: 1rem .25rem; }
+.training-type-subtitle { color: #475569; }
+.training-type-counts { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: .75rem; margin-block: 1.5rem; }
+.training-type-counts dt { color: #475569; font-size: .875rem; }
+.training-type-counts dd { color: #292a65; font-size: 1.45rem; font-weight: 600; font-variant-numeric: tabular-nums; margin-top: .15rem; }
+.training-type-actions, .practice-set-actions { display: flex; flex-wrap: wrap; align-items: center; gap: .75rem 1rem; }
+.training-type-card > details { border-top: 1px solid #e2e8f0; padding-top: .75rem; margin-top: 1rem; }
+.training-type-card > details > summary { cursor: pointer; color: #292a65; padding-block: .4rem; }
+.training-type-card .qudrat-category-settings { min-width: 0; max-width: none; }
+.training-type-card .qudrat-form { margin-top: .75rem; gap: 1rem; }
+.training-type-card .qudrat-editor { background: transparent; border: 0; border-radius: 0; padding: 0; }
+.training-type-card .arabic-admin-model { display: grid; gap: .75rem; }
+.training-type-card .qudrat-grid { grid-template-columns: 1fr; }
+.practice-sets-heading { display: flex; align-items: baseline; justify-content: space-between; gap: 1rem; margin-block: 2rem 1rem; }
+.practice-sets-heading h2 { color: #292a65; font-size: 1.35rem; font-weight: 600; }
+.practice-sets-heading > span, .practice-set-count { color: #475569; font-size: .9rem; font-variant-numeric: tabular-nums; }
+.practice-set-card { display: flex; flex-direction: column; align-self: stretch; padding: 1.5rem; border-color: #d7d8e6; }
+.practice-set-card h3 { color: #292a65; font-size: 1.375rem; font-weight: 600; line-height: 1.6; margin-block: 1.25rem .75rem; }
+.practice-set-card[data-state=completed] { background: white; border-color: #8fbaa0; }
+.practice-set-card[data-state=active] { background: white; border-color: #6f72a2; }
+.practice-set-card[data-state=new] { border-style: dashed; border-color: #c5c7d7; }
+.practice-set-card[data-state=incomplete] { background: white; border-color: #c5c6d8; }
+.practice-set-card[data-state=unavailable] { background: #f1f5f9; border-color: #cbd5e1; }
+.practice-set-badges { display: flex; align-items: center; flex-wrap: wrap; gap: .5rem; min-width: 0; }
+.practice-set-status { display: inline-flex; align-items: center; gap: .4rem; padding: .35rem .65rem; border-radius: .5rem; line-height: 1.5; }
+.practice-set-status svg { flex-shrink: 0; width: 1.5rem; height: 1.5rem; }
+.practice-set-status[data-status=completed] { color: #23613e; background: #edf7f0; }
+.practice-set-status[data-status=completed] svg { width: 1.75rem; height: 1.75rem; }
+.practice-set-status[data-status=active] { color: white; background: #292a65; }
+.practice-set-status[data-status=incomplete] { color: #545584; background: #eaeaf2; }
+.practice-set-status[data-status=new], .practice-set-status[data-status=unavailable] { color: #475569; background: #f1f5f9; }
+.practice-set-count { white-space: nowrap; color: #696a83; }
+.practice-set-retry-status { color: #292a65; font-size: .875rem; }
+.practice-set-card .practice-set-progress { height: .35rem; margin-block: -.25rem 1.25rem; background: #d8daed; accent-color: #292a65; }
+.practice-set-card .practice-set-progress::-webkit-progress-bar { background: #d8daed; }
+.practice-set-card[data-state=completed] .qudrat-button { background: #f1f1fa; border-color: #c5c7dd; color: #292a65; }
+.practice-set-card[data-state=completed] .qudrat-button:hover { background: #e6e6f3; border-color: #9495b2; color: #212251; }
+.practice-set-card[data-state=completed] .qudrat-button:active { background: #dfe0f0; color: #212251; }
+.practice-set-detail { color: #575976; font-size: 1rem; line-height: 1.7; margin-bottom: 1.25rem; }
+.practice-set-detail strong { color: #292a65; font-variant-numeric: tabular-nums; }
+.practice-set-actions { display: grid; grid-template-columns: minmax(0, 1fr); gap: .75rem; margin-top: auto; padding-top: 1rem; border-top: 1px solid #d7d8e6; }
+.practice-set-actions:has(.practice-set-review) { grid-template-columns: minmax(0, 1fr) auto; }
+.practice-set-actions form { min-width: 0; }
+.practice-set-actions .qudrat-button { width: 100%; min-height: 2.875rem; font-weight: 600; }
+.practice-set-review { display: inline-block; padding-block: .4rem; color: #292a65; text-decoration: underline; text-underline-offset: .2em; }
+.session-feedback-toast { --feedback-tone: #065f46; position: fixed; z-index: 100; inset-inline: 1rem; top: 50%; transform: translateY(-50%); width: auto; max-width: 52rem; margin-inline: auto; padding: .75rem 1rem; background: #fff; color: #1e293b; border-radius: .875rem; box-shadow: 0 8px 40px rgb(15 23 42 / .2); direction: rtl; overflow-wrap: anywhere; animation: session-feedback-arrive 180ms ease-out; }
+.session-feedback-toast[data-result=incorrect], .session-feedback-toast[data-result=partial] { --feedback-tone: #9a3412; }
+.session-feedback-top { display: grid; grid-template-columns: 1.75rem minmax(0, 1fr) auto; gap: .75rem; align-items: center; }
+.session-feedback-icon, .session-feedback-top h2 { color: var(--feedback-tone); }
+.session-feedback-top h2 { font-size: 1.125rem; font-weight: 600; line-height: 1.6; }
+.session-feedback-action .qudrat-button { white-space: nowrap; }
+.session-feedback-explanation { margin-top: .25rem; }
+.session-feedback-explanation > summary { cursor: pointer; color: #475569; font-size: .95rem; width: fit-content; padding-block: .35rem; }
+.session-feedback-explanation[open] > summary { margin-bottom: .5rem; }
+.session-feedback-content { max-height: min(38dvh, 20rem); overflow-y: auto; overscroll-behavior: contain; scrollbar-color: #9293b2 #f1f2f7; scrollbar-width: thin; padding-inline-end: .5rem; }
+.session-feedback-content .qudrat-prose { line-height: 1.9; }
+.session-feedback-content .qudrat-feedback { padding: 0; }
+@keyframes session-feedback-arrive { from { transform: translateY(calc(-50% - .4rem)); } to { transform: translateY(-50%); } }
+@media (prefers-reduced-motion: reduce) { .session-feedback-toast { animation: none; } }
+@media (max-width: 639px) {
+    .session-feedback-toast { inset-inline: .5rem; padding: .75rem; }
+    .session-feedback-top { grid-template-columns: 1.5rem minmax(0, 1fr) auto; gap: .5rem; }
+    .session-feedback-action .qudrat-button { padding-inline: .65rem; font-size: .95rem; }
+    .session-feedback-top h2 { font-size: 1rem; }
+}
+@media (max-width: 1100px) { .training-type-grid, .practice-set-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+@media (max-width: 639px) {
+    .training-type-grid, .practice-set-grid { grid-template-columns: 1fr; gap: 1rem; }
+    .training-type-card, .practice-set-card { padding: 1.25rem; }
+}
 .qudrat-empty { padding-block: 2rem; color: #475569; }
 @media (max-width: 900px) { .qudrat-reading, .qudrat-grid { grid-template-columns: 1fr; } }
 @media (max-width: 639px) { .qudrat-category, .qudrat-passage-list article, .qudrat-linked-questions li { flex-direction: column; gap: .75rem; } .qudrat-editor, .qudrat-player { padding: 1rem; } .qudrat-category-settings { width: 100%; max-width: none; } .qudrat-counts { gap: 1rem; } }
@@ -149,3 +226,28 @@
     [data-qudrat-practice] .qudrat-reading { gap: 1.25rem; }
 }
 @media (prefers-reduced-motion: reduce) { .qudrat-student-category, [data-qudrat-practice] .qudrat-choice { transition: none; } }
+
+/* Put the reading task ahead of repeated navigation and metadata. */
+[data-qudrat-student][data-qudrat-practice], [data-qudrat-student][data-arabic-practice] { padding-top: .5rem; min-height: calc(100dvh - 4rem); }
+.session-toolbar { display: flex; align-items: center; justify-content: space-between; gap: .75rem; margin-bottom: .25rem; }
+[data-qudrat-student] .session-toolbar h1 { color: #292a65; font-size: 1.125rem; line-height: 1.5; font-weight: 600; margin: 0; }
+.session-toolbar > span { font-size: .95rem; color: #475569; white-space: nowrap; }
+.session-toolbar a { font-size: .95rem; }
+.session-reading-disclosure { min-width: 0; }
+.session-reading-disclosure > summary { cursor: pointer; color: #292a65; font-weight: 600; font-size: 1.125rem; line-height: 1.5; padding-block: .35rem; }
+.session-reading-scroll { margin-top: .5rem; max-height: calc(100dvh - 12rem); overflow-y: auto; scrollbar-width: thin; scrollbar-color: #9293b2 #f1f2f7; padding-inline-end: .5rem; }
+[data-qudrat-practice] .session-reading-scroll { font-size: 1.25rem; line-height: 1.85; }
+[data-qudrat-practice] .qudrat-player { padding: 1rem; }
+[data-qudrat-practice] .qudrat-prompt { font-size: 1.5rem; line-height: 1.65; margin-block: 0 1rem; }
+[data-qudrat-practice] .qudrat-options { gap: .5rem; }
+[data-qudrat-practice] .qudrat-choice { font-size: 1.25rem; padding: .6rem .75rem; }
+[data-qudrat-practice] .qudrat-choice .qudrat-prose { line-height: 1.55; }
+@media (max-width: 1023px) {
+    .session-reading-scroll { max-height: clamp(8rem, 19dvh, 12rem); }
+    [data-qudrat-practice] .qudrat-reading { grid-template-columns: minmax(0, 1fr); gap: 1rem; }
+}
+@media (max-width: 639px) {
+    .session-toolbar { gap: .5rem; }
+    [data-qudrat-practice] .qudrat-player { padding: .75rem; }
+    [data-qudrat-practice] .qudrat-prompt { font-size: 1.375rem; line-height: 1.6; }
+}

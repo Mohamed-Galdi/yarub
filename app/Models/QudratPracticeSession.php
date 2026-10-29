@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 class QudratPracticeSession extends Model
 {
     protected $fillable = [
-        'user_id', 'category_id', 'mode', 'status', 'current_position', 'started_at', 'completed_at', 'closed_at', 'closure_reason',
+        'user_id', 'category_id', 'mode', 'status', 'current_position', 'started_at', 'completed_at', 'closed_at', 'closure_reason', 'practice_set_key', 'practice_set_title',
     ];
 
     protected $casts = [

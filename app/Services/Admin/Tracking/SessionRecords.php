@@ -77,6 +77,7 @@ class SessionRecords
             'current_type_title' => $qudrat ? $session->category->title : $session->bank->title,
             'mode' => $session->mode, 'model_id' => $qudrat ? null : $session->model_id,
             'current_model_title' => $qudrat ? null : $session->sourceModel?->title,
+            'practice_set_title' => $session->practice_set_title,
             'status' => $session->status, 'started_at' => $session->started_at?->toIso8601String(),
             'completed_at' => $session->completed_at?->toIso8601String(),
             'closed_at' => $qudrat ? $session->closed_at?->toIso8601String() : null,

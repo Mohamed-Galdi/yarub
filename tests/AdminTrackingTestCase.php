@@ -32,6 +32,8 @@ abstract class AdminTrackingTestCase extends QudratTestCase
             'database/migrations/2026_10_21_000001_create_qudrat_tables.php',
             'database/migrations/2026_10_21_000002_publish_qudrat_content_by_default.php',
             'database/migrations/2026_10_23_000001_create_arabic_skill_tables.php',
+            'database/migrations/2026_10_29_000001_add_set_identity_to_qudrat_sessions.php',
+            'database/migrations/2026_10_29_000002_add_set_identity_to_arabic_skill_sessions.php',
         ], $this->additionalMigrations), '--force' => true])->assertExitCode(0);
         DB::beginTransaction();
     }

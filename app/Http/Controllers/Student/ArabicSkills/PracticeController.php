@@ -20,17 +20,15 @@ class PracticeController extends Controller
 
     public function bank(Request $request, ArabicSkillBank $bank, Progress $progress)
     {
-        $data = $request->validate(['page' => ['sometimes', 'integer', 'min:1', 'max:1000000']]);
-
         return view('student.arabic-skills.bank', ['entry' => $progress->bank($request->user(), $bank),
-            'history' => $progress->history($request->user(), $bank, (int) ($data['page'] ?? 1))]);
+            'sets' => $progress->sets($request->user(), $bank)]);
     }
 
     public function start(Request $request, ArabicSkillBank $bank, Practice $practice)
     {
-        $data = $request->validate(['mode' => ['required', 'in:practice,model'], 'model_id' => ['nullable', 'integer', 'min:1']]);
+        $data = $request->validate(['mode' => ['required', 'in:practice,model'], 'model_id' => ['nullable', 'integer', 'min:1'], 'set_key' => ['nullable', 'string', 'max:100']]);
         $model = isset($data['model_id']) ? ArabicSkillModel::findOrFail($data['model_id']) : null;
-        $session = $practice->start($request->user(), $bank, $data['mode'], $model);
+        $session = $practice->start($request->user(), $bank, $data['mode'], $model, $data['set_key'] ?? null);
 
         return redirect()->route('student.arabic-skills.show', $session);
     }

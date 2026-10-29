@@ -61,4 +61,14 @@ class Progress
             'sessions' => $query->orderByDesc('started_at')->orderByDesc('id')->forPage($page, 20)->get()
                 ->map(fn ($s) => $this->practice->summary($s))->all()];
     }
+
+    public function sets(User $user, ArabicSkillBank $bank): array
+    {
+        Gate::forUser($user)->authorize('create', ArabicSkillSession::class);
+        $sessions = $user->arabicSkillSessions()->where('bank_id', $bank->id)->whereNotNull('practice_set_key')
+            ->orderByDesc('completed_at')->orderByDesc('id')->get()
+            ->map(fn ($s) => $this->practice->summary($s));
+
+        return app(\App\Services\PracticeSetProgress::class)->cards(app(PracticeSets::class)->definitions($bank), $sessions, $bank->is_active);
+    }
 }

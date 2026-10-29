@@ -13,24 +13,33 @@ use Illuminate\Validation\ValidationException;
 
 class Practice
 {
-    public function start(User $user, QudratCategory $category, string $mode): QudratPracticeSession
+    public function start(User $user, QudratCategory $category, string $mode, ?string $setKey = null): QudratPracticeSession
     {
         Gate::forUser($user)->authorize('create', QudratPracticeSession::class);
+        if (! in_array($mode, ['practice', 'review'], true) || ($setKey !== null && $mode !== 'practice')) {
+            throw ValidationException::withMessages(['mode' => 'اختر مجموعة للتدريب.']);
+        }
 
-        return DB::transaction(function () use ($user, $category, $mode) {
+        return DB::transaction(function () use ($user, $category, $mode, $setKey) {
             // All student operations lock the owner first: starts and first answers serialize per student.
             User::whereKey($user->id)->lockForUpdate()->firstOrFail();
             $category = QudratCategory::whereKey($category->id)->lockForUpdate()->firstOrFail();
             abort_unless($category->is_published, 404);
             $active = QudratPracticeSession::where('user_id', $user->id)->where('category_id', $category->id)
-                ->where('status', 'active')->lockForUpdate()->first();
+                ->where('practice_set_key', $setKey)->where('status', 'active')->lockForUpdate()->first();
             if ($active && $this->available($active)) {
                 return $active;
             }
             $seen = QudratSessionAnswer::where('user_id', $user->id)->pluck('question_id')->unique();
             $bank = QudratQuestion::published()->where('category_id', $category->id)
                 ->with(['options', 'passage'])->orderBy('sort_order')->orderBy('id')->lockForUpdate()->get();
-            if ($category->slug === 'reading_comprehension') {
+            $set = null;
+            if ($setKey !== null) {
+                $set = app(PracticeSets::class)->definitions($category)->firstWhere('key', $setKey);
+                abort_unless($set, 404);
+                $records = $bank->keyBy('id');
+                $questions = collect($set['question_ids'])->map(fn ($id) => $records->get($id))->filter();
+            } elseif ($category->slug === 'reading_comprehension') {
                 $groups = $bank->groupBy('passage_id')->sortBy(fn ($group) => [$group->first()->passage?->sort_order, $group->first()->passage_id])->filter(fn ($group) => $mode === 'review'
                     ? $group->contains(fn ($question) => $seen->contains($question->id))
                     : $group->contains(fn ($question) => ! $seen->contains($question->id)));
@@ -51,12 +60,12 @@ class Practice
                 $questions = $questions->take(10);
             }
             if ($questions->isEmpty()) {
-                throw ValidationException::withMessages(['practice' => $mode === 'review'
+                throw ValidationException::withMessages(['practice' => $setKey !== null ? 'لا توجد أسئلة منشورة في هذه المجموعة حاليًا.' : ($mode === 'review'
                     ? 'لا توجد أسئلة سابقة للمراجعة. ابدأ تدريبًا جديدًا أولًا.'
-                    : 'لا توجد أسئلة جديدة متاحة. يمكنك مراجعة الأسئلة السابقة.']);
+                    : 'لا توجد أسئلة جديدة متاحة. يمكنك مراجعة الأسئلة السابقة.')]);
             }
             $session = QudratPracticeSession::create(['user_id' => $user->id, 'category_id' => $category->id,
-                'mode' => $mode, 'started_at' => now()]);
+                'mode' => $mode, 'practice_set_key' => $setKey, 'practice_set_title' => $set['title'] ?? null, 'started_at' => now()]);
             foreach ($questions->values() as $position => $question) {
                 $session->items()->create(['question_id' => $question->id, 'position' => $position + 1,
                     'content_snapshot' => ['prompt' => $question->prompt, 'hint' => $question->hint,

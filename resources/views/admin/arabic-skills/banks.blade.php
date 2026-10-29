@@ -3,16 +3,19 @@
 <section data-qudrat-admin data-arabic-admin dir="rtl">
     @include('admin.arabic-skills._nav')
     <div class="qudrat-heading"><div><h2>البنوك والنماذج</h2><p>إيقاف البنك يمنع تدريبات جديدة ويحافظ على التدريبات الجارية والنتائج.</p></div></div>
+    <div class="training-type-grid">
     @foreach($banks as $bank)
         @php
             $bankFailed = $errors->any() && (string)old('bank_form') === (string)$bank->id;
             $modelFailed = $errors->any() && $bank->models->contains('id', old('model_form'));
+            $icon = ['nasaq' => 'sentence_completion', 'rasm' => 'contextual_errors', 'bayan' => 'reading_comprehension', 'midad' => 'verbal_analogies', 'burhan' => 'association_and_difference'][$bank->slug] ?? 'reading_comprehension';
         @endphp
-        <article class="arabic-admin-bank">
-            <h3>{{ $bank->title }} <span class="qudrat-note">{{ $bank->is_active ? 'متاح' : 'متوقف' }}</span></h3>
-            <p>{{ $bank->subtitle }}</p>
-            <dl class="qudrat-counts"><div><dt>الأسئلة</dt><dd>{{ $bank->questions_count }}</dd></div><div><dt>المنشورة</dt><dd>{{ $bank->active_count }}</dd></div><div><dt>المؤرشفة</dt><dd>{{ $bank->questions_count - $bank->active_count }}</dd></div></dl>
-            <div class="qudrat-actions"><a class="qudrat-table-link" href="{{ route('admin.arabic-skills.questions.index', ['bank_id' => $bank->id]) }}">أسئلة {{ $bank->title }}</a><a class="qudrat-table-link" href="{{ route('admin.arabic-skills.questions.create', ['bank_id' => $bank->id]) }}">إضافة سؤال إلى {{ $bank->title }}</a></div>
+        <article class="training-type-card">
+            <div class="training-type-heading"><x-qudrat.category-icon :type="$icon" /><span class="training-type-status">{{ $bank->is_active ? 'متاح' : 'متوقف' }}</span></div>
+            <h3>{{ $bank->title }}</h3>
+            <p class="training-type-subtitle">{{ $bank->subtitle }}</p>
+            <dl class="training-type-counts"><div><dt>الأسئلة</dt><dd>{{ $bank->questions_count }}</dd></div><div><dt>منشور</dt><dd>{{ $bank->active_count }}</dd></div><div><dt>مؤرشف</dt><dd>{{ $bank->questions_count - $bank->active_count }}</dd></div></dl>
+            <div class="training-type-actions"><a class="qudrat-button" href="{{ route('admin.arabic-skills.questions.index', ['bank_id' => $bank->id]) }}" aria-label="عرض الأسئلة — {{ $bank->title }}">عرض الأسئلة</a><a class="practice-set-review" href="{{ route('admin.arabic-skills.questions.create', ['bank_id' => $bank->id]) }}" aria-label="إضافة سؤال — {{ $bank->title }}">إضافة سؤال</a></div>
             <details @if($bankFailed) open @endif><summary>إعدادات {{ $bank->title }}</summary>
                 <form class="qudrat-form qudrat-editor" action="{{ route('admin.arabic-skills.banks.update', $bank) }}" method="POST">@csrf @method('PATCH')
                     <input type="hidden" name="bank_form" value="{{ $bank->id }}"><input type="hidden" name="revision" value="{{ $bankFailed ? old('revision') : $editor->revision($bank) }}">
@@ -24,7 +27,7 @@
                 </form>
             </details>
             <details @if($modelFailed) open @endif><summary>النماذج الأصلية في {{ $bank->title }} ({{ $bank->models->count() }})</summary>
-                <p class="qudrat-note">عضوية النماذج ثابتة. يتاح النموذج للطالب عند نشر جميع أسئلته الثلاثين وإتاحة البنك.</p>
+                <p class="qudrat-note">كل نموذج كامل يحتوي على 30 سؤالًا، موزعة على ثلاث مجموعات تدريب. عضوية النماذج ثابتة؛ يتاح النموذج عند نشر أسئلته الثلاثين وإتاحة البنك.</p>
                 @foreach($bank->models as $model)
                     @php
                         $thisModelFailed = $modelFailed && (string)old('model_form') === (string)$model->id;
@@ -37,5 +40,6 @@
             </details>
         </article>
     @endforeach
+    </div>
 </section>
 @endsection

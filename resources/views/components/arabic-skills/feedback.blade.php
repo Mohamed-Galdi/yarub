@@ -1,13 +1,15 @@
-@props(['question', 'response', 'feedback', 'review' => false])
-<section class="qudrat-result-feedback {{ $feedback['result'] === 'correct' ? 'qudrat-correct' : 'qudrat-incorrect' }}" tabindex="-1" data-arabic-feedback aria-label="نتيجة الإجابة">
+@props(['question', 'response', 'feedback', 'review' => false, 'embedded' => false])
+<section class="{{ $embedded ? 'arabic-feedback-details' : 'qudrat-result-feedback '.($feedback['result'] === 'correct' ? 'qudrat-correct' : 'qudrat-incorrect') }}" aria-label="تفاصيل الإجابة">
     @php
         $feedbackTitle = ['correct' => 'إجابة صحيحة', 'partial' => 'إجابة صحيحة جزئيًا', 'incorrect' => 'إجابة غير صحيحة'][$feedback['result']];
     @endphp
-    @if($review)
-        <h4 class="arabic-feedback-title">{{ $feedbackTitle }} · <bdi dir="ltr">{{ $feedback['earned_points'] }} / {{ $feedback['max_score'] }}</bdi></h4>
-    @else
-        <h2 class="arabic-feedback-title">{{ $feedbackTitle }} · <bdi dir="ltr">{{ $feedback['earned_points'] }} / {{ $feedback['max_score'] }}</bdi></h2>
-    @endif
+    @unless($embedded)
+        @if($review)
+            <h4 class="arabic-feedback-title">{{ $feedbackTitle }}@if($question['type'] === 'matching') · <bdi dir="ltr">{{ $feedback['earned_points'] }} / {{ $feedback['max_score'] }}</bdi>@endif</h4>
+        @else
+            <h2 class="arabic-feedback-title">{{ $feedbackTitle }}@if($question['type'] === 'matching') · <bdi dir="ltr">{{ $feedback['earned_points'] }} / {{ $feedback['max_score'] }}</bdi>@endif</h2>
+        @endif
+    @endunless
     @if($question['type'] === 'matching')
         <dl class="arabic-match-review">
             @foreach($question['matching_items'] as $item)

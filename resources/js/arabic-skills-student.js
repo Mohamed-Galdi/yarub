@@ -14,7 +14,8 @@ function initialize() {
     const check = form.querySelector('[data-arabic-check]');
     const update = () => {
         form.querySelectorAll('[data-arabic-match]').forEach(select => {
-            select.closest('.arabic-matching-item').querySelector('output').textContent = select.selectedOptions[0]?.dataset.choiceText || '';
+            const output = select.closest('.arabic-matching-item').querySelector('output');
+            if (output) output.textContent = select.selectedOptions[0]?.dataset.choiceText || '';
         });
         if (check) check.disabled = !form.checkValidity();
     };
@@ -25,6 +26,9 @@ function initialize() {
 function bringIntoView(element) {
     if (!element) return;
     element.focus({preventScroll: true});
+    if (element.matches?.('.session-feedback-toast')) {
+        return;
+    }
     const rect = element.getBoundingClientRect();
     if (rect.top < 0 || rect.bottom > window.innerHeight - 32) element.scrollIntoView({block: 'nearest', behavior: 'instant'});
 }
@@ -64,7 +68,7 @@ document.addEventListener('submit', async event => {
             root.replaceWith(replacement);
             window.history.replaceState({}, '', response.url);
             initialize();
-            bringIntoView(replacement.querySelector('[role="alert"]') || (form.dataset.arabicAction === 'answer' ? replacement.querySelector('[data-arabic-feedback-area]') : (replacement.querySelector('[data-arabic-prompt]') || replacement.querySelector('[data-arabic-heading]'))));
+            bringIntoView(replacement.querySelector('[role="alert"]') || (form.dataset.arabicAction === 'answer' ? replacement.querySelector('#arabic-feedback') : (replacement.querySelector('[data-arabic-prompt]') || replacement.querySelector('[data-arabic-heading]'))));
         }
     } catch {
         status.textContent = 'تعذّر إكمال الطلب. أعد المحاولة أو حدّث الصفحة لاستعادة آخر إجابة محفوظة.';

@@ -16,13 +16,9 @@
             <label for="progress-{{ $category->id }}">التقدّم: {{ $entry['progress'] }}٪</label><progress id="progress-{{ $category->id }}" value="{{ $entry['attempted'] }}" max="{{ max(1, $entry['total']) }}">{{ $entry['progress'] }}٪</progress>
             <div class="qudrat-card-footer">
             <span class="qudrat-session-badge">10 أسئلة لكل جلسة</span>
-            @if($category->slug === 'reading_comprehension')<p class="qudrat-session-note">قد تزيد قليلًا لتبقى أسئلة النص معًا.</p>@elseif($entry['total'] - $entry['attempted'] > 0 && $entry['total'] - $entry['attempted'] < 10)<p class="qudrat-session-note">الجلسة القادمة: {{ $entry['total'] - $entry['attempted'] }} أسئلة متبقية.</p>@endif
+            @if($category->slug === 'reading_comprehension')<p class="qudrat-session-note">قد تزيد قليلًا لتبقى أسئلة النص معًا.</p>@endif
             <div class="qudrat-actions">
-                @if($entry['active'])<a class="qudrat-button" href="{{ route('student.qudrat.show', $entry['active']) }}">متابعة التدريب</a>
-                @elseif($entry['total'] > $entry['attempted'])<form method="POST" action="{{ route('student.qudrat.start', $category) }}">@csrf<input type="hidden" name="mode" value="practice"><button class="qudrat-button">ابدأ التدريب</button></form>
-                @elseif($entry['total'] > 0)<p class="qudrat-note">أكملت جميع الأسئلة المتاحة. يمكنك الآن المراجعة.</p>
-                @else<p class="qudrat-note">لا توجد أسئلة متاحة حاليًا. جرّب قسمًا آخر.</p>@endif
-                @if(!$entry['active'] && $entry['attempted'] > 0)<form method="POST" action="{{ route('student.qudrat.start', $category) }}">@csrf<input type="hidden" name="mode" value="review"><button class="qudrat-button qudrat-secondary">مراجعة الأسئلة السابقة</button></form>@endif
+                <a class="qudrat-button" aria-label="اختيار مجموعة — {{ $category->title }}" href="{{ route('student.qudrat.category', $category) }}">اختيار مجموعة</a>
             </div>
             </div>
         </article>

@@ -29,4 +29,17 @@ class Progress
                 'active' => $active->get($category->id)];
         })->all();
     }
+
+    public function sets(User $user, QudratCategory $category): array
+    {
+        $sessions = $user->qudratSessions()->where('category_id', $category->id)->whereNotNull('practice_set_key')
+            ->withCount(['items', 'answers', 'answers as correct_count' => fn ($q) => $q->where('is_correct', true)])
+            ->orderByDesc('completed_at')->orderByDesc('id')->get()->map(fn ($s) => [
+                'id' => $s->id, 'practice_set_key' => $s->practice_set_key, 'status' => $s->status,
+                'position' => $s->current_position, 'question_count' => $s->items_count,
+                'percentage' => $s->answers_count ? $s->correct_count / $s->answers_count * 100 : 0,
+            ]);
+
+        return app(\App\Services\PracticeSetProgress::class)->cards(app(PracticeSets::class)->definitions($category), $sessions, $category->is_published);
+    }
 }

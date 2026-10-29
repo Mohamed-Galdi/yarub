@@ -228,14 +228,14 @@ class PracticeTest extends QudratTestCase
         $this->assertSame(4, QudratSessionAnswer::count());
     }
 
-    public function test_empty_and_exhausted_banks_offer_explicit_review(): void
+    public function test_legacy_review_remains_supported_and_exhausted_banks_offer_set_selection(): void
     {
         $this->actingAs($this->student)->post(route('student.qudrat.start', $this->category), ['mode' => 'practice'])->assertSessionHasErrors('practice');
         $this->assertSame(0, QudratPracticeSession::count());
         $this->question();
         $this->finish($this->start());
         $this->post(route('student.qudrat.start', $this->category), ['mode' => 'practice'])->assertSessionHasErrors('practice');
-        $this->get(route('student.qudrat.index'))->assertOk()->assertSee('أكملت جميع الأسئلة')->assertSee('مراجعة الأسئلة السابقة');
+        $this->get(route('student.qudrat.index'))->assertOk()->assertSee('اختيار مجموعة')->assertSee(route('student.qudrat.category', $this->category), false);
         $this->post(route('student.qudrat.start', $this->category), ['mode' => 'review'])->assertRedirect();
         $this->assertSame(2, QudratPracticeSession::count());
     }
