@@ -1,0 +1,98 @@
+{
+  "schemaVersion": 2,
+  "generatedAt": "2026-11-06",
+  "title": "Design System: YARUB panels",
+  "extensions": {
+    "breakpoints": [
+      {
+        "name": "persistent-admin-sidebar",
+        "value": "768px"
+      },
+      {
+        "name": "expanded-dashboard-grids",
+        "value": "1150px"
+      },
+      {
+        "name": "expanded-student-topbar",
+        "value": "1280px"
+      }
+    ],
+    "rollout": {
+      "layouts": [
+        "layouts.admin",
+        "layouts.student"
+      ],
+      "pageUrls": 76,
+      "viewports": [
+        1440,
+        390
+      ],
+      "editorGroups": [
+        "panel-editor-group",
+        "panel-editor-group-heading"
+      ],
+      "dialogs": [
+        "panel-dialog",
+        "panel-busy-overlay"
+      ],
+      "messages": [
+        "panel-message--own",
+        "panel-message--other"
+      ],
+      "verification": "Rendered all active HTML panel routes with isolated fixtures. See DESIGN.md for coverage and integration limits."
+    }
+  },
+  "components": [
+    {
+      "name": "Primary button",
+      "kind": "button",
+      "refersTo": "button-primary",
+      "description": "Primary button action in the panels.",
+      "html": "<button type=\"button\" class=\"ds-button\" dir=\"rtl\">إضافة دورة</button>",
+      "css": ".ds-button{box-sizing:border-box;display:inline-flex;align-items:center;justify-content:center;min-block-size:44px;padding:6px 14px;border:1px solid #292a65;border-radius:8px;background:#292a65;color:#fff;font:700 .9rem/1.55 hacen,sans-serif}.ds-button:hover{background:#3e3f74}.ds-button:focus-visible{outline:2px solid #545584;outline-offset:3px}.ds-button:disabled{opacity:.55;cursor:not-allowed}"
+    },
+    {
+      "name": "Secondary button",
+      "kind": "button",
+      "refersTo": "button-secondary",
+      "description": "Secondary button action in the panels.",
+      "html": "<button type=\"button\" class=\"ds-button\" dir=\"rtl\">تصفح البيانات</button>",
+      "css": ".ds-button{box-sizing:border-box;display:inline-flex;align-items:center;justify-content:center;min-block-size:44px;padding:6px 14px;border:1px solid #dfe2ec;border-radius:8px;background:#fff;color:#292a65;font:700 .9rem/1.55 hacen,sans-serif}.ds-button:hover{background:#eeedf7}.ds-button:focus-visible{outline:2px solid #545584;outline-offset:3px}.ds-button:disabled{opacity:.55;cursor:not-allowed}"
+    },
+    {
+      "name": "Quiet button",
+      "kind": "button",
+      "refersTo": "button-quiet",
+      "description": "Quiet button action in the panels.",
+      "html": "<button type=\"button\" class=\"ds-button\" dir=\"rtl\">تعديل</button>",
+      "css": ".ds-button{box-sizing:border-box;display:inline-flex;align-items:center;justify-content:center;min-block-size:44px;padding:6px 14px;border:1px solid transparent;border-radius:8px;background:transparent;color:#292a65;font:700 .9rem/1.55 hacen,sans-serif}.ds-button:hover{background:#eeedf7}.ds-button:focus-visible{outline:2px solid #545584;outline-offset:3px}.ds-button:disabled{opacity:.55;cursor:not-allowed}"
+    },
+    {
+      "name": "Published status",
+      "kind": "chip",
+      "refersTo": "status-published",
+      "description": "Text and green tint indicate a published course.",
+      "html": "<span dir=\"rtl\" class=\"ds-status\">منشورة</span>",
+      "css": ".ds-status{display:inline-block;border-radius:20px;padding:3px 10px;background:#e9f5ee;color:#216346;font-size:.8rem}.ds-status{font-family:hacen,sans-serif;line-height:1.55}"
+    },
+    {
+      "name": "Current navigation link",
+      "kind": "nav",
+      "refersTo": "nav-current",
+      "description": "Marks the current destination in the admin sidebar.",
+      "html": "<a dir=\"rtl\" class=\"ds-nav\" href=\"#courses\" aria-current=\"page\">الدورات</a>",
+      "css": ".ds-nav{box-sizing:border-box;display:flex;align-items:center;min-block-size:44px;padding:7px 10px;border-radius:8px;background:#eeedf7;color:#292a65;font:700 1rem/1.55 hacen,sans-serif;text-decoration:none}.ds-nav:focus-visible{outline:2px solid #545584;outline-offset:3px}"
+    },
+    {
+      "name": "Course card",
+      "kind": "card",
+      "refersTo": "course-card",
+      "description": "A compact text-first summary with publication state, counts, price, and view and edit actions.",
+      "html": "<article dir=\"rtl\" class=\"ds-card\"><header class=\"ds-course-heading\"><span class=\"ds-status\">منشورة</span><h3 class=\"ds-course-title\">مهارات اللغة العربية</h3></header><dl class=\"ds-stats\"><div><dt>الدروس</dt><dd>٨</dd></div><div><dt>المشتركون</dt><dd>٢</dd></div><div><dt>المبلغ</dt><dd><bdi>١٠٠</bdi> ر.س</dd></div></dl><div class=\"ds-actions\"><a class=\"ds-action\" href=\"#view\">تصفح البيانات</a><a class=\"ds-action ds-quiet\" href=\"#edit\">تعديل</a></div></article>",
+      "css": ".ds-status{display:inline-block;border-radius:20px;padding:3px 10px;background:#e9f5ee;color:#216346;font-size:.8rem}.ds-card{display:flex;flex-direction:column;gap:16px;padding:clamp(16px,2vw,24px);border:1px solid #dfe2ec;border-radius:14px;background:#fff;color:#20223a;font:1rem/1.55 hacen,sans-serif}.ds-course-heading{flex:1;overflow-wrap:anywhere}.ds-course-title{margin:10px 0 3px;font:700 1.125rem/1.35 judur,hacen,sans-serif}.ds-stats{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;margin:0;padding-block-start:12px;border-block-start:1px solid #dfe2ec}.ds-stats dt{color:#565d71;font-size:.875rem}.ds-stats dd{margin:0;font-weight:700;font-variant-numeric:tabular-nums;overflow-wrap:anywhere}.ds-actions{display:flex;flex-wrap:wrap;gap:8px}.ds-action{box-sizing:border-box;display:inline-flex;align-items:center;min-block-size:44px;padding:6px 14px;border:1px solid #dfe2ec;border-radius:8px;background:#fff;color:#292a65;font-size:.9rem;font-weight:700;text-decoration:none}.ds-quiet{border-color:transparent;background:transparent}.ds-action:hover{background:#eeedf7}.ds-action:focus-visible{outline:2px solid #545584;outline-offset:3px}"
+    }
+  ],
+  "narrative": {
+    "overview": "The pilot gives the admin pages a common surface and type system while keeping the student top bar as the starting point for a later phase."
+  }
+}

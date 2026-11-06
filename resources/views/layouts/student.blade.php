@@ -12,6 +12,7 @@
     @vite(['resources/css/app.css', request()->routeIs('student.videos.*') ? 'resources/js/videos-student.js' : (request()->routeIs('student.arabic-skills.*') ? 'resources/js/arabic-skills-student.js' : (request()->routeIs('student.qudrat.*') ? 'resources/js/qudrat-student.js' : 'resources/js/app.js'))])
     @if(request()->routeIs('student.videos.*')) @vite('resources/css/videos-student.css') @endif
     @if(request()->routeIs('student.videos.*')) @vite('resources/js/videos-player.js') @endif
+    @vite('resources/css/panels.css')
     {{-- csrf token --}}
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
@@ -102,115 +103,80 @@
 
 </head>
 
-<body class="font-hacen antialiased">
+<body class="yarub-panel panel-student antialiased">
 
-    <header data-student-navigation class="flex flex-wrap xl:justify-start xl:flex-nowrap w-full bg-pr-600 h-16 ">
-        <nav dir="rtl"
-            class="relative h-full max-w-[85rem] w-full xl:flex xl:items-center xl:justify-between xl:gap-3 mx-auto px-4 sm:px-6 xl:px-8 ">
-            <!-- Logo w/ Collapse Button -->
-            <div class="flex items-center justify-between h-full my-auto">
-                <!-- Collapse Button -->
-                <div class="xl:hidden">
-                    <button type="button"
-                        class="hs-collapse-toggle relative size-9 flex justify-center items-center text-sm font-semibold rounded-lg border border-white/50 text-white hover:bg-white/10 focus:outline-none focus:bg-white/10 disabled:opacity-50 disabled:pointer-events-none"
-                        id="hs-base-header-collapse" aria-expanded="false" aria-controls="hs-base-header"
-                        aria-label="القائمة الرئيسية" data-hs-collapse="#hs-base-header">
-                        <svg class="hs-collapse-open:hidden size-4" xmlns="http://www.w3.org/2000/svg" width="24"
-                            height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-                            stroke-linecap="round" stroke-linejoin="round">
-                            <line x1="3" x2="21" y1="6" y2="6" />
-                            <line x1="3" x2="21" y1="12" y2="12" />
-                            <line x1="3" x2="21" y1="18" y2="18" />
-                        </svg>
-                        <svg class="hs-collapse-open:block shrink-0 hidden size-4" xmlns="http://www.w3.org/2000/svg"
-                            width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                            stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                            <path d="M18 6 6 18" />
-                            <path d="m6 6 12 12" />
-                        </svg>
-                        <span class="sr-only">القائمة الرئيسية</span>
-                    </button>
-                </div>
-                <!-- End Collapse Button -->
-            </div>
-            <!-- End Logo w/ Collapse Button -->
-
-            <!-- Collapse -->
-            <div id="hs-base-header"
-                class="hs-collapse hidden overflow-hidden transition-all duration-300 basis-full grow xl:block"
-                aria-labelledby="hs-base-header-collapse">
-                <div
-                    class="overflow-hidden overflow-y-auto relative z-70  flex xl:flex-row flex-col  xl:h-16 justify-between xl:gap-0 gap-4 xl:rounded-none rounded-md xl:p-0 p-2 xl:bg-pr-600 bg-pr-300 items-stretch [&::-webkit-scrollbar]:w-2 [&::-webkit-scrollbar-thumb]:rounded-full [&::-webkit-scrollbar-track]:bg-gray-100 [&::-webkit-scrollbar-thumb]:bg-gray-300">
-                    <div
-                        class=" xl:py-0 h-full flex flex-col xl:flex-row xl:items-center xl:justify-end gap-0.5 xl:gap-1">
+    <header class="panel-topbar" data-student-navigation dir="rtl">
+        <nav aria-label="التنقل في لوحة الطالب" class="panel-topbar-inner">
+            <a class="panel-wordmark" href="{{ route('student.dashboard') }}">يعرب</a>
+            <button type="button" class="panel-button panel-topbar-toggle hs-collapse-toggle"
+                id="hs-base-header-collapse" aria-expanded="false" aria-controls="hs-base-header"
+                data-hs-collapse="#hs-base-header">
+                <x-icons.bars aria-hidden="true" />
+                القائمة
+            </button>
+            <div id="hs-base-header" class="hs-collapse hidden overflow-hidden xl:block">
+                <div class="panel-topbar-content">
+                    <div class="panel-topbar-links">
                         <x-btn.student-nav-item :route="'student.courses.index'" :item="'courses'" :title="'الدورات'">
-                            <x-icons.course class="w-5 h-5 text-white" />
-                            <!-- Replace with your actual icon component -->
+                            <x-icons.course class="w-5 h-5" />
                         </x-btn.student-nav-item>
                         <x-btn.student-nav-item :route="'student.lessons.index'" :item="'lessons'" :title="'الشروحات'">
-                            <x-icons.lesson class="w-5 h-5 text-white" />
-                            <!-- Replace with your actual icon component -->
+                            <x-icons.lesson class="w-5 h-5" />
                         </x-btn.student-nav-item>
                         <x-btn.student-nav-item :route="'student.tests.index'" :item="'tests'" :title="'الإختبارات'">
-                            <x-icons.test class="w-5 h-5 text-white" /> <!-- Replace with your actual icon component -->
+                            <x-icons.test class="w-5 h-5" />
                         </x-btn.student-nav-item>
                         <x-btn.student-nav-item :route="'student.certificates.index'" :item="'certificates'" :title="'الشهادات'">
-                            <x-icons.certificate class="w-5 h-5 text-white" />
-                            <!-- Replace with your actual icon component -->
+                            <x-icons.certificate class="w-5 h-5" />
                         </x-btn.student-nav-item>
                         <x-btn.student-nav-item :route="'student.qudrat.index'" :item="'qudrat'" :title="'القدرات'">
-                            <x-icons.square-check class="w-5 h-5 text-white" />
+                            <x-icons.square-check class="w-5 h-5" />
                         </x-btn.student-nav-item>
                         <x-btn.student-nav-item :route="'student.arabic-skills.index'" :item="'arabic-skills'" :title="'مهارات اللغة العربية'">
-                            <x-icons.text class="w-5 h-5 text-white" />
+                            <x-icons.text class="w-5 h-5" />
                         </x-btn.student-nav-item>
                         <x-btn.student-nav-item :route="'student.videos.index'" :item="'videos'" :title="'الفيديوهات'">
-                            <svg class="w-5 h-5 text-white" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><rect x="3" y="4" width="18" height="16" rx="2"/><path d="m10 8 6 4-6 4Z"/></svg>
+                            <svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><rect x="3" y="4" width="18" height="16" rx="2"/><path d="m10 8 6 4-6 4Z"/></svg>
                         </x-btn.student-nav-item>
                     </div>
-                    <div class="my-auto">
-                        <a href="{{ route('student.account.index') }}"
-                            class="flex justify-start items-center gap-2 bg-slate-200 rounded-xl px-3 shadow-md shadow-blue-500 hover:shadow-none hover:scale-[0.99] transition-all duration-300 ease-in-out ">
-                            <img src="{{ asset(Auth::user()->avatar) }}" class="w-10 h-10 rounded-full" />
-                            <div>
-                                <p>{{ Auth::user()->name }}</p>
-                                <p>{{ Auth::user()->email }}</p>
-                            </div>
+                    <div class="panel-topbar-tools">
+                        <a class="panel-topbar-account" href="{{ route('student.account.index') }}"
+                            @if(request()->routeIs('student.account.index')) aria-current="page" @endif>
+                            @if(Auth::user()->avatar)
+                                <img src="{{ asset(Auth::user()->avatar) }}" alt="" />
+                            @else
+                                <x-icons.user aria-hidden="true" />
+                            @endif
+                            <span class="panel-account-text">
+                                <span dir="auto">{{ Auth::user()->name }}</span>
+                                <small dir="ltr">{{ Auth::user()->email }}</small>
+                            </span>
                         </a>
-                    </div>
-
-                    <div
-                        class="flex px-2 items-center xl:w-fit xl:mb-0 mb-4 xl:mt-0 mt-2 w-full justify-center gap-2 xl:gap-4 me-8">
-                        <a aria-label="الدعم" href="{{ route('student.support.index') }}"
-                            class="hover:-translate-y-1 hover:scale-[1.2]  group transition-all duration-300 ease-in-out ">
-                            <x-icons.email
-                                class="w-6 h-6 text-white group-hover:text-indigo-400 transition-all duration-300 ease-in-out border-b-2 border-white group-hover:pb-2 pb-1" />
+                        <a class="panel-topbar-icon" aria-label="الدعم" href="{{ route('student.support.index') }}"
+                            @if(request()->routeIs('student.support.*', 'student.conversations.*')) aria-current="page" @endif>
+                            <x-icons.email aria-hidden="true" />
                         </a>
-                        <a aria-label="الرئيسية" href="{{ route('home') }}"
-                            class="hover:-translate-y-1 hover:scale-[1.2]  group transition-all duration-300 ease-in-out ">
-                            <x-icons.home
-                                class="w-6 h-6 text-white group-hover:text-indigo-400 transition-all duration-300 ease-in-out border-b-2 border-white group-hover:pb-2 pb-1 " />
+                        <a class="panel-topbar-icon" aria-label="الرئيسية" href="{{ route('home') }}">
+                            <x-icons.home aria-hidden="true" />
                         </a>
-                        <form method="POST" action="{{ route('logout') }}"
-                            class="hover:-translate-y-1 hover:scale-[1.2] group transition-all duration-300 ease-in-out mt-[0.4rem]">
+                        <form method="POST" action="{{ route('logout') }}">
                             @csrf
-                            <button type="submit" aria-label="تسجيل الخروج">
-                                <x-icons.logout
-                                    class="w-6 h-6 text-white group-hover:text-indigo-400 transition-all duration-300 ease-in-out border-b-2 border-white group-hover:pb-2 pb-1 scale-x-[-1]" />
+                            <button class="panel-topbar-icon" type="submit" aria-label="تسجيل الخروج">
+                                <x-icons.logout aria-hidden="true" />
                             </button>
                         </form>
                     </div>
                 </div>
             </div>
-            <!-- End Collapse -->
         </nav>
     </header>
 
-
-    <main dir="rtl" class="">
+    <main id="panel-content" dir="rtl" @class([
+        'panel-legacy' => !request()->routeIs('student.qudrat.*', 'student.arabic-skills.*', 'student.videos.*'),
+    ])>
         @yield('content')
     </main>
-    <footer class="bg-pr-800 text-white h-40 w-full">
+    <footer dir="rtl" class="panel-student-footer">
         <div class="mx-auto max-w-screen-xl flex flex-col items-center justify-center h-full py-4 px-4 sm:px-6 lg:px-8">
             <h2 class="text-2xl mb-4">
                 روابط سريعة

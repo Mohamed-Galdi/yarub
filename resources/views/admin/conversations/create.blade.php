@@ -1,22 +1,23 @@
 @extends('layouts.admin')
+@section('panel-own-title', true)
 
 @section('content')
     <div class="container">
         {{-- <x-form.errors :errors="$errors" /> --}}
         <div class="flex justify-between">
-            <h1 class="lg:text-4xl text-2xl text-nowrap truncate text-indigo-700 mb-4">إنشاء محادثة جديدة</h1>
+            <h1 class="panel-page-title">إنشاء محادثة جديدة</h1>
             {{-- // back button --}}
             <x-btn.back route="admin.conversations.index" />
         </div>
-        <form action="{{ route('admin.conversations.store') }}" method="POST">
+        <form action="{{ route('admin.conversations.store') }}" method="POST" class="panel-surface space-y-4">
             @csrf
             <div class="mb-6">
                 <label for="" class="block text-lg font-medium text-gray-700 mb-2">اختر المشتركين</label>
                 <button id="dropdownSearchButton" data-dropdown-toggle="dropdownSearch"
-                    class="flex justify-center items-center gap-2 w-full h-[3.1rem] rounded-md bg-slate-400 hover:bg-slate-500 transition-colors ease-in-out duration-200 text-white shadow-sm"
+                    class="panel-button panel-button--secondary w-full"
                     type="button">
                     <p>تحديد المشتركين</p>
-                    <x-icons.arrow-down class="w-5 h-5 ml-2 text-gray-50" />
+                    <x-icons.arrow-down class="w-5 h-5 ml-2" />
                 </button>
                 <!-- Dropdown menu -->
                 <div id="dropdownSearch" class="z-10 hidden bg-white rounded-lg shadow w-1/2 mt-2">
@@ -74,7 +75,7 @@
                     required></textarea>
             </div>
             <button type="submit"
-                class="w-full flex justify-center items-center gap-2 bg-blue-500 my-4 p-3 rounded-lg text-white  hover:scale-[0.99] hover:bg-blue-600 transition-all duration-200 ease-in-out">
+                class="panel-button panel-button--primary w-full flex justify-center items-center gap-2 my-4 p-3 rounded-lg transition-all duration-200 ease-in-out">
                 <p>إرسال</p>
                 <x-icons.send class="w-5 h-5 ml-2 text-white" />
             </button>

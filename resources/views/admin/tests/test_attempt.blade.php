@@ -9,18 +9,18 @@
         <div class="grid grid-cols-1 lg:grid-cols-3 gap-4">
             {{-- student --}}
             <div
-                class="flex justify-start items-start gap-6 bg-gradient-to-l from-indigo-500 to-purple-800 rounded-lg p-4 shadow-md text-gray-200">
-                <img src="{{ asset($testAttempt->user->avatar) }}" alt="Profile Picture" class="rounded-circle" width="100"
+                class="flex justify-start items-start gap-6 panel-surface">
+                <img src="{{ asset($testAttempt->user->avatar ?: 'assets/images/panel-avatar.svg') }}" alt="Profile Picture" class="rounded-circle" width="100"
                     height="100">
                 <div class="w-full">
-                    <h2 class="text-2xl font-bold text-white "> {{ $testAttempt->user->name }}</h2>
+                    <h2 class="panel-card-title "> {{ $testAttempt->user->name }}</h2>
                     <p>تاريخ الإجتياز: {{ $testAttempt->created_at->format('d-m-Y') }}</p>
 
                 </div>
             </div>
             {{-- test --}}
-            <div class=" gap-6 bg-gradient-to-l from-indigo-500 to-purple-800 rounded-lg p-4 shadow-md text-gray-200">
-                <h2 class="text-2xl font-bold text-white"> {{ $testAttempt->test->title }}</h2>
+            <div class=" gap-6 panel-surface">
+                <h2 class="panel-card-title"> {{ $testAttempt->test->title }}</h2>
                 <p class="font-judur text-nowrap truncate">
                     {{ $testAttempt->test->course_id ? $testAttempt->test->course->title : $testAttempt->test->lesson->title }}
                 </p>
@@ -29,11 +29,11 @@
                 </div>
             </div>
             {{-- score --}}
-            <div class=" gap-6 bg-gradient-to-l from-indigo-500 to-purple-800 rounded-lg p-4 shadow-md text-gray-200">
-                <h2 class="text-2xl font-bold text-white">النتيجة</h2>
+            <div class=" gap-6 panel-surface">
+                <h2 class="panel-card-title">النتيجة</h2>
                 <div class="flex justify-center items-end gap-1">
-                    <p class="font-judur text-gray-200 text-2xl">({{ number_format($percentage, 2) }}%)</p>
-                    <p class="text-6xl font-judur text-white" dir="ltr"> {{ $score }}/{{ $totalQuestions }} </p>
+                    <p class="text-slate-600 text-lg">({{ number_format($percentage, 2) }}%)</p>
+                    <p class="text-3xl font-judur" dir="ltr"> {{ $score }}/{{ $totalQuestions }} </p>
                 </div>
             </div>
         </div>
@@ -41,19 +41,19 @@
         <h2 class="my-8 text-4xl font-bold font-judur text-gray-800">الأسئلة و الإجابات </h2>
         <div class="space-y-16">
             @foreach ($result as $item)
-                <div class="bg-gradient-to-bl from-slate-700 to-slate-500 p-4 rounded-lg shadow-md text-white text-2xl">
+                <div class="panel-surface text-lg">
                     <div class="space-y-4">
-                        <h5 class="text-3xl text-indigo-400">السؤال {{ $loop->iteration }}:
+                        <h5 class="text-3xl text-pr-500">السؤال {{ $loop->iteration }}:
                             {{ $item['question']->question }}</h5>
                         <div class="flex lg:flex-row flex-col gap-6">
-                            <p class="text-2xl"><span class="text-xl font-nitaqat text-gray-300">إجابة الطالب:</span>
+                            <p class="text-2xl"><span class="text-xl font-hacen text-slate-600">إجابة الطالب:</span>
                                 @if ($item['student_answer_text'])
                                     {{ $item['student_answer_text'] }} (الخيار {{ $item['student_answer'] }})
                                 @else
                                     لم يتم الإجابة عليه
                                 @endif
                             </p>
-                            <p class="text-2xl"><span class="text-xl font-nitaqat text-gray-300">الجواب الصحيح :</span>
+                            <p class="text-2xl"><span class="text-xl font-hacen text-slate-600">الجواب الصحيح :</span>
                                 {{ $item['correct_answer_text'] }} (الخيار
                                 {{ $item['question']->correct_answer }})
                             </p>

@@ -7,6 +7,7 @@
         @keydown.left.prevent="$focus.wrap().previous()"
         class="flex gap-2 overflow-x-auto border-b border-slate-300 w-full"
         role="tablist"
+        data-panel-tabs
         aria-label="tab options"
     >
         @foreach ($tabs as $tab)

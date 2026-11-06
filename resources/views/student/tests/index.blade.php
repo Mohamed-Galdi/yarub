@@ -1,9 +1,9 @@
 @extends('layouts.student')
 @section('content')
-    <div class="w-full min-h-[calc(100vh-6rem)] bg-gradient-to-t from-gray-200 to-slate-200 ">
-        <div class="max-w-screen-xl mx-auto  p-4 space-y-8">
-            <h1 class="text-4xl mt-4 font-bold text-slate-600">اختبارات</h1>
-            <div class="relative overflow-x-auto shadow-md sm:rounded-lg w-full">
+    <div class="panel-student-content">
+        <x-panel.heading title="الاختبارات" />
+        <div class="panel-section space-y-4">
+            <div class="panel-table-region relative overflow-x-auto shadow-md sm:rounded-lg w-full" tabindex="0" role="region" aria-label="جدول البيانات">
 
                 <table class="w-full text-left rtl:text-right text-gray-500">
                     <thead class="text-lg text-gray-700 uppercase bg-white w-full">
@@ -32,7 +32,7 @@
                                     <p class="text-nowrap truncate w-32">{{ Str::words($test->title, 5) }}</p>
                                 </td>
                                 <td class="px-6 py-4 w-1/12">
-                                    <div class="p-2 rounded-lg bg-slate-700 text-slate-200 text-center">
+                                    <div class="panel-status">
                                         {{ $test->type }}
                                     </div>
                                 </td>
@@ -40,20 +40,20 @@
                                     {{ $testAttempts->get($test->id) ? $testAttempts->get($test->id)->created_at->diffForHumans() : 'لم يتم الإجتياز بعد' }}
                                 </td>
                                 <td class="px-6 py-4 w-1/12">
-                                    <div class="p-2 rounded-lg bg-green-700 text-slate-200 text-center">
+                                    <div class="panel-status panel-status--published">
                                         {{ $testAttempts->get($test->id) ? $testAttempts->get($test->id)->score : '- -' }}
                                     </div>
                                 </td>
                                 <td class="px-6 py-4 w-2/12">
                                     @if (!$testAttempts->get($test->id))
                                         <a href="{{ route('student.tests.take', $test->id) }}"
-                                            class="p-2 flex justify-center items-center gap-2 rounded-lg bg-indigo-400 hover:bg-indigo-500 text-white text-center transition-all duration-300 ease-in-out cursor-pointer">
+                                            class="panel-button panel-button--secondary p-2 flex justify-center items-center gap-2 rounded-lg text-center transition-all duration-300 ease-in-out cursor-pointer">
                                             <p>إجراء </p>
                                             <x-icons.test class="w-5 h-5 text-white" />
                                         </a>
                                     @else
                                         <a href="{{ route('student.tests.result', $test) }}"
-                                            class="p-2 flex justify-center items-center gap-2 rounded-lg bg-warning-500 hover:bg-warning-600 text-white text-center transition-all duration-300 ease-in-out cursor-pointer">
+                                            class="panel-button panel-button--secondary p-2 flex justify-center items-center gap-2 rounded-lg text-center transition-all duration-300 ease-in-out cursor-pointer">
                                             <p>تفقد النتائج </p>
                                             <x-icons.eye class="w-5 h-5 text-white" />
                                         </a>

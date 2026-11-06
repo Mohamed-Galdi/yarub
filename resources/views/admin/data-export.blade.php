@@ -1,8 +1,9 @@
 @extends('layouts.admin')
+@section('panel-own-title', true)
 @section('content')
     <div>
-        <h1 class="lg:text-4xl text-2xl text-nowrap truncate text-indigo-700 mb-8">إنشاء ملف للتحميل </h1>
-        <form action="{{ route('admin.data-export') }}" method="POST">
+        <h1 class="panel-page-title">إنشاء ملف للتحميل </h1>
+        <form class="panel-surface" action="{{ route('admin.data-export') }}" method="POST">
             @csrf
             <label for="data_type" class="text-gray-800 font-judur ms-3 mb-1 font-semibold">نوع البيانات </label>
             <select name="data_type" id="data_type"
@@ -38,7 +39,7 @@
             <x-form.input-light type="text" name="file_name" label="ضع إسم للملف " placeholder="مثال: مشتركين شهر أكتوبر"
                 :required="true" />
             <button type="submit"
-                class="w-full flex justify-center items-center gap-2   my-4 p-3 rounded-lg text-white bg-green-500 hover:bg-green-600 transition-all duration-200 ease-in-out ">
+                class="panel-button panel-button--primary mt-4">
                 <p>تحميل الملف</p>
                 <x-icons.file-download class="w-6 h-6 mr-2" />
             </button>

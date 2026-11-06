@@ -1,14 +1,15 @@
 @extends('layouts.admin')
+@section('panel-own-title', true)
 
 @section('content')
     <div class="container">
         {{-- <x-form.errors :errors="$errors" /> --}}
         <div class="flex justify-between">
-            <h1 class="lg:text-4xl text-2xl text-nowrap truncate text-indigo-700 mb-4">منح شهادة جديدة</h1>
+            <h1 class="panel-page-title">منح شهادة جديدة</h1>
             {{-- // back button --}}
             <x-btn.back route="admin.certificates" />
         </div>
-        <form action="{{ route('admin.certificates.store') }}" method="POST">
+        <form action="{{ route('admin.certificates.store') }}" method="POST" class="panel-surface space-y-4">
             @csrf
             <div class="grid lg:grid-cols-3 grid-cols-1 gap-3 py-4">
                 <div class="w-full">
@@ -47,7 +48,7 @@
                     </select>
                 </div>
             </div>
-            <button type="submit" class="w-full bg-green-500 my-4 p-3 rounded-lg text-white  hover:bg-green-700">
+            <button type="submit" class="panel-button panel-button--primary w-full my-4 p-3 rounded-lg">
                 منح الشهادة
             </button>
         </form>

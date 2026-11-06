@@ -1,18 +1,18 @@
 @extends('layouts.student')
 
 @section('content')
-    <div class="bg-gradient-to-t from-gray-200 to-slate-200 pt-8 ">
-        <div class="flex flex-col justify-start items-start min-h-screen space-y-6 max-w-screen-xl mx-auto  p-4">
-            <h1 class="text-4xl w-full text-center mt-4 font-bold text-indigo-500">محادثات الدعم</h1>
+    <div class="panel-student-content">
+        <x-panel.heading title="محادثات الدعم" />
+        <div class="panel-section space-y-4">
             <div>
                 <a href="{{ route('student.conversations.create') }}"
-                    class = "flex justify-center items-center text-white gap-2 bg-gradient-to-tr from-blue-600 to-blue-400 p-2 rounded-xl border-2 border-white overflow-hidden hover:scale-[1.03] transition-all duration-300 ease-in-out">
+                    class = "panel-button panel-button--primary">
                     <p>إنشاء رسالة</p>
                     <x-icons.send class="w-5 h-5 " />
                 </a>
             </div>
 
-            <div class="relative overflow-x-auto shadow-md sm:rounded-lg w-full">
+            <div class="panel-table-region relative overflow-x-auto shadow-md sm:rounded-lg w-full" tabindex="0" role="region" aria-label="جدول البيانات">
 
                 <table class="w-full text-left rtl:text-right text-gray-500 ">
                     <thead class="text-lg  text-gray-700 uppercase bg-gray-50 w-full">
@@ -57,7 +57,7 @@
                                 </td>
                                 <td class="px-6 py-4">
                                     <a href="{{ route('student.conversations.reply', $conversation) }}"
-                                        class="flex gap-2 items-center justify-center p-2 bg-indigo-500 hover:bg-indigo-600 rounded-lg text-gray-100">
+                                        class="panel-button panel-button--secondary flex gap-2 items-center justify-center p-2 rounded-lg">
                                         <p>الرد</p>
                                         <x-icons.reply class="w-4 h-4 " />
                                     </a>

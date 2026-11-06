@@ -1,14 +1,14 @@
 @extends('layouts.student')
 @section('content')
-    <div class="w-full min-h-[calc(100vh-6rem)] bg-gradient-to-t from-gray-200 to-slate-200 ">
+    <div class="w-full min-h-[calc(100vh-6rem)]  ">
         <div class="max-w-screen-xl mx-auto p-4 space-y-8 relative">
-            <div class="w-full flex justify-between items-center gap-2">
+            <div class="panel-test-heading">
                 {{-- Test Infos --}}
                 <div class="mt-6 space-y-3 w-5/6">
-                    <div class="flex items-end justify-start gap-2">
-                        <p class="lg:text-5xl text-3xl text-slate-800 text-nowrap truncate ">{{ $test->title }}</p>
+                    <div class="panel-test-title">
+                        <h1 class="panel-page-title">{{ $test->title }}</h1>
                         {{-- <p class="font-judur text-2xl text-slate-500 text-nowrap truncate">({{Str::words( $test->description , 8)}})</p> --}}
-                        <p class="py-2 px-3 rounded-lg bg-slate-800 text-slate-100">{{ $test->type }}</p>
+                        <p class="panel-status">{{ $test->type }}</p>
                     </div>
                     <div class="flex items-center justify-start gap-2 text-xl">
                         <p class="font-bold text-slate-900 underline underline-offset-2">{{ $test->course ? 'دورة' : 'شرح' }}
@@ -26,7 +26,7 @@
             {{-- Start button --}}
             <div id="startButton" class="w-full flex justify-center h-[40vh] items-center">
                 <button id="startButton"
-                    class=" bg-gradient-to-tr from-blue-500 to-indigo-600 text-slate-50 p-2 w-1/4 rounded-lg border-white border-2 lg:text-4xl text-xl  hover:bg-gradient-to-bl hover:scale-[0.99] hover:text-warning-400 transition-all duration-300 ease-in-out">ابدأ
+                    class="panel-button panel-button--primary">ابدأ
                     الاختبار</button>
             </div>
 
@@ -37,7 +37,7 @@
 
             {{-- Test form --}}
             <div class="hidden" id="testContainer">
-                <div class="w-full p-4 bg-slate-800 text-slate-100 rounded-lg my-4 lg:text-xl text-base">
+                <div class="panel-surface my-4">
                     <p>- أختي الطالبة ، وفقك الله، اجيبي عن جميع الأسئلة مستعينه بالله ومتوكله عليه.</p>
                     <p> - اقرأ الأسئلة جيدا قبل الحل وتأكد من إجابتك.</p>
 
@@ -45,8 +45,7 @@
                 <form id="testForm" action="{{ route('student.tests.submit', $test) }}" method="POST">
                     @csrf
                     @foreach ($test->questions as $index => $question)
-                        <div class="mb-16 space-y-4">
-                            <div class="w-full h-1 bg-slate-500"></div>
+                        <div class="panel-surface mb-4 space-y-4">
                             <p class="text-lg">{{ $question->question_text }}</p>
                             <p class="text-lg font-bold text-slate-600">{{ $index + 1 }}. {{ $question->question }}</p>
                             <ul class="mt-2 grid lg:grid-cols-2 grid-cols-1 gap-2">
@@ -55,9 +54,9 @@
                                     <li>
                                         <input type="radio" id="{{ $question->id . '_option_' . $loop->index }}"
                                             name="answers[{{ $question->id }}]" value="{{ $loop->index + 1 }}"
-                                            class="hidden peer" required />
+                                            class="sr-only peer" required />
                                         <label for="{{ $question->id . '_option_' . $loop->index }}"
-                                            class="inline-flex items-center justify-between w-full p-5 text-gray-500 bg-white border border-gray-200 rounded-lg cursor-pointer peer-checked:border-blue-600 peer-checked:text-slate-50 peer-checked:bg-indigo-500 hover:text-gray-600 hover:bg-gray-100 ">
+                                            class="panel-answer-option inline-flex items-center justify-between w-full p-4 cursor-pointer ">
                                             <div class="block">
                                                 <div class="w-full text-lg">{{ $question->$option }}</div>
 
@@ -69,7 +68,7 @@
                         </div>
                     @endforeach
                     <button type="submit"
-                        class="w-full text-center text-white bg-indigo-500 hover:bg-indigo-700 py-3 px-4 rounded-xl mb-4"
+                        class="panel-button panel-button--primary w-full text-center py-3 px-4 rounded-xl mb-4"
                         id="submitBtn">
                         تسليم الاختبار
                     </button>

@@ -1,13 +1,14 @@
 @extends('layouts.admin')
+@section('panel-own-title', true)
 @section('content')
     <div>
         <div class="flex justify-between">
-            <h1 class="lg:text-4xl text-2xl text-nowrap truncate text-indigo-700 mb-4">إنشاء قسيمة جديدة</h1>
+            <h1 class="panel-page-title">إنشاء قسيمة جديدة</h1>
             {{-- // back button --}}
             <x-btn.back route="admin.coupons" />
         </div>
         {{-- <x-form.errors :errors="$errors" /> --}}
-        <div class="bg-white shadow-md rounded-lg p-4 mb-4">
+        <div class="panel-surface mb-4">
             <form action="{{ route('admin.coupons.store') }}" method="POST">
                 @csrf
                 <div class="flex flex-col lg:flex-row gap-4 mb-6">
@@ -48,7 +49,7 @@
                             الشروحات
                         </label>
                         <button id="dropdownSearchButton" data-dropdown-toggle="dropdownSearch"
-                            class="block w-full h-[3.1rem] rounded-md bg-indigo-500 text-white disabled:text-black disabled:bg-slate-300 shadow-sm disabled:cursor-not-allowed "
+                            class="panel-button panel-button--secondary block w-full h-[3.1rem] rounded-md disabled:text-black disabled:bg-slate-300 disabled:cursor-not-allowed"
                             type="button" disabled>تحديد الدورات و الشروحات</button>
                         <!-- Dropdown menu -->
                         <div id="dropdownSearch" class="z-10 hidden bg-white rounded-lg shadow w-fit">
@@ -102,7 +103,7 @@
                         @enderror
                     </div>
                 </div>
-                <button type="submit" class="w-full bg-green-500 my-4 p-3 rounded-lg text-white  hover:bg-green-700">إنشاء
+                <button type="submit" class="panel-button panel-button--primary w-full my-4 p-3 rounded-lg">إنشاء
                     القسيمة</button>
             </form>
         </div>

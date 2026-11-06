@@ -1,17 +1,17 @@
 @extends('layouts.admin')
+@section('panel-own-title', true)
 @section('content')
     <div class="flex justify-between">
-        <h1 class="lg:text-4xl text-2xl text-nowrap truncate text-indigo-700 mb-4">تعديل الصفحة الرئيسية</h1>
-        </h1>
+        <h1 class="panel-page-title">تعديل الصفحة الرئيسية</h1>
         {{-- // back button --}}
         <x-btn.back route="admin.pages" />
     </div>
     <div class="mt-8">
         <div class="flex justify-start items-center gap-4">
-            <h2 class="w-fit text-nowrap text-warning-500 text-2xl ">الفقرة الرئيسية</h2>
-            <div class="w-full h-1 bg-warning-500"></div>
+            <h2 class="panel-section-title">الفقرة الرئيسية</h2>
+            <div class="flex-1 border-b border-gray-200"></div>
         </div>
-        <form action="{{ route('admin.pages.update-home') }}" class="mt-4 space-y-2" method="post">
+        <form action="{{ route('admin.pages.update-home') }}" class="panel-surface mt-4 space-y-4" method="post">
             @csrf
             <input type="hidden" name="form" value="header">
             <div>
@@ -23,7 +23,7 @@
                     required />
             </div>
             <button type="submit"
-                class="w-1/5 flex justify-center items-center gap-2 bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-md ">
+                class="panel-button panel-button--primary flex justify-center items-center gap-2 px-4 py-2 rounded-md">
                 <x-icons.save class="w-4 h-4  scale-x-[-1] " />
                 <p> حفظ</p>
             </button>
@@ -31,10 +31,10 @@
     </div>
     <div class="mt-12">
         <div class="flex justify-start items-center gap-4">
-            <h2 class="w-fit text-nowrap text-warning-500 text-2xl "> فقرة الميزات</h2>
-            <div class="w-full h-1 bg-warning-500"></div>
+            <h2 class="panel-section-title"> فقرة الميزات</h2>
+            <div class="flex-1 border-b border-gray-200"></div>
         </div>
-        <form action="{{ route('admin.pages.update-home') }}" class="mt-4 space-y-6" method="post">
+        <form action="{{ route('admin.pages.update-home') }}" class="panel-surface mt-4 space-y-6" method="post">
             @csrf
             <input type="hidden" name="form" value="features">
             <div class="w-full  ">
@@ -67,7 +67,7 @@
 
             </div>
             <button type="submit"
-                class="w-1/5 flex justify-center items-center gap-2 bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-md ">
+                class="panel-button panel-button--primary flex justify-center items-center gap-2 px-4 py-2 rounded-md">
                 <x-icons.save class="w-4 h-4  scale-x-[-1] " />
                 <p> حفظ</p>
             </button>
@@ -75,14 +75,14 @@
     </div>
     <div class="mt-12">
         <div class="flex justify-start items-center gap-4">
-            <h2 class="w-fit text-nowrap text-warning-500 text-2xl "> فقرة التقييمات</h2>
-            <div class="w-full h-1 bg-warning-500"></div>
+            <h2 class="panel-section-title"> فقرة التقييمات</h2>
+            <div class="flex-1 border-b border-gray-200"></div>
         </div>
 
         <div class="w-full grid lg:grid-cols-3 grid-cols-1 gap-8 place-items-center mt-4">
             @foreach ($homePageReviews as $review)
                 <form action="{{ route('admin.pages.update-review', $review->id) }}" enctype="multipart/form-data"
-                    class="space-y-2 w-full bg-slate-400  pe-6 py-3 rounded-lg" method="post">
+                    class="panel-surface space-y-4 w-full" method="post">
                     @csrf
                     <input type="hidden" name="form" value="reviews">
                     <x-form.input-light class="w-full" type="text" name="reviewer_name" label=" "
@@ -97,7 +97,7 @@
                                 alt="review image" class="w-1/2 h-1/2 object-cover rounded-full" />
                         </div>
                         <label for="reviewerImageInput{{ $review->id }}"
-                            class="bg-slate-700 text-center flex justify-center items-center gap-2 ms-3 cursor-pointer p-1 w-3/4 rounded-lg text-slate-200">
+                            class="panel-button panel-button--secondary">
                             صورة المستخدم
                             <x-icons.uplaod class="w-4 h-4 text-slate-200 " />
                         </label>
@@ -105,7 +105,7 @@
                             class="hidden reviewerImageInput" accept="image/*" data-review-id="{{ $review->id }}">
                     </div>
                     <button
-                        class="w-full ms-3 flex justify-center items-center gap-2 bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-md ">
+                        class="panel-button panel-button--secondary w-full flex justify-center items-center gap-2 px-4 py-2 rounded-md">
                         <x-icons.save class="w-4 h-4  scale-x-[-1] " />
                         <p> حفظ</p>
                     </button>
@@ -115,10 +115,10 @@
     </div>
     <div class="mt-12">
         <div class="flex justify-start items-center gap-4">
-            <h2 class="w-fit text-nowrap text-warning-500 text-2xl ">الفقرة الاخيرة</h2>
-            <div class="w-full h-1 bg-warning-500"></div>
+            <h2 class="panel-section-title">الفقرة الاخيرة</h2>
+            <div class="flex-1 border-b border-gray-200"></div>
         </div>
-        <form action="{{ route('admin.pages.update-home') }}" class="mt-4 space-y-2" method="post">
+        <form action="{{ route('admin.pages.update-home') }}" class="panel-surface mt-4 space-y-4" method="post">
             @csrf
             <input type="hidden" name="form" value="footer">
             <div>
@@ -130,7 +130,7 @@
                     placeholder="{{ $homePage->last_section_content }}" required />
             </div>
             <button type="submit"
-                class="w-1/5 flex justify-center items-center gap-2 bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-md ">
+                class="panel-button panel-button--primary flex justify-center items-center gap-2 px-4 py-2 rounded-md">
                 <x-icons.save class="w-4 h-4  scale-x-[-1] " />
                 <p> حفظ</p>
             </button>

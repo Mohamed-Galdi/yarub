@@ -1,6 +1,5 @@
 @php($usersRuntime = request()->routeIs('admin.students', 'admin.students.deleted', 'admin.view_student', 'admin.students.tracking.review'))
 @php($videoRuntime = request()->routeIs('admin.videos.*'))
-@php($navigationRuntime = $usersRuntime || $videoRuntime)
 <!DOCTYPE html>
 <html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
 
@@ -24,6 +23,7 @@
     @else
         @vite(['resources/css/app.css', 'resources/js/app.js'])
     @endif
+    @vite('resources/css/panels.css')
     @include('flatpickr::components.style')
     <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
 
@@ -130,19 +130,19 @@
 
 </head>
 
-<body dir="rtl" class="bg-gray-100 font-hacen">
+<body dir="rtl" class="yarub-panel panel-admin">
 
     {{-- ////////////////// sidebar mobile toggle button ////////////////// --}}
-    <button id="openButton" @if($navigationRuntime) aria-label="فتح قائمة الإدارة" aria-controls="sidebar" aria-expanded="false" @endif
-        class="absolute {{ $navigationRuntime ? 'md:hidden' : 'sm:hidden' }} p-2 rounded-bl-lg bg-gray-200 text-pr-500 hover:bg-pr-800 order-1">
+    <button id="openButton" aria-label="فتح قائمة الإدارة" aria-controls="sidebar" aria-expanded="false"
+        class="absolute md:hidden p-2 rounded-bl-lg bg-gray-200 text-pr-500 hover:bg-pr-800 order-1">
         <x-icons.bars class="w-6 h-6" />
     </button>
 
 
     <aside id="sidebar"
-        class="fixed z-[999999] top-0 right-0 h-full w-60 bg-indigo-800 transition-transform translate-x-full {{ $navigationRuntime ? 'md:translate-x-0 md:block' : 'sm:translate-x-0 sm:block' }}">
-        <button id="closeButton" @if($navigationRuntime) aria-label="إغلاق قائمة الإدارة" @endif
-            class="{{ $navigationRuntime ? 'md:hidden' : 'sm:hidden' }} p-2 rounded-bl-lg bg-gray-100 text-pr-500 hover:bg-gray-400 order-1">
+        class="fixed z-[999999] top-0 right-0 h-full w-60 bg-indigo-800 transition-transform translate-x-full md:translate-x-0">
+        <button id="closeButton" aria-label="إغلاق قائمة الإدارة"
+            class="md:hidden p-2 rounded-bl-lg bg-gray-100 text-pr-500 hover:bg-gray-400 order-1">
             <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"
                 xmlns="http://www.w3.org/2000/svg">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7"></path>
@@ -262,24 +262,18 @@
 
     </aside>
 
-    <main @hasSection('compact-admin') data-users-shell @endif
-        class="bg-indigo-800 md:w-[calc(100%-15rem)] w-full min-h-screen md:ms-[15rem] ms-0 flex flex-col justify-center items-center  overflow-hidden">
-        {{-- //////////////////// Title //////////////////// --}}
-        @unless($__env->hasSection('compact-admin'))
-        <div class="w-full space-y-1 font-judur pt-3 mb-4 ps-16">
-            <h1 class="text-4xl font-bold text-gradient-to-r  p-2 w-fit text-gray-100 ">
-                {{ \App\Enums\PageTitles::getTitle(request()->path()) }}
-            </h1>
-
-        </div>
+    <main id="panel-content" @hasSection('compact-admin') data-users-shell @endif
+        class="panel-main @hasSection('compact-admin') panel-main--compact @endif">
+        @unless($__env->hasSection('compact-admin') || $__env->hasSection('panel-heading') || $__env->hasSection('panel-own-title'))
+            <x-panel.heading :title="\App\Enums\PageTitles::getTitle(request()->path())" />
         @endunless
-
-        <div class="{{ $__env->hasSection('compact-admin') ? 'w-full h-full' : 'w-full h-full bg-indigo-800 overflow-hidden rounded-tr-[3rem]' }}">
-            <div class="{{ $__env->hasSection('compact-admin') ? 'users-shell-content w-full bg-gray-100 min-h-screen' : 'w-full h-full px-8 py-12 bg-gray-100 min-h-screen' }}">
-                @yield('content')
-            </div>
+        <div @class([
+            'users-shell-content' => $__env->hasSection('compact-admin'),
+            'panel-legacy' => !$__env->hasSection('compact-admin') && !$__env->hasSection('panel-heading'),
+            'panel-section' => !$__env->hasSection('compact-admin') && !$__env->hasSection('panel-heading') && !$__env->hasSection('panel-own-title'),
+        ])>
+            @yield('content')
         </div>
-
     </main>
 
     {{-- ////////////////// sidebar mobile toggle button ////////////////// --}}
@@ -288,24 +282,28 @@
             const openButton = document.getElementById('openButton');
             const closeButton = document.getElementById('closeButton');
             const sidebar = document.getElementById('sidebar');
-            const sidebarBreakpoint = {{ $navigationRuntime ? 768 : 640 }};
-            function syncUsersSidebar() {
-                @if($navigationRuntime)
+            const sidebarBreakpoint = 768;
+            function syncSidebar() {
                 const closed = window.innerWidth < sidebarBreakpoint && sidebar.classList.contains('translate-x-full');
                 sidebar.inert = closed;
                 openButton.setAttribute('aria-expanded', String(!closed));
-                @endif
             }
 
             closeButton.addEventListener('click', function() {
                 sidebar.classList.toggle('translate-x-full');
-                syncUsersSidebar();
-                @if($navigationRuntime) openButton.focus(); @endif
+                syncSidebar();
+                openButton.focus();
             });
             openButton.addEventListener('click', function() {
                 sidebar.classList.toggle('translate-x-full');
-                syncUsersSidebar();
-                @if($navigationRuntime) closeButton.focus(); @endif
+                syncSidebar();
+                closeButton.focus();
+            });
+
+            document.addEventListener('keydown', function(event) {
+                if (event.key === 'Escape' && window.innerWidth < sidebarBreakpoint && !sidebar.inert) {
+                    closeButton.click();
+                }
             });
 
             window.addEventListener('resize', function() {
@@ -314,7 +312,7 @@
                 } else {
                     sidebar.classList.add('translate-x-full');
                 }
-                syncUsersSidebar();
+                syncSidebar();
             });
 
             // Ensure sidebar visibility is correct on page load
@@ -323,7 +321,7 @@
             } else {
                 sidebar.classList.add('translate-x-full');
             }
-            syncUsersSidebar();
+            syncSidebar();
         });
     </script>
     @include('sweetalert::alert')

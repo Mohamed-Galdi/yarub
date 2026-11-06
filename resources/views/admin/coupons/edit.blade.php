@@ -1,13 +1,14 @@
 @extends('layouts.admin')
+@section('panel-own-title', true)
 
 @section('content')
     <div class="flex justify-between">
-        <h1 class="lg:text-4xl text-2xl text-nowrap truncate text-indigo-700 mb-4">تعديل القسيمة: <span
+        <h1 class="panel-page-title">تعديل القسيمة: <span
                 class="text-gray-500">{{ $coupon->code }}</span></h1>
         {{-- // back button --}}
         <x-btn.back route="admin.coupons" />
     </div>
-    <form action="{{ route('admin.coupons.update', $coupon->id) }}" method="POST">
+    <form action="{{ route('admin.coupons.update', $coupon->id) }}" method="POST" class="panel-surface space-y-4">
         @csrf
         @method('PUT')
         <div class="flex flex-col lg:flex-row gap-4 mb-6">
@@ -50,7 +51,7 @@
                 <label for="applicable_to" class="text-gray-800 font-judur ms-3 mb-1 font-semibold">تحديد الدورات و
                     الشروحات</label>
                 <button id="dropdownSearchButton" data-dropdown-toggle="dropdownSearch"
-                    class="block w-full h-[3.1rem] rounded-md bg-indigo-500 text-white disabled:text-black disabled:bg-slate-300 shadow-sm disabled:cursor-not-allowed"
+                    class="panel-button panel-button--secondary block w-full h-[3.1rem] rounded-md disabled:text-black disabled:bg-slate-300 disabled:cursor-not-allowed"
                     type="button" disabled>تحديد الدورات و الشروحات</button>
                 <!-- Dropdown menu -->
                 <div id="dropdownSearch" class="z-10 hidden bg-white rounded-lg shadow w-fit">
@@ -103,7 +104,7 @@
             </div>
         </div>
 
-        <button type="submit" class="w-full bg-green-500 my-4 p-3 rounded-lg text-white hover:bg-green-700">تحديث
+        <button type="submit" class="panel-button panel-button--primary w-full my-4 p-3 rounded-lg">تحديث
             القسيمة</button>
     </form>
 @endsection

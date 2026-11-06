@@ -2,9 +2,9 @@
 
 @section('content')
     @if ($lesson->content->count() > 0)
-        <div class="area-container flex bg-pr-200 w-full min-h-screen">
+        <div class="panel-learning area-container flex bg-pr-200 w-full min-h-screen">
             {{-- toggle sidebar --}}
-            <button id="openButton" class="lg:hidden w-8 p-2   bg-gray-200 ">
+            <button type="button" id="openButton" aria-label="عرض المحتويات" aria-controls="sidebar" class="lg:hidden w-8 p-2   bg-gray-200 ">
                 <x-icons.bars class="w-6 h-6" />
             </button>
             <!-- Sidebar -->
@@ -12,9 +12,9 @@
                 class=" z-10 translate-x-full hidden lg:block lg:relative absolute lg:translate-x-0 transision-all duration-300 ease-in-out lg:w-1/5 w-1/2 bg-pr-900 p-4 overflow-y-auto lg:h-[calc(100vh+6px)] h-screen">
                 <div class="flex justify-between items-center mt-10">
                     <h2 class="text-xl font-bold mb-4 text-slate-200">محتويات الشرح</h2>
-                    <div id="closeButton" class="text-sm text-slate-300 mb-4 cursor-pointer lg:hidden block">
+                    <button type="button" id="closeButton" aria-label="إغلاق المحتويات" class="mb-4 lg:hidden">
                         <x-icons.x class="w-6 h-6" />
-                    </div>
+                    </button>
                 </div>
                 <button data-modal-target="review_modal" data-modal-toggle="review_modal"
                     class="absolute flex justify-center items-center gap-2 w-full top-0 h-10 right-0 p-2 bg-slate-200 hover:bg-teal-500 hover:font-bold transition-all duration-300 ease-in-out">
@@ -59,7 +59,7 @@
         </div>
     @else
         <div
-            class="w-full min-h-[calc(100vh-6rem)]   bg-gradient-to-tr from-gray-400 to-slate-100 flex flex-col justify-center items-center pt-6">
+            class="w-full min-h-[calc(100vh-6rem)]    flex flex-col justify-center items-center pt-6">
             <p class="lg:text-5xl text-3xl text-center text-slate-500"> لا يوجد محتوى لهذه الشرح بعد ! </p>
             <img src="{{ asset('assets/images/empty.svg') }}" alt="صورة فارغة" class="lg:w-1/3 w-full" />
         </div>
@@ -70,7 +70,7 @@
         class="hidden overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 justify-center items-center w-full md:inset-0 max-h-full bg-gray-800/70">
         <div class="relative p-4 w-full max-w-md max-h-full">
             <!-- Modal content -->
-            <div class="relative bg-white rounded-lg shadow  ">
+            <div class="panel-dialog relative">
                 <!-- Modal header -->
                 <div class="flex items-center justify-between p-4 md:p-5 border-b rounded-t ">
                     <h3 class="text-lg font-semibold text-gray-900 ">
@@ -100,7 +100,7 @@
 
 
                     <button type="submit"
-                        class="w-full text-white bg-warning-400 hover:bg-warning-500 p-2 rounded-lg mt-4 me-2 flex justify-center items-center gap-2">
+                        class="panel-button panel-button--primary w-full p-2 rounded-lg mt-4 me-2 flex justify-center items-center gap-2">
                         <p>{{ $review ? 'تعديل التقييم' : 'تقييم الشرح' }}</p>
                     </button>
                 </form>

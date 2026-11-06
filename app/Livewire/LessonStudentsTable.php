@@ -53,7 +53,7 @@ final class LessonStudentsTable extends PowerGridComponent
     public function fields(): PowerGridFields
     {
         return PowerGrid::fields()
-            ->add('avatar', fn ($item) => '<img class="w-8 h-8 shrink-0 grow-0 rounded-full" src="' . asset("{$item->avatar}") . '" alt="">')
+            ->add('avatar', fn ($item) => '<img class="w-8 h-8 shrink-0 grow-0 rounded-full" src="' . asset($item->avatar ?: 'assets/images/panel-avatar.svg') . '" alt="">')
             ->add('name')
             ->add('email')
 

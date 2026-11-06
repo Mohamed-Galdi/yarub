@@ -1,9 +1,9 @@
 @extends('layouts.student')
 @section('content')
-    <div class="w-full min-h-[calc(100vh-6rem)] bg-gradient-to-t from-gray-200 to-slate-200 ">
-        <div class="max-w-screen-xl mx-auto  p-4 space-y-8">
-            <h1 class="text-4xl mt-4 font-bold text-slate-600">الشهادات</h1>
-            <div class="relative overflow-x-auto shadow-md sm:rounded-lg w-full">
+    <div class="panel-student-content">
+        <x-panel.heading title="الشهادات" />
+        <div class="panel-section space-y-4">
+            <div class="panel-table-region relative overflow-x-auto shadow-md sm:rounded-lg w-full" tabindex="0" role="region" aria-label="جدول البيانات">
 
                 <table class="w-full text-left rtl:text-right text-gray-500">
                     <thead class="text-lg text-gray-700 uppercase bg-white w-full">
@@ -37,7 +37,7 @@
                                     <a href="{{ route('admin.certificates.view', ['id' => $certificate->id]) }}"
                                         target="_blank">
                                         <div
-                                            class="flex items-center justify-center gap-3 py-1 px-2 me-1 rounded-lg bg-indigo-400 text-gray-100 border border-gray-100 hover:bg-indigo-500 hover:text-white transition-all duration-300 ease-in-out cursor-pointer">
+                                            class="panel-button panel-button--secondary">
                                             <p> عرض </p>
                                             <x-icons.eye class="w-4 h-4" />
                                         </div>
@@ -47,7 +47,7 @@
                                     <a href="{{ route('admin.certificates.download', ['id' => $certificate->id]) }}"
                                         target="_blank">
                                         <div
-                                            class="flex items-center justify-center gap-3 py-1 px-2 me-1 rounded-lg bg-green-400 text-gray-100 border border-gray-100 hover:bg-green-500 hover:text-white transition-all duration-300 ease-in-out cursor-pointer">
+                                            class="panel-button panel-button--secondary">
                                             <p> تنزيل </p>
                                             <x-icons.download class="w-4 h-4" />
                                         </div>

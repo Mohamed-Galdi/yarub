@@ -1,15 +1,15 @@
 @extends('layouts.admin')
+@section('panel-own-title', true)
 
 @section('content')
     <div class="">
         <div class="flex justify-between">
-            <h1 class="lg:text-4xl text-2xl text-nowrap truncate text-indigo-700 mb-4">إنشاء شرح جديدة</h1>
-            </h1>
+            <h1 class="panel-page-title">إنشاء شرح جديدة</h1>
             {{-- // back button --}}
             <x-btn.back route="admin.lessons" />
         </div>
         {{-- <x-form.errors :errors="$errors" /> --}}
-        <form id="lessonForm" action="{{ route('admin.lessons.store') }}" method="POST" class="space-y-6" onsubmit="return false;">
+        <form id="lessonForm" action="{{ route('admin.lessons.store') }}" method="POST" class="panel-surface space-y-6" onsubmit="return false;">
             @csrf
             <div class="form-group w-full flex lg:flex-row flex-col gap-4 items-start justify-start">
                 <x-form.input-light name="title" label="العنوان" placeholder="مثال لعنوان: همزة الوصل" type="text"
@@ -38,14 +38,14 @@
                     type="text" required class="w-full " />
             </div>
             <div>
-                <h2 class="text-2xl text-indigo-500 mt-8 mb-2">محتوى الشرح </h2>
-                <div class="w-full h-1 bg-gray-400 rounded-md mb-6"></div>
+                <h2 class="panel-section-title mt-8 mb-2">محتوى الشرح </h2>
+                <div class="w-full border-b border-gray-200 mb-6"></div>
             </div>
             <div id="content-forms">
                 <div
-                    class="content-form bg-white rounded-xl border-gray-700 border-2 shadow-lg overflow-hidden pb-6 space-y-6">
-                    <div class="w-full bg-gray-800 py-2">
-                        <h3 class="w-full text-center text-gray-200 text-2xl">الدرس 1</h3>
+                    class="content-form panel-editor-group overflow-hidden pb-6 space-y-6">
+                    <div class="panel-editor-group-heading w-full py-2">
+                        <h3 class="panel-card-title w-full">الدرس 1</h3>
                     </div>
                     <div class="form-group">
                         <x-form.input-light name="content_titles[]" label="عنوان الدرس" placeholder="اكتب عنوان للشرح"
@@ -70,17 +70,17 @@
                 </div>
             </div>
             <button type="button"
-                class="w-36 bg-indigo-500 text-white flex gap-2 items-center justify-center rounded-lg p-2 mt-2"
+                class="panel-button panel-button--secondary w-36 flex gap-2 items-center justify-center rounded-lg p-2 mt-2"
                 id="add-content">
                 <p>إضافة درس</p>
                 <x-icons.plus class="w-4 h-4 mr-2" />
             </button>
-            <button type="button" class="w-full bg-green-500 my-4 p-3 rounded-lg text-white  hover:bg-green-700"
+            <button type="button" class="panel-button panel-button--primary w-full my-4 p-3 rounded-lg"
                 id="submitBtn">إنشاء
                 الشرح</button>
         </form>
-        <div id="loader" style="display: none;"
-            class="absolute  w-3/4 h-screen  flex flex-col items-center justify-center">
+        <div id="loader" role="status" aria-live="polite" style="display: none;"
+            class="panel-busy-overlay">
             <p class="text-indigo-600 lg:text-5xl text-2xl mb-2">جاري إنشاء الشرح...</p>
             <lottie-player src="https://lottie.host/25165b5d-de71-47e1-b452-1a7daf8a6aec/6b0mvv9d9K.json" class="mb-24"
                 background="##ffffff" speed="1" style="width: 400px; height: 400px" loop autoplay direction="1"
@@ -98,10 +98,10 @@
             const formCount = document.querySelectorAll('.content-form').length;
             return `
             <div
-                    class="content-form bg-white rounded-xl border-gray-700 border-2 shadow-lg overflow-hidden pb-6 space-y-6 mt-4">
-                    <div class="w-full bg-gray-800  py-2 flex justify-start items-center">
+                    class="content-form panel-editor-group overflow-hidden pb-6 space-y-6 mt-4">
+                    <div class="panel-editor-group-heading w-full  py-2 flex justify-start items-center">
                         <p class="remove-content px-3 py-1 bg-red-500 text-white text-center rounded-xl ms-5 cursor-pointer hover:bg-red-600  font-hacen">X</p>
-                        <h3 class="w-full text-center text-gray-200 text-2xl">الدرس ${formCount +1}</h3>
+                        <h3 class="panel-card-title w-full">الدرس ${formCount +1}</h3>
 
                     </div>
                     <div class="form-group">

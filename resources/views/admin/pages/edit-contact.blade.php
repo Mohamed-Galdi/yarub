@@ -1,17 +1,17 @@
 @extends('layouts.admin')
+@section('panel-own-title', true)
 @section('content')
     <div class="flex justify-between">
-        <h1 class="lg:text-4xl text-2xl text-nowrap truncate text-indigo-700 mb-4">تعديل صفحة تواصل معنا</h1>
-        </h1>
+        <h1 class="panel-page-title">تعديل صفحة تواصل معنا</h1>
         {{-- // back button --}}
         <x-btn.back route="admin.pages" />
     </div>
     <div class="mt-8">
         <div class="flex justify-start items-center gap-4">
-            <h2 class="w-fit text-nowrap text-warning-500 text-2xl ">الفقرة الرئيسية</h2>
-            <div class="w-full h-1 bg-warning-500"></div>
+            <h2 class="panel-section-title">الفقرة الرئيسية</h2>
+            <div class="flex-1 border-b border-gray-200"></div>
         </div>
-        <form action="{{ route('admin.pages.update-contact') }}" class="mt-4 space-y-2" method="post">
+        <form action="{{ route('admin.pages.update-contact') }}" class="panel-surface mt-4 space-y-4" method="post">
             @csrf
             <div class="flex lg:flex-row flex-col  justify-start items-center gap-4 w-full">
                 <x-form.input-light type="text" name="commercial_registration_no" label="رقم السجل التجاري" placeholder="رقم التسوية التجارية"
@@ -38,7 +38,7 @@
                     class="lg:w-1/2 w-full" value="{{ $contactPage->snapchat }}" />
             </div>
             <button type="submit"
-                class="w-full flex justify-center items-center gap-2 bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-md ">
+                class="panel-button panel-button--primary w-full flex justify-center items-center gap-2 px-4 py-2 rounded-md">
                 <x-icons.save class="w-4 h-4  scale-x-[-1] " />
                 <p> حفظ</p>
             </button>

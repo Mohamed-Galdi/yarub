@@ -1,13 +1,14 @@
 @extends('layouts.admin')
+@section('panel-own-title', true)
 @section('content')
-    <h1 class="lg:text-4xl text-3xl text-nowrap truncate font-bold text-gradient-to-r  p-2 w-fit text-indigo-500 ">حسابات المشرفين</h1>
+    <h1 class="panel-page-title">حسابات المشرفين</h1>
     <div class="mt-6">
         <div class="p-2 ms-2 flex gap-2 items-center">
             <x-icons.star class="w-4 h-4 text-yellow-500" />
             <h2>الحساب الرئيسي</h2>
         </div>
         <form action="{{ route('admin.account.update-main') }}" method="POST"
-            class="w-full  rounded-2xl bg-white shadow-xl px-4 pb-6 pt-4 ">
+            class="panel-surface w-full">
             @csrf
             <div class="grid lg:grid-cols-2 grid-cols-1 justify-start items-start py-2  gap-4 ">
                 <x-form.input-light type="text" name="name" label="الاسم" placeholder="الاسم" class="w-full"
@@ -16,12 +17,12 @@
                     class="w-full" value="{{ $superAdmin->email }}" />
             </div>
             <button type="submit"
-                class="w-full text-center mt-3 text-white bg-indigo-400 hover:bg-indigo-500 rounded-2xl py-2 px-4 hover:font-bold transition-all duration-300 ease-in-out">تحديث
+                class="panel-button panel-button--primary w-full text-center mt-3 rounded-2xl py-2 px-4 hover:font-bold transition-all duration-300 ease-in-out">تحديث
                 الحساب</button>
         </form>
         <div>
             <button data-modal-target="pw-modal" data-modal-toggle="pw-modal"
-                class="w-fit text-white bg-red-400 hover:bg-red-500 p-2 rounded-lg mt-4 me-2 flex justify-center items-center gap-2">
+                class="panel-button panel-button--secondary w-fit p-2 rounded-lg mt-4 me-2 flex justify-center items-center gap-2">
                 <x-icons.key class="w-4 h-4 text-white" />
                 <p>تغيير كلمة المرور</p>
             </button>
@@ -30,13 +31,13 @@
     <div class="w-full h-[2px] rounded-lg bg-gray-600 mt-8"></div>
     <div>
         <button data-modal-target="new-admin-modal" data-modal-toggle="new-admin-modal"
-            class="w-fit text-white bg-blue-400 hover:bg-blue-500 p-2 rounded-lg mt-4 me-2 flex justify-center items-center gap-2">
+            class="panel-button panel-button--secondary w-fit p-2 rounded-lg mt-4 me-2 flex justify-center items-center gap-2">
             <x-icons.admin class="w-4 h-4 text-white" />
             <p> إضافة مشرف </p>
         </button>
         <div class="mt-8 space-y-6">
             @forelse($admins as $admin)
-                <form action="{{ route('admin.account.update-admin', $admin->id) }}" method="POST" class="w-full  rounded-2xl bg-slate-300 shadow-xl px-4 pb-6 pt-4 border-2 border-blue-500">
+                <form action="{{ route('admin.account.update-admin', $admin->id) }}" method="POST" class="panel-surface">
                     @csrf
                     @method('PUT')
                     <input type="hidden" name="admin_id" value="{{ $admin->id }}">
@@ -57,7 +58,7 @@
                             placeholder="البريد الإلكتروني" class="w-full" value="{{ $admin->email }}" />
                     </div>
                     <button type="submit"
-                        class="w-full text-center mt-3 text-white bg-indigo-400 hover:bg-indigo-500 rounded-2xl py-2 px-4 hover:font-bold transition-all duration-300 ease-in-out">تحديث
+                        class="panel-button panel-button--primary w-full text-center mt-3 rounded-2xl py-2 px-4 hover:font-bold transition-all duration-300 ease-in-out">تحديث
                         الحساب</button>
                 </form>
             @empty
@@ -74,7 +75,7 @@
         class="hidden overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 justify-center items-center w-full md:inset-0 max-h-full bg-gray-800/70">
         <div class="relative p-4 w-full max-w-md max-h-full">
             <!-- Modal content -->
-            <div class="relative bg-white rounded-lg shadow  ">
+            <div class="panel-dialog relative">
                 <!-- Modal header -->
                 <div class="flex items-center justify-between p-4 md:p-5 border-b rounded-t ">
                     <h3 class="text-lg font-semibold text-gray-900 ">
@@ -106,7 +107,7 @@
 
 
                     <button type="submit"
-                        class="w-[90%] text-white bg-red-400 hover:bg-red-500 p-2 rounded-lg mt-4 me-2 flex justify-center items-center gap-2">
+                        class="panel-button panel-button--secondary w-[90%] p-2 rounded-lg mt-4 me-2 flex justify-center items-center gap-2">
                         <x-icons.key class="w-4 h-4 text-white" />
                         <p>تغيير كلمة المرور</p>
                     </button>
@@ -119,7 +120,7 @@
         class="hidden overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 justify-center items-center w-full md:inset-0 max-h-full bg-gray-800/70">
         <div class="relative p-4 w-full max-w-md max-h-full">
             <!-- Modal content -->
-            <div class="relative bg-white rounded-lg shadow  ">
+            <div class="panel-dialog relative">
                 <!-- Modal header -->
                 <div class="flex items-center justify-between p-4 md:p-5 border-b rounded-t ">
                     <h3 class="text-lg font-semibold text-gray-900 ">
@@ -149,7 +150,7 @@
 
 
                     <button type="submit"
-                        class="w-[90%] text-white bg-blue-400 hover:bg-blue-500 p-2 rounded-lg mt-4 me-2 flex justify-center items-center gap-2">
+                        class="panel-button panel-button--primary w-[90%] p-2 rounded-lg mt-4 me-2 flex justify-center items-center gap-2">
                         <x-icons.admin class="w-4 h-4 text-white" />
                         <p> إضافة مشرف </p>
                     </button>

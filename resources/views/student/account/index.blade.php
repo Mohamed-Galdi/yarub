@@ -1,9 +1,10 @@
 @extends('layouts.student')
 @section('content')
-    <div class="py-12 min-h-[calc(100vh-6rem)] bg-gradient-to-t from-gray-300 to-slate-300 ">
-        <div class="max-w-7xl mx-auto sm:px-6 lg:px-8 space-y-6 flex lg:flex-row flex-col items-start justify-between gap-8">
+    <div class="panel-student-content">
+        <x-panel.heading title="حسابي" />
+        <div class="panel-section space-y-6 flex lg:flex-row flex-col items-start justify-between gap-8">
 
-            <div class="p-4 sm:p-8 bg-white shadow sm:rounded-lg lg:w-2/3 w-full">
+            <div class="panel-surface lg:w-2/3 w-full">
                 <h2 class="text-xl  font-medium text-gray-900 mb-4">الملف الشخصي</h2>
                 <form id="profile-form" method="POST" action="{{ route('profile.update') }}" enctype="multipart/form-data"
                     class="space-y-6">
@@ -17,7 +18,7 @@
                                 <div
                                     class=" cursor-pointer relative md:w-1/2 w-full aspect-square rounded-full  group transition-all duration-200 ease-in-out">
                                     <img id="avatar-preview"
-                                        src="{{ $user->avatar ? asset($user->avatar) : asset('default-avatar.png') }}"
+                                        src="{{ $user->avatar ? asset($user->avatar) : asset('assets/images/panel-avatar.svg') }}"
                                         alt="User Avatar"
                                         class=" w-full aspect-square rounded-full object-cover group-hover:brightness-50 transition-all duration-200 ease-in-out">
                                     <div
@@ -45,7 +46,7 @@
 
                     <div>
                         <button type="submit"
-                            class="inline-flex w-full justify-center py-2 px-4 border border-transparent shadow-sm text-xl font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+                            class="panel-button panel-button--primary inline-flex w-full justify-center py-2 px-4 border border-transparent text-xl font-medium rounded-md focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
                             تحديث الحساب
                         </button>
                     </div>
@@ -53,7 +54,7 @@
             </div>
 
             <button id="change-password-btn"
-                class="lg:w-1/3 w-full p-2 text-white flex justify-center items-center gap-4 rounded-lg bg-red-500 hover:bg-red-600 transition-all duration-200 ease-in-out ">
+                class="panel-button panel-button--secondary lg:w-1/3 w-full p-2 flex justify-center items-center gap-4 rounded-lg transition-all duration-200 ease-in-out">
                 <p>تغيير كلمة المرور</p>
                 <x-icons.key class="w-5 h-5 ml-2" />
             </button>
@@ -68,7 +69,7 @@
             <div class="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity" aria-hidden="true"></div>
             <span class="hidden sm:inline-block sm:align-middle sm:h-screen" aria-hidden="true">&#8203;</span>
             <div
-                class="inline-block align-bottom bg-white rounded-lg text-right overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full">
+                class="panel-dialog inline-block align-bottom text-right overflow-hidden transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full">
                 <form id="password-form" method="POST" action="{{ route('profile.update.password') }}" class="p-6">
                     @csrf
                     @method('PUT')
@@ -93,7 +94,7 @@
                             إلغاء
                         </button>
                         <button type="submit"
-                            class="w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-indigo-600 text-base font-medium text-white hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 sm:col-start-2 sm:text-sm">
+                            class="panel-button panel-button--primary w-full inline-flex justify-center rounded-md border border-transparent px-4 py-2 text-base font-medium focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 sm:col-start-2 sm:text-sm">
                             تغيير كلمة المرور
                         </button>
 

@@ -1,8 +1,9 @@
 @extends('layouts.admin')
+@section('panel-own-title', true)
 @section('content')
     <div>
         <div class="flex justify-between px-8">
-            <h1 class="lg:text-4xl text-2xl text-nowrap truncate text-indigo-700 mb-4">تعديل : <span
+            <h1 class="panel-page-title">تعديل : <span
                     class="text-gray-800">{{ $test->title }} <span
                         class="font-nitaqat text-gray-500 text-2xl">({{ $test->course_id ? ' الدورة : ' . $test->course->title : ' الشرح : ' . $test->lesson->title }})</span></span>
             </h1>
@@ -13,14 +14,14 @@
         {{-- <x-form.errors :errors="$errors" /> --}}
         <div class="py-12">
             <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
-                <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
+                <div class="panel-surface overflow-hidden">
                     <div class="p-6 bg-white border-b border-gray-200">
                         <form action="{{ route('admin.tests.update', $test->id) }}" method="POST">
                             @csrf
                             @method('PUT')
                             <div class="w-full mb-4 ">
                                 <button type="submit"
-                                    class="px-4 py-2 w-full bg-green-600 text-white rounded-md hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500">
+                                    class="panel-button panel-button--primary px-4 py-2 w-full rounded-md focus:ring-2 focus:ring-offset-2 focus:ring-green-500">
                                     تحديث الإختبار
                                 </button>
                             </div>
@@ -53,14 +54,14 @@
                             </div>
                             <div id="questions-container" class="space-y-8">
                                 @foreach ($test->questions as $index => $question)
-                                    <div class="mb-6  border border-gray-300 rounded-md overflow-hidden bg-gray-300"
+                                    <div class="panel-editor-group mb-6 overflow-hidden"
                                         id="question-block-{{ $index }}">
                                         <div class="flex justify-between items-center mb-2 w-full">
                                             <div
-                                                class="text-lg font-medium mb-2 bg-gray-800 p-1 text-center text-gray-100 w-full flex relative justify-center items-center">
+                                                class="panel-editor-group-heading text-lg mb-2 p-3 w-full flex relative justify-center items-center">
                                                 <h3> السؤال {{ $index + 1 }} </h3>
                                                 <button type="button" onclick="removeQuestion({{ $index }})"
-                                                    class=" absolute left-0 top-0 px-2 py-1 bg-red-600 text-white w-8 h-full hover:bg-red-700 ">
+                                                    class="panel-button panel-button--danger absolute left-0 top-0 px-2 py-1 w-8 h-full">
                                                     <x-icons.trash class="h-full w-full" />
                                                 </button>
                                             </div>
@@ -123,7 +124,7 @@
                             </div>
 
                             <button type="button" onclick="addQuestion()"
-                                class="mt-4 px-4 py-2 bg-indigo-600 text-white rounded-md hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+                                class="panel-button panel-button--secondary mt-4 px-4 py-2 rounded-md focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
                                 أضف سؤال جديد
                             </button>
                         </form>
@@ -164,13 +165,13 @@
                 const container = document.getElementById('questions-container');
                 const questionDiv = document.createElement('div');
 
-                questionDiv.className = 'question-form mb-6  border border-gray-300 rounded-md overflow-hidden bg-gray-300';
+                questionDiv.className = 'question-form panel-editor-group mb-6 overflow-hidden';
                 questionDiv.innerHTML = `
                 <div
-                    class="text-lg font-medium mb-2 bg-gray-800 p-1 text-center text-gray-100 w-full flex relative justify-center items-center">
+                    class="panel-editor-group-heading text-lg mb-2 p-3 w-full flex relative justify-center items-center">
                     <h3>  سؤال إضافي ${questionCount} </h3>
                     <button  type="button"
-                        class="remove-question absolute left-0 top-0 px-2 py-1 bg-red-600 text-white w-8 h-full hover:bg-red-700 ">
+                        class="panel-button panel-button--danger remove-question absolute left-0 top-0 px-2 py-1 w-8 h-full">
                         <x-icons.trash class="h-full w-full" />
                     </button>
                 </div>

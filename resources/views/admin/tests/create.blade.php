@@ -1,8 +1,9 @@
 @extends('layouts.admin')
+@section('panel-own-title', true)
 @section('content')
     <div>
         <div class="flex justify-between px-8">
-            <h1 class="lg:text-4xl text-2xl text-nowrap truncate text-indigo-700 mb-4">إنشاء إختبار جديد</h1>
+            <h1 class="panel-page-title">إنشاء إختبار جديد</h1>
             {{-- // back button --}}
             <x-btn.back route="admin.tests" />
         </div>
@@ -10,7 +11,7 @@
 
         <div class="py-8">
             <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
-                <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
+                <div class="panel-surface overflow-hidden">
                     <div class="p-6 bg-white border-b border-gray-200">
                         <form action="{{ route('admin.tests.store') }}" method="POST">
                             @csrf
@@ -68,13 +69,13 @@
                             </div>
 
                             <button type="button" onclick="addQuestion()"
-                                class="mt-4 px-4 py-2 bg-indigo-600 text-white rounded-md hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+                                class="panel-button panel-button--secondary mt-4 px-4 py-2 rounded-md focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
                                 أضف سؤالا اخر
                             </button>
 
                             <div class="mt-6 w-full">
                                 <button type="submit"
-                                    class="w-full px-4 py-2 bg-green-600 text-white rounded-md hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500">
+                                    class="panel-button panel-button--primary w-full px-4 py-2 rounded-md focus:ring-2 focus:ring-offset-2 focus:ring-green-500">
                                     انشئ الإختبار
                                 </button>
                             </div>
@@ -111,9 +112,9 @@
                 questionCount++;
                 const container = document.getElementById('questions-container');
                 const questionDiv = document.createElement('div');
-                questionDiv.className = 'mb-6  border border-gray-300 rounded-md overflow-hidden bg-gray-300';
+                questionDiv.className = 'panel-editor-group mb-6 overflow-hidden';
                 questionDiv.innerHTML = `
-                <h3 class="text-lg font-medium mb-2 bg-gray-800 p-1 text-center text-gray-100">السؤال ${questionCount}</h3>
+                <h3 class="panel-editor-group-heading text-lg mb-2 p-3">السؤال ${questionCount}</h3>
                 <div class="p-4 space-y-4">
                 <div class="p-4">
                     <div class="mb-4">

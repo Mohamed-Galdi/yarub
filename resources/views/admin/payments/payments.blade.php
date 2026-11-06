@@ -1,9 +1,7 @@
 @extends('layouts.admin')
 @section('content')
     <div class="">
-        <h1 class="lg:text-4xl text-2xl text-nowrap truncate text-indigo-700 mb-4">المدفوعات</h1>
-        </h1>
-        <div>
+        <div class="panel-table-region" tabindex="0" role="region" aria-label="جدول البيانات">
             <table class="w-full text-left rtl:text-right text-gray-500 ">
                 <thead class="text-lg  text-gray-100 uppercase bg-indigo-500 w-full">
                     <tr>

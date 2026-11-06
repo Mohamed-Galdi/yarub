@@ -1,16 +1,16 @@
 @extends('layouts.admin')
+@section('panel-own-title', true)
 
 @section('content')
     <div class="container">
         <div class="flex justify-between">
-            <h1 class="lg:text-4xl text-2xl text-nowrap truncate text-indigo-700 mb-4">تعديل دورة: <span
+            <h1 class="panel-page-title">تعديل دورة: <span
                     class="text-gray-500">{{ $course->title }}</span></h1>
-            </h1>
             {{-- // back button --}}
             <x-btn.back route="admin.courses" />
         </div>
         {{-- <x-form.validation-errors :errors="$errors" /> --}}
-        <form id="courseForm" action="{{ route('admin.courses.update', $course->id) }}" method="POST" class="space-y-6" onsubmit="return false;">
+        <form id="courseForm" action="{{ route('admin.courses.update', $course->id) }}" method="POST" class="panel-surface space-y-6" onsubmit="return false;">
             @csrf
             @method('PUT')
             <div class="form-group flex lg:flex-row flex-col justify-start items-start gap-4 ">
@@ -48,16 +48,16 @@
             </div>
 
             <div>
-                <h2 class="text-2xl text-indigo-500 mt-8 mb-2">محتوى الدورة </h2>
-                <div class="w-full h-1 bg-gray-400 rounded-md mb-6"></div>
+                <h2 class="panel-section-title mt-8 mb-2">محتوى الدورة </h2>
+                <div class="w-full border-b border-gray-200 mb-6"></div>
             </div>
 
             <div id="content-forms" class="space-y-4">
                 @forelse ($course->content as $content)
                     <div
-                        class="content-form bg-white rounded-xl border-gray-700 border-2 shadow-lg overflow-hidden pb-6 space-y-6">
-                        <div class="w-full bg-gray-800 py-2">
-                            <h3 class="w-full text-center text-gray-200 text-2xl">الدرس {{ $loop->iteration }}</h3>
+                        class="content-form panel-editor-group overflow-hidden pb-6 space-y-6">
+                        <div class="panel-editor-group-heading w-full py-2">
+                            <h3 class="panel-card-title w-full">الدرس {{ $loop->iteration }}</h3>
                         </div>
                         <input type="hidden" name="content_ids[]" value="{{ $content->id }}">
 
@@ -72,7 +72,7 @@
                             </label>
                             <div class="flex flex-col items-center gap-3 justify-center lg:w-2/3 w-full  mx-auto ">
                                 <label for="video{{ $loop->iteration }}"
-                                    class="p-3 w-full bg-gray-900 text-white rounded-lg cursor-pointer hover:bg-gray-700 flex gap-2 items-center justify-center">
+                                    class="panel-button panel-button--secondary w-full">
                                     تغيير الفيديو
                                 </label>
                                 <input id="video{{ $loop->iteration }}" type="file"
@@ -109,20 +109,20 @@
         </div>
 
         <button type="button"
-            class="w-36 bg-indigo-500 text-white flex gap-2 items-center justify-center rounded-lg p-2 mt-2"
+            class="panel-button panel-button--secondary w-36 flex gap-2 items-center justify-center rounded-lg p-2 mt-2"
             id="add-content">
             <p>إضافة درس</p>
             <x-icons.plus class="w-4 h-4 mr-2" />
         </button>
         <button type="button"
-            class="w-full bg-blue-500 my-4 p-3 rounded-lg text-white  hover:bg-blue-700 flex gap-2 items-center justify-center"
+            class="panel-button panel-button--primary w-full my-4 p-3 rounded-lg flex gap-2 items-center justify-center"
             id="submitBtn">
             <p>حفظ التغييرات</p>
             <x-icons.save class="w-6 h-6 mr-2" />
         </button>
     </form>
-    <div id="loader" style="display: none;"
-        class="absolute  w-3/4 h-screen  flex flex-col items-center justify-center">
+    <div id="loader" role="status" aria-live="polite" style="display: none;"
+        class="panel-busy-overlay">
         <p class="text-indigo-600 lg:text-5xl text-2xl mb-2">جاري تحديث الدورة...</p>
         <lottie-player src="https://lottie.host/25165b5d-de71-47e1-b452-1a7daf8a6aec/6b0mvv9d9K.json" class="mb-24"
             background="##ffffff" speed="1" style="width: 400px; height: 400px" loop autoplay direction="1"
@@ -143,10 +143,10 @@
         const formCount = document.querySelectorAll('.content-form').length;
         return `
            <div
-                    class="content-form bg-white rounded-xl border-gray-700 border-2 shadow-lg overflow-hidden pb-6 space-y-6 mt-4">
-                    <div class="w-full bg-gray-800  py-2 flex justify-start items-center">
+                    class="content-form panel-editor-group overflow-hidden pb-6 space-y-6 mt-4">
+                    <div class="panel-editor-group-heading w-full  py-2 flex justify-start items-center">
                         <p class="remove-content px-3 py-1 bg-red-500 text-white text-center rounded-xl ms-5 cursor-pointer hover:bg-red-600  font-hacen">X</p>
-                        <h3 class="w-full text-center text-gray-200 text-2xl">الدرس ${formCount +1}</h3>
+                        <h3 class="panel-card-title w-full">الدرس ${formCount +1}</h3>
 
                     </div>
                     <input type="hidden" name="content_ids[]" value="">

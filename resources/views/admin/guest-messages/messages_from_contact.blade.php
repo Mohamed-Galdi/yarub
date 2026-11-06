@@ -1,17 +1,18 @@
 @extends('layouts.admin')
+@section('panel-own-title', true)
 @section('content')
     <div class="space-y-4">
-        <h1 class="lg:text-4xl text-2xl text-nowrap truncate font-bold text-gray-800">الرسائل المرسلة</h1>
+        <h1 class="panel-page-title">الرسائل المرسلة</h1>
         <div class="w-full flex md:flex-row flex-col md:justify-between">
             <a href="{{ route('messages_from_about') }}"
-                class="md:w-1/2 w-full py-2 text-center md:rounded-tr-xl md:rounded-br-xl md:rounded-bl-none md:rounded-tl-none rounded-tl-xl rounded-tr-xl  cursor-pointer {{ request()->routeIs('messages_from_about') ? 'bg-indigo-500 text-slate-200 font-semibold ' : 'bg-slate-300 text-gray-800' }}">صفحة
+                class="panel-button" @if(request()->routeIs('messages_from_about')) aria-current="page" @endif>صفحة
                 من نحن</a>
             <a href="{{ route('messages_from_contact') }}"
-                class="md:w-1/2 w-full  py-2 text-center md:rounded-tl-xl md:rounded-bl-xl md:rounded-br-none md:rounded-tr-none rounded-br-xl rounded-bl-xl  cursor-pointer {{ request()->routeIs('messages_from_contact') ? 'bg-indigo-500 text-slate-200 font-semibold ' : 'bg-slate-300 text-gray-800' }}">صفحة
+                class="panel-button" @if(request()->routeIs('messages_from_contact')) aria-current="page" @endif>صفحة
                 تواصل معنا
             </a>
         </div>
-        <div class="overflow-x-auto">
+        <div class="panel-table-region overflow-x-auto" tabindex="0" role="region" aria-label="جدول البيانات">
             <table class="w-full text-left rtl:text-right text-gray-500 ">
                 <thead class="text-lg  text-gray-700 uppercase bg-gray-300 w-full">
                     <tr>
@@ -61,7 +62,7 @@
                             class="hidden overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 justify-center items-center w-full md:inset-0 h-full max-h-full bg-slate-700/50">
                             <div class="relative p-4 w-full max-w-2xl max-h-full">
                                 <!-- Modal content -->
-                                <div class="relative bg-white rounded-lg shadow dark:bg-gray-700">
+                                <div class="panel-dialog relative">
                                     <!-- Modal header -->
                                     <div
                                         class="flex flex-col items-start justify-center p-4 md:p-5 border-b rounded-t dark:border-gray-600 gap-3">

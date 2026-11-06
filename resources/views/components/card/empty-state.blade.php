@@ -1,4 +1,4 @@
- <div  {{$attributes->merge(['class' => 'col-span-3 flex flex-col items-center justify-center space-y-2'])}}>
+ <div  {{$attributes->merge(['class' => 'panel-empty-legacy col-span-3 flex flex-col items-center justify-center space-y-2'])}}>
     <p class="text-center text-4xl  text-indigo-500">{{$title }}</p>
     <p class="font-judur text-lg text-gray-500">{{$message ?? ''}}</p>
     @if ($image)

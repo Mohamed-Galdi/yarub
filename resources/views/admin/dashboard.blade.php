@@ -1,115 +1,57 @@
 @extends('layouts.admin')
+@section('panel-heading', true)
+
 @section('content')
-    <div class="flex flex-col justify-start items-start min-h-screen space-y-6">
-        {{-- ////////////////////// Banner ///////////////////// --}}
-        
-        <div
-            class="w-full lg:h-64 rounded-2xl bg-gradient-to-b from-indigo-400 to-blue-700 shadow-xl flex lg:flex-row flex-col justify-start items-start lg:ps-0 ps-6">
-            <div class="h-full lg:w-1/3 w-full  lg:relative flex flex-col justify-center items-center pe-3 ">
-                <img src="{{ asset('assets/illustrations/admin_panel_character_cropped.svg') }}" alt="الصورة الرمزية"
-                    class="lg:h-full h-56 lg:absolute -bottom-4 right-0 object-cover" />
-                <h1
-                    class="lg:absolute top-12 right-32 text-3xl  text-gray-200 text-center text-wrap w-2/3 font-judur font-bold pe-3">
-                    لوحة تحكم منصة يعرب</h1>
-            </div>
-            <div class="h-full lg:w-2/3 w-full pl-6 pt-6  grid md:grid-cols-2 grid-cols-1  gap-4 pb-8">
-                <div
-                    class="w-full  rounded-lg bg-gradient-to-b border-2 border-gray-100 overflow-hidden from-green-400 to-green-600 flex justify-between items-start py-2 px-4  ">
-                    <div class="w-1/4 h-full  flex justify-start items-start ">
-                        <x-icons.students class="w-full h-full text-green-800" />
-                    </div>
-                    <div class="w-3/4  flex  justify-center items-center h-full ">
-                        <div class="w-fit  flex flex-col justify-center items-center ">
-                            <h1 class="lg:text-4xl text-2xl text-nowrap truncate text-green-900">المشتركين</h1>
-                            <p class="text-gray-50 text-3xl">{{ $students_count }}</p>
-                        </div>
-                    </div>
-                </div>
-                <div
-                    class="w-full  rounded-lg bg-gradient-to-b border-2 border-gray-100 overflow-hidden from-red-400 to-red-500 flex justify-start items-start  py-2 px-4  ">
-                    <div class="w-1/4 h-full  flex justify-start items-start ">
-                        <x-icons.course class="w-full h-full text-red-800" />
-                    </div>
-                    <div class="w-3/4  flex  justify-center items-center h-full ">
-                        <div class="w-fit  flex flex-col justify-center items-center ">
-                            <h1 class="lg:text-3xl text-2xl text-nowrap truncate text-red-800">الدورات و الشروحات</h1>
-                            <p class="text-gray-50 text-3xl">{{ $courses_and_lessons_count }}</p>
-                        </div>
-                    </div>
-                </div>
-                <div
-                    class="w-full  rounded-lg bg-gradient-to-b border-2 border-gray-100 overflow-hidden from-blue-500 to-blue-600 flex justify-start items-start  py-2 px-4  ">
-                    <div class="w-1/4 h-full  flex justify-center items-center ">
-                        <x-icons.eye class="w-[4.5rem] h-[4.5rem] text-blue-900" />
-                    </div>
-                    <div class="w-3/4  flex  justify-center items-center h-full ">
-                        <div class="w-fit  flex flex-col justify-center items-center ">
-                            <h1 class="lg:text-4xl text-2xl text-nowrap truncate text-blue-900">زوار المنصة</h1>
-                            <p class="text-gray-50 text-3xl">{{ $allTimeVisitors }}</p>
-                        </div>
-                    </div>
+    <x-panel.heading title="لوحة التحكم" description="نظرة عامة على نشاط منصة يعرب والمبيعات.">
+        <x-slot:actions>
+            <x-panel.button :href="route('admin.data-export-page')">
+                <x-icons.file-download aria-hidden="true" />
+                تصدير البيانات
+            </x-panel.button>
+        </x-slot:actions>
+    </x-panel.heading>
 
-                </div>
-                <div
-                    class="w-full  rounded-lg bg-gradient-to-b border-2 border-gray-100 overflow-hidden from-warning-300 to-yellow-400 flex justify-start items-start  py-2 px-4  ">
-                    <div class="w-1/4 h-full  flex justify-start items-start ">
-                        <x-icons.money-bag class="w-full h-full text-warning-800" />
-                    </div>
-                    <div class="w-3/4  flex  justify-center items-center h-full ">
-                        <div class="w-fit  flex flex-col justify-center items-center ">
-                            <h1 class="lg:text-4xl text-2xl text-nowrap truncate text-warning-800">المداخيل</h1>
-                            <p class="text-white text-3xl align-middle">{{ number_format($total_sales, 2) }} <span
-                                    class="text-sm">(ريال سعودي)</span></p>
-                        </div>
-                    </div>
-                </div>
-            </div>
+    <section class="panel-section" aria-labelledby="overview-heading">
+        <div class="panel-section-heading"><h2 id="overview-heading">مؤشرات المنصة</h2></div>
+        <dl class="panel-grid panel-grid--metrics">
+            <x-panel.metric label="المشتركون" :value="$students_count" />
+            <x-panel.metric label="الدورات والشروحات" :value="$courses_and_lessons_count" />
+            <x-panel.metric label="زوار المنصة" :value="$allTimeVisitors" />
+            <x-panel.metric label="المداخيل" :value="number_format($total_sales, 2)" unit="ر.س" />
+        </dl>
+    </section>
+
+    <section class="panel-section" aria-labelledby="activity-heading">
+        <div class="panel-section-heading"><h2 id="activity-heading">النشاط بمرور الوقت</h2></div>
+        <div class="panel-grid panel-grid--charts">
+            <x-panel.card title="الزوار والمشتركون" class="panel-chart">
+                <div id="usersDetail" dir="ltr"></div>
+            </x-panel.card>
+            <x-panel.card title="مبيعات الدورات واشتراكات الشروحات" class="panel-chart">
+                <div id="coursesDetail" dir="ltr"></div>
+            </x-panel.card>
         </div>
+    </section>
 
-        <div class="w-full flex justify-end">
-            <a href="{{route('admin.data-export-page')}}" class="w-44 p-2 flex justify-center items-center gap-2 bg-green-500 hover:bg-green-700 border-white border-2 transition-all duration-200 ease-in-out text-white rounded-lg">
-                <x-icons.file-download class="w-6 h-6" />
-                <p>صفحة تصدير البيانات  </p>
-            </a>
+    <section class="panel-section" aria-labelledby="sales-heading">
+        <div class="panel-section-heading"><h2 id="sales-heading">توزيع المبيعات</h2></div>
+        <div class="panel-grid panel-grid--charts">
+            <x-panel.card title="الدورات الأكثر مبيعًا" class="panel-chart">
+                @if(empty($coursesWithSubsCount['subs_count']))
+                    <x-panel.empty title="لا توجد بيانات مبيعات للدورات" message="سيظهر توزيع المبيعات عند تسجيل اشتراكات." />
+                @else
+                    <div id="CoursesalesDetail" dir="ltr"></div>
+                @endif
+            </x-panel.card>
+            <x-panel.card title="الشروحات الأكثر مبيعًا" class="panel-chart">
+                @if(empty($lessonsWithSubsCount['subs_count']))
+                    <x-panel.empty title="لا توجد بيانات مبيعات للشروحات" message="سيظهر توزيع المبيعات عند تسجيل اشتراكات." />
+                @else
+                    <div id="LessonsalesDetail" dir="ltr"></div>
+                @endif
+            </x-panel.card>
         </div>
-
-        {{-- //////////////////// Detail Charts //////////////////// --}}
-        <div class="w-full bg-slate-300 rounded-lg min-h-screen shadow-md  border border-white lg:px-12 px-2 py-3">
-            {{-- <p class="text-3xl text-gray-700 text-center  ">الإحصائيات المفصلة</p> --}}
-            {{-- //////////////////// Users //////////////////// --}}
-            <div class="mt-6 ">
-                <div class="rounded-2xl overflow-hidden">
-                    <div id="usersDetail"></div>
-                </div>
-            </div>
-            {{-- //////////////////// Courses //////////////////// --}}
-            <div class="mt-12">
-                <p class="text-2xl text-indigo-500 ">الدورات و الشروحات </p>
-                <div class="w-full h-1 rounded-lg bg-gradient-to-r from-pr-500 to-indigo-500"></div>
-                <div class="mt-12">
-                    <div id="coursesDetail"></div>
-                </div>
-            </div>
-            {{-- //////////////////// Courses //////////////////// --}}
-            <div class="mt-12">
-                <p class="text-2xl text-indigo-500 "> توزيع المبيعات</p>
-                <div class="w-full h-1 rounded-lg bg-gradient-to-r from-pr-500 to-indigo-500"></div>
-                <div class="mt-12 flex lg:flex-row flex-col justify-start items-start w-full gap-6">
-                    <div
-                        class="bg-gray-100 rounded-xl lg:w-1/2 w-full md:h-[34rem] h-[24rem] py-6 px-4 space-y-4 lg:space-y-0 ">
-                        <p class="text-indigo-500 font-judur text-xl font-bold">الدورات الاكثر مبيعا</p>
-                        <div id="CoursesalesDetail"></div>
-                    </div>
-                    <div
-                        class="bg-gray-100 rounded-xl lg:w-1/2 w-full md:h-[34rem] h-[24rem] py-6 px-4 space-y-4 lg:space-y-0 ">
-                        <p class="text-indigo-500 font-judur text-xl font-bold">الشروحات الاكثر مبيعا</p>
-                        <div id="LessonsalesDetail"></div>
-                    </div>
-                </div>
-            </div>
-
-        </div>
-    </div>
+    </section>
 
     <script>
         // ///////////////// Users and Students /////////////////
@@ -127,7 +69,7 @@
                     data: visitorsAndRegistrationsChartData.registrations,
                 }],
                 chart: {
-                    height: 400,
+                    height: 310,
                     type: 'line',
                     background: '#fff',
                     locales: [{
@@ -150,25 +92,26 @@
                 stroke: {
                     width: [0, 4]
                 },
-                title: {
-                    align: 'center',
-                    text: 'الزوار و المشتركين  '
-                },
-                colors: ['#43399f', '#92a3fe'],
+                colors: ['#43399f', '#616cba'],
                 dataLabels: {
-                    enabled: true,
-                    enabledOnSeries: [1]
+                    enabled: false
                 },
-                // arabic weekdays days
                 labels: visitorsAndRegistrationsChartData.months,
+                responsive: [{
+                    breakpoint: 520,
+                    options: {
+                        xaxis: { labels: { rotate: -45, rotateAlways: true } }
+                    }
+                }],
                 grid: {
-                    show: true,
+                    padding: { top: 12, right: 14 },
                 },
                 yaxis: [{
                     show: false,
 
                 }, {
                     opposite: true,
+                    min: 0,
                     title: {
                         text: ' المشتركين الجدد'
                     }
@@ -195,18 +138,9 @@
                     }
                 ],
                 chart: {
-                    height: 450,
+                    height: 310,
                     type: 'line',
                     background: '#fff',
-
-                    dropShadow: {
-                        enabled: true,
-                        color: '#000',
-                        top: 18,
-                        left: 7,
-                        blur: 10,
-                        opacity: 0.2
-                    },
                     zoom: {
                         enabled: false
                     },
@@ -227,19 +161,15 @@
                     fontFamily: 'judur, Arial, sans-serif'
                 },
 
-                colors: ['#43399f', '#92a3fe'],
+                colors: ['#43399f', '#616cba'],
                 dataLabels: {
-                    enabled: true,
+                    enabled: false,
                 },
                 stroke: {
                     curve: 'smooth'
                 },
-                title: {
-                    text: 'مبيعات الدورات و إشتراكات الشروحات',
-                    align: 'center'
-                },
                 grid: {
-                    color: '#fff'
+                    padding: { top: 12, right: 20 },
                 },
                 markers: {
                     size: 1
@@ -251,14 +181,10 @@
                     }
                 },
                 yaxis: {
-                    show: false,
+                    min: 0,
                 },
                 legend: {
-                    position: 'top',
-                    horizontalAlign: 'right',
-                    floating: true,
-                    offsetY: -25,
-                    offsetX: -5
+                    position: 'bottom'
                 }
             };
 
@@ -274,7 +200,7 @@
                 series: coursesWithSubsCount.subs_count,
                 chart: {
                     width: '100%',
-                    height: '100%',
+                    height: 310,
                     type: 'pie',
                     toolbar: {
                         show: true
@@ -299,6 +225,7 @@
                     monochrome: {
                         enabled: true,
                         color: '#43399f',
+                        shadeIntensity: 0.22,
                     },
                 },
                 plotOptions: {
@@ -317,20 +244,20 @@
                     },
                 },
                 dataLabels: {
-                    formatter(val, opts) {
-                        const name = opts.w.globals.labels[opts.seriesIndex]
-                        return [name, val.toFixed(1) + '%']
-                    },
+                    formatter: value => value.toFixed(1) + '%',
                 },
                 legend: {
-                    show: false,
+                    position: 'bottom',
+                    height: 48,
                 },
             };
 
             var chart = new ApexCharts(document.querySelector("#CoursesalesDetail"), options);
             chart.render();
         }
-        createDetailCoursesSalesChart();
+        if (document.getElementById('CoursesalesDetail')) {
+            createDetailCoursesSalesChart();
+        }
 
         function createDetailLessonsSalesChart() {
             var lessonsWithSubsCount = @json($lessonsWithSubsCount);
@@ -338,7 +265,7 @@
                 series: lessonsWithSubsCount.subs_count,
                 chart: {
                     width: '100%',
-                    height: '100%',
+                    height: 310,
                     type: 'pie',
                     toolbar: {
                         show: true
@@ -362,6 +289,7 @@
                     monochrome: {
                         enabled: true,
                         color: '#43399f',
+                        shadeIntensity: 0.22,
                     },
                 },
                 plotOptions: {
@@ -380,23 +308,23 @@
                     },
                 },
                 dataLabels: {
-                    formatter(val, opts) {
-                        const name = opts.w.globals.labels[opts.seriesIndex]
-                        return [name, val.toFixed(1) + '%']
-                    },
+                    formatter: value => value.toFixed(1) + '%',
                 },
                 legend: {
-                    show: false,
+                    position: 'bottom',
+                    height: 48,
                 },
             };
 
             var chart = new ApexCharts(document.querySelector("#LessonsalesDetail"), options);
             chart.render();
         }
-        createDetailLessonsSalesChart();
+        if (document.getElementById('LessonsalesDetail')) {
+            createDetailLessonsSalesChart();
+        }
     </script>
 @endsection()
 @push('styles')
-    .apexcharts-menu-item.exportSVG { display: none; }
-    .apexcharts-menu-item.exportCSV { display: none; }
+    .yarub-panel .apexcharts-menu-item.exportSVG { display: none; }
+    .yarub-panel .apexcharts-menu-item.exportCSV { display: none; }
 @endpush

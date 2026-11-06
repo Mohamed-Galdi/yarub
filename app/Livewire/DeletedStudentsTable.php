@@ -58,7 +58,7 @@ final class DeletedStudentsTable extends PowerGridComponent
             ->add('name')
             ->add('email')
             ->add('role')
-            ->add('avatar', fn($item) => '<img class="w-8 h-8 shrink-0 grow-0 rounded-full" src="' . asset("{$item->avatar}") . '" alt="">')
+            ->add('avatar', fn($item) => '<img class="w-8 h-8 shrink-0 grow-0 rounded-full" src="' . asset($item->avatar ?: 'assets/images/panel-avatar.svg') . '" alt="">')
             ->add('created_at', fn($item) => Carbon::parse($item->created_at))
             ->add('created_at_formatted', fn($item) => Carbon::parse($item->created_at)->diffForhumans());
     }
