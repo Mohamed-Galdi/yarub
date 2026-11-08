@@ -1,0 +1,25 @@
+/* Shared input focus: change the existing border without an outer ring. */
+:is(input, textarea, select):is(:focus, :focus-visible) {
+    --tw-ring-offset-shadow: 0 0 #0000 !important;
+    --tw-ring-shadow: 0 0 #0000 !important;
+    border-color: var(--input-focus-color, #292a65) !important;
+    outline: none !important;
+    box-shadow: none !important;
+}
+
+.dark-input {
+    --input-focus-color: #b6b7e8;
+}
+
+/* Custom controls draw their visible surface beside the actual input. */
+input:is(:focus, :focus-visible) + :is(.panel-answer-option, [class*="peer-focus:"]) {
+    border-color: var(--input-focus-color, #292a65) !important;
+    outline: none !important;
+    box-shadow: none !important;
+}
+
+@media (forced-colors: active) {
+    :is(input, textarea, select):is(:focus, :focus-visible) {
+        border-color: Highlight !important;
+    }
+}

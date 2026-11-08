@@ -106,6 +106,7 @@ Do not execute the placeholder literally. Current feature migrations:
 | Video seed import identities | `database/migrations/2026_10_27_000001_create_video_seed_imports_table.php` |
 | Qudrat practice set identity | `database/migrations/2026_10_29_000001_add_set_identity_to_qudrat_sessions.php` |
 | Arabic Skills practice set identity | `database/migrations/2026_10_29_000002_add_set_identity_to_arabic_skill_sessions.php` |
+| Google student authentication | `database/migrations/2026_11_06_000001_create_social_identities_table.php` |
 
 Before deploying video media endpoints, complete the private storage, media-tool, upload-limit and cleanup prerequisites in [VIDEO_LIBRARY_MEDIA.md](VIDEO_LIBRARY_MEDIA.md), then follow the [Phase 6 release and recovery handoff](VIDEO_LIBRARY_RELEASE.md) and [QA evidence](VIDEO_LIBRARY_QA.md). These migrations were verified only on isolated development MySQL; no video deployment has been performed.
 
@@ -203,3 +204,63 @@ Do not introduce `route:cache` or `config:cache` routinely: known duplicate rout
 If verification fails, stop and use the agreed recovery plan. A Git reversal alone does not restore database changes, uploads, payments or cached state. Record backup locations/tested production restores, maintenance handling, OPcache refresh, service management, Composer runtime and worker/scheduler procedures when confirmed. Do not invent rollback, restart, storage-link or permission-reset commands.
 
 See [project overview](PROJECT_OVERVIEW.md), [Qudrat](QUDRAT.md), [Arabic Skills](ARABIC_SKILLS.md), and [repository safeguards](../AGENTS.md).
+
+## Authentication and design release — 2026-11-08
+
+This release includes student Google authentication, redesigned authentication pages, global border-only input focus, shared course/lesson cards and student navigation alignment. No npm dependency changes, content imports or seeders are needed. See [AUTHENTICATION.md](AUTHENTICATION.md) for Google account behavior.
+
+After pulling, run the following on the host, one command at a time; stop on failure. Use the established maintenance procedure while dependencies/schema/assets are incomplete, and retain a restorable DB backup before the migration. Do not replace the production environment with the local one.
+
+1. In `/var/www/yarub/.env`, set `GOOGLE_CLIENT_ID`, `GOOGLE_CLIENT_SECRET` and `GOOGLE_REDIRECT_URI`. Use the credentials belonging to the Google client on which you registered the production callback, and copy that callback exactly. Keep `APP_URL` on the real HTTPS production origin, `APP_DEBUG=false`, and the existing `APP_KEY`. Retain the working persistent session settings; do not copy local `SESSION_SECURE_COOKIE=false` to production.
+
+2. Confirm the PHP runtime and Composer availability inside the existing PHP container:
+
+```bash
+cd /var/www/yarub
+docker exec --user www-data --workdir /var/www/yarub yarub-php php -v
+docker exec --user www-data --workdir /var/www/yarub yarub-php composer --version
+```
+
+The lockfile needs a compatible PHP 8.2/8.3 runtime and its required extensions. The Composer command above is a prerequisite check, not evidence that the binary is installed. If Composer is not found, stop and establish the existing server dependency-install method; do not improvise a PHP/Composer image or run an incompatible host Composer against this checkout.
+
+3. If that Composer check succeeds, install the exact locked production dependencies:
+
+```bash
+docker exec --user www-data --workdir /var/www/yarub yarub-php \
+  composer install --no-dev --prefer-dist --optimize-autoloader --no-interaction
+```
+
+Do not use `composer update` or ignore platform requirements. Composer hooks may bootstrap Laravel, so provision production environment values first. Clear stale configuration after the install:
+
+```bash
+docker exec --user www-data --workdir /var/www/yarub yarub-php php artisan config:clear
+```
+
+4. Check migration history, then apply this release's migration if pending:
+
+```bash
+docker exec --user www-data --workdir /var/www/yarub yarub-php php artisan migrate:status
+docker exec --user www-data --workdir /var/www/yarub yarub-php \
+  php artisan migrate --path=database/migrations/2026_11_06_000001_create_social_identities_table.php --force
+```
+
+It adds `users.has_local_password` (true for existing users) and the social identity table. Existing passwords, roles, enrollments and users are preserved. If other migrations are pending, review them separately rather than running an unrestricted batch.
+
+5. Build on the host with the existing Node dependencies:
+
+```bash
+sudo -u www-data npm --cache=/var/cache/yarub-npm run build
+```
+
+If `node_modules` is absent, first use the `npm ci` command from section 3. There is no npm lockfile change in this release.
+
+6. Clear changed route and Blade caches:
+
+```bash
+docker exec --user www-data --workdir /var/www/yarub yarub-php php artisan route:clear
+docker exec --user www-data --workdir /var/www/yarub yarub-php php artisan view:clear
+```
+
+Do not add blanket cache flushing, session clearing, `route:cache`, `config:cache`, or a container restart. Follow the established OPcache refresh procedure if PHP retains old code.
+
+7. Check login/registration and a new Google student, repeat Google login, an existing student's password login and Google linking, admin password login, course/lesson pages, and mobile input focus. Verify browser redirects remain on the production origin. Reopen access through the established maintenance procedure after checks pass. Google working locally does not verify production cookie/proxy/credential settings.

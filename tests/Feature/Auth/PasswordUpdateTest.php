@@ -5,11 +5,10 @@ namespace Tests\Feature\Auth;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\Hash;
-use Tests\TestCase;
+use Tests\AuthTestCase;
 
-class PasswordUpdateTest extends TestCase
+class PasswordUpdateTest extends AuthTestCase
 {
-    use RefreshDatabase;
 
     public function test_password_can_be_updated(): void
     {

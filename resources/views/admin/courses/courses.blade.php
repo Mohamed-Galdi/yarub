@@ -16,30 +16,32 @@
             <h2 id="course-list">قائمة الدورات</h2>
             <span class="panel-count">{{ $courses->count() }}</span>
         </div>
-        <div class="panel-grid panel-grid--courses">
+        <div class="panel-grid panel-learning-grid">
             @forelse ($courses as $course)
-                <x-panel.card class="panel-course">
-                    <header class="panel-course-heading">
-                        <span @class(['panel-status', 'panel-status--published' => $course->is_published])>
+                <x-panel.learning-card :title="$course->title" :type="$course->type" :description="$course->description"
+                    :href="route('admin.courses.view', $course->id)" :heading-level="3">
+                    <x-slot:status>
+                        <span @class(['panel-learning-card__status', 'is-published' => $course->is_published])>
                             {{ $course->is_published ? 'منشورة' : 'غير منشورة' }}
                         </span>
-                        <h3 class="panel-card-title" dir="auto">{{ $course->title }}</h3>
-                        <p dir="auto">{{ $course->type }}</p>
-                    </header>
-                    <dl class="panel-course-stats">
-                        <div><dt>الدروس</dt><dd>{{ $course->content()->count() }}</dd></div>
-                        <div><dt>المشتركون</dt><dd>{{ $course->students()->count() }}</dd></div>
-                        <div><dt>المبلغ</dt><dd><bdi>{{ $course->price }}</bdi> ر.س</dd></div>
-                    </dl>
-                    <div class="panel-actions panel-course-actions">
-                        <x-panel.button :href="route('admin.courses.view', $course->id)" :aria-label="'تصفح البيانات: '.$course->title">
-                            تصفح البيانات
-                        </x-panel.button>
-                        <x-panel.button :href="route('admin.courses.edit', $course->id)" variant="quiet" :aria-label="'تعديل: '.$course->title">
-                            تعديل
-                        </x-panel.button>
-                    </div>
-                </x-panel.card>
+                    </x-slot:status>
+                    <x-slot:details>
+                        <div><dt>الدروس</dt><dd>{{ $course->content()->count() }} <span>درس</span></dd></div>
+                        <div><dt>المشتركون</dt><dd>{{ $course->students()->count() }} <span>مشترك</span></dd></div>
+                    </x-slot:details>
+                    <x-slot:pricing>
+                        <span class="panel-learning-card__price-label">سعر الدورة</span>
+                        <p class="panel-learning-card__price"><bdi>{{ $course->price }}</bdi> <span>ر.س</span></p>
+                    </x-slot:pricing>
+                    <x-panel.button :href="route('admin.courses.view', $course->id)" :aria-label="'تصفح البيانات: '.$course->title">
+                        تصفح البيانات
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" aria-hidden="true"><path d="M19 12H5m6-6-6 6 6 6"/></svg>
+                    </x-panel.button>
+                    <x-panel.button :href="route('admin.courses.edit', $course->id)" variant="quiet" :aria-label="'تعديل: '.$course->title">
+                        <x-icons.edit aria-hidden="true" />
+                        تعديل
+                    </x-panel.button>
+                </x-panel.learning-card>
             @empty
                 <x-panel.card class="panel-grid-full">
                     <x-panel.empty title="لم يتم العثور على أي دورة" message="اضغط على زر الإضافة لإنشاء دورة." />

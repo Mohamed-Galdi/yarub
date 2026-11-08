@@ -167,3 +167,27 @@ The four legacy view files `admin/Xdashboard`, `admin/courses/VimeoCreate`, `adm
 Verification used a disposable SQLite database and sample media metadata. It checks rendering and client interactions. Live video playback, uploads, mail, payments, and production deployment require their configured environments.
 
 Legacy course and lesson players retain the class names used by their selection scripts. Panel-scoped CSS supplies their neutral surfaces and dark text, including the active selection. Their inherited utility color names do not describe the rendered panel appearance.
+
+## Authentication usage and coverage
+
+All project-owned inputs, textareas, and selects use `resources/css/input-focus.css`, shared by the application and authentication bundles. Focus changes the existing border to YARUB indigo without outlines, shadows, or Tailwind rings. Dark inputs use a light indigo border, authentication errors retain their red border, and forced-color mode uses the system highlight border. Links and buttons retain their keyboard focus treatment. Student login and registration always show the bordered Google action with its multicolor logo; provider configuration is checked when starting the flow.
+
+Authentication extends the established YARUB palette, Hacen/Judur pairing, control corners, and feedback colors through `layouts.auth`, `resources/css/auth.css`, and `resources/js/auth.js`. Its user-selected composition places a focused white form beside a right-hand indigo brand panel. The form width is capped at 440 px; the brand column is 40%, rising to 42% from 1440 px. At 760 px and below, the brand panel becomes a compact logo/home header and its promotional copy is hidden. This composition belongs to authentication, not the panel navigation system.
+
+Use `x-auth.field` for persistent labels, associated hints/errors, mixed-direction email/password input, and password reveal; use `x-auth.submit` for submission feedback and its `secondary` option for supporting actions. Google entry appears only when configured. Keep verification resend and Google linking as primary actions; logout and the optional password email action use the outlined secondary treatment. Text fields and full-width actions have a 50 px minimum height; password reveal has a 44 px target. Preserve visible keyboard focus and reduced-motion support. The script prevents repeat submissions while busy, restores controls on history return, and focuses an error summary.
+
+Authentication headings are a local rule: Judur at weight 400 and line-height 1.5, with the form heading using `clamp(30px, 3vw, 38px)` and an explicit 30 px mobile size. Brand copy has its own larger heading. These surface roles do not replace the panel heading ramp in the frontmatter. The existing white YARUB logo at `public/assets/logos/logo_white.png` is reused; no new generated raster ships with this surface.
+
+Coverage includes student login/registration, administrator login, forgotten/reset passwords, email verification and invalid verification links, password confirmation, Google account linking, and validation feedback. Captures and `checks.json` under `.impeccable/review/auth` cover ten page/state samples at 1440, 390, and 320 px; the recorded checks report no page overflow, repeat-submission prevention, and history restoration. The finish reviewer returned **ship at fix-list scope** after checking the six revised verification/Google-account captures and component source for the two hierarchy corrections. This is a visual review, not certification of live OAuth, mail delivery, or production operation.
+
+The existing frontmatter and `.impeccable/design.json` remain unchanged. Authentication matches their shared colors, font families, and control radius; its layout, control sizing, and heading roles are documented locally above. The sidecar still describes panel components and panel breakpoints, and its older pilot narrative predates the rollout coverage recorded here; it is not an authentication inventory.
+
+## Course and explanation cards
+
+The four course and explanation catalogs use `x-panel.learning-card` inside `panel-learning-grid`. The shared composition has an inline content-type indicator, an optional publication state, a linked 22 px Judur title, a two-line excerpt from the existing description, grouped metadata, and an action footer. Titles wrap in full. Descriptions are escaped plain-text summaries and are omitted when empty.
+
+Pass `title`, `href`, `type`, and `description`, with `kind="lesson"` for explanations. The required `details` slot contains definition-list groups. Admin cards also use the `status` and `pricing` slots. Put the existing View/Edit or Continue links in the default slot. Use `:heading-level="3"` when a section already provides a level-two heading.
+
+The admin course card shows its single course price. Explanation cards retain separate monthly and annual prices. Student cards show enrollment date or remaining subscription days, including the existing expiring-soon state. This component and its styles are scoped to the four learning catalogs.
+
+Card hover borders reuse the existing `pr-50` brand shade `#9495b2`. The expiring-subscription text reuses the panel warning shade `#754c08`. Inline title links use a 3 px corner only around their keyboard-focus outline.

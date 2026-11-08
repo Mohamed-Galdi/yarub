@@ -6,11 +6,10 @@ use App\Models\User;
 use Illuminate\Auth\Notifications\ResetPassword;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\Notification;
-use Tests\TestCase;
+use Tests\AuthTestCase;
 
-class PasswordResetTest extends TestCase
+class PasswordResetTest extends AuthTestCase
 {
-    use RefreshDatabase;
 
     public function test_reset_password_link_screen_can_be_rendered(): void
     {

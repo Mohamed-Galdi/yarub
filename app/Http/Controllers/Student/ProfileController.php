@@ -49,10 +49,13 @@ class ProfileController extends Controller
 
     public function updatePassword(Request $request)
     {
-        // $request->validate([
-        //     'current_password' => 'required',
-        //     'new_password' => 'required|string|min:8',
-        // ]);
+        $validator = \Illuminate\Support\Facades\Validator::make($request->all(), [
+            'current_password' => ['required', 'string'],
+            'new_password' => ['required', 'string', \Illuminate\Validation\Rules\Password::defaults()],
+        ]);
+        if ($validator->fails()) {
+            return response()->json(['error' => $validator->errors()->first(), 'errors' => $validator->errors()], 422);
+        }
 
         $user = Auth::user();
 
@@ -61,9 +64,13 @@ class ProfileController extends Controller
         }
 
         $user->password = Hash::make($request->new_password);
+        $user->has_local_password = true;
+        $user->remember_token = \Illuminate\Support\Str::random(60);
         $user->save();
 
         Auth::logout();
+        $request->session()->invalidate();
+        $request->session()->regenerateToken();
 
         return response()->json(['message' => 'Password updated successfully. Please log in with your new password.']);
     }

@@ -49,17 +49,11 @@ class AuthenticatedSessionController extends Controller
             return redirect()->route('cart.index');
         }
 
-        $featureDestinations = [route('student.qudrat.index'), route('student.arabic-skills.index')];
-        if (in_array($request->session()->get('url.intended'), $featureDestinations, true)) {
-            return redirect()->intended(route('student.courses.index'));
-        }
-        if ($destination = \App\Services\VideoLibrary\LoginDestination::from($request->session()->get('url.intended'))) {
-            $request->session()->forget('url.intended');
-
-            return redirect()->to($destination);
+        if ($request->session()->pull('google.link_after_login')) {
+            return redirect()->route('google.account');
         }
 
-        return redirect()->route('student.courses.index');
+        return redirect()->to(\App\Services\Auth\StudentDestination::pull($request));
     }
 
     public function loginAdmin(LoginRequest $request): RedirectResponse

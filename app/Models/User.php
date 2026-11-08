@@ -15,6 +15,8 @@ class User extends Authenticatable
 {
     use HasApiTokens, HasFactory, Notifiable, SoftDeletes;
 
+    protected $attributes = ['has_local_password' => true];
+
     /**
      * The attributes that are mass assignable.
      *
@@ -44,6 +46,7 @@ class User extends Authenticatable
      * @var array<string, string>
      */
     protected $casts = [
+        'has_local_password' => 'boolean',
         'email_verified_at' => 'datetime',
         'password' => 'hashed',
     ];

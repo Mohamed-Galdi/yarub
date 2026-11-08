@@ -3,7 +3,7 @@
 @section('content')
     <div class="panel-student-content">
         <x-panel.heading title="شروحاتي" />
-        <div class="panel-section panel-grid panel-grid--courses">
+        <div class="panel-section panel-grid panel-learning-grid">
             @forelse ($lessons as $lesson)
                 <x-card.student-lesson :lesson="$lesson" />
             @empty

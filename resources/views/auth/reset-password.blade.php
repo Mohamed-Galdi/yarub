@@ -1,40 +1,15 @@
-<x-breeze.guest-layout>
-    <form method="POST" action="{{ route('password.store') }}">
-        @csrf
+@extends('layouts.auth')
+@section('title', 'كلمة مرور جديدة')
+@section('description', 'اختر كلمة مرور لحسابك. يمكنك استخدامها أيضاً مع حساب Google المرتبط.')
 
-        <!-- Password Reset Token -->
-        <input type="hidden" name="token" value="{{ $request->route('token') }}">
-
-        <!-- Email Address -->
-        <div>
-            <x-breeze.input-label for="email" :value="__('Email')" />
-            <x-breeze.text-input id="email" class="block mt-1 w-full" type="email" name="email" :value="old('email', $request->email)"
-                required autofocus autocomplete="username" />
-            <x-breeze.input-error :messages="$errors->get('email')" class="mt-2" />
-        </div>
-
-        <!-- Password -->
-        <div class="mt-4">
-            <x-breeze.input-label for="password" :value="__('Password')" />
-            <x-breeze.text-input id="password" class="block mt-1 w-full" type="password" name="password" required
-                autocomplete="new-password" />
-            <x-breeze.input-error :messages="$errors->get('password')" class="mt-2" />
-        </div>
-
-        <!-- Confirm Password -->
-        <div class="mt-4">
-            <x-breeze.input-label for="password_confirmation" :value="__('Confirm Password')" />
-
-            <x-breeze.text-input id="password_confirmation" class="block mt-1 w-full" type="password"
-                name="password_confirmation" required autocomplete="new-password" />
-
-            <x-breeze.input-error :messages="$errors->get('password_confirmation')" class="mt-2" />
-        </div>
-
-        <div class="flex items-center justify-end mt-4">
-            <x-breeze.primary-button>
-                {{ __('Reset Password') }}
-                </x-primary-button>
-        </div>
-    </form>
-    </x-guest-layout>
+@section('content')
+<form class="auth-form" data-auth-form method="POST" action="{{ route('password.store') }}">
+    @csrf
+    <input type="hidden" name="token" value="{{ $request->route('token') }}">
+    <x-auth.field name="email" type="email" label="البريد الإلكتروني" autocomplete="username" :value="$request->email" maxlength="255" />
+    <x-auth.field name="password" type="password" label="كلمة المرور الجديدة" autocomplete="new-password" minlength="8" hint="استخدم 8 أحرف على الأقل." />
+    <x-auth.field name="password_confirmation" type="password" label="تأكيد كلمة المرور" autocomplete="new-password" minlength="8" />
+    <x-auth.submit label="حفظ كلمة المرور" />
+</form>
+<p class="auth-foot">انتهت صلاحية الرابط؟ <a href="{{ route('password.request') }}">اطلب رابطاً جديداً</a></p>
+@endsection

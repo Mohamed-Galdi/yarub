@@ -23,6 +23,12 @@ class Handler extends ExceptionHandler
      */
     public function register(): void
     {
+        $this->renderable(function (\Illuminate\Routing\Exceptions\InvalidSignatureException $e, $request) {
+            if ($request->routeIs('verification.verify') && ! $request->expectsJson()) {
+                return response()->view('auth.invalid-verification', [], 403);
+            }
+        });
+
         $this->reportable(function (Throwable $e) {
             //
         });

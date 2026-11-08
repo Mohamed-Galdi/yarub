@@ -5,11 +5,10 @@ namespace Tests\Feature\Auth;
 use App\Models\User;
 use App\Providers\RouteServiceProvider;
 use Illuminate\Foundation\Testing\RefreshDatabase;
-use Tests\TestCase;
+use Tests\AuthTestCase;
 
-class AuthenticationTest extends TestCase
+class AuthenticationTest extends AuthTestCase
 {
-    use RefreshDatabase;
 
     public function test_login_screen_can_be_rendered(): void
     {
@@ -28,7 +27,7 @@ class AuthenticationTest extends TestCase
         ]);
 
         $this->assertAuthenticated();
-        $response->assertRedirect(RouteServiceProvider::HOME);
+        $response->assertRedirect(route('student.courses.index'));
     }
 
     public function test_users_can_not_authenticate_with_invalid_password(): void
