@@ -264,3 +264,62 @@ docker exec --user www-data --workdir /var/www/yarub yarub-php php artisan view:
 Do not add blanket cache flushing, session clearing, `route:cache`, `config:cache`, or a container restart. Follow the established OPcache refresh procedure if PHP retains old code.
 
 7. Check login/registration and a new Google student, repeat Google login, an existing student's password login and Google linking, admin password login, course/lesson pages, and mobile input focus. Verify browser redirects remain on the production origin. Reopen access through the established maintenance procedure after checks pass. Google working locally does not verify production cookie/proxy/credential settings.
+
+## Learning dashboard and video-open tracking — 2026-11-09
+
+This release replaces the admin overview and adds simple student library video-open
+tracking. It changes routes, Blade, JS/CSS and adds one table. No dependencies,
+environment values, content imports or seeders change.
+
+After pulling, keep the application in the established maintenance procedure until
+schema and assets are ready. Have a restorable database backup before migrating.
+Run commands separately from the host; stop on any failure.
+
+```bash
+cd /var/www/yarub
+
+docker exec --user www-data --workdir /var/www/yarub yarub-php php artisan migrate:status
+```
+
+Confirm the existing users, training and video-library tables are already deployed.
+If the new migration is pending, apply only this reviewed file:
+
+```bash
+docker exec --user www-data --workdir /var/www/yarub yarub-php \
+  php artisan migrate --path=database/migrations/2026_11_09_000001_create_video_views_table.php --force
+```
+
+The dashboard requires `video_views`; apply schema before serving the new code.
+This migration creates the table and indexes without backfilling old views.
+
+Build on the host with the existing Node dependencies:
+
+```bash
+sudo -u www-data npm --cache=/var/cache/yarub-npm run build
+```
+
+If `node_modules` is absent, run the documented `npm ci` command first. No lockfile
+change requires reinstalling existing dependencies.
+
+Clear the affected route and compiled-view caches:
+
+```bash
+docker exec --user www-data --workdir /var/www/yarub yarub-php php artisan route:clear
+
+docker exec --user www-data --workdir /var/www/yarub yarub-php php artisan view:clear
+```
+
+No blanket cache clearing, configuration cache operation, Composer install, import,
+seeder or container restart is needed by this change. Use the existing OPcache
+refresh procedure if PHP retains old code. Dashboard snapshots expire in two minutes
+and this release uses a new snapshot key.
+
+Verify using a designated student account: opening an available library video sends
+one `POST /student-dashboard/videos/{id}/views` with a 204 response; closing and
+reopening adds another. Pause/resume does not add views. Admin previews and guest
+examples do not send tracking requests. Check the dashboard's 7/30/90-day filters,
+video-open totals, unique viewers and category detail, allowing two minutes for the
+cached snapshot to expire. Video opens do not measure playback duration. These
+checks intentionally create analytics records for the designated account. Check
+normal playback and a mobile layout, then reopen access through the established
+maintenance procedure.

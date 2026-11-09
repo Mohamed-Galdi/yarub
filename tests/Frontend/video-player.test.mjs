@@ -139,3 +139,52 @@ test('late native share failure cannot copy a newly selected video', async () =>
     assert.equal(s.platform.copied, undefined);
     assert.equal(s.nodes['share-status'].textContent, '');
 });
+
+
+test('student opens record once, playback controls do not count, reopening gets a new ID', async () => {
+    const s = setup();
+    s.root.dataset.viewEndpoint = s.root.dataset.playerEndpoint;
+    s.root.dataset.viewCsrf = 'csrf-test';
+    let id = 0; s.platform.crypto = {randomUUID: () => `opening-${++id}`};
+    s.api.navigate('1', element()); s.respond(0); await tick();
+    assert.equal(s.calls.length, 2);
+    assert.equal(s.calls[1].options.method, 'POST');
+    assert.equal(s.calls[1].options.headers['X-CSRF-TOKEN'], 'csrf-test');
+    assert.equal(s.calls[1].url.endsWith('/1/views'), true);
+    s.calls[1].resolve({status: 204}); await tick();
+    s.media.emit('playing'); await s.nodes['player-play'].emit('click');
+    assert.equal(s.calls.length, 2);
+    s.api.dismiss(); s.api.show('1'); s.respond(2); await tick();
+    assert.notEqual(s.calls[1].options.body, s.calls[3].options.body);
+    s.calls[3].resolve({status: 204});
+});
+
+test('tracking network retry reuses the opening ID and never blocks the player', async () => {
+    const s = setup(); s.root.dataset.viewEndpoint = s.root.dataset.playerEndpoint;
+    s.platform.crypto = {randomUUID: () => 'same-opening'};
+    s.api.show('1'); s.respond(0); await tick();
+    s.calls[1].reject(new Error('connection lost')); await tick();
+    assert.equal(s.calls[2].options.body, s.calls[1].options.body);
+    s.calls[2].reject(new Error('still offline')); await tick();
+    assert.equal(s.media.src, '/media/1');
+    assert.equal(s.nodes['player-error'].hidden, true);
+});
+
+test('closed or failed metadata loads never record opens', async () => {
+    const s = setup(); s.root.dataset.viewEndpoint = s.root.dataset.playerEndpoint;
+    s.platform.crypto = {randomUUID: () => 'opening'};
+    s.api.show('1'); s.api.dismiss(); s.respond(0); await tick();
+    assert.equal(s.calls.length, 1);
+    s.api.show('2'); s.calls[1].resolve({ok: false, status: 404}); await tick();
+    assert.equal(s.calls.length, 2);
+});
+
+
+test('retrying media within the same opening keeps its idempotency ID', async () => {
+    const s = setup(); s.root.dataset.viewEndpoint = s.root.dataset.playerEndpoint;
+    let id = 0; s.platform.crypto = {randomUUID: () => `opening-${++id}`};
+    s.api.show('1'); s.respond(0); await tick(); s.calls[1].resolve({status: 204});
+    s.nodes['player-retry'].emit('click'); s.respond(2); await tick();
+    assert.equal(s.calls[1].options.body, s.calls[3].options.body);
+    s.calls[3].resolve({status: 204});
+});

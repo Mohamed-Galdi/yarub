@@ -1,6 +1,6 @@
 @extends('layouts.student')
 @section('content')
-<section class="student-videos" lang="ar" data-video-library data-endpoint="{{ route('student.videos.catalog') }}" data-player-endpoint="{{ url('/student-dashboard/videos') }}" data-canonical="{{ $canonicalUrl }}" aria-labelledby="video-library-title">
+<section class="student-videos" lang="ar" data-video-library data-endpoint="{{ route('student.videos.catalog') }}" data-view-endpoint="{{ url('/student-dashboard/videos') }}" data-view-csrf="{{ csrf_token() }}" data-player-endpoint="{{ url('/student-dashboard/videos') }}" data-canonical="{{ $canonicalUrl }}" aria-labelledby="video-library-title">
     <h1 id="video-library-title">الفيديوهات</h1>
     <p class="sv-intro">شروحات في القدرات ومهارات اللغة العربية.</p>
     <form class="sv-filters" action="{{ route('student.videos.index') }}" method="GET" role="search" aria-label="البحث في الفيديوهات" data-video-filters>

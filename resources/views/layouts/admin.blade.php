@@ -24,6 +24,9 @@
         @vite(['resources/css/app.css', 'resources/js/app.js'])
     @endif
     @vite('resources/css/panels.css')
+    @if(request()->routeIs('admin.dashboard'))
+        @vite('resources/css/admin-dashboard.css')
+    @endif
     @include('flatpickr::components.style')
     <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
 

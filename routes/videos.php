@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\Route;
 Route::middleware(['auth', 'verified', 'student'])->get('/student-dashboard/videos', [\App\Http\Controllers\Student\VideoLibraryController::class, 'index'])->name('student.videos.index');
 Route::middleware(VideoLibraryAccess::class.':student')->get('/student-dashboard/videos/catalog', [\App\Http\Controllers\Student\VideoLibraryController::class, 'results'])->name('student.videos.catalog');
 Route::middleware(VideoLibraryAccess::class.':student')->get('/student-dashboard/videos/{video}', [\App\Http\Controllers\Student\VideoLibraryController::class, 'show'])->whereNumber('video')->name('student.videos.show');
+Route::middleware([VideoLibraryAccess::class.':student', 'throttle:60,1'])->post('/student-dashboard/videos/{video}/views', [\App\Http\Controllers\Student\VideoLibraryController::class, 'recordView'])->whereNumber('video')->name('student.videos.views');
 Route::get('/videos', [\App\Http\Controllers\VideoShowcaseController::class, 'index'])->name('videos');
 
 // Pages follow the existing admin guard; media/JSON retain error responses without redirects.

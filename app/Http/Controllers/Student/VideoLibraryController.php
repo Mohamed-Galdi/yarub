@@ -28,6 +28,14 @@ class VideoLibraryController extends Controller
         ]);
     }
 
+    public function recordView(Request $request, LibraryVideo $video, \App\Services\VideoLibrary\RecordView $views)
+    {
+        $data = $request->validate(['opening_id' => ['required', 'uuid']]);
+        $views->record($request->user(), $video, $data['opening_id']);
+
+        return response()->noContent();
+    }
+
     private function card(LibraryVideo $video): array
     {
         return ['id' => $video->id, 'title' => $video->title, 'type' => $video->qudratCategory?->title ?? $video->arabicSkillBank?->title,

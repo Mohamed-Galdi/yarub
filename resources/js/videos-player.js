@@ -8,7 +8,7 @@ export function initializeVideoPlayer(root, platform = window) {
     const related = get('player-related'), relatedSection = get('player-related-section');
     const shareStatus = get('share-status'), manual = get('share-manual');
     const copyInput = manual.querySelector('input');
-    let request, revision = 0, current, currentId, origin, scroll = 0, overflow = '';
+    let request, revision = 0, current, currentId, openingId, origin, scroll = 0, overflow = '';
     let backdropDown = false;
     const base = url => { const value = new URL(url); value.searchParams.delete('video'); return value; };
 
@@ -63,8 +63,21 @@ export function initializeVideoPlayer(root, platform = window) {
             text.append(heading, label); link.append(image, text); related.append(link);
         }
     }
-    async function show(id, autoplay = false) {
+    function recordOpening(id, key) {
+        // Only the authenticated student library supplies this endpoint.
+        if (!root.dataset.viewEndpoint || !key) return;
+        const send = () => platform.fetch(`${root.dataset.viewEndpoint}/${id}/views`, {
+            method: 'POST', credentials: 'same-origin', keepalive: true,
+            headers: {'Content-Type': 'application/json', Accept: 'application/json', 'X-CSRF-TOKEN': root.dataset.viewCsrf},
+            body: JSON.stringify({opening_id: key}),
+        });
+        // Network failures may have happened after insertion; reuse the same ID.
+        send().then(response => { if (response.status >= 500) return send(); })
+            .catch(() => send().catch(() => {}));
+    }
+    async function show(id, autoplay = false, retrying = false) {
         release();
+        if (!retrying) openingId = root.dataset.viewEndpoint ? platform.crypto?.randomUUID?.() : null;
         currentId = id;
         const version = revision;
         if (!dialog.open) {
@@ -91,6 +104,7 @@ export function initializeVideoPlayer(root, platform = window) {
             content.hidden = false; media.setAttribute('aria-label', data.title);
             media.poster = data.cover; media.src = data.media; media.load();
             renderRelated(data.related);
+            recordOpening(data.id, openingId);
             status.textContent = 'اضغط تشغيل لبدء المشاهدة.';
             if (autoplay) await attemptPlay();
         } catch (failure) {
@@ -121,7 +135,7 @@ export function initializeVideoPlayer(root, platform = window) {
     }
     dialog.addEventListener('pointerdown', event => { backdropDown = outside(event); });
     dialog.addEventListener('click', event => { if (backdropDown && outside(event)) closePlayer(); backdropDown = false; });
-    retry.addEventListener('click', () => show(currentId));
+    retry.addEventListener('click', () => show(currentId, false, true));
     play.addEventListener('click', attemptPlay);
     media.addEventListener('waiting', () => { if (current) status.textContent = 'جارٍ تحميل المقطع…'; });
     media.addEventListener('playing', () => { status.textContent = ''; play.hidden = true; });
